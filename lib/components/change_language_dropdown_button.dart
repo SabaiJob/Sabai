@@ -12,60 +12,60 @@ class DropDown extends StatefulWidget {
 class _DropDownState extends State<DropDown> {
   String? selectedValue = "English";
   Function(String)? whenChanged;
-  final List<Map<String, String>> items =[
-    {"name" : "English", "icon" : "icons/uk.png"},
-    {"name" : "MM", "icon" : "icons/myanmar.png"}
-  ] ;
+  final List<Map<String, String>> items = [
+    {"name": "English", "icon": "icons/uk.png"},
+    {"name": "မြန်မာ", "icon": "icons/myanmar.png"}
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-  
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton2<String>(
-          iconStyleData: IconStyleData(
-            icon: Icon(Icons.keyboard_arrow_down),
-          ),
-          isExpanded: true,
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-                    value: item["name"],
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          item["icon"]!,
-                          width: 16,
-                          height: 16,
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2<String>(
+        iconStyleData: const IconStyleData(
+          icon: Icon(Icons.keyboard_arrow_down),
+        ),
+        isExpanded: true,
+        items: items
+            .map((item) => DropdownMenuItem<String>(
+                  value: item["name"],
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        item["icon"]!,
+                        width: 16,
+                        height: 16,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        item["name"]!,
+                        style: GoogleFonts.bricolageGrotesque(
+                          textStyle: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(width: 3),
-                        Text(
-                          item["name"]!,
-                          style: GoogleFonts.bricolageGrotesque(textStyle:  TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),),
-                        ),
-                      ],
-                    ),
-                  ))
-              .toList(),
-          value: selectedValue,
-          onChanged: (String? value) {
-            setState(() {
-              selectedValue = value;
-            });
-          },
-          buttonStyleData: ButtonStyleData(
+                      ),
+                    ],
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (String? value) {
+          setState(() {
+            selectedValue = value;
+          });
+        },
+        buttonStyleData: ButtonStyleData(
             elevation: 10,
-            padding: EdgeInsets.symmetric(horizontal: 1),
-            height: 24,
-            width: 100,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            height: 30,
+            width: 110,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
-            )
-          ),
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
-          ),
+            )),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
         ),
       ),
     );
-}}
+  }
+}
