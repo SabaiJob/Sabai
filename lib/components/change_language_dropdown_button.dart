@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:sabai_app/materials/language_provider.dart';
 
 class DropDown extends StatefulWidget {
   const DropDown({super.key});
@@ -19,6 +21,7 @@ class _DropDownState extends State<DropDown> {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
         iconStyleData: const IconStyleData(
@@ -51,6 +54,7 @@ class _DropDownState extends State<DropDown> {
         onChanged: (String? value) {
           setState(() {
             selectedValue = value;
+            languageProvider.setLan(value!);
           });
         },
         buttonStyleData: ButtonStyleData(

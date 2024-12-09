@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sabai_app/materials/language_provider.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
 
 void main() {
-  runApp(const Sabai());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => LanguageProvider(),
+      child: const Sabai(),
+    ),
+  );
 }
 
 class Sabai extends StatelessWidget {

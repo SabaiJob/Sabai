@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/components/change_language_dropdown_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../materials/language_provider.dart';
 
 class Walkthrough extends StatefulWidget {
   const Walkthrough({super.key});
@@ -15,6 +17,7 @@ final _controller = PageController();
 class _WalkthroughState extends State<Walkthrough> {
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -45,28 +48,49 @@ class _WalkthroughState extends State<Walkthrough> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Welcome to',
-                        style: GoogleFonts.bricolageGrotesque(
-                          textStyle: const TextStyle(
-                            fontSize: 24.41,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
+                      languageProvider.lan == 'English'
+                          ? Text(
+                              'Welcome to',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  fontSize: 24.41,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Sabai Jobs',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  fontSize: 30.52,
+                                  color: Color(0xffFF3997),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'Sabai Jobs',
-                        style: GoogleFonts.bricolageGrotesque(
-                          textStyle: const TextStyle(
-                            fontSize: 30.52,
-                            color: Color(0xffFF3997),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      languageProvider.lan == 'English'
+                          ? Text(
+                              'Sabai Jobs',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  fontSize: 30.52,
+                                  color: Color(0xffFF3997),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'မှကြိုဆိုပါတယ်',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  fontSize: 24.41,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                   SizedBox(
@@ -75,36 +99,64 @@ class _WalkthroughState extends State<Walkthrough> {
                       controller: _controller,
                       children: [
                         Center(
-                          child: Text(
-                            'Finding a Job Made Easy',
-                            style: GoogleFonts.bricolageGrotesque(
-                              textStyle: const TextStyle(fontSize: 15.6),
-                            ),
-                          ),
+                          child: languageProvider.lan == 'English'
+                              ? Text(
+                                  'Finding a Job Made Easy',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 15.6),
+                                  ),
+                                )
+                              : Text(
+                                  'အလုပ်အကိုင်ရှာဖွေမှုကို လွယ်ကူစေတယ်',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
                         ),
                         Center(
-                          child: Text(
-                            'Offering Safe, Hassle-Free Jobs',
-                            style: GoogleFonts.bricolageGrotesque(
-                              textStyle: const TextStyle(fontSize: 15.6),
-                            ),
-                          ),
+                          child: languageProvider.lan == 'English'
+                              ? Text(
+                                  'Offering Safe, Hassle-Free Jobs',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 15.6),
+                                  ),
+                                )
+                              : Text(
+                                  'လုံခြုံ အဆင်ပြေတဲ့ အလုပ်အကိုင်တွေရှိတယ်',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
                         ),
                         Center(
-                          child: Text(
-                            'Shielding You from Scammers',
-                            style: GoogleFonts.bricolageGrotesque(
-                              textStyle: const TextStyle(fontSize: 15.6),
-                            ),
-                          ),
+                          child: languageProvider.lan == 'English'
+                              ? Text(
+                                  'Shielding You from Scammers',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 15.6),
+                                  ),
+                                )
+                              : Text(
+                                  'အလိမ်အညာအလုပ်များကို သေချာစီစစ်ထားတယ်',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
                         ),
                         Center(
-                          child: Text(
-                            'Enjoy Job Hunting with Us',
-                            style: GoogleFonts.bricolageGrotesque(
-                              textStyle: const TextStyle(fontSize: 15.6),
-                            ),
-                          ),
+                          child: languageProvider.lan == 'English'
+                              ? Text(
+                                  'Enjoy Job Hunting with Us',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 14),
+                                  ),
+                                )
+                              : Text(
+                                  'အလုပ်အကိုင််ရှာဖွေမှုကို Sabai job နဲ့ပျော်ရွှင်စွာ ပြုလုပ်လိုက်ပါ',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -122,15 +174,80 @@ class _WalkthroughState extends State<Walkthrough> {
               ),
               Column(
                 children: [
-                  Text(
-                    'By registering, you accept our Terms and Conditions of \n Use and our Privacy Policy.',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.bricolageGrotesque(
-                      textStyle: const TextStyle(
-                        fontSize: 12.5,
-                        color: Color(0xff4C5258),
-                      ),
-                    ),
+                  languageProvider.lan == 'English'
+                      ? RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: 'By registering, you accept our ',
+                            style: GoogleFonts.bricolageGrotesque(
+                              textStyle: const TextStyle(
+                                fontSize: 12.5,
+                                color: Color(0xff4C5258),
+                              ),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Terms and Conditions of \nUse ',
+                                style: GoogleFonts.bricolageGrotesque(
+                                  textStyle: const TextStyle(
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff4C5258),
+                                  ),
+                                ),
+                              ),
+                              const TextSpan(
+                                text: 'and our ',
+                              ),
+                              TextSpan(
+                                text: 'Privacy Policy.',
+                                style: GoogleFonts.bricolageGrotesque(
+                                  textStyle: const TextStyle(
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff4C5258),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              text:
+                                  'စာရင်းသွင်းခြင်းဖြင့် သင့်အနေနှင့် ကျွန်ုပ်တို့၏',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xff4C5258),
+                                ),
+                              ),
+                              children: [
+                                TextSpan(
+                                  text:
+                                      'အသုံးပြုမှုစည်းမျဉ်းများနှင့်\nကိုယ်ရေးအချက်အလက်မူဝါဒ',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff4C5258),
+                                    ),
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'ကို လက်ခံသည်ဟု ယူဆပါသည်',
+                                  style: GoogleFonts.bricolageGrotesque(
+                                    textStyle: const TextStyle(
+                                      fontSize: 11,
+                                      color: Color(0xff4C5258),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   Container(
                     width: 343,
@@ -147,20 +264,31 @@ class _WalkthroughState extends State<Walkthrough> {
                               BorderRadius.circular(8), // Set the border radius
                         ),
                       ),
-                      child: Text(
-                        'Sign Up',
-                        style: GoogleFonts.bricolageGrotesque(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.63,
-                          ),
-                        ),
-                      ),
+                      child: languageProvider.lan == 'English'
+                          ? Text(
+                              'Sign Up',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.63,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'အကောင့်အသစ်ပြုလုပ်ရန်',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 13,
                   ),
                   Container(
                     width: 343,
@@ -180,20 +308,31 @@ class _WalkthroughState extends State<Walkthrough> {
                               BorderRadius.circular(8), // Set the border radius
                         ),
                       ),
-                      child: Text(
-                        'Log In',
-                        style: GoogleFonts.bricolageGrotesque(
-                          textStyle: const TextStyle(
-                            color: Color(0xffFF3997),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.63,
-                          ),
-                        ),
-                      ),
+                      child: languageProvider.lan == "English"
+                          ? Text(
+                              'Log In',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Color(0xffFF3997),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.63,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              '၀င်ရောက်ရန်',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Color(0xffFF3997),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.63,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(
-                    height: 60,
+                    height: 50,
                   )
                 ],
               ),
