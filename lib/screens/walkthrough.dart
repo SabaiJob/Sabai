@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sabai_app/components/change_language_dropdown_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Walkthrough extends StatefulWidget {
@@ -16,8 +17,7 @@ class _WalkthroughState extends State<Walkthrough> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
+      body: Stack(
           children: [
             // Background image
             Container(
@@ -34,61 +34,10 @@ class _WalkthroughState extends State<Walkthrough> {
               children: [
                 // Dropdown at the top
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      color: Colors.white,
-                      width: 120,
-                      height: 26,
-                      child: Center(
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            alignment: Alignment.center,
-                            value: dropdownValue,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 18,
-                            ),
-                            items: [
-                              DropdownMenuItem<String>(
-                                value: 'English',
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 16,
-                                      child: Image.asset('lib/icons/uk.png'),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const Text('English'),
-                                  ],
-                                ),
-                              ),
-                              DropdownMenuItem<String>(
-                                value: 'Myanmar',
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 16,
-                                      child:
-                                          Image.asset('lib/icons/myanmar.png'),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const Text('Myanmar'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            onChanged: (String? value) {
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  padding: const EdgeInsets.only(top: 60, left: 25),
+                  child: Align(alignment: Alignment.topLeft,child: DropDown()),
+                    
+                  
                 ),
                 const SizedBox(
                   height: 50,
@@ -255,7 +204,6 @@ class _WalkthroughState extends State<Walkthrough> {
             ),
           ],
         ),
-      ),
     );
   }
 }
