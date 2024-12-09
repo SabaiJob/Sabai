@@ -102,19 +102,19 @@ class _WalkthroughState extends State<Walkthrough> {
                         Text(
                           'Welcome to',
                           style: GoogleFonts.bricolageGrotesque(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 24.41,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
                           'Sabai Jobs',
                           style: GoogleFonts.bricolageGrotesque(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 30.52,
                               color: Color(0xffFF3997),
                               fontWeight: FontWeight.bold,
@@ -132,7 +132,7 @@ class _WalkthroughState extends State<Walkthrough> {
                             child: Text(
                               'Finding a Job Made Easy',
                               style: GoogleFonts.bricolageGrotesque(
-                                textStyle: TextStyle(fontSize: 15.6),
+                                textStyle: const TextStyle(fontSize: 15.6),
                               ),
                             ),
                           ),
@@ -140,7 +140,7 @@ class _WalkthroughState extends State<Walkthrough> {
                             child: Text(
                               'Offering Safe, Hassle-Free Jobs',
                               style: GoogleFonts.bricolageGrotesque(
-                                textStyle: TextStyle(fontSize: 15.6),
+                                textStyle: const TextStyle(fontSize: 15.6),
                               ),
                             ),
                           ),
@@ -148,7 +148,7 @@ class _WalkthroughState extends State<Walkthrough> {
                             child: Text(
                               'Shielding You from Scammers',
                               style: GoogleFonts.bricolageGrotesque(
-                                textStyle: TextStyle(fontSize: 15.6),
+                                textStyle: const TextStyle(fontSize: 15.6),
                               ),
                             ),
                           ),
@@ -156,7 +156,7 @@ class _WalkthroughState extends State<Walkthrough> {
                             child: Text(
                               'Enjoy Job Hunting with Us',
                               style: GoogleFonts.bricolageGrotesque(
-                                textStyle: TextStyle(fontSize: 15.6),
+                                textStyle: const TextStyle(fontSize: 15.6),
                               ),
                             ),
                           ),
@@ -180,7 +180,7 @@ class _WalkthroughState extends State<Walkthrough> {
                       'By registering, you accept our Terms and Conditions of \n Use and our Privacy Policy.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.bricolageGrotesque(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 12.5,
                           color: Color(0xff4C5258),
                         ),
@@ -194,16 +194,6 @@ class _WalkthroughState extends State<Walkthrough> {
                       ),
                       child: TextButton(
                         onPressed: () {},
-                        child: Text(
-                          'Sign Up',
-                          style: GoogleFonts.bricolageGrotesque(
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.63,
-                            ),
-                          ),
-                        ),
                         style: TextButton.styleFrom(
                           backgroundColor: Color(0xffFF3997),
                           shape: RoundedRectangleBorder(
@@ -211,9 +201,19 @@ class _WalkthroughState extends State<Walkthrough> {
                                 8), // Set the border radius
                           ),
                         ),
+                        child: Text(
+                          'Sign Up',
+                          style: GoogleFonts.bricolageGrotesque(
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.63,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
@@ -221,22 +221,12 @@ class _WalkthroughState extends State<Walkthrough> {
                       height: 42,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Color(0xffFF3997),
+                          color: const Color(0xffFF3997),
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
                         onPressed: () {},
-                        child: Text(
-                          'Log In',
-                          style: GoogleFonts.bricolageGrotesque(
-                            textStyle: TextStyle(
-                              color: Color(0xffFF3997),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.63,
-                            ),
-                          ),
-                        ),
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -244,9 +234,19 @@ class _WalkthroughState extends State<Walkthrough> {
                                 8), // Set the border radius
                           ),
                         ),
+                        child: Text(
+                          'Log In',
+                          style: GoogleFonts.bricolageGrotesque(
+                            textStyle: const TextStyle(
+                              color: Color(0xffFF3997),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.63,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 60,
                     )
                   ],
