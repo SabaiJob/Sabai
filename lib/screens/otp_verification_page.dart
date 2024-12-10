@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sabai_app/constants.dart';
@@ -51,7 +52,25 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
             ),
             PinCodeTextField(appContext: context, length: 6,
-            pinTheme: PinTheme(),),
+            enableActiveFill: true,
+            pinTheme: PinTheme( 
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              selectedColor: Color(0xFFC8C8C8),
+              selectedFillColor: Colors.white,
+              inactiveFillColor: Colors.white,
+              activeColor: Color(0xFFC8C8C8),
+              activeFillColor: Colors.white,
+              errorBorderColor: Colors.black,
+              inactiveColor: Color(0xFFC8C8C8),
+              inactiveBorderWidth: 1.5,
+              activeBorderWidth: 1,
+              fieldWidth: 40,
+              fieldHeight: 56,
+              shape: PinCodeFieldShape.box,
+              
+              //activeFillColor: Colors.white,
+              //selectedColor: Colors.black,
+            ),),
             Container(
               padding: const EdgeInsets.only(top: 32, bottom: 12),
               child: Align(

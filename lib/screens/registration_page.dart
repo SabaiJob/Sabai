@@ -4,6 +4,8 @@ import 'package:sabai_app/screens/otp_verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../services/language_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
+
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -157,7 +159,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: ("+66 2134567"),
+                    hintText: ("Select One"),
                     hintStyle: TextStyle(
                       color: Color(0xFF7B838A),
                       fontSize: 14,
@@ -355,27 +357,39 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   BorderRadius.circular(8), // Set the border radius
                             ),
                           ),
-                          child: languageProvider.lan == "English"
-                              ? Text(
-                                  'Continue',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.63,
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  'ဆက်လက်ရန်',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.63,
-                                    ),
-                                  ),
+                          child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      languageProvider.lan == 'English'
+                          ? Text(
+                              'Continue',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.63,
                                 ),
+                              ),
+                            )
+                          : Text(
+                              'ဆက်လက်ရန်',
+                              style: GoogleFonts.bricolageGrotesque(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(
+                        CupertinoIcons.arrow_right,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
                         ),
               )
             ],
