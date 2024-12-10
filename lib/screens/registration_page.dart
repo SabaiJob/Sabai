@@ -113,6 +113,56 @@ class _RegistrationPageState extends State<RegistrationPage> {
               padding: EdgeInsets.only(top: 16, bottom: 12),
               child: Align(
                 alignment: Alignment.topLeft,
+                child: Text("Gender *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.63,
+                  color: Colors.black,
+                )),),
+              ),
+            ),
+            const SizedBox(
+              width: 400,
+              height: 36,
+              child: TextField(
+                style: TextStyle(
+                  fontFamily: 'Bricolage-R',
+                  fontWeight: FontWeight.w100,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.start,
+                decoration:  InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFFFFF),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFFFFF),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: ("Select One"),
+                  contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                  hintStyle: TextStyle(
+                    color: Color(0xFF7B838A),
+                    fontSize: 14,
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 16, bottom: 12),
+              child: Align(
+                alignment: Alignment.topLeft,
                 child: Text("Phone Number *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 15.63,
