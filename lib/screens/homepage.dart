@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabai_app/components/bottomSheet.dart';
+import 'package:sabai_app/components/bottom_sheet.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

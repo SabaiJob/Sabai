@@ -259,7 +259,12 @@ class _WalkthroughState extends State<Walkthrough> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegistrationPage(),
+                          ),
+                        );
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffFF3997),
