@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
 
@@ -25,11 +26,31 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Bottom Sheet Example")),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: const Text("Show Bottom Sheet"),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          "Jobs",
+          style: TextStyle(
+            fontFamily: 'Bricolage-M',
+            fontSize: 19.53,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              CupertinoIcons.bell,
+              color: Color(0xffFF3997),
+            ),
+          ),
+        ],
+        backgroundColor: Colors.white,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: const Column(
+          children: [],
         ),
       ),
     );
