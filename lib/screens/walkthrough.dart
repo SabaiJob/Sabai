@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/change_language_dropdown_button.dart';
-import 'package:sabai_app/screens/registration_page.dart';
+import 'package:sabai_app/screens/homepage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../materials/language_provider.dart';
+import '../services/language_provider.dart';
 
 class Walkthrough extends StatefulWidget {
   const Walkthrough({super.key});
@@ -257,9 +257,7 @@ class _WalkthroughState extends State<Walkthrough> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> RegistrationPage()));
-                      },
+                      onPressed: () {},
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffFF3997),
                         shape: RoundedRectangleBorder(
@@ -269,7 +267,7 @@ class _WalkthroughState extends State<Walkthrough> {
                       ),
                       child: languageProvider.lan == 'English'
                           ? Text(
-                              'Get Started',
+                              'Sign Up',
                               style: GoogleFonts.bricolageGrotesque(
                                 textStyle: const TextStyle(
                                   color: Colors.white,
@@ -303,7 +301,14 @@ class _WalkthroughState extends State<Walkthrough> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Homepage(),
+                          ),
+                        );
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(

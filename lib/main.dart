@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sabai_app/materials/language_provider.dart';
+import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
 
 void main() {
