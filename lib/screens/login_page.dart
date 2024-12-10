@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
