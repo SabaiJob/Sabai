@@ -50,7 +50,7 @@ class _HomepageState extends State<Homepage> {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: const Column(
-          children: [],
+          children: [Text('Motivation Text!')],
         ),
       ),
     );
