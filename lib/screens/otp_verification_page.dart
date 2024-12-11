@@ -2,17 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/user_profile_setup_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   const OtpVerificationPage({super.key});
+  
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
 }
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
+  final String fixedPinNumber = "000000"; // fixed OTP pin code for now
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +55,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
             ),
             PinCodeTextField(appContext: context, length: 6,
+            onCompleted: (value){
+                if(value == fixedPinNumber){
+                print(value);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfileSetupPage()));
+              }else{
+                print('wrong pin');
+              }
+            },
             enableActiveFill: true,
             pinTheme: PinTheme( 
               borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -59,11 +70,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               selectedFillColor: Colors.white,
               inactiveFillColor: Colors.white,
               activeColor: Color(0xFFC8C8C8),
+              //activeColor: Colors.pink,
               activeFillColor: Colors.white,
               errorBorderColor: Colors.black,
               inactiveColor: Color(0xFFC8C8C8),
-              inactiveBorderWidth: 1.5,
-              activeBorderWidth: 1,
+              inactiveBorderWidth: 2,
+              activeBorderWidth: 3,
               fieldWidth: 40,
               fieldHeight: 56,
               shape: PinCodeFieldShape.box,
