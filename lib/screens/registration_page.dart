@@ -33,6 +33,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              // progress indicator bar
               Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: const StepProgressIndicator(

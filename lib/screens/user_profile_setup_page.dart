@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/job_category_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
@@ -449,12 +450,12 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                       ),
                 child: TextButton(
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const OtpVerificationPage(),
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const JobCategoryPage(),
+                              ),
+                            );
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Color(0xffFF3997),
