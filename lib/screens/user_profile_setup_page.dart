@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabai_app/screens/job_category_page.dart';
+import 'package:sabai_app/screens/verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +38,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   totalSteps: 3,
                   currentStep: 1,
                   selectedColor: Color(0xFFFF3997),
-                  unselectedColor: Color(0xFF4C5258),
+                  unselectedColor: Color.fromARGB(100, 76, 82, 88),
                   size: 8.0,
                 ),
               ),
@@ -497,7 +497,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const JobCategoryPage(),
+                        builder: (context) => const VerificationPage(),
                       ),
                     );
                   },
