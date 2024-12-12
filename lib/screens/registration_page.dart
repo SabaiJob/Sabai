@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sabai_app/components/reusable_dropdown.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/otp_verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../services/language_provider.dart';
@@ -15,6 +17,8 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final List<String> genderItems = ['male', 'female', 'others'];
+  String? selectedGender;
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -22,10 +26,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       backgroundColor: Color(0xFFF0F1F2),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("Create Profile", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 19.53,
-        )),),
+        title: Text("Create Profile", style: aBTitlteStyle),
       ),
       body: Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
@@ -159,45 +160,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ),
               // Gender Picker
-              const SizedBox(
-                width: 400,
-                height: 36,
-                child: TextField(
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-R',
-                    fontWeight: FontWeight.w100,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.start,
-                  decoration:  InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFFFFF),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFFFFF),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: ("Select One"),
-                    hintStyle: TextStyle(
-                      color: Color(0xFF7B838A),
-                      fontSize: 14,
-                    ),
-                    contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
+              ReusableDropdown(dropdownItems: genderItems, selectedItem: selectedGender, cusHeight: 36,cusWidth: 400, whenOnChanged: (value){
+                setState(() {
+                  selectedGender = value;
+                });
+              }, hintText: 'Select One'),
           
               //Birthday 
               Container(

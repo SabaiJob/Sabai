@@ -21,7 +21,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       backgroundColor: const Color(0xFFF0F1F2),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Create Profile', style: GoogleFonts.bricolageGrotesque(textStyle: appBarTitleStyle),),
+        title: Text('Create Profile', style: aBTitlteStyle),
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),

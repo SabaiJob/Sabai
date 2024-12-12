@@ -15,3 +15,8 @@ const title2Style = TextStyle(
                   fontSize: 15.63,
                   color: Color(0xFF08210E),
                 );
+
+const aBTitlteStyle = TextStyle(
+          fontFamily: 'Bricolage-M',
+          fontSize: 19.53,
+        );
