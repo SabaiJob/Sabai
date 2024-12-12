@@ -42,7 +42,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     totalSteps: 3,
                     currentStep: 1,
                     selectedColor: Color(0xFFFF3997),
-                    unselectedColor: Color(0xFF4C5258),
+                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
                     size: 8.0,
                     ),
               ),
@@ -72,11 +72,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Full Name *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Full Name',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               // Full Name TextField
@@ -125,11 +138,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 padding: EdgeInsets.only(top: 16, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Gender *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Gender ',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               // Gender Picker
@@ -178,11 +204,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 padding: EdgeInsets.only(top: 16, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Birthday *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Birthday',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               //Birthday Date Picker
@@ -230,11 +269,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 padding: EdgeInsets.only(top: 16, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Phone Number *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Phone Number',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               // PhoneNumber TextField
@@ -280,13 +332,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               // Email Address
               Container(
                 padding: EdgeInsets.only(top: 16, bottom: 12),
-                child: Align(
+                child: const Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Email Address *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: Text("Email Address",  style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),),
                 ),
               ),
               // Email Address TextField

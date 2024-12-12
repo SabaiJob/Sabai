@@ -37,7 +37,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     totalSteps: 3,
                     currentStep: 1,
                     selectedColor: Color(0xFFFF3997),
-                    unselectedColor: Color(0xFF4C5258),
+                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
                     size: 8.0,
                     ),
               ),
@@ -70,11 +70,24 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   padding: EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Select District *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Colors.black,
-                    )),),
+                    child: RichText(
+                    text: const TextSpan(
+                      text: 'Select District',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   ),
                 ),
                 // Select District Dropdown
@@ -123,14 +136,27 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   padding: EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Select City *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Colors.black,
-                    )),),
+                    child: RichText(
+                    text: const TextSpan(
+                      text: 'Select City',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   ),
                 ),
-                // Full Name TextField
+                // Select City Dropdown
                 const SizedBox(
                   width: 400,
                   height: 36,
@@ -170,17 +196,150 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     ),
                   ),
                 ),
-          
+
+                //Years in Thailand 
+                Container(
+                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                    text: const TextSpan(
+                      text: 'Years in Thailand',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ),
+                ),
+                // year dropdown
+                const SizedBox(
+                  width: 400,
+                  height: 36,
+                  child: TextField(
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-R',
+                      fontWeight: FontWeight.w100,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.start,
+                    decoration:  InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFFFFF),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFFFFF),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: ("2 years"),
+                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                      hintStyle: TextStyle(
+                        color: Color(0xFF7B838A),
+                        fontSize: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+                // Thai Proficiency 
+                Container(
+                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                    text: const TextSpan(
+                      text: 'Thai Proficiency',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ),
+                ),
+                // Thai Proficiency slider
+                const SizedBox(
+                  width: 400,
+                  height: 36,
+                  child: TextField(
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-R',
+                      fontWeight: FontWeight.w100,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.start,
+                    decoration:  InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFFFFF),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFFFFF),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: ("2 years"),
+                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                      hintStyle: TextStyle(
+                        color: Color(0xFF7B838A),
+                        fontSize: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+
                 // Passport Number
                 Container(
                   padding: EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Passport Number *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Colors.black,
-                    )),),
+                    child: Text("Passport Number",  style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),),
                   ),
                 ),
                 // Passport Number TextField
@@ -227,13 +386,13 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 // Passport Photo
                 Container(
                   padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Passport Photo *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Colors.black,
-                    )),),
+                    child: Text("Passport Photo",  style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),),
                   ),
                 ),
                 // Passport Photo Picker
@@ -277,16 +436,29 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   ),
                 ),
           
-                //Y/N question
+                //Do you have work permit ? Y/N question
                 Container(
                   padding: EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Do you have work permit *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Colors.black,
-                    )),),
+                    child: RichText(
+                    text: const TextSpan(
+                      text: 'Do you have work permit?',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   ),
                 ),
                 // answer choice yes/no
@@ -386,13 +558,13 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
               // Your Photo
               Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
-                child: Align(
+                child: const Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Your photo *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: Text("Your photo",  style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.63,
+                        color: Colors.black,
+                      ),),
                 ),
               ),
               // Your photo picker
