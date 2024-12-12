@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/job_category_page.dart';
+import 'package:sabai_app/screens/verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,8 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
         title: Text('Create Profile'),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -32,367 +34,409 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
               Container(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
                 child: const StepProgressIndicator(
-                    roundedEdges: Radius.circular(10),
-                    padding: 0.0,
-                    totalSteps: 3,
-                    currentStep: 1,
-                    selectedColor: Color(0xFFFF3997),
-                    unselectedColor: Color(0xFF4C5258),
-                    size: 8.0,
-                    ),
+                  roundedEdges: Radius.circular(10),
+                  padding: 0.0,
+                  totalSteps: 3,
+                  currentStep: 1,
+                  selectedColor: Color(0xFFFF3997),
+                  unselectedColor: Color(0xFF4C5258),
+                  size: 8.0,
+                ),
               ),
-          
+
               Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Tell Us About Yourself", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Tell Us About Yourself",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 24.41,
-                    )),),
+                    )),
                   ),
                 ),
-          
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("We need a bit more information to finalize\n your profile. This ensure your account is secure and verified.", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "We need a bit more information to finalize\n your profile. This ensure your account is secure and verified.",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Color(0xFF08210E),
-                    )),),
+                    )),
                   ),
                 ),
-          
-                //Select District
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Select District *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              //Select District
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Select District *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // Select District Dropdown
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // Select District Dropdown
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Select District"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Select District"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-          
-                //Select City
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Select City *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              //Select City
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Select City *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // Full Name TextField
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // Full Name TextField
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Select City"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Select City"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-          
-                // Passport Number
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Passport Number *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              // Passport Number
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Passport Number *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // Passport Number TextField
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // Passport Number TextField
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Enter your passport number"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Enter your passport number"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-          
-                // Passport Photo
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Passport Photo *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              // Passport Photo
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Passport Photo *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // Passport Photo Picker
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // Passport Photo Picker
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Click to Upload"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Click to Upload"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-          
-                //Y/N question
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Do you have work permit *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              //Y/N question
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Do you have work permit *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // answer choice yes/no
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // answer choice yes/no
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Enter your full name"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Enter your full name"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-          
-                //work permit photo
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Work Permit *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
+              ),
+
+              //work permit photo
+              Container(
+                padding: EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Work Permit *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),),
+                    )),
                   ),
                 ),
-                // Work Permit photo picker
-                const SizedBox(
-                  width: 400,
-                  height: 36,
-                  child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
+              ),
+              // Work Permit photo picker
+              const SizedBox(
+                width: 400,
+                height: 36,
+                child: TextField(
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontWeight: FontWeight.w100,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFFFFF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: ("Click to Upload"),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF7B838A),
                       fontSize: 14,
                     ),
-                    textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: ("Click to Upload"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
-                        color: Color(0xFF7B838A),
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
+              ),
 
               // Your Photo
               Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Your photo *", style: GoogleFonts.bricolageGrotesque(textStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.63,
-                    color: Colors.black,
-                  )),),
+                  child: Text(
+                    "Your photo *",
+                    style: GoogleFonts.bricolageGrotesque(
+                        textStyle: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15.63,
+                      color: Colors.black,
+                    )),
+                  ),
                 ),
               ),
               // Your photo picker
@@ -406,7 +450,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     fontSize: 14,
                   ),
                   textAlign: TextAlign.start,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0xFFFFFF),
@@ -424,7 +468,8 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: ("Scan Face"),
-                    contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                    contentPadding:
+                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
                     hintStyle: TextStyle(
                       color: Color(0xFF7B838A),
                       fontSize: 14,
@@ -436,7 +481,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 ),
               ),
 
-              // for some space 
+              // for some space
               SizedBox(
                 height: 30,
               ),
@@ -446,25 +491,25 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 width: 400,
                 height: 42,
                 decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const JobCategoryPage(),
-                              ),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Color(0xffFF3997),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(8), // Set the border radius
-                            ),
-                          ),
-                          child: Row(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VerificationPage(),
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xffFF3997),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8), // Set the border radius
+                    ),
+                  ),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       languageProvider.lan == 'English'
@@ -497,7 +542,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                       ),
                     ],
                   ),
-                        ),
+                ),
               )
             ],
           ),
