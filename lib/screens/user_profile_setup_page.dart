@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_dropdown.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
+import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -59,14 +61,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text(
-                    "Tell Us About Yourself",
-                    style: GoogleFonts.bricolageGrotesque(
-                        textStyle: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24.41,
-                    )),
-                  ),
+                  child: ReusableTitleHolder(title: 'Tell Us About Yourself'),
                 ),
               ),
 
@@ -74,15 +69,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text(
-                    "We need a bit more information to finalize\n your profile. This ensure your account is secure and verified.",
-                    style: GoogleFonts.bricolageGrotesque(
-                        textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.63,
-                      color: Color(0xFF08210E),
-                    )),
-                  ),
+                  child: ReusableContentHolder(content: 'We need a bit more information to finalize\nyour profile. This ensure your account is\nsecure and verified.'),
                 ),
               ),
 
@@ -318,60 +305,33 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 ),
               ),
               // answer choice yes/no
-             
-            Row(
-            mainAxisAlignment: MainAxisAlignment.start, 
-            children: [
-              Row(
+             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ReusableRadioButton(rButtonValue: 'Yes', 
+                rButtonSelectedValue: selectedOptionPp, 
+                rButtonChoosen: (value){
+                  setState(() {
+                    selectedOptionPp = value;
+                  });
+                }, rButtonName: 'Yes'),
+                const SizedBox(
+                  width: 20,
+                ),
+                ReusableRadioButton(rButtonValue: 'No', 
+                rButtonSelectedValue: selectedOptionPp, 
+                rButtonChoosen: (value){
+                  setState(() {
+                    selectedOptionPp = value;
+                  });
+                }, rButtonName: 'No'),
+              ],
+            ),
+            //Passport Number Textfield only appear when the user chose yes
+            if(selectedOptionPp == 'Yes')...[
+              Column(
                 children: [
-                  Radio<String>(
-                    value: 'Yes',
-                    groupValue: selectedOptionPp,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOptionPp = value;
-                      });
-                    },
-                    activeColor: Colors.pink, 
-                  ),
-                  const Text(
-                    'Yes',
-                    style:  TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ), // Custom text style
-                  ),
-                ],
-              ),
-              const SizedBox(width: 20), 
-              Row(
-                children: [
-                  Radio<String>(
-                    value: 'No',
-                    groupValue: selectedOptionPp,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOptionPp = value;
-                      });
-                    },
-                    activeColor: Colors.pink, // Pink radio button
-                  ),
-                  const Text(
-                    'No',
-                    style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ), // Custom text style
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-              // Passport Number Textfield only available when the user clicked YES in the above question
-              Container(
+                  Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -427,7 +387,10 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   ),
                 ),
               ),
-
+                ],
+              )
+            ],
+            
               // Do you have work permit YES/NO question ?
               Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -457,51 +420,23 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
              Row(
             mainAxisAlignment: MainAxisAlignment.start, 
             children: [
-              Row(
-                children: [
-                  Radio<String>(
-                    value: 'Yes',
-                    groupValue: selectedOptionWp,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOptionWp = value;
-                      });
-                    },
-                    activeColor: Colors.pink, 
-                  ),
-                  const Text(
-                    'Yes',
-                    style:  TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ), // Custom text style
-                  ),
-                ],
-              ),
-              const SizedBox(width: 20), 
-              Row(
-                children: [
-                  Radio<String>(
-                    value: 'No',
-                    groupValue: selectedOptionWp,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOptionWp = value;
-                      });
-                    },
-                    activeColor: Colors.pink, // Pink radio button
-                  ),
-                  const Text(
-                    'No',
-                    style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ), // Custom text style
-                  ),
-                ],
-              ),
+              ReusableRadioButton(rButtonValue: 'Yes', 
+                rButtonSelectedValue: selectedOptionWp, 
+                rButtonChoosen: (value){
+                  setState(() {
+                    selectedOptionWp = value;
+                  });
+                }, rButtonName: 'Yes'),
+                const SizedBox(
+                  width: 20,
+                ),
+                ReusableRadioButton(rButtonValue: 'No', 
+                rButtonSelectedValue: selectedOptionWp, 
+                rButtonChoosen: (value){
+                  setState(() {
+                    selectedOptionWp = value;
+                  });
+                }, rButtonName: 'No'),
             ],
           ),
              

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sabai_app/components/reusable_content_holder.dart';
+import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/user_profile_setup_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -43,14 +45,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               padding: const EdgeInsets.only(top: 12, bottom: 12),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Text("Verify OTP Code", style: GoogleFonts.bricolageGrotesque(textStyle: title1Style),),
+                child: ReusableTitleHolder(title: 'Verify OTP Code'),
               ),
             ),
             Container(
               padding: const EdgeInsets.only(top: 12, bottom:32),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Text("We sent a SMS with your OTP code to\n +66 2134567", style: GoogleFonts.bricolageGrotesque(textStyle: title2Style),),
+                child: ReusableContentHolder(content: 'We sent a SMS with your OTP code to\n+66 2134567.'),
               ),
             ),
             PinCodeTextField(appContext: context, length: 6,
@@ -86,7 +88,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               padding: const EdgeInsets.only(top: 32, bottom: 12),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Text("Having trouble? Request a new OTP.", style: GoogleFonts.bricolageGrotesque(textStyle: title2Style),),
+                child: ReusableContentHolder(content: 'Having trouble? Request a new OTP.',),
               ),
             ),
           ],
