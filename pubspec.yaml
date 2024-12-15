@@ -93,6 +93,15 @@ flutter:
     - family: Bricolage-B
       fonts:
         - asset: fonts/BricolageGrotesque-Bold.ttf
+    - family: Walone-T
+      fonts:
+        - asset: fonts/Z06-Walone-Thin.ttf
+    - family: Walone-R
+      fonts:
+        - asset: fonts/Z06-Walone-Regular.ttf
+    - family: Walone-B
+      fonts:
+        - asset: fonts/Z06-Walone-Bold.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

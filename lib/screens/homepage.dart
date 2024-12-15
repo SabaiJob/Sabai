@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -25,16 +27,25 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xffF0F1F2),
       appBar: AppBar(
-        title: const Text(
-          "Jobs",
-          style: TextStyle(
-            fontFamily: 'Bricolage-M',
-            fontSize: 19.53,
-          ),
-        ),
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "Jobs",
+                style: TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 19.53,
+                ),
+              )
+            : const Text(
+                "အလုပ်များ",
+                style: TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 19.53,
+                ),
+              ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -53,6 +64,7 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         backgroundColor: const Color(0xffF0F1F2),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: const EdgeInsets.all(20),

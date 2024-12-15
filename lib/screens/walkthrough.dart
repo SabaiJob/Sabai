@@ -51,46 +51,38 @@ class _WalkthroughState extends State<Walkthrough> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       languageProvider.lan == 'English'
-                          ? Text(
+                          ? const Text(
                               'Welcome to',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 24.41,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 24.41,
                               ),
                             )
-                          : Text(
+                          : const Text(
                               'Sabai Jobs',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 30.52,
-                                  color: Color(0xffFF3997),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-B',
+                                fontSize: 30.52,
+                                color: Color(0xffFF3997),
                               ),
                             ),
                       const SizedBox(
                         width: 10,
                       ),
                       languageProvider.lan == 'English'
-                          ? Text(
+                          ? const Text(
                               'Sabai Jobs',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 30.52,
-                                  color: Color(0xffFF3997),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-B',
+                                fontSize: 30.52,
+                                color: Color(0xffFF3997),
                               ),
                             )
-                          : Text(
+                          : const Text(
                               'မှကြိုဆိုပါတယ်',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 24.41,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 24.41,
                               ),
                             ),
                     ],
@@ -108,10 +100,11 @@ class _WalkthroughState extends State<Walkthrough> {
                                     textStyle: const TextStyle(fontSize: 15.6),
                                   ),
                                 )
-                              : Text(
+                              : const Text(
                                   'အလုပ်အကိုင်ရှာဖွေမှုကို လွယ်ကူစေတယ်',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontFamily: 'Walone-R',
+                                    fontSize: 14,
                                   ),
                                 ),
                         ),
@@ -123,10 +116,11 @@ class _WalkthroughState extends State<Walkthrough> {
                                     textStyle: const TextStyle(fontSize: 15.6),
                                   ),
                                 )
-                              : Text(
+                              : const Text(
                                   'လုံခြုံ အဆင်ပြေတဲ့ အလုပ်အကိုင်တွေရှိတယ်',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontFamily: 'Walone-R',
+                                    fontSize: 14,
                                   ),
                                 ),
                         ),
@@ -138,10 +132,11 @@ class _WalkthroughState extends State<Walkthrough> {
                                     textStyle: const TextStyle(fontSize: 15.6),
                                   ),
                                 )
-                              : Text(
+                              : const Text(
                                   'အလိမ်အညာအလုပ်များကို သေချာစီစစ်ထားတယ်',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontFamily: 'Walone-R',
+                                    fontSize: 14,
                                   ),
                                 ),
                         ),
@@ -153,10 +148,11 @@ class _WalkthroughState extends State<Walkthrough> {
                                     textStyle: const TextStyle(fontSize: 14),
                                   ),
                                 )
-                              : Text(
+                              : const Text(
                                   'အလုပ်အကိုင််ရှာဖွေမှုကို Sabai job နဲ့ပျော်ရွှင်စွာ ပြုလုပ်လိုက်ပါ',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(fontSize: 14),
+                                  style: TextStyle(
+                                    fontFamily: 'Walone-R',
+                                    fontSize: 14,
                                   ),
                                 ),
                         ),
@@ -216,34 +212,31 @@ class _WalkthroughState extends State<Walkthrough> {
                         )
                       : RichText(
                           textAlign: TextAlign.center,
-                          text: TextSpan(
+                          text: const TextSpan(
                               text:
                                   'စာရင်းသွင်းခြင်းဖြင့် သင့်အနေနှင့် ကျွန်ုပ်တို့၏',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xff4C5258),
-                                ),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Color(0xff4C5258),
+                                fontFamily: 'Walone-R',
                               ),
                               children: [
                                 TextSpan(
                                   text:
                                       'အသုံးပြုမှုစည်းမျဉ်းများနှင့်\nကိုယ်ရေးအချက်အလက်မူဝါဒ',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff4C5258),
-                                    ),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff4C5258),
+                                    fontFamily: 'Walone-R',
                                   ),
                                 ),
                                 TextSpan(
                                   text: 'ကို လက်ခံသည်ဟု ယူဆပါသည်',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xff4C5258),
-                                    ),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Color(0xff4C5258),
+                                    fontFamily: 'Walone-R',
                                   ),
                                 ),
                               ]),
@@ -284,14 +277,12 @@ class _WalkthroughState extends State<Walkthrough> {
                                 ),
                               ),
                             )
-                          : Text(
+                          : const Text(
                               'အကောင့်အသစ်ပြုလုပ်ရန်',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Walone-B',
                               ),
                             ),
                     ),
@@ -335,14 +326,12 @@ class _WalkthroughState extends State<Walkthrough> {
                                 ),
                               ),
                             )
-                          : Text(
+                          : const Text(
                               '၀င်ရောက်ရန်',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  color: Color(0xffFF3997),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.63,
-                                ),
+                              style: TextStyle(
+                                color: Color(0xffFF3997),
+                                fontSize: 14,
+                                fontFamily: 'Walone-B',
                               ),
                             ),
                     ),

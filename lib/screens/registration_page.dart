@@ -11,7 +11,6 @@ import '../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
 
@@ -30,13 +29,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
-      backgroundColor: Color(0xFFF0F1F2),
+      backgroundColor: const Color(0xFFF0F1F2),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("Create Profile", style: aBTitlteStyle),
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "Create Profile",
+                style: appBarTitleStyleEng,
+              )
+            : const Text(
+                'ပရိုဖိုင် ဖန်တီးရန်',
+                style: appBarTitleStyleMn,
+              ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF3997),
+        ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -45,159 +57,240 @@ class _RegistrationPageState extends State<RegistrationPage> {
               children: [
                 // progress indicator bar
                 Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
                   child: const StepProgressIndicator(
-                      roundedEdges: Radius.circular(10),
-                      padding: 0.0,
-                      totalSteps: 3,
-                      currentStep: 1,
-                      selectedColor: Color(0xFFFF3997),
-                      unselectedColor: Color.fromARGB(100, 76, 82, 88),
-                      size: 8.0,
-                      ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: ReusableTitleHolder(title: 'Tell Us About Yourself',),
+                    roundedEdges: Radius.circular(10),
+                    padding: 0.0,
+                    totalSteps: 3,
+                    currentStep: 1,
+                    selectedColor: Color(0xFFFF3997),
+                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                    size: 8.0,
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: ReusableContentHolder(content: 'Please provide your basic information to get\nstarted. This helps us tailor job opportunities\njust for you.'),
+                    child: ReusableTitleHolder(
+                      title: languageProvider.lan == 'English'
+                          ? 'Tell Us About Yourself'
+                          : 'ကိုယ်ရေးကိုယ်တာအချက်လက်',
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: ReusableContentHolder(
+                        content: languageProvider.lan == 'English'
+                            ? 'Please provide your basic information to get'
+                                '\nstarted. This helps us tailor job opportunities'
+                                '\njust for you.'
+                            : 'အကောင့်အသစ်ပြုလုပ်ရန်သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်'
+                                '\nများကိုထည့်သွင်းပေးပါ။'
+                                '\nသင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့'
+                                '\nဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'),
                   ),
                 ),
                 // Full Name
                 Container(
-                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: RichText(
-                      text: const TextSpan(
-                        text: 'Full Name',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 15.63,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.pink,
+                      text: languageProvider.lan == 'English'
+                          ? const TextSpan(
+                              text: 'Full Name',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 15.63,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const TextSpan(
+                              text: 'အမည်',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
-                
+
                 // Full Name TextFormField
-                ReusableTextformfield(textEditingController: _fullNameController, 
-                validating: (value){
-                  if(value == null || value.isEmpty){
+                ReusableTextformfield(
+                    textEditingController: _fullNameController,
+                    validating: (value) {
+                      if (value == null || value.isEmpty) {
                         return "Full Name is required";
                       }
                       return null;
-                }, 
-                hint: 'Enter your full name'),
-            
+                    },
+                    hint: languageProvider.lan == 'English'
+                        ? 'Enter your full name'
+                        : 'သင့်အမည် ထည့်ပါ'),
+
                 // Gender
                 Container(
-                  padding: EdgeInsets.only(top: 1, bottom: 12),
+                  padding: const EdgeInsets.only(top: 1, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: RichText(
-                      text: const TextSpan(
-                        text: 'Gender ',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 15.63,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.pink,
+                      text: languageProvider.lan == 'English'
+                          ? const TextSpan(
+                              text: 'Gender ',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 15.63,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const TextSpan(
+                              text: 'လိင် ',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '*',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
                 // Gender Picker
-                ReusableDropdown(dropdownItems: genderItems, selectedItem: selectedGender, cusHeight: 36,cusWidth: 400, whenOnChanged: (value){
-                  setState(() {
-                    selectedGender = value;
-                  });
-                }, hintText: 'Select One'),
-            
-                //Birthday 
+                ReusableDropdown(
+                    dropdownItems: genderItems,
+                    selectedItem: selectedGender,
+                    cusHeight: 36,
+                    cusWidth: 400,
+                    whenOnChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
+                    hintText: languageProvider.lan == 'English'
+                        ? 'Select One'
+                        : 'တစ်ခုရွေးချယ်ပါ'),
+
+                //Birthday
                 Container(
-                  padding: EdgeInsets.only(top: 22, bottom: 12),
+                  padding: const EdgeInsets.only(top: 22, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: RichText(
-                      text: const TextSpan(
-                        text: 'Birthday',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 15.63,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.pink,
+                      text: languageProvider.lan == 'English'
+                          ? const TextSpan(
+                              text: 'Birthday',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 15.63,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const TextSpan(
+                              text: 'မွေးနေ့',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
                 //Birthday Date Picker
-                const SizedBox(
+                SizedBox(
                   width: 400,
                   height: 36,
                   child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14,
-                    ),
+                    style: languageProvider.lan == 'English'
+                        ? const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 14,
+                          )
+                        : const TextStyle(
+                            fontFamily: 'Walone-R',
+                            fontSize: 14,
+                          ),
                     textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
+                          color: Color(0x00ffffff),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
+                          color: Color(0x00ffffff),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: ("Select Date"),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
+                      hintText: languageProvider.lan == 'English'
+                          ? ("Select Date")
+                          : ("နေ့စွဲ ရွေးချယ်ပါ"),
+                      contentPadding:
+                          const EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                      hintStyle: const TextStyle(
                         color: Color(0xFF7B838A),
                         fontSize: 14,
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -205,128 +298,165 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 // Phone Number
                 Container(
-                  padding: EdgeInsets.only(top: 22, bottom: 12),
+                  padding: const EdgeInsets.only(top: 22, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: RichText(
-                      text: const TextSpan(
-                        text: 'Phone Number',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 15.63,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.pink,
+                      text: languageProvider.lan == 'English'
+                          ? const TextSpan(
+                              text: 'Phone Number',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 15.63,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const TextSpan(
+                              text: 'ဖုန်းနံပါတ်',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.pink,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
-                
-                
+
                 //Phone Number TextFormField
-               ReusableTextformfield(textEditingController: _phoneNumberController,
-                validating: (value){
-                  if(value == null || value.isEmpty){
+                ReusableTextformfield(
+                    textEditingController: _phoneNumberController,
+                    validating: (value) {
+                      if (value == null || value.isEmpty) {
                         return "Phone Number is required";
                       }
                       return null;
-                }, 
-                hint: '+66 2134567'),
+                    },
+                    hint: '+66 2134567'),
                 // Email Address
                 Container(
-                  padding: EdgeInsets.only(top: 1, bottom: 12),
-                  child: const Align(
+                  padding: const EdgeInsets.only(top: 1, bottom: 12),
+                  child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Email Address",  style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 15.63,
-                          color: Colors.black,
-                        ),),
+                    child: languageProvider.lan == 'English'
+                        ? const Text(
+                            "Email Address",
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-M',
+                              fontSize: 15.63,
+                              color: Colors.black,
+                            ),
+                          )
+                        : const Text(
+                            "အီးမေးလ် လိပ်စာ",
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
                   ),
                 ),
                 // Email Address TextField
-                const SizedBox(
+                SizedBox(
                   width: 400,
                   height: 36,
                   child: TextField(
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14,
-                    ),
+                    style: languageProvider.lan == 'English'
+                        ? const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 14,
+                          )
+                        : const TextStyle(
+                            fontFamily: 'Walone-R',
+                            fontSize: 14,
+                          ),
                     textAlign: TextAlign.start,
-                    decoration:  InputDecoration(
-                      enabledBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
+                          color: Color(0x00ffffff),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFFFFF),
+                          color: Color(0x00ffffff),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: ("Enter your email address"),
-                      hintStyle: TextStyle(
+                      hintText: languageProvider.lan == 'English'
+                          ? ("Enter your email address")
+                          : ('သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
+                      hintStyle: const TextStyle(
                         color: Color(0xFF7B838A),
                         fontSize: 14,
                       ),
-                      contentPadding: EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      border: OutlineInputBorder(
+                      contentPadding:
+                          const EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                 ),
-            
+
                 // for some space
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
-            
+
                 // Continue Button
                 Container(
                   width: 400,
                   height: 42,
                   decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: TextButton(
-                            onPressed: () {
-                              if(_formKey.currentState!.validate()){
-                                Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const OtpVerificationPage(),
-                                ),
-                              );
-                              } else{
-                                // form validation failed
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content:Text("Please completed all the required fields")));
-                              }
-                            },
-                            style: TextButton.styleFrom(
-                              backgroundColor: Color(0xffFF3997),
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(8), // Set the border radius
-                              ),
-                            ),
-                            child: Row(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OtpVerificationPage(),
+                          ),
+                        );
+                      } else {
+                        // form validation failed
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "Please completed all the required fields")));
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xffFF3997),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(8), // Set the border radius
+                      ),
+                    ),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         languageProvider.lan == 'English'
@@ -359,7 +489,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ],
                     ),
-                          ),
+                  ),
                 )
               ],
             ),

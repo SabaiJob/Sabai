@@ -6,6 +6,8 @@ import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
+import '../constants.dart';
+
 class JobCategoryPage extends StatefulWidget {
   const JobCategoryPage({super.key});
 
@@ -19,6 +21,13 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
     'Restaurant 🧑‍🍳',
     'Beauty 💋',
     'Teaching\t👩‍🏫',
+  ];
+
+  final List<String> categoriesMM = [
+    'ဟိုတယ်များ 🏨',
+    'စားသောက်ဆိုင်များ 🧑‍🍳',
+    'အလှပရေးရာ 💋',
+    'သင်ကြားရေး\t👩‍🏫',
   ];
   late List<bool> _check;
 
@@ -39,16 +48,18 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
       backgroundColor: const Color(0xFFF0F1F2),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          "Create Profile",
-          style: TextStyle(
-            fontSize: 19.53,
-            fontFamily: 'Bricolage-M',
-          ),
-        ),
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "Create Profile",
+                style: appBarTitleStyleEng,
+              )
+            : const Text(
+                'ပရိုဖိုင် ဖန်တီးရန်',
+                style: appBarTitleStyleMn,
+              ),
         centerTitle: true,
         iconTheme: const IconThemeData(
-          color: Color(0xffFF3997),
+          color: Color(0xFFFF3997),
         ),
       ),
       body: Container(
@@ -74,30 +85,48 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
               padding: const EdgeInsets.only(top: 12, bottom: 12),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "Select Your Job Preferences",
-                  style: GoogleFonts.bricolageGrotesque(
-                      textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 24.41,
-                  )),
-                ),
+                child: languageProvider.lan == 'English'
+                    ? const Text(
+                        "Select Your Job Preferences",
+                        style: const TextStyle(
+                          fontFamily: 'Bricolage-B',
+                          fontSize: 24.41,
+                        ),
+                      )
+                    : const Text(
+                        'အလုပ်အကိုင်အမျိုးအစားများ',
+                        style: const TextStyle(
+                          fontFamily: 'Walone-B',
+                          fontSize: 24.41,
+                        ),
+                      ),
               ),
             ),
 
             Container(
               padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: const Align(
+              child: Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "Choose the job categories that interest you.\n"
-                  "This helps us match you with the best\nopportunities",
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-R',
-                    fontSize: 15.63,
-                    color: Color(0xFF08210E),
-                  ),
-                ),
+                child: languageProvider.lan == 'English'
+                    ? const Text(
+                        "Choose the job categories that interest you.\n"
+                        "This helps us match you with the best\nopportunities",
+                        style: TextStyle(
+                          fontFamily: 'Bricolage-R',
+                          fontSize: 15.63,
+                          color: Color(0xFF08210E),
+                        ),
+                      )
+                    : const Text(
+                        'သင်စိတ်ဝင်စားရာအလုပ်အကိုင်အမျိုးအစားများကို ရွေးချယ်ပါ။'
+                        '\nသင့်နဲ့ကိုက်ညီမယ့်အကောင်းဆုံး အလုပ်အခွင့်အလမ်းများကို'
+                        '\nကျွန်တော်တို့ ပြပေးနိုင်ပါသည်။',
+                        style: TextStyle(
+                          fontFamily: 'Walone-R',
+                          fontSize: 14,
+                          color: Color(0xFF08210E),
+                        ),
+                      ),
               ),
             ),
             Expanded(
@@ -111,13 +140,21 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            categories[index],
-                            style: const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 15.63,
-                            ),
-                          ),
+                          child: languageProvider.lan == 'English'
+                              ? Text(
+                                  categories[index],
+                                  style: const TextStyle(
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 15.63,
+                                  ),
+                                )
+                              : Text(
+                                  categoriesMM[index],
+                                  style: const TextStyle(
+                                    fontFamily: 'Walone-R',
+                                    fontSize: 14,
+                                  ),
+                                ),
                         ),
                         Checkbox(
                           activeColor: const Color(0xffFF3997),
@@ -147,17 +184,17 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return const Dialog(
+                      return Dialog(
                         backgroundColor: Colors.white,
                         child: SizedBox(
                           width: 120,
                           height: 200,
                           child: Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 110,
                                 width: 110,
                                 child: Stack(
@@ -184,17 +221,26 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 35,
                               ),
-                              Text(
-                                'Creating your profile...',
-                                style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontFamily: 'Bricolage-R',
-                                  color: Color(0xff41464B),
-                                ),
-                              )
+                              languageProvider.lan == 'English'
+                                  ? const Text(
+                                      'Creating your profile...',
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        fontFamily: 'Bricolage-R',
+                                        color: Color(0xff41464B),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'သင့်ပရိုဖိုင်ကို ဖန်တီးနေသည် ...',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontFamily: 'Walone-B',
+                                        color: Color(0xff41464B),
+                                      ),
+                                    ),
                             ],
                           ),
                         ),

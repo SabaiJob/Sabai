@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/screens/homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
@@ -24,10 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           title: languageProvider.lan == 'English'
               ? const Text(
                   'Log In',
-                  style: TextStyle(
-                    fontFamily: "Bricolage-M",
-                    fontSize: 19.53,
-                  ),
+                  style: appBarTitleStyleEng,
                 )
               : const Text(
                   '၀င်ရောက်ရန်',
@@ -46,22 +44,16 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'User Register',
-                    style: GoogleFonts.bricolageGrotesque(
-                      textStyle: title1Style,
-                    ),
+                    style: appBarTitleStyleEng,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    'Lorem ipsum dolor sit amet consectetur. Ut'
-                    ' vel\nvitae sed quam maecenas cursus pharetra.',
-                    style: GoogleFonts.bricolageGrotesque(
-                      textStyle: title2Style,
-                    ),
-                  ),
+                  ReusableContentHolder(
+                      content:
+                          'Lorem ipsum dolor sit amet consectetur. Ut vel\nnvitae sed quam maecenas cursus pharetra.'),
                   const SizedBox(
                     height: 20,
                   ),

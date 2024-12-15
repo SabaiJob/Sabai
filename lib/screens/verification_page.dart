@@ -1,6 +1,8 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/job_category_page.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -53,21 +55,60 @@ class _VerificationPageState extends State<VerificationPage>
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFFFEBF6),
-      body: AvatarGlow(
-        glowColor: Colors.white,
-        glowCount: 1,
-        child: Center(
-          child: ScaleTransition(
-            scale: _animation,
-            child: Image.asset(
-              'images/verifying.png',
-              width: 300,
-              height: 300,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AvatarGlow(
+            glowColor: Colors.white,
+            glowCount: 1,
+            child: Center(
+              child: ScaleTransition(
+                scale: _animation,
+                child: Image.asset(
+                  'images/verifying.png',
+                  width: 300,
+                  height: 300,
+                ),
+              ),
             ),
           ),
-        ),
+          languageProvider.lan == 'English'
+              ? const Text(
+                  'Checking Your Profile',
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 24.41,
+                  ),
+                )
+              : const Text(
+                  'သင့်ပရိုဖိုင်ကို စစ်ဆေးနေပါပြီ',
+                  style: TextStyle(
+                    fontFamily: 'Walone-B',
+                    fontSize: 24.41,
+                  ),
+                ),
+          const SizedBox(
+            height: 5,
+          ),
+          languageProvider.lan == 'English'
+              ? const Text(
+                  'We\'ll Be in Touch Within 2 Business Days',
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-R',
+                    fontSize: 15.63,
+                  ),
+                )
+              : const Text(
+                  'အများဆုံး ၂ ရက်အတွင်းပြန်လည်ဆက်သွယ်ပါမည်',
+                  style: TextStyle(
+                    fontFamily: 'Walone-R',
+                    fontSize: 14,
+                  ),
+                ),
+        ],
       ),
     );
   }
