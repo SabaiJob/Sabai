@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';

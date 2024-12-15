@@ -333,16 +333,15 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 children: [
                   Container(
                 padding: EdgeInsets.only(top: 12, bottom: 12),
-                child: Align(
+                child: const Align(
                   alignment: Alignment.topLeft,
-                  child: Text(
+                  child:  Text(
                     "Passport Number",
-                    style: GoogleFonts.bricolageGrotesque(
-                        textStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-M',
                       fontSize: 15.63,
                       color: Colors.black,
-                    )),
+                    ),
                   ),
                 ),
               ),
