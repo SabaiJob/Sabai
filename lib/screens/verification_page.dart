@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/job_category_page.dart';
 
@@ -21,12 +22,12 @@ class _VerificationPageState extends State<VerificationPage>
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    )..repeat(reverse: false); // Automatically repeats animation
+    )..repeat(reverse: true); // Automatically repeats animation
 
     // Set up the bounce animation
     _animation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.bounceOut,
+      curve: Curves.easeOut,
     );
 
     Future.delayed(
@@ -53,13 +54,18 @@ class _VerificationPageState extends State<VerificationPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ScaleTransition(
-          scale: _animation,
-          child: Image.asset(
-            'images/verifying.png',
-            width: 300,
-            height: 300,
+      backgroundColor: const Color(0xFFFFEBF6),
+      body: AvatarGlow(
+        glowColor: Colors.white,
+        glowCount: 1,
+        child: Center(
+          child: ScaleTransition(
+            scale: _animation,
+            child: Image.asset(
+              'images/verifying.png',
+              width: 300,
+              height: 300,
+            ),
           ),
         ),
       ),
