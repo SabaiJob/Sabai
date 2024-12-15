@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/job_category_page.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -20,12 +21,26 @@ class _VerificationPageState extends State<VerificationPage>
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    )..repeat(reverse: true); // Automatically repeats animation
+    )..repeat(reverse: false); // Automatically repeats animation
 
     // Set up the bounce animation
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.bounceOut,
+    );
+
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        if (!mounted) return;
+        _controller.stop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const JobCategoryPage(),
+          ),
+        );
+      },
     );
   }
 
