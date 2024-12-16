@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
+import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/screens/homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
@@ -18,10 +19,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    final fullNameController = TextEditingController();
+    final phoneNumberController = TextEditingController();
     return Scaffold(
-        backgroundColor: Color(0xffF7F7F7),
+        backgroundColor: const Color(0xffF7F7F7),
         appBar: AppBar(
-          backgroundColor: Color(0xffF7F7F7),
+          backgroundColor: const Color(0xffF7F7F7),
           title: languageProvider.lan == 'English'
               ? const Text(
                   'Log In',
@@ -40,148 +43,130 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'User Register',
-                    style: appBarTitleStyleEng,
-                  ),
+                  languageProvider.lan == 'English'
+                      ? const Text(
+                          'User Register',
+                          style: appBarTitleStyleEng,
+                        )
+                      : const Text(
+                          'အကောင့်က၀င်ရောက်ရန်',
+                          style: appBarTitleStyleMn,
+                        ),
                   const SizedBox(
                     height: 20,
                   ),
                   ReusableContentHolder(
-                      content:
-                          'Lorem ipsum dolor sit amet consectetur. Ut vel\nnvitae sed quam maecenas cursus pharetra.'),
+                      content: languageProvider.lan == 'English'
+                          ? 'Lorem ipsum dolor sit amet consectetur. Ut vel'
+                              '\nnvitae sed quam maecenas cursus pharetra.'
+                          : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
                   const SizedBox(
                     height: 20,
                   ),
                   RichText(
-                    text: const TextSpan(
-                      text: 'Full Name',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
+                    text: languageProvider.lan == 'English'
+                        ? const TextSpan(
+                            text: 'Full Name',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-M',
+                              fontSize: 15.63,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          )
+                        : const TextSpan(
+                            text: 'အမည်',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  const SizedBox(
-                    width: 400,
-                    height: 36,
-                    child: TextField(
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-R',
-                        fontWeight: FontWeight.w100,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFFFFF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFFFFF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: ("Enter your full name"),
-                        contentPadding:
-                            EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                        hintStyle: TextStyle(
-                          color: Color(0xFF7B838A),
-                          fontSize: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  ReusableTextformfield(
+                      textEditingController: fullNameController,
+                      validating: (value) {
+                        if (value == null || value.isEmpty) {
+                          return languageProvider.lan == 'English'
+                              ? "Full Name is required"
+                              : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                        }
+                        return null;
+                      },
+                      hint: languageProvider.lan == 'English'
+                          ? 'Enter your full name'
+                          : 'သင့်အမည် ထည့်ပါ'),
                   RichText(
-                    text: const TextSpan(
-                      text: 'Phone Number',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
+                    text: languageProvider.lan == 'Englsih'
+                        ? const TextSpan(
+                            text: 'Phone Number',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-M',
+                              fontSize: 15.63,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.pink,
+                                ),
+                              ),
+                            ],
+                          )
+                        : const TextSpan(
+                            text: 'ဖုန်းနံပါတ်',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.pink,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
                   ),
                   const SizedBox(
-                    width: 400,
-                    height: 36,
-                    child: TextField(
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-R',
-                        fontWeight: FontWeight.w100,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFFFFF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFFFFF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: ("+66 2134567"),
-                        contentPadding:
-                            EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                        hintStyle: TextStyle(
-                          color: Color(0xFF7B838A),
-                          fontSize: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
+                    height: 10,
                   ),
+                  ReusableTextformfield(
+                      textEditingController: phoneNumberController,
+                      validating: (value) {
+                        if (value == null || value.isEmpty) {
+                          return languageProvider.lan == 'English'
+                              ? "Phone Number is required"
+                              : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
+                        }
+                        return null;
+                      },
+                      hint: '+66 2134567'),
                 ],
               ),
             ),

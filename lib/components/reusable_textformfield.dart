@@ -6,8 +6,9 @@ class ReusableTextformfield extends StatelessWidget {
   final TextEditingController? textEditingController;
   final String? Function(String?)? validating;
   final String? hint;
-  ReusableTextformfield(
-      {required this.textEditingController,
+  const ReusableTextformfield(
+      {super.key,
+      required this.textEditingController,
       required this.validating,
       required this.hint});
   //const ReusableTextformfield({super.key});
@@ -35,14 +36,14 @@ class ReusableTextformfield extends StatelessWidget {
             hintText: hint,
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFFFFFF),
+                color: Color(0x00ffffff),
                 width: 2,
               ),
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFFFFFF),
+                color: Color(0x00ffffff),
                 width: 2,
               ),
               borderRadius: BorderRadius.all(Radius.circular(8)),

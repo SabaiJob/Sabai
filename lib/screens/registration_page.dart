@@ -20,7 +20,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final List<String> genderItemsEng = ['male', 'female', 'others'];
-  final List<String> genderItemsMm = ['ကျား','မ', 'အခြား'];
+  final List<String> genderItemsMm = ['ကျား', 'မ', 'အခြား'];
   String? selectedGender;
   // Form Key and Controllers
   final _formKey = GlobalKey<FormState>();
@@ -143,7 +143,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     textEditingController: _fullNameController,
                     validating: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Full Name is required";
+                        return languageProvider.lan == 'English'
+                            ? "Full Name is required"
+                            : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
                       }
                       return null;
                     },
@@ -195,8 +197,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 // Gender Picker
                 ReusableDropdown(
-                    dropdownItems: languageProvider.lan == 'English' 
-                    ? genderItemsEng : genderItemsMm,
+                    dropdownItems: languageProvider.lan == 'English'
+                        ? genderItemsEng
+                        : genderItemsMm,
                     selectedItem: selectedGender,
                     cusHeight: 36,
                     cusWidth: 400,
@@ -346,7 +349,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     textEditingController: _phoneNumberController,
                     validating: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Phone Number is required";
+                        return languageProvider.lan == 'English'
+                            ? "Phone Number is required"
+                            : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
                       }
                       return null;
                     },

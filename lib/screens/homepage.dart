@@ -57,7 +57,8 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0), // Height of the bottom border
+          preferredSize:
+              const Size.fromHeight(1.0), // Height of the bottom border
           child: Container(
             color: Colors.grey, // Border color
             height: 1.0, // Border thickness
