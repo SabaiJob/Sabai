@@ -19,7 +19,8 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final List<String> genderItems = ['male', 'female', 'others'];
+  final List<String> genderItemsEng = ['male', 'female', 'others'];
+  final List<String> genderItemsMm = ['ကျား','မ', 'အခြား'];
   String? selectedGender;
   // Form Key and Controllers
   final _formKey = GlobalKey<FormState>();
@@ -194,7 +195,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 // Gender Picker
                 ReusableDropdown(
-                    dropdownItems: genderItems,
+                    dropdownItems: languageProvider.lan == 'English' 
+                    ? genderItemsEng : genderItemsMm,
                     selectedItem: selectedGender,
                     cusHeight: 36,
                     cusWidth: 400,

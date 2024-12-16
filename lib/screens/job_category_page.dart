@@ -76,7 +76,7 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
                 totalSteps: 3,
                 currentStep: 1,
                 selectedColor: Color(0xFFFF3997),
-                unselectedColor: Color(0xFF4C5258),
+                unselectedColor: Color.fromARGB(100, 76, 82, 88),
                 size: 8.0,
               ),
             ),

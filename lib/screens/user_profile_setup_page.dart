@@ -474,7 +474,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                       });
                     },
                     rButtonName:
-                        languageProvider.lan == 'English' ? 'Yes' : 'မရှိ',
+                        languageProvider.lan == 'English' ? 'No' : 'မရှိ',
                   ),
                 ],
               ),
@@ -621,7 +621,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                       });
                     },
                     rButtonName:
-                        languageProvider.lan == 'English' ? 'Yes' : 'မရှိ',
+                        languageProvider.lan == 'English' ? 'No' : 'မရှိ',
                   ),
                 ],
               ),
