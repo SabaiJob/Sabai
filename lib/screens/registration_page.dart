@@ -451,9 +451,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         );
                       } else {
                         // form validation failed
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                "Please completed all the required fields")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: languageProvider.lan == 'English' ?
+                            const Text(
+                                "Please completed all the required fields")
+                                : 
+                                const Text(
+                                "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
                       }
                     },
                     style: TextButton.styleFrom(

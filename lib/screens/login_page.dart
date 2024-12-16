@@ -260,10 +260,13 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         // form validation failed
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                "Please completed all the required fields"),
-                          ),
+                           SnackBar(
+                            content: languageProvider.lan == 'English' ?
+                            const Text(
+                                "Please completed all the required fields")
+                                : 
+                                const Text(
+                                "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")),
                         );
                       }
                     },

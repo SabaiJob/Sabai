@@ -311,7 +311,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                         ? selectedDuration
                         : selectedDurationMM,
                     cusHeight: 36,
-                    cusWidth: 95,
+                    cusWidth: 96,
                     whenOnChanged: (value) {
                       setState(() {
                         selectedDuration = value;
