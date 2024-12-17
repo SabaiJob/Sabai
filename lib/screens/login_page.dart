@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? 'Enter your full name'
                             : 'သင့်အမည် ထည့်ပါ'),
                     RichText(
-                      text: languageProvider.lan == 'Englsih'
+                      text: languageProvider.lan == 'English'
                           ? const TextSpan(
                               text: 'Phone Number',
                               style: TextStyle(
@@ -260,13 +260,12 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         // form validation failed
                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
-                            content: languageProvider.lan == 'English' ?
-                            const Text(
-                                "Please completed all the required fields")
-                                : 
-                                const Text(
-                                "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")),
+                          SnackBar(
+                              content: languageProvider.lan == 'English'
+                                  ? const Text(
+                                      "Please completed all the required fields")
+                                  : const Text(
+                                      "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")),
                         );
                       }
                     },

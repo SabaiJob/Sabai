@@ -22,7 +22,9 @@ class _SuccessPageState extends State<SuccessPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const Homepage(),
+          builder: (context) => const Homepage(
+            showBottomSheet: true,
+          ),
         ),
       );
     });
