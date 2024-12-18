@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/job_details_page.dart';
 
 class All extends StatelessWidget {
   const All({super.key});
@@ -28,7 +29,9 @@ class WorkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> JobDetailsPage()));
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
