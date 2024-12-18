@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/screens/homepage.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
 
@@ -252,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Homepage(),
+                                builder: (context) => const NavigationHomepage(showButtonSheet: false,),
                               ),
                             );
                           },

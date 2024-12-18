@@ -5,6 +5,7 @@ import 'package:sabai_app/components/bottom_sheet.dart';
 import 'package:sabai_app/screens/homepage_menupages/all.dart';
 import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -48,7 +49,15 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
             context: context,
             isScrollControlled: true,
             builder: (context) => const Bottomsheet(),
-          );
+          ).whenComplete(() {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const NavigationHomepage(
+                  showButtonSheet: false,
+                ),
+              ),
+            );
+          });
         },
       );
     }

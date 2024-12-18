@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/homepage.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class SuccessPage extends StatefulWidget {
@@ -22,8 +23,8 @@ class _SuccessPageState extends State<SuccessPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const Homepage(
-            showBottomSheet: true,
+          builder: (context) => const NavigationHomepage(
+            showButtonSheet: true,
           ),
         ),
       );
