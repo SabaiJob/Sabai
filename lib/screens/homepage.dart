@@ -161,8 +161,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         backgroundColor: const Color(0xffF0F1F2),
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         child: Column(
           children: [
             Row(

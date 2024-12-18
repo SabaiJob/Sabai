@@ -37,34 +37,62 @@ class WorkCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 120,
-              height: 25,
-              decoration: const BoxDecoration(
-                color: Color(0xffFFEBF6),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset(
-                    'images/status.png',
-                    width: 12,
-                    height: 12,
-                  ),
-                  const Text(
-                    'Sabai Job Partner',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'Bricolage-R',
-                      color: Color(0xff6C757D),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 120,
+                  height: 25,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFFEBF6),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
                     ),
                   ),
-                ],
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset(
+                        'images/status.png',
+                        width: 12,
+                        height: 12,
+                      ),
+                      const Text(
+                        'Sabai Job Partner',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: 'Bricolage-R',
+                          color: Color(0xff6C757D),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 10),
+                  child: Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: Color(0xffF0F1F2),
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        CupertinoIcons.heart,
+                        color: Color(0xffFF3997),
+                      ),
+                      iconSize: 18,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                )
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -73,7 +101,7 @@ class WorkCard extends StatelessWidget {
                 children: [
                   Text(
                     jobTitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15.63,
                       fontFamily: 'Bricolage-M',
                     ),
