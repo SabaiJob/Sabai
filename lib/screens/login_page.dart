@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
-import 'package:sabai_app/screens/homepage.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
@@ -66,8 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     ReusableContentHolder(
                         content: languageProvider.lan == 'English'
-                            ? 'Lorem ipsum dolor sit amet consectetur. Ut vel'
-                                '\nnvitae sed quam maecenas cursus pharetra.'
+                            ? 'Lorem ipsum dolor sit amet consectetur. Ut vel nvitae sed quam maecenas cursus pharetra.'
                             : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
                     const SizedBox(
                       height: 20,
@@ -281,24 +278,20 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         languageProvider.lan == 'English'
-                            ? Text(
+                            ? const Text(
                                 'Log In',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.63,
-                                  ),
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-B',
+                                  fontSize: 15.63,
+                                  color: Colors.white,
                                 ),
                               )
-                            : Text(
+                            : const Text(
                                 '၀င်ရောက်ရန်',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
                               ),
                         const SizedBox(

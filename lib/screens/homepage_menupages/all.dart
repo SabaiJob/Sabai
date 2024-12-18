@@ -30,7 +30,7 @@ class WorkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> JobDetailsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> const JobDetailsPage()));
       },
       child: Card(
         shape: RoundedRectangleBorder(
