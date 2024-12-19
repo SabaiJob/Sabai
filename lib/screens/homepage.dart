@@ -159,6 +159,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
           ),
         ),
         backgroundColor: const Color(0xffF0F1F2),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         automaticallyImplyLeading: false,
       ),
       body: Padding(

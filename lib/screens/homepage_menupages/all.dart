@@ -7,9 +7,9 @@ class All extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> jobTitle = ['Barista', 'Chef', 'Teacher'];
-    return Scaffold(
-      backgroundColor: const Color(0xffF7F7F7),
-      body: ListView.builder(
+    return Container(
+      color: const Color(0xffF7F7F7),
+      child: ListView.builder(
         itemCount: jobTitle.length, // Total number of items
         itemBuilder: (context, index) {
           return WorkCard(
