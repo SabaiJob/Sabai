@@ -6,7 +6,6 @@ import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/verification_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import '../services/language_provider.dart';
 import 'package:provider/provider.dart';
@@ -95,8 +94,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                           ? 'We need a bit more information to finalize'
                               '\nyour profile. This ensure your account is'
                               '\nsecure and verified.'
-                          : 'သင့်ပရိုဖိုင်ကို လုံခြုံစေဖို့ အတည်ပြုရန် အခြားအချက်အလက်'
-                              '\nအနည်းငယ် လိုအပ်ပါသည်။'),
+                          : 'သင့်ပရိုဖိုင်ကို လုံခြုံစေဖို့ အတည်ပြုရန် အခြားအချက်အလက် အနည်းငယ် လိုအပ်ပါသည်။'),
                 ),
               ),
 
@@ -257,51 +255,56 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    width: 240,
-                    height: 36,
-                    child: TextField(
-                      style: languageProvider.lan == 'English'
-                          ? const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 14,
-                            )
-                          : const TextStyle(
-                              fontFamily: 'Walone-R',
-                              fontSize: 14,
+                  Expanded(
+                    child: SizedBox(
+                      
+                      height: 36,
+                      child: TextField(
+                        style: languageProvider.lan == 'English'
+                            ? const TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 14,
+                              )
+                            : const TextStyle(
+                                fontFamily: 'Walone-R',
+                                fontSize: 14,
+                              ),
+                        textAlign: TextAlign.start,
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00ffffff),
+                              width: 2,
                             ),
-                      textAlign: TextAlign.start,
-                      decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00ffffff),
-                            width: 2,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00ffffff),
-                            width: 2,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00ffffff),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: ("0"),
-                        contentPadding:
-                            EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                        hintStyle: TextStyle(
-                          color: Color(0xFF7B838A),
-                          fontSize: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: ("0"),
+                          contentPadding:
+                              EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                          hintStyle: TextStyle(
+                            color: Color(0xFF7B838A),
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
                     ),
+                  ),
+                  const SizedBox(
+                    width: 5,
                   ),
                   ReusableDropdown(
                     dropdownItems: languageProvider.lan == "English"
@@ -658,25 +661,21 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       languageProvider.lan == 'English'
-                          ? Text(
+                          ? const Text(
                               'Continue',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                              style: TextStyle(
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 15.63,
-                                ),
-                              ),
-                            )
-                          : Text(
-                              'ဆက်လက်ရန်',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
                                 ),
-                              ),
+                            )
+                          : const Text(
+                              'ဆက်လက်ရန်',
+                              style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                             ),
                       const SizedBox(
                         width: 10,

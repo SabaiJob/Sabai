@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_dropdown.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
@@ -86,13 +85,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     alignment: Alignment.topLeft,
                     child: ReusableContentHolder(
                         content: languageProvider.lan == 'English'
-                            ? 'Please provide your basic information to get'
-                                '\nstarted. This helps us tailor job opportunities'
-                                '\njust for you.'
-                            : 'အကောင့်အသစ်ပြုလုပ်ရန်သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်'
-                                '\nများကိုထည့်သွင်းပေးပါ။'
-                                '\nသင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့'
-                                '\nဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'),
+                            ? 'Please provide your basic information to get started. This helps us tailor job opportunities just for you.'
+                            : 'အကောင့်အသစ်ပြုလုပ်ရန် သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုထည့်သွင်းပေးပါ။ သင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့ ဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'
+                              ),
                   ),
                 ),
                 // Full Name
@@ -471,24 +466,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         languageProvider.lan == 'English'
-                            ? Text(
+                            ? const Text(
                                 'Continue',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.63,
-                                  ),
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-B',
+                                  fontSize: 15.63,
+                                  color: Colors.white,
                                 ),
                               )
-                            : Text(
+                            : const Text(
                                 'ဆက်လက်ရန်',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
                               ),
                         const SizedBox(

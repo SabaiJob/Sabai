@@ -38,91 +38,93 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           color: Color(0xFFFF3997),
         ),
       ),
-      body: Container(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: const StepProgressIndicator(
-                roundedEdges: Radius.circular(10),
-                padding: 0.0,
-                totalSteps: 3,
-                currentStep: 1,
-                selectedColor: Color(0xFFFF3997),
-                unselectedColor: Color.fromARGB(100, 76, 82, 88),
-                size: 8.0,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: ReusableTitleHolder(
-                  title: languageProvider.lan == 'English'
-                      ? 'Verify OTP Code'
-                      : 'OTP ကုဒ်ကို စစ်ဆေးပါ',
+      body: SingleChildScrollView(
+        child: Container(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: const StepProgressIndicator(
+                  roundedEdges: Radius.circular(10),
+                  padding: 0.0,
+                  totalSteps: 3,
+                  currentStep: 1,
+                  selectedColor: Color(0xFFFF3997),
+                  unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                  size: 8.0,
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 12, bottom: 32),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: ReusableContentHolder(
-                    content: languageProvider.lan == "English"
-                        ? 'We sent a SMS with your OTP code to\n+66 2134567.'
-                        : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို +66 2134567 သို့\nပို့ခဲ့ပါပြီ။'),
-              ),
-            ),
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              onCompleted: (value) {
-                if (value == fixedPinNumber) {
-                  print(value);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UserProfileSetupPage()));
-                } else {
-                  print('wrong pin');
-                }
-              },
-              enableActiveFill: true,
-              pinTheme: PinTheme(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                selectedColor: const Color(0xFFC8C8C8),
-                selectedFillColor: Colors.white,
-                inactiveFillColor: Colors.white,
-                activeColor: const Color(0xFFC8C8C8),
-                //activeColor: Colors.pink,
-                activeFillColor: Colors.white,
-                errorBorderColor: Colors.black,
-                inactiveColor: const Color(0xFFC8C8C8),
-                inactiveBorderWidth: 2,
-                activeBorderWidth: 3,
-                fieldWidth: 40,
-                fieldHeight: 56,
-                shape: PinCodeFieldShape.box,
-
-                //activeFillColor: Colors.white,
-                //selectedColor: Colors.black,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 32, bottom: 12),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: ReusableContentHolder(
-                  content: languageProvider.lan == 'English'
-                      ? 'Having trouble? Request a new OTP.'
-                      : 'ပြဿနာရှိနေပါသလား? OTP ကုဒ်အသစ်ကိုပြန်တောင်းရန်\n00:27.',
+              Container(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: ReusableTitleHolder(
+                    title: languageProvider.lan == 'English'
+                        ? 'Verify OTP Code'
+                        : 'OTP ကုဒ်ကို စစ်ဆေးပါ',
+                  ),
                 ),
               ),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.only(top: 12, bottom: 32),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: ReusableContentHolder(
+                      content: languageProvider.lan == "English"
+                          ? 'We sent a SMS with your OTP code to\n+66 2134567.'
+                          : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို +66 2134567 သို့\nပို့ခဲ့ပါပြီ။'),
+                ),
+              ),
+              PinCodeTextField(
+                appContext: context,
+                length: 6,
+                onCompleted: (value) {
+                  if (value == fixedPinNumber) {
+                    print(value);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserProfileSetupPage()));
+                  } else {
+                    print('wrong pin');
+                  }
+                },
+                enableActiveFill: true,
+                pinTheme: PinTheme(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  selectedColor: const Color(0xFFC8C8C8),
+                  selectedFillColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  activeColor: const Color(0xFFC8C8C8),
+                  //activeColor: Colors.pink,
+                  activeFillColor: Colors.white,
+                  errorBorderColor: Colors.black,
+                  inactiveColor: const Color(0xFFC8C8C8),
+                  inactiveBorderWidth: 2,
+                  activeBorderWidth: 3,
+                  fieldWidth: 40,
+                  fieldHeight: 56,
+                  shape: PinCodeFieldShape.box,
+        
+                  //activeFillColor: Colors.white,
+                  //selectedColor: Colors.black,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 32, bottom: 12),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: ReusableContentHolder(
+                    content: languageProvider.lan == 'English'
+                        ? 'Having trouble? Request a new OTP.'
+                        : 'ပြဿနာရှိနေပါသလား? OTP ကုဒ်အသစ်ကိုပြန်တောင်းရန်\n00:27.',
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
