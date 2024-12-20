@@ -21,6 +21,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           'Job Details',
           style: appBarTitleStyleEng,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(

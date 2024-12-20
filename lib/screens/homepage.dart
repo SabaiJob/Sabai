@@ -7,7 +7,6 @@ import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Homepage extends StatefulWidget {
   final bool showBottomSheet;
