@@ -1,5 +1,3 @@
-// NOT CURRENTLY USING
-// NEED TO REFACTOR
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:provider/provider.dart';
