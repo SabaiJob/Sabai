@@ -43,7 +43,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SizedBox(
-        height: 80,
+        height: 95,
         child: BottomNavigationBar(
           currentIndex: currentIndex,
           backgroundColor: const Color(0xffF7F7F7),

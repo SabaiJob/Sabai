@@ -293,7 +293,7 @@ class _JobListingPageState extends State<JobListingPage>
                       scale: _menuItemScaleAnimations[index],
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 21, vertical: 8),
+                            horizontal: 10, vertical: 8),
                         decoration: BoxDecoration(
                           color: _selectedIndex == index
                               ? Colors.white
