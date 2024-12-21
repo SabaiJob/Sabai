@@ -14,15 +14,17 @@ class ReusableRadioButton extends StatefulWidget {
 class _ReusableRadioButtonState extends State<ReusableRadioButton> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Radio(value: widget.rButtonValue!, 
         groupValue: widget.rButtonSelectedValue,
          onChanged: widget.rButtonChoosen, 
          activeColor: Colors.pink,),
          Text(widget.rButtonName!,
+         //textAlign: TextAlign.justify,
          style:  const TextStyle(
-                        fontFamily: 'Bricolage-M',
+                        fontFamily: 'Bricolage-R',
                         fontSize: 15.63,
                         color: Colors.black,
                       )),
