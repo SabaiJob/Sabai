@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
+import 'package:sabai_app/screens/advanced_filter_page.dart';
 import 'package:sabai_app/screens/homepage_menupages/all.dart';
 import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
@@ -176,11 +177,13 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  '"Hard work pays off. Keep striving, and the right job\nwill come."',
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-M',
-                    fontSize: 12,
+                const Expanded(
+                  child: Text(
+                    '"Hard work pays off. Keep striving, and the right job will come."',
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
@@ -190,48 +193,50 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
             ),
             Row(
               children: [
-                Container(
-                  width: 295,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child: SearchAnchor(
-                    builder:
-                        (BuildContext context, SearchController controller) {
-                      return SearchBar(
-                        backgroundColor: const WidgetStatePropertyAll<Color>(
-                          Colors.white,
-                        ),
-                        controller: controller,
-                        padding: const WidgetStatePropertyAll<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 16.0)),
-                        onTap: () {
-                          controller.openView();
-                        },
-                        onChanged: (_) {
-                          controller.openView();
-                        },
-                        leading: const Icon(
-                          Icons.search,
-                          color: Colors.pink,
-                        ),
-                      );
-                    },
-                    suggestionsBuilder:
-                        (BuildContext context, SearchController controller) {
-                      return List<ListTile>.generate(5, (int index) {
-                        final String item = 'item $index';
-                        return ListTile(
-                          title: Text(item),
+                Expanded(
+                  child: Container(
+                    //width: 295,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child: SearchAnchor(
+                      builder:
+                          (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          backgroundColor: const WidgetStatePropertyAll<Color>(
+                            Colors.white,
+                          ),
+                          controller: controller,
+                          padding: const WidgetStatePropertyAll<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
                           onTap: () {
-                            setState(() {
-                              controller.closeView(item);
-                            });
+                            controller.openView();
                           },
+                          onChanged: (_) {
+                            controller.openView();
+                          },
+                          leading: const Icon(
+                            Icons.search,
+                            color: Colors.pink,
+                          ),
                         );
-                      });
-                    },
+                      },
+                      suggestionsBuilder:
+                          (BuildContext context, SearchController controller) {
+                        return List<ListTile>.generate(5, (int index) {
+                          final String item = 'item $index';
+                          return ListTile(
+                            title: Text(item),
+                            onTap: () {
+                              setState(() {
+                                controller.closeView(item);
+                              });
+                            },
+                          );
+                        });
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -239,7 +244,12 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                 ),
                 IconButton(
                   color: const Color(0xffFF3997),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdvancedFilterPage()));
+                  },
                   icon: const Icon(
                     CupertinoIcons.slider_horizontal_3,
                   ),
