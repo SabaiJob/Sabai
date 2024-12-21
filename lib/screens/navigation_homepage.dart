@@ -43,11 +43,19 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: SizedBox(
-        height: 95,
+        height: 90,
         child: BottomNavigationBar(
           currentIndex: currentIndex,
           backgroundColor: const Color(0xffF7F7F7),
           selectedItemColor: const Color(0xffFF3997),
+          selectedLabelStyle: const TextStyle(
+            fontFamily: 'Bricolage-R',
+            fontSize: 12.5,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontFamily: 'Bricolage-R',
+            fontSize: 12,
+          ),
           type: BottomNavigationBarType.fixed,
           onTap: onTabChange,
           items: const [
@@ -57,7 +65,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.add_circled),
-              label: 'contribute',
+              label: 'Contribute',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.heart),
