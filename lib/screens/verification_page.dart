@@ -22,14 +22,16 @@ class _VerificationPageState extends State<VerificationPage>
 
     // Set up the animation controller
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     )..repeat(reverse: true); // Automatically repeats animation
 
-    // Set up the bounce animation
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
+    // Set up the floating animation
+    _animation = Tween<double>(begin: 0, end: 10).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
     );
 
     Future.delayed(
@@ -65,8 +67,14 @@ class _VerificationPageState extends State<VerificationPage>
             glowColor: Colors.white,
             glowCount: 1,
             child: Center(
-              child: ScaleTransition(
-                scale: _animation,
+              child: AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, -_animation.value), // Floating effect
+                    child: child,
+                  );
+                },
                 child: Image.asset(
                   'images/verifying.png',
                   width: 300,

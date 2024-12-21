@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/contribute_page.dart';
-import 'package:sabai_app/screens/homepage.dart';
+import 'package:sabai_app/screens/job_listing_page.dart';
 import 'package:sabai_app/screens/profile.dart';
 import 'package:sabai_app/screens/save_jobs.dart';
 
@@ -24,7 +24,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     // TODO: implement initState
     super.initState();
     widgetList = [
-      Homepage(
+      JobListingPage(
         showBottomSheet: widget.showButtonSheet,
       ),
       const ContributePage(),

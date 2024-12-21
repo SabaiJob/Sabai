@@ -9,15 +9,16 @@ import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
-class Homepage extends StatefulWidget {
+class JobListingPage extends StatefulWidget {
   final bool showBottomSheet;
-  const Homepage({super.key, this.showBottomSheet = false});
+  const JobListingPage({super.key, this.showBottomSheet = false});
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  State<JobListingPage> createState() => _JobListingPageState();
 }
 
-class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
+class _JobListingPageState extends State<JobListingPage>
+    with TickerProviderStateMixin {
   final List<Widget> _pages = [
     const All(),
     const BestMatches(),
