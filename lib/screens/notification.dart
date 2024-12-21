@@ -50,6 +50,13 @@ class _NotificationPageState extends State<NotificationPage> {
             color: Color(0xffFF3997),
           ),
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.shade300,
+            height: 1.0,
+          ),
+        ),
       ),
       body: Center(
         child: Column(

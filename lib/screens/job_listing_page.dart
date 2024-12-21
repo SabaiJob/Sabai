@@ -169,7 +169,7 @@ class _JobListingPageState extends State<JobListingPage>
           preferredSize:
               const Size.fromHeight(1.0), // Height of the bottom border
           child: Container(
-            color: Colors.grey, // Border color
+            color: Colors.grey.shade300, // Border color
             height: 1.0, // Border thickness
           ),
         ),
