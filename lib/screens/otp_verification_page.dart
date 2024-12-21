@@ -24,9 +24,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F1F2),
+      backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF7F7F7),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(1.0), child: Container(color: Colors.grey.shade300, height: 1.0,)),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         title: languageProvider.lan == 'English'
             ? const Text(
                 "Create Profile",

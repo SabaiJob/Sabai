@@ -32,7 +32,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF7F7F7),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(1.0), child: Container(color: Colors.grey.shade300, height: 1.0,)),
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: const Text(
