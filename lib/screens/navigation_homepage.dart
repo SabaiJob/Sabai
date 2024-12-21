@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/contribute_page.dart';
 import 'package:sabai_app/screens/job_listing_page.dart';
 import 'package:sabai_app/screens/profile.dart';
 import 'package:sabai_app/screens/save_jobs.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class NavigationHomepage extends StatefulWidget {
   final bool showButtonSheet;
@@ -41,6 +43,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 90,
@@ -48,32 +51,45 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           currentIndex: currentIndex,
           backgroundColor: const Color(0xffF7F7F7),
           selectedItemColor: const Color(0xffFF3997),
-          selectedLabelStyle: const TextStyle(
-            fontFamily: 'Bricolage-R',
-            fontSize: 12.5,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontFamily: 'Bricolage-R',
-            fontSize: 12,
-          ),
+          selectedLabelStyle: languageProvider.lan == 'English'
+              ? const TextStyle(
+                  fontFamily: 'Bricolage-R',
+                  fontSize: 12.5,
+                )
+              : const TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 11,
+                ),
+          unselectedLabelStyle: languageProvider.lan == 'English'
+              ? const TextStyle(
+                  fontFamily: 'Bricolage-R',
+                  fontSize: 12,
+                )
+              : const TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 10,
+                ),
           type: BottomNavigationBarType.fixed,
           onTap: onTabChange,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.work_outline_outlined),
-              label: 'Jobs',
+              icon: const Icon(Icons.work_outline_outlined),
+              label: languageProvider.lan == 'English' ? 'Jobs' : 'အလုပ်ရှာ',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.add_circled),
-              label: 'Contribute',
+              icon: const Icon(CupertinoIcons.add_circled),
+              label:
+                  languageProvider.lan == 'English' ? 'Contribute' : 'အလုပ်တင်',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.heart),
-              label: 'Saved',
+              icon: const Icon(CupertinoIcons.heart),
+              label: languageProvider.lan == 'English'
+                  ? 'Saved'
+                  : 'သိမ်းထားသည်များ',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.profile_circled),
-              label: 'Me',
+              icon: const Icon(CupertinoIcons.profile_circled),
+              label: languageProvider.lan == 'English' ? 'Me' : 'ပရိုဖိုင်',
             ),
             // _buildItem(Icons.work_outline_outlined, 'Jobs', 0),
             // _buildItem(CupertinoIcons.add_circled, 'Contribute', 1),

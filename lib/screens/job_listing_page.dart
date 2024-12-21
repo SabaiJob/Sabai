@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
 import 'package:sabai_app/screens/advanced_filter_page.dart';
@@ -7,6 +8,7 @@ import 'package:sabai_app/screens/homepage_menupages/all.dart';
 import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/screens/notification.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobListingPage extends StatefulWidget {
@@ -39,6 +41,10 @@ class _JobListingPageState extends State<JobListingPage>
   late List<AnimationController> _menuItemAnimations;
   late List<Animation<double>> _menuItemScaleAnimations;
 
+  final TextEditingController _searchController = TextEditingController();
+  String searchQuery = "";
+  bool isSearching = false;
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +57,7 @@ class _JobListingPageState extends State<JobListingPage>
             isScrollControlled: true,
             builder: (context) => const Bottomsheet(),
           ).whenComplete(() {
+            if (!mounted) return;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const NavigationHomepage(
@@ -144,7 +151,14 @@ class _JobListingPageState extends State<JobListingPage>
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationPage(),
+                ),
+              );
+            },
             icon: const Icon(
               CupertinoIcons.bell,
               color: Color(0xffFF3997),
@@ -194,50 +208,79 @@ class _JobListingPageState extends State<JobListingPage>
             ),
             Row(
               children: [
-                Expanded(
-                  child: Container(
-                    //width: 295,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(0),
+                Container(
+                  width: 295,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: languageProvider.lan == 'English'
+                          ? 'Search for job'
+                          : 'အလုပ်များရှာမယ်',
+                      hintStyle: languageProvider.lan == 'English'
+                          ? GoogleFonts.dmSans(
+                              textStyle: const TextStyle(
+                                color: Color(0xff989EA4),
+                                fontSize: 14,
+                              ),
+                            )
+                          : const TextStyle(
+                              fontFamily: 'Walone-R',
+                              color: Color(0xff989EA4),
+                              fontSize: 14,
+                            ),
+                      prefixIcon: IconButton(
+                        icon: Icon(
+                          // searchQuery.isEmpty &&
+                          isSearching ? Icons.clear : Icons.search,
+                          color: const Color(0xffFF3997),
+                        ),
+                        onPressed: () {
+                          if (isSearching) {
+                            FocusScope.of(context).unfocus();
+                            // Clear the search query and reset search state
+                            _searchController.clear();
+                            setState(() {
+                              searchQuery = ""; // Clear search query
+                              isSearching = false; // Switch back to search icon
+                            });
+                          }
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(0xffF0F1F2),
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Color(
+                              0xffFF3997), // Border color when not focused
+                          width: 1,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 17),
                     ),
-                    child: SearchAnchor(
-                      builder:
-                          (BuildContext context, SearchController controller) {
-                        return SearchBar(
-                          backgroundColor: const WidgetStatePropertyAll<Color>(
-                            Colors.white,
-                          ),
-                          controller: controller,
-                          padding: const WidgetStatePropertyAll<EdgeInsets>(
-                              EdgeInsets.symmetric(horizontal: 16.0)),
-                          onTap: () {
-                            controller.openView();
-                          },
-                          onChanged: (_) {
-                            controller.openView();
-                          },
-                          leading: const Icon(
-                            Icons.search,
-                            color: Colors.pink,
-                          ),
-                        );
-                      },
-                      suggestionsBuilder:
-                          (BuildContext context, SearchController controller) {
-                        return List<ListTile>.generate(5, (int index) {
-                          final String item = 'item $index';
-                          return ListTile(
-                            title: Text(item),
-                            onTap: () {
-                              setState(() {
-                                controller.closeView(item);
-                              });
-                            },
-                          );
-                        });
-                      },
-                    ),
+                    onTap: () {
+                      setState(() {
+                        isSearching = true; // Activate search mode
+                      });
+                    },
+                    onChanged: (val) {
+                      setState(() {
+                        searchQuery = val; // Update the search query
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(
@@ -255,57 +298,142 @@ class _JobListingPageState extends State<JobListingPage>
                     CupertinoIcons.slider_horizontal_3,
                   ),
                   style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      )),
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(
+                        color: Color(0xffF0F1F2),
+                        width: 2,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(
               height: 15,
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xffF0F1F2),
-                borderRadius: BorderRadius.circular(8),
+            if (isSearching) ...[
+              Expanded(
+                // child: StreamBuilder<QuerySnapshot>(
+                //   stream:
+                //   FirebaseFirestore.instance.collection('events').snapshots(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(
+                //           color: Color(0xFF6597E1),
+                //         ),
+                //       );
+                //     }
+                //
+                //     if (snapshot.hasError) {
+                //       return Center(child: Text('Error: ${snapshot.error}'));
+                //     }
+                //
+                //     final events = snapshot.data!.docs;
+                //
+                //     // Filter events based on the search query
+                //     final filteredEvents = events.where((event) {
+                //       var data = event.data() as Map<String, dynamic>;
+                //       return data['name']
+                //           .toString()
+                //           .toLowerCase()
+                //           .contains(searchQuery.toLowerCase());
+                //     }).toList();
+                //
+                //     return ListView.builder(
+                //       itemCount: filteredEvents.length,
+                //       itemBuilder: (context, index) {
+                //         var data =
+                //         filteredEvents[index].data() as Map<String, dynamic>;
+                //         String imageUrl =
+                //             data['img'] ?? ''; // Use a default value if null
+                //         return ListTile(
+                //           onTap: () {
+                //             Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                   builder: (context) => Event(
+                //                     name: data['name'],
+                //                     about: data['about'],
+                //                     isDone: data['isDone'],
+                //                     detail: data['detail'],
+                //                     img: data['img'],
+                //                     img2: data['img2'],
+                //                     hasButton: data['hasButton'],
+                //                   ),
+                //                 ));
+                //           },
+                //           title: Text(
+                //             data['name'],
+                //             maxLines: 1,
+                //             overflow: TextOverflow.ellipsis,
+                //             style: const TextStyle(
+                //                 fontSize: 16, color: Colors.black),
+                //           ),
+                //           leading: CircleAvatar(
+                //             backgroundImage: imageUrl.isNotEmpty
+                //                 ? NetworkImage(imageUrl)
+                //                 : const NetworkImage(
+                //                 'https://www.stsbeijing.org/wp-content/uploads/2022/05/ThaiUni4.png'), // Use a placeholder image
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // ),
+                child: Container(
+                  width: 500,
+                  color: Colors.grey,
+                  child: const Center(
+                    child: Text('Search Items will appear here'),
+                  ),
+                ),
               ),
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  getNavItems(languageProvider).length,
-                  (index) => GestureDetector(
-                    onTapDown: (_) {
-                      // Animate scale down when tapped
-                      _menuItemAnimations[index].forward();
-                    },
-                    onTapUp: (_) {
-                      // Animate scale back and navigate
-                      _menuItemAnimations[index].reverse();
-                      _navigateToPage(index);
-                    },
-                    onTapCancel: () {
-                      // Animate scale back if tap is cancelled
-                      _menuItemAnimations[index].reverse();
-                    },
-                    child: ScaleTransition(
-                      scale: _menuItemScaleAnimations[index],
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: _selectedIndex == index
-                              ? Colors.white
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          getNavItems(languageProvider)[index],
-                          style: const TextStyle(
-                            color: Color(0xffFF3997),
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 12.5,
+            ] else ...[
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xffF0F1F2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(
+                    getNavItems(languageProvider).length,
+                    (index) => GestureDetector(
+                      onTapDown: (_) {
+                        // Animate scale down when tapped
+                        _menuItemAnimations[index].forward();
+                      },
+                      onTapUp: (_) {
+                        // Animate scale back and navigate
+                        _menuItemAnimations[index].reverse();
+                        _navigateToPage(index);
+                      },
+                      onTapCancel: () {
+                        // Animate scale back if tap is cancelled
+                        _menuItemAnimations[index].reverse();
+                      },
+                      child: ScaleTransition(
+                        scale: _menuItemScaleAnimations[index],
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _selectedIndex == index
+                                ? Colors.white
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            getNavItems(languageProvider)[index],
+                            style: const TextStyle(
+                              color: Color(0xffFF3997),
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 12.5,
+                            ),
                           ),
                         ),
                       ),
@@ -313,16 +441,16 @@ class _JobListingPageState extends State<JobListingPage>
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Expanded(
-              child: SlideTransition(
-                position: _offsetAnimation,
-                child: _pages[_selectedIndex],
+              const SizedBox(
+                height: 15,
               ),
-            ),
+              Expanded(
+                child: SlideTransition(
+                  position: _offsetAnimation,
+                  child: _pages[_selectedIndex],
+                ),
+              ),
+            ],
           ],
         ),
       ),

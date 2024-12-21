@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/job_details_page.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class All extends StatelessWidget {
   const All({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     final List<String> jobTitle = ['Barista', 'Chef', 'Teacher'];
     return Container(
       color: const Color(0xffF7F7F7),
@@ -28,9 +31,11 @@ class WorkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var language = Provider.of<LanguageProvider>(context);
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const JobDetailsPage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const JobDetailsPage()));
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -132,51 +137,89 @@ class WorkCard extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text(
-                    'Closing in 3 days',
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontSize: 10,
-                      color: Color(0xffDC3545),
-                    ),
-                  ),
+                  language.lan == 'English'
+                      ? const Text(
+                          'Closing in 3 days',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 10,
+                            color: Color(0xffDC3545),
+                          ),
+                        )
+                      : const Text(
+                          '၃ ရက် အတွင်းပိတ်မည်',
+                          style: TextStyle(
+                            fontFamily: 'Walone-M',
+                            fontSize: 10,
+                            color: Color(0xffDC3545),
+                          ),
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Salary',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-R',
-                          fontSize: 10,
-                          color: Color(0xff6C757D),
-                        ),
-                      ),
+                      language.lan == 'English'
+                          ? const Text(
+                              'Salary',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 10,
+                                color: Color(0xff6C757D),
+                              ),
+                            )
+                          : const Text(
+                              'လစာ',
+                              style: TextStyle(
+                                fontFamily: 'Walone-M',
+                                fontSize: 10,
+                                color: Color(0xff6C757D),
+                              ),
+                            ),
                       Padding(
-                        padding: EdgeInsets.only(right: 38),
+                        padding: language.lan == 'English'
+                            ? const EdgeInsets.only(right: 35)
+                            : const EdgeInsets.only(right: 28),
                         child: Row(
                           children: [
-                            Text(
-                              'Location',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 10,
-                                color: Color(0xff6C757D),
-                              ),
+                            language.lan == 'English'
+                                ? const Text(
+                                    'Location',
+                                    style: TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 10,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    'တည်နေရာ',
+                                    style: TextStyle(
+                                      fontFamily: 'Walone-M',
+                                      fontSize: 10,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
+                            SizedBox(
+                              width: language.lan == 'English' ? 68 : 60,
                             ),
-                            const SizedBox(
-                              width: 63,
-                            ),
-                            const Text(
-                              'Safety',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 10,
-                                color: Color(0xff6C757D),
-                              ),
-                            ),
+                            language.lan == 'English'
+                                ? const Text(
+                                    'Safety',
+                                    style: TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 10,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    'စိတ်ချရမှု',
+                                    style: TextStyle(
+                                      fontFamily: 'Walone-M',
+                                      fontSize: 10,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
                           ],
                         ),
                       )
@@ -185,14 +228,23 @@ class WorkCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        '18000 ~ 28000 THB',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 12.5,
-                          color: Color(0xff4C5258),
-                        ),
-                      ),
+                      language.lan == 'English'
+                          ? const Text(
+                              '18000 ~ 28000 THB',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 12.5,
+                                color: Color(0xff4C5258),
+                              ),
+                            )
+                          : const Text(
+                              '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 11,
+                                color: Color(0xff4C5258),
+                              ),
+                            ),
                       Row(
                         children: [
                           const Text(
@@ -211,29 +263,38 @@ class WorkCard extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 8),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     CupertinoIcons.info_circle,
                                     size: 11,
                                     color: Color(0xff28A745),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 3,
                                   ),
-                                  Text(
-                                    'Level-3',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 10,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                  language.lan == 'English'
+                                      ? const Text(
+                                          'Level-3',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                      : const Text(
+                                          'အဆင့် - ၃',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),
@@ -265,27 +326,36 @@ class WorkCard extends StatelessWidget {
                             const SizedBox(
                               width: 3,
                             ),
-                            RichText(
-                              text: const TextSpan(
-                                text: 'viewed by  ',
-                                style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontFamily: 'Bricolage-R',
-                                  color: Color(0xff6C757D),
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: '20',
+                            language.lan == 'English'
+                                ? RichText(
+                                    text: const TextSpan(
+                                      text: 'viewed by  ',
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        fontFamily: 'Bricolage-R',
+                                        color: Color(0xff6C757D),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: '20',
+                                          style: TextStyle(
+                                            fontSize: 12.5,
+                                            fontFamily: 'Bricolage-B',
+                                            color: Color(0xff6C757D),
+                                          ),
+                                        ),
+                                        TextSpan(text: '  job hunters'),
+                                      ],
+                                    ),
+                                  )
+                                : const Text(
+                                    'အခြားအလုပ်ရှာဖွေသူ ၂၀ ယောက်ကြည့်ရှုပြီး',
                                     style: TextStyle(
-                                      fontSize: 12.5,
-                                      fontFamily: 'Bricolage-B',
-                                      color: Color(0xff6C757D),
+                                      fontFamily: 'Walone-B',
+                                      fontSize: 10,
+                                      color: Color(0xff899197),
                                     ),
                                   ),
-                                  TextSpan(text: '  job hunters'),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                         Row(
@@ -300,14 +370,23 @@ class WorkCard extends StatelessWidget {
                             const SizedBox(
                               width: 3,
                             ),
-                            const Text(
-                              '56',
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                fontFamily: 'Bricolage-B',
-                                color: Color(0xff6C757D),
-                              ),
-                            ),
+                            language.lan == 'English'
+                                ? const Text(
+                                    '56',
+                                    style: TextStyle(
+                                      fontSize: 12.5,
+                                      fontFamily: 'Bricolage-B',
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    '၅၆',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'Walone-B',
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
                           ],
                         ),
                       ],
