@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
+import 'package:sabai_app/screens/job_listing_page.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/screens/otp_verification_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/constants.dart';
 
@@ -191,85 +193,98 @@ class _LoginPageState extends State<LoginPage> {
                           child: TextButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible:
-                                      false, // Prevent dismissal by tapping outside
-                                  builder: (context) {
-                                    return const Dialog(
-                                      backgroundColor: Colors.white,
-                                      child: SizedBox(
-                                        width: 170,
-                                        height: 200,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            SizedBox(
-                                              height: 110,
-                                              width: 110,
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    height:
-                                                        70, // Outer circle size
-                                                    width: 70,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      color: Color(0xffFF3997),
-                                                      strokeWidth:
-                                                          4.0, // Outer circle thickness
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        30, // Inner circle size
-                                                    width: 30,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      color: Color(0xffFF3997),
-                                                      strokeWidth:
-                                                          4.0, // Inner circle thickness
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 35,
-                                            ),
-                                            Text(
-                                              'Loggin...',
-                                              style: TextStyle(
-                                                fontSize: 12.5,
-                                                fontFamily: 'Bricolage-R',
-                                                color: Color(0xff41464B),
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OtpVerificationPage(
+                                      navWidget: NavigationHomepage(
+                                        showButtonSheet: false,
                                       ),
-                                    );
-                                  },
+                                      signUp: false,
+                                    ),
+                                  ),
                                 );
 
-                                Future.delayed(
-                                  const Duration(seconds: 3),
-                                  () {
-                                    Navigator.of(context).pop();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const NavigationHomepage(
-                                          showButtonSheet: false,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                // showDialog(
+                                //   context: context,
+                                //   barrierDismissible:
+                                //       false, // Prevent dismissal by tapping outside
+                                //   builder: (context) {
+                                //     return const Dialog(
+                                //       backgroundColor: Colors.white,
+                                //       child: SizedBox(
+                                //         width: 170,
+                                //         height: 200,
+                                //         child: Column(
+                                //           children: [
+                                //             SizedBox(
+                                //               height: 10,
+                                //             ),
+                                //             SizedBox(
+                                //               height: 110,
+                                //               width: 110,
+                                //               child: Stack(
+                                //                 alignment: Alignment.center,
+                                //                 children: [
+                                //                   SizedBox(
+                                //                     height:
+                                //                         70, // Outer circle size
+                                //                     width: 70,
+                                //                     child:
+                                //                         CircularProgressIndicator(
+                                //                       color: Color(0xffFF3997),
+                                //                       strokeWidth:
+                                //                           4.0, // Outer circle thickness
+                                //                     ),
+                                //                   ),
+                                //                   SizedBox(
+                                //                     height:
+                                //                         30, // Inner circle size
+                                //                     width: 30,
+                                //                     child:
+                                //                         CircularProgressIndicator(
+                                //                       color: Color(0xffFF3997),
+                                //                       strokeWidth:
+                                //                           4.0, // Inner circle thickness
+                                //                     ),
+                                //                   ),
+                                //                 ],
+                                //               ),
+                                //             ),
+                                //             SizedBox(
+                                //               height: 35,
+                                //             ),
+                                //             Text(
+                                //               'Loggin...',
+                                //               style: TextStyle(
+                                //                 fontSize: 12.5,
+                                //                 fontFamily: 'Bricolage-R',
+                                //                 color: Color(0xff41464B),
+                                //               ),
+                                //             )
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     );
+                                //   },
+                                // );
+
+                                // Future.delayed(
+                                //   const Duration(seconds: 3),
+                                //   () {
+                                //     Navigator.of(context).pop();
+                                //     Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             const NavigationHomepage(
+                                //           showButtonSheet: false,
+                                //         ),
+                                //       ),
+                                //     );
+                                //   },
+                                // );
                               } else {
                                 // form validation failed
                                 ScaffoldMessenger.of(context).showSnackBar(

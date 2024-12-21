@@ -9,7 +9,10 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpVerificationPage extends StatefulWidget {
-  const OtpVerificationPage({super.key});
+  final Widget navWidget;
+  final bool signUp;
+  const OtpVerificationPage(
+      {super.key, required this.navWidget, required this.signUp});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -44,18 +47,20 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.only(top: 12, bottom: 12),
-                child: const StepProgressIndicator(
-                  roundedEdges: Radius.circular(10),
-                  padding: 0.0,
-                  totalSteps: 3,
-                  currentStep: 1,
-                  selectedColor: Color(0xFFFF3997),
-                  unselectedColor: Color.fromARGB(100, 76, 82, 88),
-                  size: 8.0,
-                ),
-              ),
+              if (widget.signUp) ...[
+                Container(
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                  child: const StepProgressIndicator(
+                    roundedEdges: Radius.circular(10),
+                    padding: 0.0,
+                    totalSteps: 3,
+                    currentStep: 1,
+                    selectedColor: Color(0xFFFF3997),
+                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                    size: 8.0,
+                  ),
+                )
+              ],
               Container(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
                 child: Align(
@@ -82,11 +87,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 length: 6,
                 onCompleted: (value) {
                   if (value == fixedPinNumber) {
-                    print(value);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const UserProfileSetupPage()));
+                            builder: (context) => widget.navWidget));
                   } else {
                     print('wrong pin');
                   }
@@ -107,7 +111,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   fieldWidth: 40,
                   fieldHeight: 56,
                   shape: PinCodeFieldShape.box,
-        
+
                   //activeFillColor: Colors.white,
                   //selectedColor: Colors.black,
                 ),

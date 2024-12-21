@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -33,8 +34,21 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
               ),
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color(0xffFF3997),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NavigationHomepage(
+                  showButtonSheet: false,
+                ),
+              ),
+            );
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xffFF3997),
+          ),
         ),
       ),
       body: Center(

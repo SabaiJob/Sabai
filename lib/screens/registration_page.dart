@@ -5,6 +5,7 @@ import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/otp_verification_page.dart';
+import 'package:sabai_app/screens/user_profile_setup_page.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../services/language_provider.dart';
 import 'package:provider/provider.dart';
@@ -86,8 +87,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     child: ReusableContentHolder(
                         content: languageProvider.lan == 'English'
                             ? 'Please provide your basic information to get started. This helps us tailor job opportunities just for you.'
-                            : 'အကောင့်အသစ်ပြုလုပ်ရန် သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုထည့်သွင်းပေးပါ။ သင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့ ဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'
-                              ),
+                            : 'အကောင့်အသစ်ပြုလုပ်ရန် သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုထည့်သွင်းပေးပါ။ သင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့ ဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'),
                   ),
                 ),
                 // Full Name
@@ -441,18 +441,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OtpVerificationPage(),
+                            builder: (context) => const OtpVerificationPage(
+                              navWidget: UserProfileSetupPage(),
+                              signUp: true,
+                            ),
                           ),
                         );
                       } else {
                         // form validation failed
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: languageProvider.lan == 'English' ?
-                            const Text(
-                                "Please completed all the required fields")
-                                : 
-                                const Text(
-                                "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
+                            content: languageProvider.lan == 'English'
+                                ? const Text(
+                                    "Please completed all the required fields")
+                                : const Text(
+                                    "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
                       }
                     },
                     style: TextButton.styleFrom(

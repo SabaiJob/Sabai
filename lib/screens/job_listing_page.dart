@@ -208,79 +208,83 @@ class _JobListingPageState extends State<JobListingPage>
             ),
             Row(
               children: [
-                Container(
-                  width: 295,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: languageProvider.lan == 'English'
-                          ? 'Search for job'
-                          : 'အလုပ်များရှာမယ်',
-                      hintStyle: languageProvider.lan == 'English'
-                          ? GoogleFonts.dmSans(
-                              textStyle: const TextStyle(
+                Expanded(
+                  child: Container(
+                    width: 295,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8)),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: languageProvider.lan == 'English'
+                            ? 'Search for job'
+                            : 'အလုပ်များရှာမယ်',
+                        hintStyle: languageProvider.lan == 'English'
+                            ? GoogleFonts.dmSans(
+                                textStyle: const TextStyle(
+                                  color: Color(0xff989EA4),
+                                  fontSize: 14,
+                                ),
+                              )
+                            : const TextStyle(
+                                fontFamily: 'Walone-R',
                                 color: Color(0xff989EA4),
                                 fontSize: 14,
                               ),
-                            )
-                          : const TextStyle(
-                              fontFamily: 'Walone-R',
-                              color: Color(0xff989EA4),
-                              fontSize: 14,
-                            ),
-                      prefixIcon: IconButton(
-                        icon: Icon(
-                          // searchQuery.isEmpty &&
-                          isSearching ? Icons.clear : Icons.search,
-                          color: const Color(0xffFF3997),
+                        prefixIcon: IconButton(
+                          icon: Icon(
+                            // searchQuery.isEmpty &&
+                            isSearching ? Icons.clear : Icons.search,
+                            color: const Color(0xffFF3997),
+                          ),
+                          onPressed: () {
+                            if (isSearching) {
+                              FocusScope.of(context).unfocus();
+                              // Clear the search query and reset search state
+                              _searchController.clear();
+                              setState(() {
+                                searchQuery = ""; // Clear search query
+                                isSearching =
+                                    false; // Switch back to search icon
+                              });
+                            }
+                          },
                         ),
-                        onPressed: () {
-                          if (isSearching) {
-                            FocusScope.of(context).unfocus();
-                            // Clear the search query and reset search state
-                            _searchController.clear();
-                            setState(() {
-                              searchQuery = ""; // Clear search query
-                              isSearching = false; // Switch back to search icon
-                            });
-                          }
-                        },
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(
-                          color: Color(0xffF0F1F2),
-                          width: 2,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(
-                          color: Color(
-                              0xffFF3997), // Border color when not focused
-                          width: 1,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(0xffF0F1F2),
+                            width: 2,
+                          ),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Color(
+                                0xffFF3997), // Border color when not focused
+                            width: 1,
+                          ),
+                        ),
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 17),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 17),
+                      onTap: () {
+                        setState(() {
+                          isSearching = true; // Activate search mode
+                        });
+                      },
+                      onChanged: (val) {
+                        setState(() {
+                          searchQuery = val; // Update the search query
+                        });
+                      },
                     ),
-                    onTap: () {
-                      setState(() {
-                        isSearching = true; // Activate search mode
-                      });
-                    },
-                    onChanged: (val) {
-                      setState(() {
-                        searchQuery = val; // Update the search query
-                      });
-                    },
                   ),
                 ),
                 const SizedBox(
