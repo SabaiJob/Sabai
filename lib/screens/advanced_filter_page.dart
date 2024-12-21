@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sabai_app/components/reusable_dropdown.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:flutter/cupertino.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
   const AdvancedFilterPage({super.key});
@@ -34,9 +33,15 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         title: const Text(
           'Filters',
           style: appBarTitleStyleEng,
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color(0xffFF3997),
         ),
       ),
       backgroundColor: const Color(0xFFF7F7F7),
@@ -590,58 +595,57 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
           ),
         ),
       ),
-      
       persistentFooterButtons: [
         Column(
-          children: [SizedBox(
-                width: 343,
-                height: 42,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xffFF3997),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(8), // Set the border radius
-                    ),
+          children: [
+            SizedBox(
+              width: 343,
+              height: 42,
+              child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xffFF3997),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8), // Set the border radius
                   ),
-                  child: const Text(
-                    'Apply Now',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Bricolage-B',
-                      fontSize: 15.63,
-                    ),
+                ),
+                child: const Text(
+                  'Apply Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Bricolage-B',
+                    fontSize: 15.63,
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
-                width: 343,
-                height: 42,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                   
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(8), // Set the border radius
-                    ),
-                  ),
-                  child: const Text(
-                    'Clear Filter',
-                    style: TextStyle(
-                      color: Color(0xffFF3997),
-                      fontFamily: 'Bricolage-B',
-                      fontSize: 15.63,
-                    ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              width: 343,
+              height: 42,
+              child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8), // Set the border radius
                   ),
                 ),
-              ),],
+                child: const Text(
+                  'Clear Filter',
+                  style: TextStyle(
+                    color: Color(0xffFF3997),
+                    fontFamily: 'Bricolage-B',
+                    fontSize: 15.63,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        
       ],
       persistentFooterAlignment: AlignmentDirectional.center,
     );
