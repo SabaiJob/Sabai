@@ -590,9 +590,10 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
           ),
         ),
       ),
-      persistentFooterAlignment: AlignmentDirectional.bottomCenter,
+      
       persistentFooterButtons: [
-        SizedBox(
+        Column(
+          children: [SizedBox(
                 width: 343,
                 height: 42,
                 child: TextButton(
@@ -638,8 +639,11 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                     ),
                   ),
                 ),
-              ),
+              ),],
+        ),
+        
       ],
+      persistentFooterAlignment: AlignmentDirectional.center,
     );
   }
 }
