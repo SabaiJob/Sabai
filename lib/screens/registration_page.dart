@@ -427,13 +427,87 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
 
                 // for some space
-                const SizedBox(
-                  height: 50,
-                ),
+                // const SizedBox(
+                //   height: 50,
+                // ),
 
                 // Continue Button
-                Container(
-                  width: 400,
+                // Container(
+                //   width: 400,
+                //   height: 42,
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   child: TextButton(
+                //     onPressed: () {
+                //       if (_formKey.currentState!.validate()) {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => const OtpVerificationPage(
+                //               navWidget: UserProfileSetupPage(),
+                //               signUp: true,
+                //             ),
+                //           ),
+                //         );
+                //       } else {
+                //         // form validation failed
+                //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //             content: languageProvider.lan == 'English'
+                //                 ? const Text(
+                //                     "Please completed all the required fields")
+                //                 : const Text(
+                //                     "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
+                //       }
+                //     },
+                //     style: TextButton.styleFrom(
+                //       backgroundColor: const Color(0xffFF3997),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius:
+                //             BorderRadius.circular(8), // Set the border radius
+                //       ),
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         languageProvider.lan == 'English'
+                //             ? const Text(
+                //                 'Continue',
+                //                 style: TextStyle(
+                //                   fontFamily: 'Bricolage-B',
+                //                   fontSize: 15.63,
+                //                   color: Colors.white,
+                //                 ),
+                //               )
+                //             : const Text(
+                //                 'ဆက်လက်ရန်',
+                //                 style: TextStyle(
+                //                   fontFamily: 'Walone-B',
+                //                   fontSize: 14,
+                //                   color: Colors.white,
+                //                 ),
+                //               ),
+                //         const SizedBox(
+                //           width: 10,
+                //         ),
+                //         const Icon(
+                //           CupertinoIcons.arrow_right,
+                //           color: Colors.white,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
+          ),
+        ),
+      ),
+      persistentFooterButtons: [
+        Column(
+          children: [
+            Container(
+                  width: 375,
                   height: 42,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -498,11 +572,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                 )
-              ],
-            ),
-          ),
-        ),
-      ),
+          ],
+        )
+      ],
+      persistentFooterAlignment: AlignmentDirectional.center,
     );
   }
 }

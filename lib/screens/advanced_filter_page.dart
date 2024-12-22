@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/reusable_dropdown.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
+import 'package:sabai_app/components/reusable_slider.dart';
 import 'package:sabai_app/constants.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
@@ -28,12 +29,18 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   String? selectedJobTypeOption;
   String? selectedLanguageOption;
   String? selectedVerificationOption;
+  double currentValue = 1000.00;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
-        bottom: PreferredSize(preferredSize: const Size.fromHeight(1.0), child: Container(color: Colors.grey.shade300, height: 1.0,)),
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey.shade300,
+              height: 1.0,
+            )),
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: const Text(
@@ -406,7 +413,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                     selectedJobLocation = value;
                   });
                 },
-                cusWidth: 400,
+                cusWidth: 343,
                 cusHeight: 36,
                 hintText: 'Select job location',
               ),
@@ -426,7 +433,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   ),
                 ),
               ),
-              Wrap(
+              Row(
                 children: [
                   ReusableRadioButton(
                       rButtonValue: 'Remote',
@@ -455,6 +462,10 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                         });
                       },
                       rButtonName: 'Hybrid'),
+                ],
+              ),
+              Row(
+                children: [
                   ReusableRadioButton(
                       rButtonValue: 'On Site',
                       rButtonSelectedValue: selectedJobTypeOption,
@@ -520,18 +531,17 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   ),
                 ),
               ),
-              ReusableDropdown(
-                dropdownItems: jobLocationItemsEng,
-                selectedItem: selectedJobLocation,
-                whenOnChanged: (value) {
-                  setState(() {
-                    selectedJobLocation = value;
-                  });
-                },
-                cusWidth: 343,
-                cusHeight: 36,
-                hintText: 'Select job location',
-              ),
+              
+              ReusableSlider(minAmount: 1000.00, 
+              maxAmount: 9000.00, 
+              unit: 'THB', 
+              currentValue: currentValue, 
+              sliderOnChanged: (value){
+                setState(() {
+                  currentValue = value;
+                });
+              }),
+
               const SizedBox(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
@@ -570,28 +580,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       rButtonName: 'No'),
                 ],
               ),
-              // SizedBox(
-              //   width: 343,
-              //   height: 42,
-              //   child: TextButton(
-              //     onPressed: () {},
-              //     style: TextButton.styleFrom(
-              //       backgroundColor: const Color(0xffFF3997),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius:
-              //             BorderRadius.circular(8), // Set the border radius
-              //       ),
-              //     ),
-              //     child: const Text(
-              //       'Apply Now',
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //         fontFamily: 'Bricolage-B',
-              //         fontSize: 15.63,
-              //       ),
-              //     ),
-              //   ),
-              // )
+             
             ],
           ),
         ),

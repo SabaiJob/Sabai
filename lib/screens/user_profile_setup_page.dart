@@ -635,7 +635,67 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
               ),
 
               // Continue Button
-              Container(
+              // Container(
+              //   width: 400,
+              //   height: 42,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              //   child: TextButton(
+              //     onPressed: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => const VerificationPage(),
+              //         ),
+              //       );
+              //     },
+              //     style: TextButton.styleFrom(
+              //       backgroundColor: const Color(0xffFF3997),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius:
+              //             BorderRadius.circular(8), // Set the border radius
+              //       ),
+              //     ),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         languageProvider.lan == 'English'
+              //             ? const Text(
+              //                 'Continue',
+              //                 style: TextStyle(
+              //                     fontFamily: 'Bricolage-B',
+              //                     fontSize: 15.63,
+              //                     color: Colors.white,
+              //                   ),
+              //               )
+              //             : const Text(
+              //                 'ဆက်လက်ရန်',
+              //                 style: TextStyle(
+              //                     fontFamily: 'Walone-B',
+              //                     fontSize: 14,
+              //                     color: Colors.white,
+              //                   ),
+              //               ),
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+              //         const Icon(
+              //           CupertinoIcons.arrow_right,
+              //           color: Colors.white,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // )
+            ],
+          ),
+        ),
+      ),
+      persistentFooterButtons: [
+        Column(
+          children: [
+            Container(
                 width: 400,
                 height: 42,
                 decoration: BoxDecoration(
@@ -688,10 +748,9 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                   ),
                 ),
               )
-            ],
-          ),
-        ),
-      ),
+          ],
+        )
+      ],
     );
   }
 }
