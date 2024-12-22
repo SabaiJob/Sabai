@@ -9,7 +9,6 @@ class All extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var languageProvider = Provider.of<LanguageProvider>(context);
     final List<String> jobTitle = ['Barista', 'Chef', 'Teacher'];
     return Container(
       color: const Color(0xffF7F7F7),
@@ -27,7 +26,7 @@ class All extends StatelessWidget {
 
 class WorkCard extends StatelessWidget {
   final String jobTitle;
-  const WorkCard(this.jobTitle);
+  const WorkCard(this.jobTitle, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +85,7 @@ class WorkCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: Color(0xffF0F1F2),
+                        color: const Color(0xffF0F1F2),
                       ),
                     ),
                     child: IconButton(
@@ -172,7 +171,7 @@ class WorkCard extends StatelessWidget {
                           : const Text(
                               'လစာ',
                               style: TextStyle(
-                                fontFamily: 'Walone-M',
+                                fontFamily: 'Walone-R',
                                 fontSize: 10,
                                 color: Color(0xff6C757D),
                               ),
@@ -195,7 +194,7 @@ class WorkCard extends StatelessWidget {
                                 : const Text(
                                     'တည်နေရာ',
                                     style: TextStyle(
-                                      fontFamily: 'Walone-M',
+                                      fontFamily: 'Walone-R',
                                       fontSize: 10,
                                       color: Color(0xff6C757D),
                                     ),
@@ -215,7 +214,7 @@ class WorkCard extends StatelessWidget {
                                 : const Text(
                                     'စိတ်ချရမှု',
                                     style: TextStyle(
-                                      fontFamily: 'Walone-M',
+                                      fontFamily: 'Walone-R',
                                       fontSize: 10,
                                       color: Color(0xff6C757D),
                                     ),
@@ -264,7 +263,7 @@ class WorkCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 8),
                               child: Row(
                                 mainAxisAlignment:
