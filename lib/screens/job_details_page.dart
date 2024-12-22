@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_bulletpoints.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sabai_app/components/tc_dialog.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
@@ -654,7 +655,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               width: 287,
               height: 42,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(context: context, builder: (context)=> const TAndCDialog());
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),
                   shape: RoundedRectangleBorder(
@@ -706,7 +709,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                         width: 1.5,
                       )),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                   showDialog(context: context, builder: (context)=> const TAndCDialog());
+                },
                 child: const Image(
                   image: AssetImage('images/share_icon.png'),
                   width: 24,
