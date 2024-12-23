@@ -31,6 +31,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         ),
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize:
+              const Size.fromHeight(1.0), // Height of the bottom border
+          child: Container(
+            color: Colors.grey.shade300, // Border color
+            height: 1.0, // Border thickness
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -656,7 +664,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               height: 42,
               child: TextButton(
                 onPressed: () {
-                  showDialog(context: context, builder: (context)=> const TAndCDialog());
+                  showDialog(
+                      context: context,
+                      builder: (context) => const TAndCDialog());
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),
@@ -710,7 +720,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                       )),
                 ),
                 onPressed: () {
-                   showDialog(context: context, builder: (context)=> const TAndCDialog());
+                  showDialog(
+                      context: context,
+                      builder: (context) => const TAndCDialog());
                 },
                 child: const Image(
                   image: AssetImage('images/share_icon.png'),
