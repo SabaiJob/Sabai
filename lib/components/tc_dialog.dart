@@ -3,13 +3,12 @@ import 'package:sabai_app/components/reusable_bulletpoints.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 
-
 class TAndCDialog extends StatelessWidget {
   const TAndCDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
-        var languageProvider = Provider.of<LanguageProvider>(context);
+    var languageProvider = Provider.of<LanguageProvider>(context);
 
     return Dialog(
       shape: const RoundedRectangleBorder(
@@ -39,42 +38,44 @@ class TAndCDialog extends StatelessWidget {
                 width: 110,
                 height: 100,
               ),
-              languageProvider.lan == "English" ? 
-              const Text(
-                'Terms and Conditions',
-                style: TextStyle(
-                  fontFamily: 'Bricolage-M',
-                  fontSize: 19.53,
-                ),
-              ):const Text(
-                'သတ်မှတ်ချက်များနှင့်\nအခြေအနေများ',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Walone-B',
-                  fontSize: 19.53,
-                ),
-              ),
+              languageProvider.lan == "English"
+                  ? const Text(
+                      'Terms and Conditions',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 19.53,
+                      ),
+                    )
+                  : const Text(
+                      'သတ်မှတ်ချက်များနှင့်\nအခြေအနေများ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 19.53,
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
-              languageProvider.lan == 'English' ?
-              const Text(
-                'Please read and accept our Terms and Conditions before proceeding.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Bricolage-R',
-                  fontSize: 12.5,
-                  color: Colors.black54,
-                ),
-              ) : const Text(
-                'ကျွန်ုပ်တို့၏ သတ်မှတ်ချက်များနှင့် အခြေအနေများကို အရင်ဖတ်ပါ',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Walone-B',
-                  fontSize: 11,
-                  color: Colors.black54,
-                ),
-              ),
+              languageProvider.lan == 'English'
+                  ? const Text(
+                      'Please read and accept our Terms and Conditions before proceeding.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-R',
+                        fontSize: 12.5,
+                        color: Colors.black54,
+                      ),
+                    )
+                  : const Text(
+                      'ကျွန်ုပ်တို့၏ သတ်မှတ်ချက်များနှင့် အခြေအနေများကို အရင်ဖတ်ပါ',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 11,
+                        color: Colors.black54,
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -92,7 +93,6 @@ class TAndCDialog extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              
               const Text(
                 'By clicking "I Accept," you acknowledge that you have read, understood, and agree to these terms and conditions.',
                 style: TextStyle(
@@ -118,22 +118,23 @@ class TAndCDialog extends StatelessWidget {
                           BorderRadius.circular(8), // Set the border radius
                     ),
                   ),
-                  child: languageProvider.lan == 'English' ?
-                  const Text(
-                    'I accept',
-                    style: TextStyle(
-                      color: Color(0xffFF3997),
-                      fontFamily: 'Bricolage-B',
-                      fontSize: 15.63,
-                    ),
-                  ) : const Text(
-                    'လက်ခံပါသည်',
-                    style: TextStyle(
-                      color: Color(0xffFF3997),
-                      fontFamily: 'Walone-B',
-                      fontSize: 14,
-                    ),
-                  ),
+                  child: languageProvider.lan == 'English'
+                      ? const Text(
+                          'I accept',
+                          style: TextStyle(
+                            color: Color(0xffFF3997),
+                            fontFamily: 'Bricolage-B',
+                            fontSize: 15.63,
+                          ),
+                        )
+                      : const Text(
+                          'လက်ခံပါသည်',
+                          style: TextStyle(
+                            color: Color(0xffFF3997),
+                            fontFamily: 'Walone-B',
+                            fontSize: 14,
+                          ),
+                        ),
                 ),
               ),
             ],

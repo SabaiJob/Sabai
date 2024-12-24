@@ -49,252 +49,254 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                width: 343,
-                height: 228,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Sabai Job Partner Tag
-                    Container(
-                      width: 116,
-                      height: 21,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFFEBF6),
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(8),
-                            topLeft: Radius.circular(8)),
-                      ),
-                      child: Row(
-                        children: [
-                          const Image(
-                            image: AssetImage('images/status.png'),
-                            width: 12,
-                            height: 12,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          languageProvider.lan == 'English'
-                              ? const Text(
-                                  'Sabai Job Partner',
-                                  style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 10,
-                                      color: Color(0xFF6C757D)),
-                                )
-                              : RichText(
-                                  text: const TextSpan(
-                                    text: 'Sabai Job  ',
+              Center(
+                child: Container(
+                  width: 343,
+                  height: 228,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Sabai Job Partner Tag
+                      Container(
+                        width: 116,
+                        height: 21,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFFEBF6),
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(8),
+                              topLeft: Radius.circular(8)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Image(
+                              image: AssetImage('images/status.png'),
+                              width: 12,
+                              height: 12,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            languageProvider.lan == 'English'
+                                ? const Text(
+                                    'Sabai Job Partner',
                                     style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 10,
-                                      color: Color(0xFF6C757D),
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 10,
+                                        color: Color(0xFF6C757D)),
+                                  )
+                                : RichText(
+                                    text: const TextSpan(
+                                      text: 'Sabai Job  ',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 10,
+                                        color: Color(0xFF6C757D),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'မိတ်ဖက်',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'Walone-B',
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    children: [
-                                      TextSpan(
-                                        text: 'မိတ်ဖက်',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          fontFamily: 'Walone-B',
-                                          color: Color(0xFF6C757D),
-                                        ),
-                                      )
-                                    ],
+                                  ),
+                          ],
+                        ),
+                      ),
+                
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Offered by',
+                                  style: TextStyle(
+                                    color: Color(0xFF6C757D),
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 10,
                                   ),
                                 ),
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Column(
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Offered by',
-                                style: TextStyle(
-                                  color: Color(0xFF6C757D),
-                                  fontFamily: 'Bricolage-R',
-                                  fontSize: 10,
+                                SizedBox(
+                                  height: 5,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                'The Walt Disney Company',
-                                style: TextStyle(
-                                  color: Color(0xFF4C5258),
-                                  fontFamily: 'Bricolage-M',
-                                  fontSize: 12.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              languageProvider.lan == 'English'
-                                  ? const Text(
-                                      'Salary',
-                                      style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'လစာ',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-R',
-                                        fontSize: 10,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              languageProvider.lan == 'English'
-                                  ? const Text(
-                                      '18000 ~ 28000 THB',
-                                      style: TextStyle(
-                                        color: Color(0xFF4C5258),
-                                        fontFamily: 'Bricolage-M',
-                                        fontSize: 12.5,
-                                      ),
-                                    )
-                                  : const Text(
-                                      '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-B',
-                                        fontSize: 11,
-                                        color: Color(0xff4C5258),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              languageProvider.lan == 'English'
-                                  ? const Text(
-                                      'Safety',
-                                      style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'စိတ်ချရမှု',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-R',
-                                        fontSize: 10,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Container(
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFEAF6EC),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4)),
-                                ),
-                                width: 65,
-                                height: 21,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.info_outline,
-                                      size: 13,
-                                      color: Color(0xFF28A745),
-                                    ),
-                                    const SizedBox(
-                                      width: 2,
-                                    ),
-                                    languageProvider.lan == 'English'
-                                        ? const Text(
-                                            'Level - 3',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                            ),
-                                          )
-                                        : const Text(
-                                            'အဆင့် - ၃',
-                                            style: TextStyle(
-                                              fontFamily: 'Walone-B',
-                                              fontSize: 10,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              languageProvider.lan == 'English'
-                                  ? const Text(
-                                      'Location',
-                                      style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'တည်နေရာ',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-R',
-                                        fontSize: 10,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text('Bangkok',
+                                Text(
+                                  'The Walt Disney Company',
                                   style: TextStyle(
                                     color: Color(0xFF4C5258),
                                     fontFamily: 'Bricolage-M',
                                     fontSize: 12.5,
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                languageProvider.lan == 'English'
+                                    ? const Text(
+                                        'Salary',
+                                        style: TextStyle(
+                                          color: Color(0xFF6C757D),
+                                          fontFamily: 'Bricolage-R',
+                                          fontSize: 10,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'လစာ',
+                                        style: TextStyle(
+                                          fontFamily: 'Walone-R',
+                                          fontSize: 10,
+                                          color: Color(0xff6C757D),
+                                        ),
+                                      ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                languageProvider.lan == 'English'
+                                    ? const Text(
+                                        '18000 ~ 28000 THB',
+                                        style: TextStyle(
+                                          color: Color(0xFF4C5258),
+                                          fontFamily: 'Bricolage-M',
+                                          fontSize: 12.5,
+                                        ),
+                                      )
+                                    : const Text(
+                                        '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
+                                        style: TextStyle(
+                                          fontFamily: 'Walone-B',
+                                          fontSize: 11,
+                                          color: Color(0xff4C5258),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                languageProvider.lan == 'English'
+                                    ? const Text(
+                                        'Safety',
+                                        style: TextStyle(
+                                          color: Color(0xFF6C757D),
+                                          fontFamily: 'Bricolage-R',
+                                          fontSize: 10,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'စိတ်ချရမှု',
+                                        style: TextStyle(
+                                          fontFamily: 'Walone-R',
+                                          fontSize: 10,
+                                          color: Color(0xff6C757D),
+                                        ),
+                                      ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFEAF6EC),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4)),
+                                  ),
+                                  width: 65,
+                                  height: 21,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.info_outline,
+                                        size: 13,
+                                        color: Color(0xFF28A745),
+                                      ),
+                                      const SizedBox(
+                                        width: 2,
+                                      ),
+                                      languageProvider.lan == 'English'
+                                          ? const Text(
+                                              'Level - 3',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'အဆင့် - ၃',
+                                              style: TextStyle(
+                                                fontFamily: 'Walone-B',
+                                                fontSize: 10,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                languageProvider.lan == 'English'
+                                    ? const Text(
+                                        'Location',
+                                        style: TextStyle(
+                                          color: Color(0xFF6C757D),
+                                          fontFamily: 'Bricolage-R',
+                                          fontSize: 10,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'တည်နေရာ',
+                                        style: TextStyle(
+                                          fontFamily: 'Walone-R',
+                                          fontSize: 10,
+                                          color: Color(0xff6C757D),
+                                        ),
+                                      ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text('Bangkok',
+                                    style: TextStyle(
+                                      color: Color(0xFF4C5258),
+                                      fontFamily: 'Bricolage-M',
+                                      fontSize: 12.5,
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
@@ -656,7 +658,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               height: 42,
               child: TextButton(
                 onPressed: () {
-                  showDialog(context: context, builder: (context)=> const TAndCDialog());
+                  showDialog(
+                      context: context,
+                      builder: (context) => const TAndCDialog());
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),
@@ -710,7 +714,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                       )),
                 ),
                 onPressed: () {
-                   showDialog(context: context, builder: (context)=> const TAndCDialog());
+                  showDialog(
+                      context: context,
+                      builder: (context) => const TAndCDialog());
                 },
                 child: const Image(
                   image: AssetImage('images/share_icon.png'),
