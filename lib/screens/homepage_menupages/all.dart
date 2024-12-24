@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/job_details_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/job_provider.dart';
 
 class All extends StatelessWidget {
   const All({super.key});
@@ -24,13 +25,21 @@ class All extends StatelessWidget {
   }
 }
 
-class WorkCard extends StatelessWidget {
+class WorkCard extends StatefulWidget {
   final String jobTitle;
   const WorkCard(this.jobTitle, {super.key});
 
   @override
+  State<WorkCard> createState() => _WorkCardState();
+}
+
+class _WorkCardState extends State<WorkCard> {
+  @override
   Widget build(BuildContext context) {
     var language = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
+    bool? isSaved = jobProvider.isSaved(widget.jobTitle);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
@@ -89,11 +98,18 @@ class WorkCard extends StatelessWidget {
                       ),
                     ),
                     child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        CupertinoIcons.heart,
-                        color: Color(0xffFF3997),
-                      ),
+                      onPressed: () {
+                        jobProvider.toggleSavedJobs(widget.jobTitle);
+                      },
+                      icon: isSaved == false
+                          ? const Icon(
+                              CupertinoIcons.heart,
+                              color: Color(0xffFF3997),
+                            )
+                          : const Icon(
+                              CupertinoIcons.heart_fill,
+                              color: Color(0xffFF3997),
+                            ),
                       iconSize: 18,
                       padding: EdgeInsets.zero,
                     ),
@@ -107,7 +123,7 @@ class WorkCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    jobTitle,
+                    widget.jobTitle,
                     style: const TextStyle(
                       fontSize: 15.63,
                       fontFamily: 'Bricolage-M',
