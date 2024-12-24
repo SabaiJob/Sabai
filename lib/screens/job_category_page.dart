@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/success_page.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -44,6 +45,7 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF0F1F2),
       appBar: AppBar(
@@ -163,6 +165,7 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
                             setState(
                               () {
                                 _check[index] = value!;
+                                jobProvider.addBestMatched(categories[index]);
                               },
                             );
                           },

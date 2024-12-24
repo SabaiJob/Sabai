@@ -1,20 +1,43 @@
 import 'package:flutter/material.dart';
 
 class JobProvider extends ChangeNotifier {
+  final List<String> _allJobs = [
+    'Barista',
+    'Chef',
+    'Teacher',
+    'Housekeeper',
+    'Janitorial Staff'
+  ];
+  final List<String> _restaurantJobs = ['Barista', 'Chef'];
+  final List<String> _hotelJobs = ['Housekeeper', 'Janitorial Staff'];
+
+  List<String> get allJobs => _allJobs;
+
   final List<String> _savedJobs = [];
 
   List<String> get savedJobs => _savedJobs;
 
-  void toggleSavedJobs(String jobTite) {
-    if (_savedJobs.contains(jobTite)) {
-      _savedJobs.remove(jobTite);
+  void toggleSavedJobs(String jobTitle) {
+    if (_savedJobs.contains(jobTitle)) {
+      _savedJobs.remove(jobTitle);
     } else {
-      _savedJobs.add(jobTite);
+      _savedJobs.add(jobTitle);
     }
     notifyListeners();
   }
 
   bool isSaved(String jobTitle) {
     return savedJobs.contains(jobTitle);
+  }
+
+  final List<String> _bestMatched = [];
+  List<String> get bestMatched => _bestMatched;
+  void addBestMatched(String category) {
+    if (category.contains('Restaurant')) {
+      _bestMatched.addAll(_restaurantJobs);
+    } else if (category.contains('Hotel')) {
+      _bestMatched.addAll(_hotelJobs);
+    }
+    notifyListeners();
   }
 }
