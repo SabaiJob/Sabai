@@ -41,7 +41,7 @@ class _SaveJobsState extends State<SaveJobs> {
                 ),
               )
             : const Text(
-                "အလုပ်များ",
+                "သိမ်းထားသည့်အလုပ်များ",
                 style: TextStyle(
                   fontFamily: 'Walone-B',
                   fontSize: 19.53,
@@ -79,7 +79,7 @@ class _SaveJobsState extends State<SaveJobs> {
                   decoration: InputDecoration(
                     hintText: languageProvider.lan == 'English'
                         ? 'Search by keywords'
-                        : 'အလုပ်များရှာမယ်',
+                        : 'ရှာဖွေမယ်',
                     hintStyle: languageProvider.lan == 'English'
                         ? GoogleFonts.dmSans(
                             textStyle: const TextStyle(
@@ -193,7 +193,13 @@ class _SaveJobsState extends State<SaveJobs> {
                           },
                         )
                       : const Center(
-                          child: Text('There is no saved jobs'),
+                          child: Text(
+                            'There is no saved jobs',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage',
+                              fontSize: 15.42,
+                            ),
+                          ),
                         ),
                 ),
               ),
