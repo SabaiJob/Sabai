@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class ReusableTextformfield extends StatelessWidget {
   final TextEditingController? textEditingController;
+  final TextInputType? keyboardType;
   final String? Function(String?)? validating;
   final String? hint;
+  final List<TextInputFormatter>? formatter;
   const ReusableTextformfield(
       {super.key,
+      this.keyboardType = TextInputType.text,
+      this.formatter,
       required this.textEditingController,
       required this.validating,
       required this.hint});
@@ -20,6 +25,8 @@ class ReusableTextformfield extends StatelessWidget {
       width: 400,
       height: 56,
       child: TextFormField(
+        inputFormatters: formatter,
+        keyboardType: keyboardType,
           controller: textEditingController,
           validator: validating,
           style: languageProvier.lan == 'English'
@@ -66,10 +73,13 @@ class ReusableTextformfield extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
             helperText: '',
-            errorStyle: const TextStyle(
-              fontSize: 10,
-              color: Colors.red,
-            ),
+            errorStyle: languageProvier.lan == 'English' ? const TextStyle(
+                            color: Colors.red,
+                            fontSize: 10,
+                            fontFamily: 'Bricolage-M') : const TextStyle(
+                            color: Colors.red,
+                            fontSize: 10,
+                            fontFamily: 'Walone-R'),
             errorMaxLines: 1,
           )),
     );
