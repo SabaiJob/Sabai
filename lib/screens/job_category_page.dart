@@ -10,7 +10,8 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import '../constants.dart';
 
 class JobCategoryPage extends StatefulWidget {
-  const JobCategoryPage({super.key});
+  final int currentStep;
+  const JobCategoryPage({super.key, required this.currentStep});
 
   @override
   State<JobCategoryPage> createState() => _JobCategoryPageState();
@@ -72,13 +73,13 @@ class _JobCategoryPageState extends State<JobCategoryPage> {
             // progress indicator bar
             Container(
               padding: const EdgeInsets.only(top: 12, bottom: 12),
-              child: const StepProgressIndicator(
-                roundedEdges: Radius.circular(10),
+              child:  StepProgressIndicator(
+                roundedEdges: const Radius.circular(10),
                 padding: 0.0,
-                totalSteps: 3,
-                currentStep: 1,
-                selectedColor: Color(0xFFFF3997),
-                unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                totalSteps: totalSteps,
+                currentStep: widget.currentStep,
+                selectedColor: const Color(0xFFFF3997),
+                unselectedColor: const Color.fromARGB(100, 76, 82, 88),
                 size: 8.0,
               ),
             ),

@@ -5,7 +5,8 @@ import 'package:sabai_app/screens/job_category_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+  final int currentStep;
+  const VerificationPage({super.key, required this.currentStep});
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -42,7 +43,7 @@ class _VerificationPageState extends State<VerificationPage>
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const JobCategoryPage(),
+            builder: (context) =>  JobCategoryPage(currentStep: widget.currentStep + 1,),
           ),
         );
       },

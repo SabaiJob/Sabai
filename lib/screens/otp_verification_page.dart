@@ -9,10 +9,11 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpVerificationPage extends StatefulWidget {
+  final int currentStep;
   final Widget navWidget;
   final bool signUp;
   const OtpVerificationPage(
-      {super.key, required this.navWidget, required this.signUp});
+      {super.key,this.currentStep = 0,required this.navWidget, required this.signUp});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -53,13 +54,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               if (widget.signUp) ...[
                 Container(
                   padding: const EdgeInsets.only(top: 12, bottom: 12),
-                  child: const StepProgressIndicator(
-                    roundedEdges: Radius.circular(10),
+                  child:  StepProgressIndicator(
+                    roundedEdges: const Radius.circular(10),
                     padding: 0.0,
-                    totalSteps: 3,
-                    currentStep: 1,
-                    selectedColor: Color(0xFFFF3997),
-                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                    totalSteps: totalSteps,
+                    currentStep: widget.currentStep,
+                    selectedColor: const Color(0xFFFF3997),
+                    unselectedColor: const Color.fromARGB(100, 76, 82, 88),
                     size: 8.0,
                   ),
                 )

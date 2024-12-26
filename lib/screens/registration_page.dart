@@ -22,6 +22,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  int _currentStep = 0;
   final List<String> _genderItemsEng = ['male', 'female', 'others'];
   final List<String> _genderItemsMm = ['ကျား', 'မ', 'အခြား'];
   String? _selectedGender;
@@ -86,11 +87,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 // progress indicator bar
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: const StepProgressIndicator(
+                  child:  StepProgressIndicator(
                     roundedEdges: Radius.circular(10),
                     padding: 0.0,
-                    totalSteps: 3,
-                    currentStep: 0,
+                    totalSteps: totalSteps,
+                    currentStep: _currentStep,
                     selectedColor: Color(0xFFFF3997),
                     unselectedColor: Color.fromARGB(100, 76, 82, 88),
                     size: 8.0,
@@ -405,8 +406,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OtpVerificationPage(
-                          navWidget: UserProfileSetupPage(),
+                        builder: (context) =>  OtpVerificationPage(
+                          currentStep: _currentStep + 1,
+                          navWidget: UserProfileSetupPage(currentStep: _currentStep + 2,),
                           signUp: true,
                         ),
                       ),

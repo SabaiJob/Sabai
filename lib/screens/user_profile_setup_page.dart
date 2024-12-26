@@ -11,7 +11,8 @@ import '../services/language_provider.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileSetupPage extends StatefulWidget {
-  const UserProfileSetupPage({super.key});
+  final int currentStep;
+  const UserProfileSetupPage({super.key, required this.currentStep});
 
   @override
   State<UserProfileSetupPage> createState() => _UserProfileSetupPageState();
@@ -63,13 +64,13 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
               // StepProgressIndicator
               Container(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
-                child: const StepProgressIndicator(
-                  roundedEdges: Radius.circular(10),
+                child:  StepProgressIndicator(
+                  roundedEdges: const Radius.circular(10),
                   padding: 0.0,
-                  totalSteps: 3,
-                  currentStep: 1,
-                  selectedColor: Color(0xFFFF3997),
-                  unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                  totalSteps: totalSteps,
+                  currentStep: widget.currentStep,
+                  selectedColor: const Color(0xFFFF3997),
+                  unselectedColor: const Color.fromARGB(100, 76, 82, 88),
                   size: 8.0,
                 ),
               ),
@@ -706,7 +707,7 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const VerificationPage(),
+                        builder: (context) =>  VerificationPage(currentStep: widget.currentStep + 1,),
                       ),
                     );
                   },
