@@ -18,8 +18,10 @@ class All extends StatelessWidget {
       child: ListView.builder(
         itemCount: jobProvider.allJobs.length, // Total number of items
         itemBuilder: (context, index) {
+          final job = jobProvider.combineJobs[index];
           return WorkCard(
-            jobProvider.allJobs[index],
+            job['jobTitle'],
+            job['isPartner'],
           );
         },
       ),

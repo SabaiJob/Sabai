@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
-import '../components/work_card.dart';
+import '../../components/work_card.dart';
 
 class SaveJobs extends StatefulWidget {
   const SaveJobs({super.key});
@@ -23,9 +23,11 @@ class _SaveJobsState extends State<SaveJobs> {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
     List<String> savedJobs = jobProvider.savedJobs;
+    final combineJobs = jobProvider.combineJobs;
 
-    final filterJobs = savedJobs.where((job) {
-      bool matchesQuery = job.toLowerCase().contains(searchQuery.toLowerCase());
+    final filterJobs = combineJobs.where((job) {
+      bool matchesQuery =
+          job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
       return matchesQuery;
     }).toList();
 
@@ -90,7 +92,7 @@ class _SaveJobsState extends State<SaveJobs> {
                         : const TextStyle(
                             fontFamily: 'Walone-R',
                             color: Color(0xff989EA4),
-                            fontSize: 14,
+                            fontSize: 15,
                           ),
                     prefixIcon: IconButton(
                       icon: Icon(
@@ -129,7 +131,7 @@ class _SaveJobsState extends State<SaveJobs> {
                         width: 1,
                       ),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 17),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 15),
                   ),
                   onTap: () {
                     setState(() {
@@ -153,14 +155,9 @@ class _SaveJobsState extends State<SaveJobs> {
                       itemCount: filterJobs.length,
                       itemBuilder: (context, index) {
                         var jobs = filterJobs[index];
-                        return ListTile(
-                          title: Text(
-                            jobs,
-                            style: const TextStyle(
-                              fontSize: 15.63,
-                              fontFamily: 'Bricolage-M',
-                            ),
-                          ),
+                        return WorkCard(
+                          jobs['jobTitle'],
+                          jobs['isPartner'],
                         );
                       })),
             ] else ...[
@@ -187,8 +184,12 @@ class _SaveJobsState extends State<SaveJobs> {
                       ? ListView.builder(
                           itemCount: savedJobs.length, // Total number of items
                           itemBuilder: (context, index) {
+                            final job = jobProvider.combineJobs.firstWhere(
+                              (j) => j['jobTitle'] == savedJobs[index],
+                            );
                             return WorkCard(
-                              savedJobs[index],
+                              job['jobTitle'],
+                              job['isPartner'],
                             );
                           },
                         )

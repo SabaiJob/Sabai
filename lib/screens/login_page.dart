@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
-import 'package:sabai_app/screens/job_listing_page.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/otp_verification_page.dart';
 import 'package:sabai_app/services/language_provider.dart';

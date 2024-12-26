@@ -7,7 +7,8 @@ import '../services/language_provider.dart';
 
 class WorkCard extends StatefulWidget {
   final String jobTitle;
-  const WorkCard(this.jobTitle, {super.key});
+  final bool isPartner;
+  const WorkCard(this.jobTitle, this.isPartner, {super.key});
 
   @override
   State<WorkCard> createState() => _WorkCardState();
@@ -33,101 +34,147 @@ class _WorkCardState extends State<WorkCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  height: 25,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffFFEBF6),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            widget.isPartner == true
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'images/status.png',
-                        width: 12,
-                        height: 12,
-                      ),
-                      const Text(
-                        'Sabai Job Partner',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: 'Bricolage-R',
-                          color: Color(0xff6C757D),
+                      Container(
+                        width: 120,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          color: Color(0xffFFEBF6),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Image.asset(
+                              'images/status.png',
+                              width: 12,
+                              height: 12,
+                            ),
+                            const Text(
+                              'Sabai Job Partner',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: 'Bricolage-R',
+                                color: Color(0xff6C757D),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 10),
-                  child: Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                        color: const Color(0xffF0F1F2),
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        jobProvider.toggleSavedJobs(widget.jobTitle);
-                      },
-                      icon: isSaved == false
-                          ? const Icon(
-                              CupertinoIcons.heart,
-                              color: Color(0xffFF3997),
-                            )
-                          : const Icon(
-                              CupertinoIcons.heart_fill,
-                              color: Color(0xffFF3997),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, right: 10),
+                        child: Container(
+                          width: 26,
+                          height: 26,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: const Color(0xffF0F1F2),
                             ),
-                      iconSize: 18,
-                      padding: EdgeInsets.zero,
-                    ),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              jobProvider.toggleSavedJobs(widget.jobTitle);
+                            },
+                            icon: isSaved == false
+                                ? const Icon(
+                                    CupertinoIcons.heart,
+                                    color: Color(0xffFF3997),
+                                  )
+                                : const Icon(
+                                    CupertinoIcons.heart_fill,
+                                    color: Color(0xffFF3997),
+                                  ),
+                            iconSize: 18,
+                            padding: EdgeInsets.zero,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : const SizedBox(
+                    height: 20,
                   ),
-                )
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.jobTitle,
-                    style: const TextStyle(
-                      fontSize: 15.63,
-                      fontFamily: 'Bricolage-M',
-                    ),
-                  ),
-                  RichText(
-                    text: const TextSpan(
-                      text: 'By ',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: 'Bricolage-R',
-                        color: Color(0xff6C757D),
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Starbucks Thailand',
-                          style: TextStyle(
-                            fontFamily: 'Bricolage-B',
-                            fontSize: 10,
-                            color: Color(0xff6C757D),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.jobTitle,
+                            style: const TextStyle(
+                              fontSize: 15.63,
+                              fontFamily: 'Bricolage-M',
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          RichText(
+                            text: const TextSpan(
+                              text: 'By ',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: 'Bricolage-R',
+                                color: Color(0xff6C757D),
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Starbucks Thailand',
+                                  style: TextStyle(
+                                    fontFamily: 'Bricolage-B',
+                                    fontSize: 10,
+                                    color: Color(0xff6C757D),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      widget.isPartner == false
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                width: 26,
+                                height: 26,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: const Color(0xffF0F1F2),
+                                  ),
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    jobProvider
+                                        .toggleSavedJobs(widget.jobTitle);
+                                  },
+                                  icon: isSaved == false
+                                      ? const Icon(
+                                          CupertinoIcons.heart,
+                                          color: Color(0xffFF3997),
+                                        )
+                                      : const Icon(
+                                          CupertinoIcons.heart_fill,
+                                          color: Color(0xffFF3997),
+                                        ),
+                                  iconSize: 18,
+                                  padding: EdgeInsets.zero,
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
                   ),
                   const SizedBox(
                     height: 10,

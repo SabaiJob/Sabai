@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sabai_app/screens/contribute_page.dart';
-import 'package:sabai_app/screens/job_listing_page.dart';
-import 'package:sabai_app/screens/profile.dart';
-import 'package:sabai_app/screens/save_jobs.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/contribute_page.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class NavigationHomepage extends StatefulWidget {
