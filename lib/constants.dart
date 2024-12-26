@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 const int totalSteps = 5;
 
 const appBarTitleStyleEng = TextStyle(
@@ -27,3 +28,5 @@ const labelStyleMm = TextStyle(
   fontSize: 14,
   color: Colors.black,
 );
+
+const primaryPinkColor = Color(0xffFF3997);
