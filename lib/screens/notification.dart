@@ -70,6 +70,26 @@ class _NotificationPageState extends State<NotificationPage> {
     return groupedNoti;
   }
 
+  String timeAgo(String timestamp) {
+    final notificationTime = DateTime.parse(timestamp);
+    final now = DateTime.now();
+    final difference = now.difference(notificationTime);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else {
+      return DateFormat('MMMM dd').format(notificationTime);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -185,9 +205,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           (item) => NotiTile(
                             img: item['img']!,
                             title: item['title']!,
-                            time: DateFormat('hh:mm a').format(
-                              DateTime.parse(item['time']!),
-                            ),
+                            time: timeAgo(item['time']!),
                             type: item['type']!,
                           ),
                         ),
