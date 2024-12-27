@@ -97,23 +97,23 @@ class PrivacyPolicy extends StatelessWidget {
                         'We may collect personal information from you in a variety of ways when you use our Services, including:',
                         style: infoTextStyle,
                       ),
-                      bulletInfo(
+                      BulletInfo(
                         padding: 25,
                         infoTextStyle: infoTextStyle,
                         text:
                             'Personal Identification Information: This includes your name, email address, phone number, gender, date of birth, and other contact details.',
                       ),
-                      bulletInfo(
+                      BulletInfo(
                           padding: 25,
                           text:
                               'Professional Information: This includes your resume, job history, educational background, skills, and other information relevant to job applications.',
                           infoTextStyle: infoTextStyle),
-                      bulletInfo(
+                      BulletInfo(
                           padding: 25,
                           infoTextStyle: infoTextStyle,
                           text:
                               'Verification Information: This includes your passport number, work permit details, and photos of your passport and work permit.'),
-                      bulletInfo(
+                      BulletInfo(
                         padding: 25,
                         infoTextStyle: infoTextStyle,
                         text:
@@ -133,38 +133,38 @@ class PrivacyPolicy extends StatelessWidget {
                         'We may use the information we collect from you for various purposes, including:',
                         style: infoTextStyle,
                       ),
-                      bulletInfo(
+                      BulletInfo(
                         padding: 0,
                         infoTextStyle: infoTextStyle,
                         text: 'To provide, operate, and maintain our Services.',
                       ),
-                      bulletInfo(
+                      BulletInfo(
                           padding: 0,
                           infoTextStyle: infoTextStyle,
                           text:
                               'To improve, personalize, and expand our Services'),
-                      bulletInfo(
+                      BulletInfo(
                         infoTextStyle: infoTextStyle,
                         text:
                             'To process your registration and manage your account.',
                         padding: 0,
                       ),
-                      bulletInfo(
+                      BulletInfo(
                           infoTextStyle: infoTextStyle,
                           text:
                               'To facilitate communication between job seekers and employers.',
                           padding: 0),
-                      bulletInfo(
+                      BulletInfo(
                           infoTextStyle: infoTextStyle,
                           text:
                               'To send you updates, notifications, and other information related to your use of the Services.',
                           padding: 0),
-                      bulletInfo(
+                      BulletInfo(
                           infoTextStyle: infoTextStyle,
                           text:
                               'To prevent fraudulent activity and ensure the security of our Services.',
                           padding: 0),
-                      bulletInfo(
+                      BulletInfo(
                           infoTextStyle: infoTextStyle,
                           text:
                               'To comply with legal obligations and protect our legal rights.',
@@ -181,8 +181,8 @@ class PrivacyPolicy extends StatelessWidget {
   }
 }
 
-class bulletInfo extends StatelessWidget {
-  const bulletInfo({
+class BulletInfo extends StatelessWidget {
+  const BulletInfo({
     super.key,
     required this.infoTextStyle,
     required this.text,
