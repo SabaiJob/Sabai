@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/privacy_policy.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +85,7 @@ class Profile extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-            
+
                 Text(
                     languageProvider.lan == 'English'
                         ? '+66 45789032'
@@ -103,7 +104,7 @@ class Profile extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-            
+
                 // Box 1
                 Container(
                   width: double.infinity,
@@ -274,9 +275,9 @@ class Profile extends StatelessWidget {
                     ],
                   ),
                 ),
-            
+
                 const SizedBox(height: 16),
-            
+
                 // Box 2
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -357,9 +358,9 @@ class Profile extends StatelessWidget {
                     ],
                   ),
                 ),
-            
+
                 const SizedBox(height: 16),
-            
+
                 // Box 3
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -525,9 +526,9 @@ class Profile extends StatelessWidget {
                     ],
                   ),
                 ),
-            
+
                 const SizedBox(height: 16),
-            
+
                 // Box 4
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -565,14 +566,14 @@ class Profile extends StatelessWidget {
                         trailing: const Icon(CupertinoIcons.right_chevron,
                             size: 23, color: Color(0xFFFF3997)),
                       ),
-            
+
                       const SizedBox(
                         width: 311,
                         child: Divider(
                           color: Color(0xFFE2E3E5),
                         ),
                       ),
-            
+
                       // Terms and Conditions
                       ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -601,14 +602,14 @@ class Profile extends StatelessWidget {
                         trailing: const Icon(CupertinoIcons.right_chevron,
                             size: 23, color: Color(0xFFFF3997)),
                       ),
-            
+
                       const SizedBox(
                         width: 311,
                         child: Divider(
                           color: Color(0xFFE2E3E5),
                         ),
                       ),
-            
+
                       // Privacy Policy
                       ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -634,17 +635,28 @@ class Profile extends StatelessWidget {
                                   color: Color(0xFF2B2F32),
                                 ),
                         ),
-                        trailing: const Icon(CupertinoIcons.right_chevron,
-                            size: 23, color: Color(0xFFFF3997)),
+                        trailing: const Icon(
+                          CupertinoIcons.right_chevron,
+                          size: 23,
+                          color: Color(0xFFFF3997),
+                        ),
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrivacyPolicy(),
+                            ),
+                          );
+                        },
                       ),
-            
+
                       const SizedBox(
                         width: 311,
                         child: Divider(
                           color: Color(0xFFE2E3E5),
                         ),
                       ),
-            
+
                       // about sabai jobs
                       ListTile(
                         contentPadding: const EdgeInsets.symmetric(
@@ -682,7 +694,7 @@ class Profile extends StatelessWidget {
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    fixedSize: const Size(double.infinity,52),
+                    fixedSize: const Size(double.infinity, 52),
                     backgroundColor: const Color(0xFFF0F1F2),
                     shape: RoundedRectangleBorder(
                       borderRadius:

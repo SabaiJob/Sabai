@@ -30,3 +30,5 @@ const labelStyleMm = TextStyle(
 );
 
 const primaryPinkColor = Color(0xffFF3997);
+
+const backgroundColor = Color(0xffF7F7F7);
