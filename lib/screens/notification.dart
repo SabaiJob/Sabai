@@ -161,35 +161,40 @@ class _NotificationPageState extends State<NotificationPage> {
                 ],
               )
             : ListView(
-                children: groupedNoti.entries.map((entry) {
-                  final header = entry.key;
-                  final items = entry.value;
+                children: groupedNoti.entries.map(
+                  (entry) {
+                    final header = entry.key;
+                    final items = entry.value;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 13),
-                        child: Text(
-                          header,
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.63,
-                            color: Color(0xFF41464B),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 13),
+                          child: Text(
+                            header,
+                            style: const TextStyle(
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 15.63,
+                              color: Color(0xFF41464B),
+                            ),
                           ),
                         ),
-                      ),
-                      ...items.map((item) => NotiTile(
+                        ...items.map(
+                          (item) => NotiTile(
                             img: item['img']!,
                             title: item['title']!,
-                            time: DateFormat('hh:mm a')
-                                .format(DateTime.parse(item['time']!)),
+                            time: DateFormat('hh:mm a').format(
+                              DateTime.parse(item['time']!),
+                            ),
                             type: item['type']!,
-                          )),
-                    ],
-                  );
-                }).toList(),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ).toList(),
               ),
       ),
     );
