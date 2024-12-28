@@ -197,7 +197,7 @@ class _SaveJobsState extends State<SaveJobs> {
                           child: Text(
                             'There is no saved jobs',
                             style: TextStyle(
-                              fontFamily: 'Bricolage',
+                              fontFamily: 'Bricolage-R',
                               fontSize: 15.42,
                             ),
                           ),

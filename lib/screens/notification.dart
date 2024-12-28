@@ -47,8 +47,11 @@ class _NotificationPageState extends State<NotificationPage> {
       List<Map<String, dynamic>> notifications) {
     final now = DateTime.now();
     final today = DateFormat('yyyy-MM-dd').format(now);
-    final yesterday =
-        DateFormat('yyyy-MM-dd').format(now.subtract(Duration(days: 1)));
+    final yesterday = DateFormat('yyyy-MM-dd').format(
+      now.subtract(
+        const Duration(days: 1),
+      ),
+    );
 
     final groupedNoti = <String, List<Map<String, dynamic>>>{};
 
