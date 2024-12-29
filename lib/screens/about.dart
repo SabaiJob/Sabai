@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../constants.dart';
+import '../services/language_provider.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     const labelTextStyle = TextStyle(
       fontFamily: 'Bricolage-M',
       fontSize: 12.5,
       color: Color(0xff363B3F),
     );
 
+    const labelTextStyleMm = TextStyle(
+      fontFamily: 'Walone-B',
+      fontSize: 11,
+      color: Color(0xff363B3F),
+    );
+
     const infoTextStyle = TextStyle(
       fontFamily: 'Bricolage-R',
+      fontSize: 10,
+      color: Color(0xff6C757D),
+    );
+
+    const infoTextStyleMn = TextStyle(
+      fontFamily: 'Walone-R',
       fontSize: 10,
       color: Color(0xff6C757D),
     );
