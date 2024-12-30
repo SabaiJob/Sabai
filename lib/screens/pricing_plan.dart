@@ -122,12 +122,11 @@ class _PricingPlanState extends State<PricingPlan> {
                     .toList(),
                 options: CarouselOptions(
                   height: 288,
-                  aspectRatio: 1000 / 700,
                   initialPage: 1,
                   autoPlay: false,
                   enlargeCenterPage: true,
                   enableInfiniteScroll: false, // Disables infinite scrolling.
-                  viewportFraction: 0.5,
+                  viewportFraction: 0.6,
                   onPageChanged: (index, reason) {
                     setState(() {
                       _currentIndex = index;
