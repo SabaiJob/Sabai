@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'dart:io';
 
 class PricingPlan extends StatefulWidget {
   const PricingPlan({super.key});
@@ -126,7 +127,7 @@ class _PricingPlanState extends State<PricingPlan> {
                   autoPlay: false,
                   enlargeCenterPage: true,
                   enableInfiniteScroll: false, // Disables infinite scrolling.
-                  viewportFraction: 0.6,
+                  viewportFraction: Platform.isAndroid ? 0.5 : 0.6,
                   onPageChanged: (index, reason) {
                     setState(() {
                       _currentIndex = index;
