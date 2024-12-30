@@ -275,6 +275,80 @@ class PrivacyPolicy extends StatelessWidget {
                       ),
                       const SizedBox(
                         height: 10,
+                      ),
+                      languageProvider.lan == 'English'
+                          ? const Text(
+                              '3. Use of Services',
+                              style: labelTextStyle,
+                            )
+                          : const Text(
+                              '၃။ ဝန်ဆောင်မှုများအသုံးပြုခြင်း',
+                              style: labelTextStyleMm,
+                            ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      languageProvider.lan == 'English'
+                          ? const Text(
+                              'You agree to use the Services only for lawful purposes and in accordance with these Terms. You agree not to use the Services:',
+                              style: infoTextStyle,
+                            )
+                          : const Text(
+                              'သင်သည် ဤဝန်ဆောင်မှုများကို ဥပဒေပြုလုပ်ထားသော ရည်ရွယ်ချက်များအတွက်သာ အသုံးပြုရန် သဘောတူပါသည်။ သင်သည် ဤဝန်ဆောင်မှုများကို အသုံးပြုရန် အောက်ပါကဲ့သို့ မလုပ်ပေးရန် သဘောတူပါသည်။',
+                              style: infoTextStyleMn,
+                            ),
+                      const BulletInfo(
+                        padding: 15,
+                        infoTextStyle: infoTextStyle,
+                        text:
+                            'To post any job listings or other content that is false, misleading, or otherwise deceptive.',
+                        textmm:
+                            'အမှား၊ မမှန်ကန်သော သို့မဟုတ် အခြားသော လိမ္မာမှုမရှိသော အလုပ်ဖော်ပြချက်များ သို့မဟုတ် အကြောင်းအရာများကို ပေါ်ပြူလာသွားရန်',
+                        infoTextStylemm: infoTextStyleMn,
+                        paddingmm: 10,
+                      ),
+                      const BulletInfo(
+                        padding: 15,
+                        infoTextStyle: infoTextStyle,
+                        text:
+                            'To post any content that is illegal, offensive, defamatory, or otherwise inappropriate.',
+                        textmm:
+                            'ဥပဒေအရ မမှန်၊ အပြစ်တင်ခြင်း၊ ဆန့်ကျင်မှုရှိသော သို့မဟုတ် အခြားသော မသင့်တော်သော အကြောင်းအရာများကို ပေါ်ပြူလာသွားရန်',
+                        infoTextStylemm: infoTextStyleMn,
+                        paddingmm: 10,
+                      ),
+                      const BulletInfo(
+                        infoTextStyle: infoTextStyle,
+                        text:
+                            'To violate any applicable local, state, national, or international law.',
+                        padding: 15,
+                        textmm:
+                            'ဒေသခံ၊ ပြည်နယ်၊ အမျိုးသား သို့မဟုတ် အပြည်ပြည်ဆိုင်ရာ ဥပဒေများကို ချိုးဖောက်ရန်',
+                        infoTextStylemm: infoTextStyleMn,
+                        paddingmm: 0,
+                      ),
+                      const BulletInfo(
+                        infoTextStyle: infoTextStyle,
+                        text:
+                            'To transmit any viruses, malware, or other harmful software.',
+                        padding: 0,
+                        textmm:
+                            'ဗိုင်းရပ်စ်များ၊ မော်လ်ဝဲများ သို့မဟုတ် အခြားသော အန္တရာယ်ဖြစ်စေသော ဆော့ဖ်ဝဲများပို့ဆောင်ရန်',
+                        infoTextStylemm: infoTextStyleMn,
+                        paddingmm: 10,
+                      ),
+                      const BulletInfo(
+                        infoTextStyle: infoTextStyle,
+                        text:
+                            'To collect or store personal information about other users without their consent.',
+                        padding: 0,
+                        textmm:
+                            'အခြားအသုံးပြုသူများ၏ ကိုယ်ရေးအချက်အလက်များကို သူတို့၏ အလွှတ်သတ်မှတ်ချက်မရှိဘဲ စုဆောင်းရန်',
+                        infoTextStylemm: infoTextStyleMn,
+                        paddingmm: 15,
+                      ),
+                      const SizedBox(
+                        height: 10,
                       )
                     ],
                   ),
