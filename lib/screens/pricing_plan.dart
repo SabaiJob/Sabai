@@ -121,6 +121,7 @@ class _PricingPlanState extends State<PricingPlan> {
                     )
                     .toList(),
                 options: CarouselOptions(
+                  height: 288,
                   aspectRatio: 1000 / 700,
                   initialPage: 1,
                   autoPlay: false,
@@ -355,14 +356,12 @@ class PriceTexts extends StatelessWidget {
         const SizedBox(
           width: 5,
         ),
-        Expanded(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 12.5,
-              fontFamily: 'Bricolage-R',
-              color: textColor,
-            ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 12.5,
+            fontFamily: 'Bricolage-R',
+            color: textColor,
           ),
         ),
       ],
