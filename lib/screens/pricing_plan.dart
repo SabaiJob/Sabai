@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:sabai_app/screens/payment.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:io';
 
@@ -13,7 +14,8 @@ class PricingPlan extends StatefulWidget {
 
 class _PricingPlanState extends State<PricingPlan> {
   final CarouselSliderController _controller = CarouselSliderController();
-  int _currentIndex = 1; // Default to show the second container in the center.
+  int _currentIndex = 1;// Default to show the second container in the center.
+  bool _currentPlan = false;
 
   final List<Map<String, dynamic>> priceDetail = [
     {
@@ -23,6 +25,7 @@ class _PricingPlanState extends State<PricingPlan> {
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
       'plan': '3 months',
+      'current' : '',
     },
     {
       'price': '250',
@@ -31,6 +34,7 @@ class _PricingPlanState extends State<PricingPlan> {
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
       'plan': '1 month',
+      'current' : '',
     },
     {
       'price': 'Free',
@@ -38,7 +42,8 @@ class _PricingPlanState extends State<PricingPlan> {
       'text2': 'Verified jobs',
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
-      'plan': 'Current',
+      'plan': '',
+      'current' : 'active',
     },
   ];
 
@@ -118,11 +123,12 @@ class _PricingPlanState extends State<PricingPlan> {
                         text3: entry.value['text3'],
                         text4: entry.value['text4'],
                         plan: entry.value['plan'],
+                        current: entry.value['current'],
                       ),
                     )
                     .toList(),
                 options: CarouselOptions(
-                  height: 288,
+                  height: 300,
                   initialPage: 1,
                   autoPlay: false,
                   enlargeCenterPage: true,
@@ -138,13 +144,16 @@ class _PricingPlanState extends State<PricingPlan> {
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 30),
               child: GestureDetector(
+                onTap: _currentIndex!= 2?(){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const Payment(),),);
+                }: null,
                 child: Container(
                   height: 42,
                   width: 343,
                   decoration: BoxDecoration(
-                    color: primaryPinkColor,
+                    color: _currentIndex != 2 ? primaryPinkColor: const Color(0x40FF3997),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
@@ -169,6 +178,7 @@ class _PricingPlanState extends State<PricingPlan> {
 
 class PricingContainer extends StatelessWidget {
   const PricingContainer({
+    required this.current,
     required this.isSelected,
     required this.price,
     required this.plan,
@@ -180,6 +190,7 @@ class PricingContainer extends StatelessWidget {
   });
 
   final bool isSelected;
+  final String current;
   final String price;
   final String plan;
   final String text1;
@@ -276,12 +287,22 @@ class PricingContainer extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
+              if(price != 'Free')
               Text(
                 plan,
                 style: const TextStyle(
                   fontSize: 15.63,
                   fontFamily: 'Bricolage-R',
                   color: Color(0xff4C5258),
+                ),
+              ),
+              if(current == 'active')
+                 const Text(
+                'Current',
+                style: const TextStyle(
+                  fontSize: 15.63,
+                  fontFamily: 'Bricolage-R',
+                  color: Color(0xff28A745),
                 ),
               ),
             ],
