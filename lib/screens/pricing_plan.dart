@@ -14,8 +14,7 @@ class PricingPlan extends StatefulWidget {
 
 class _PricingPlanState extends State<PricingPlan> {
   final CarouselSliderController _controller = CarouselSliderController();
-  int _currentIndex = 1;// Default to show the second container in the center.
-  bool _currentPlan = false;
+  int _currentIndex = 1; // Default to show the second container in the center.
 
   final List<Map<String, dynamic>> priceDetail = [
     {
@@ -25,7 +24,7 @@ class _PricingPlanState extends State<PricingPlan> {
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
       'plan': '3 months',
-      'current' : '',
+      'current': '',
     },
     {
       'price': '250',
@@ -34,7 +33,7 @@ class _PricingPlanState extends State<PricingPlan> {
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
       'plan': '1 month',
-      'current' : '',
+      'current': '',
     },
     {
       'price': 'Free',
@@ -43,7 +42,7 @@ class _PricingPlanState extends State<PricingPlan> {
       'text3': '10 roses a day',
       'text4': 'Early access to new jobs',
       'plan': '',
-      'current' : 'active',
+      'current': 'active',
     },
   ];
 
@@ -146,14 +145,25 @@ class _PricingPlanState extends State<PricingPlan> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: GestureDetector(
-                onTap: _currentIndex!= 2?(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const Payment(),),);
-                }: null,
+                onTap: _currentIndex != 2
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Payment(
+                              plan: _currentIndex,
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
                 child: Container(
                   height: 42,
                   width: 343,
                   decoration: BoxDecoration(
-                    color: _currentIndex != 2 ? primaryPinkColor: const Color(0x40FF3997),
+                    color: _currentIndex != 2
+                        ? primaryPinkColor
+                        : const Color(0x40FF3997),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
@@ -287,24 +297,24 @@ class PricingContainer extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              if(price != 'Free')
-              Text(
-                plan,
-                style: const TextStyle(
-                  fontSize: 15.63,
-                  fontFamily: 'Bricolage-R',
-                  color: Color(0xff4C5258),
+              if (price != 'Free')
+                Text(
+                  plan,
+                  style: const TextStyle(
+                    fontSize: 15.63,
+                    fontFamily: 'Bricolage-R',
+                    color: Color(0xff4C5258),
+                  ),
                 ),
-              ),
-              if(current == 'active')
-                 const Text(
-                'Current',
-                style: const TextStyle(
-                  fontSize: 15.63,
-                  fontFamily: 'Bricolage-R',
-                  color: Color(0xff28A745),
+              if (current == 'active')
+                const Text(
+                  'Current',
+                  style: TextStyle(
+                    fontSize: 15.63,
+                    fontFamily: 'Bricolage-R',
+                    color: Color(0xff28A745),
+                  ),
                 ),
-              ),
             ],
           ),
           Padding(
