@@ -22,7 +22,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  int _currentStep = 0;
+  final int _currentStep = 0;
   final List<String> _genderItemsEng = ['male', 'female', 'others'];
   final List<String> _genderItemsMm = ['ကျား', 'မ', 'အခြား'];
   String? _selectedGender;
@@ -39,7 +39,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
     print('Selected Date: $date'); // Do something with the selected date
   }
-  
 
   // Form Key and Controllers
   final _formKey = GlobalKey<FormState>();
@@ -75,7 +74,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           color: Color(0xFFFF3997),
         ),
       ),
-      body: Container(
+      body: Padding(
         padding:
             const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 30),
         child: SingleChildScrollView(
@@ -85,22 +84,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // progress indicator bar
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  child:  StepProgressIndicator(
-                    roundedEdges: Radius.circular(10),
+                  child: StepProgressIndicator(
+                    roundedEdges: const Radius.circular(10),
                     padding: 0.0,
                     totalSteps: totalSteps,
                     currentStep: _currentStep,
-                    selectedColor: Color(0xFFFF3997),
-                    unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                    selectedColor: const Color(0xFFFF3997),
+                    unselectedColor: const Color.fromARGB(100, 76, 82, 88),
                     size: 8.0,
                   ),
                 ),
 
                 // title
-                Container(
-                   padding: const EdgeInsets.symmetric(vertical: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: ReusableTitleHolder(
@@ -112,8 +111,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
 
                 // subtitle
-                Container(
-                   padding: const EdgeInsets.symmetric(vertical: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: ReusableContentHolder(
@@ -125,7 +124,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
                 // Full Name
                 Padding(
-                   padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: ReusableLabelHolder(
                     labelName: languageProvider.lan == 'English'
                         ? 'Full Name'
@@ -203,13 +202,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       padding: const EdgeInsets.only(top: 1),
                       child: Text(
                         genderErrorMessage,
-                        style: languageProvider.lan == 'English' ? const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Bricolage-M') : const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Walone-R'),
+                        style: languageProvider.lan == 'English'
+                            ? const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Bricolage-M')
+                            : const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Walone-R'),
                       ),
                     ),
                   ),
@@ -252,13 +253,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(
                         birthdayErrorMessage,
-                        style: languageProvider.lan == 'English' ? const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Bricolage-M') : const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Walone-R'),
+                        style: languageProvider.lan == 'English'
+                            ? const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Bricolage-M')
+                            : const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Walone-R'),
                       ),
                     ),
                   ),
@@ -295,7 +298,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
                 // Email Address
                 Padding(
-                  padding: const EdgeInsets.only(top: 5,bottom: 8),
+                  padding: const EdgeInsets.only(top: 5, bottom: 8),
                   child: ReusableLabelHolder(
                     labelName: languageProvider.lan == 'English'
                         ? 'Email Address'
@@ -363,108 +366,110 @@ class _RegistrationPageState extends State<RegistrationPage> {
       persistentFooterButtons: [
         Column(
           children: [
-            Container(
-              width: 375,
-              height: 42,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  // if (_formKey.currentState!.validate()) {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => const OtpVerificationPage(
-                  //         navWidget: UserProfileSetupPage(),
-                  //         signUp: true,
-                  //       ),
-                  //     ),
-                  //   );
-                  // } else {
-                  //   // form validation failed
-                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //     content: languageProvider.lan == 'English'
-                  //         ? const Text(
-                  //             "Please completed all the required fields")
-                  //         : const Text(
-                  //             "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-                  // }
-                  setState(() {
-                    isGenderError = _selectedGender == null;
-                    isBirthdayError = _selectedDate == null;
+            TextButton(
+              onPressed: () {
+                // if (_formKey.currentState!.validate()) {
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const OtpVerificationPage(
+                //         navWidget: UserProfileSetupPage(),
+                //         signUp: true,
+                //       ),
+                //     ),
+                //   );
+                // } else {
+                //   // form validation failed
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //     content: languageProvider.lan == 'English'
+                //         ? const Text(
+                //             "Please completed all the required fields")
+                //         : const Text(
+                //             "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
+                // }
+                setState(() {
+                  isGenderError = _selectedGender == null;
+                  isBirthdayError = _selectedDate == null;
 
-                    genderErrorMessage =
-                        isGenderError ? (languageProvider.lan == 'English'?  "   Gender is required" : "   လိင်အမျိုးအစားရွေးချယ်ရန်လိုအပ်သည်" ): '';
-                    birthdayErrorMessage =
-                        isBirthdayError ? (languageProvider.lan == 'English' ? "   Birthday is required" : "   မွေးဖွားသည့်နေ့ရွေးချယ်ရန်လိုအပ်သည်") : '';
-                  });
+                  genderErrorMessage = isGenderError
+                      ? (languageProvider.lan == 'English'
+                          ? "   Gender is required"
+                          : "   လိင်အမျိုးအစားရွေးချယ်ရန်လိုအပ်သည်")
+                      : '';
+                  birthdayErrorMessage = isBirthdayError
+                      ? (languageProvider.lan == 'English'
+                          ? "   Birthday is required"
+                          : "   မွေးဖွားသည့်နေ့ရွေးချယ်ရန်လိုအပ်သည်")
+                      : '';
+                });
 
-                  if (_formKey.currentState!.validate() &&
-                      !isGenderError &&
-                      !isBirthdayError) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>  OtpVerificationPage(
-                          currentStep: _currentStep + 1,
-                          navWidget: UserProfileSetupPage(currentStep: _currentStep + 2,),
-                          signUp: true,
+                if (_formKey.currentState!.validate() &&
+                    !isGenderError &&
+                    !isBirthdayError) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OtpVerificationPage(
+                        currentStep: _currentStep + 1,
+                        navWidget: UserProfileSetupPage(
+                          currentStep: _currentStep + 2,
                         ),
+                        signUp: true,
                       ),
-                    );
-                    print('username: $_fullNameController');
-                    print('gender : $_selectedGender');
-                    print('DOB : $_selectedDate');
-                    print('Phone Number : $_phoneNumberController');
-                  } 
-                  // else {
-                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //       content: languageProvider.lan == 'English'
-                  //           ? const Text(
-                  //               "Please complete all the required fields")
-                  //           : const Text(
-                  //               "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-                  // }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xffFF3997),
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(8), // Set the border radius
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    languageProvider.lan == 'English'
-                        ? const Text(
-                            'Continue',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-B',
-                              fontSize: 15.63,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'ဆက်လက်ရန်',
-                            style: TextStyle(
-                              fontFamily: 'Walone-B',
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                    const SizedBox(
-                      width: 10,
                     ),
-                    const Icon(
-                      CupertinoIcons.arrow_right,
-                      color: Colors.white,
-                    ),
-                  ],
+                  );
+                  print('username: $_fullNameController');
+                  print('gender : $_selectedGender');
+                  print('DOB : $_selectedDate');
+                  print('Phone Number : $_phoneNumberController');
+                }
+                // else {
+                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //       content: languageProvider.lan == 'English'
+                //           ? const Text(
+                //               "Please complete all the required fields")
+                //           : const Text(
+                //               "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
+                // }
+              },
+              style: TextButton.styleFrom(
+                fixedSize: const Size(375, 42),
+                backgroundColor: const Color(0xffFF3997),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Set the border radius
                 ),
               ),
-            )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  languageProvider.lan == 'English'
+                      ? const Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-B',
+                            fontSize: 15.63,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'ဆက်လက်ရန်',
+                          style: TextStyle(
+                            fontFamily: 'Walone-B',
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Icon(
+                    CupertinoIcons.arrow_right,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
           ],
         )
       ],
