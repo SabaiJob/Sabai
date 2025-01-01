@@ -6,12 +6,12 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class Payment extends StatefulWidget {
-  const Payment({
+  Payment({
     required this.plan,
     super.key,
   });
 
-  final int plan;
+  late int plan;
 
   @override
   State<Payment> createState() => _PaymentState();
@@ -28,6 +28,8 @@ class _PaymentState extends State<Payment> {
 
   late bool isPrompt = false;
   late bool isKBZ = false;
+
+  late Color color = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,10 @@ class _PaymentState extends State<Payment> {
             color: Colors.grey.shade300,
           ),
         ),
+        iconTheme: const IconThemeData(
+          color: primaryPinkColor,
+        ),
+        surfaceTintColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
@@ -105,132 +111,148 @@ class _PaymentState extends State<Payment> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                    width: double.infinity,
-                    height: 69,
-                    decoration: widget.plan == 1
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                            border: Border.all(
-                              color: primaryPinkColor,
-                            ),
-                          )
-                        : BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                          ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                text: const TextSpan(
-                                  text: '250',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Bricolage-SMB',
-                                      color: Color(0xff363B3F)),
-                                  children: [
-                                    TextSpan(
-                                      text: ' THB',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xff616971),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.plan = 1;
+                      });
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 69,
+                      decoration: widget.plan == 1
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: primaryPinkColor,
+                                width: 2,
                               ),
-                              if (widget.plan == 1)
-                                const Icon(
-                                  Icons.check_circle_outline,
-                                  color: primaryPinkColor,
-                                )
-                            ],
-                          ),
-                          const Text(
-                            '1 month',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 12.5,
-                              color: Color(0xffB6BABE),
+                            )
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
                             ),
-                          )
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                  text: const TextSpan(
+                                    text: '250',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Bricolage-SMB',
+                                        color: Color(0xff363B3F)),
+                                    children: [
+                                      TextSpan(
+                                        text: ' THB',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Bricolage-R',
+                                          color: Color(0xff616971),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (widget.plan == 1)
+                                  const Icon(
+                                    Icons.check_circle_outline,
+                                    color: primaryPinkColor,
+                                  )
+                              ],
+                            ),
+                            const Text(
+                              '1 month',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 12.5,
+                                color: Color(0xffB6BABE),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    width: double.infinity,
-                    height: 69,
-                    decoration: widget.plan == 0
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                            border: Border.all(
-                              color: primaryPinkColor,
-                            ),
-                          )
-                        : BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                          ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                text: const TextSpan(
-                                  text: '500',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: 'Bricolage-SMB',
-                                      color: Color(0xff363B3F)),
-                                  children: [
-                                    TextSpan(
-                                      text: ' THB',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xff616971),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.plan = 0;
+                      });
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 69,
+                      decoration: widget.plan == 0
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: primaryPinkColor,
+                                width: 2,
                               ),
-                              if (widget.plan == 0)
-                                const Icon(
-                                  Icons.check_circle_outline,
-                                  color: primaryPinkColor,
-                                )
-                            ],
-                          ),
-                          const Text(
-                            '3 months',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 12.5,
-                              color: Color(0xffB6BABE),
+                            )
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white,
                             ),
-                          )
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                  text: const TextSpan(
+                                    text: '500',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Bricolage-SMB',
+                                        color: Color(0xff363B3F)),
+                                    children: [
+                                      TextSpan(
+                                        text: ' THB',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: 'Bricolage-R',
+                                          color: Color(0xff616971),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (widget.plan == 0)
+                                  const Icon(
+                                    Icons.check_circle_outline,
+                                    color: primaryPinkColor,
+                                  )
+                              ],
+                            ),
+                            const Text(
+                              '3 months',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 12.5,
+                                color: Color(0xffB6BABE),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -256,9 +278,8 @@ class _PaymentState extends State<Payment> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: isPrompt == false
-                                ? Colors.transparent
-                                : primaryPinkColor,
+                            color: isPrompt == false ? color : primaryPinkColor,
+                            width: 2,
                           )),
                       child: const Padding(
                         padding: EdgeInsets.only(left: 10.0),
@@ -291,9 +312,8 @@ class _PaymentState extends State<Payment> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isKBZ == false
-                              ? Colors.transparent
-                              : primaryPinkColor,
+                          color: isKBZ == false ? color : primaryPinkColor,
+                          width: 2,
                         ),
                       ),
                       child: const Padding(
@@ -481,7 +501,11 @@ class _PaymentState extends State<Payment> {
               ),
               child: TextButton(
                 onPressed: () {
-                  setState(() {});
+                  setState(() {
+                    if (isKBZ == false && isPrompt == false) {
+                      color = Colors.red;
+                    }
+                  });
 
                   if (_formKey.currentState!.validate()) {
                   } else {
