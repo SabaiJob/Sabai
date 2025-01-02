@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/qr.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class Payment extends StatefulWidget {
@@ -491,72 +492,76 @@ class _PaymentState extends State<Payment> {
         ),
       ),
       persistentFooterButtons: [
-        Column(
-          children: [
-            Container(
-              width: 375,
-              height: 42,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    if (isKBZ == false && isPrompt == false) {
-                      color = Colors.red;
-                    }
-                  });
+        Container(
+          width: 375,
+          height: 42,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                if (isKBZ == false && isPrompt == false) {
+                  color = Colors.red;
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Qr(
+                        isKbz: isKBZ,
+                        isPrompt: isPrompt,
+                      ),
+                    ),
+                  );
+                }
+              });
 
-                  if (_formKey.currentState!.validate()) {
-                  } else {
-                    // form validation failed
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: languageProvider.lan == 'English'
-                            ? const Text(
-                                "Please completed all the required fields")
-                            : const Text(
-                                "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-                  }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xffFF3997),
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(8), // Set the border radius
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    languageProvider.lan == 'English'
-                        ? const Text(
-                            'Continue',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-B',
-                              fontSize: 15.63,
-                              color: Colors.white,
-                            ),
-                          )
+              if (_formKey.currentState!.validate()) {
+              } else {
+                // form validation failed
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: languageProvider.lan == 'English'
+                        ? const Text("Please completed all the required fields")
                         : const Text(
-                            'ဆက်လက်ရန်',
-                            style: TextStyle(
-                              fontFamily: 'Walone-B',
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Icon(
-                      CupertinoIcons.arrow_right,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+                            "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
+              }
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: const Color(0xffFF3997),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Set the border radius
               ),
-            )
-          ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                languageProvider.lan == 'English'
+                    ? const Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontFamily: 'Bricolage-B',
+                          fontSize: 15.63,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'ဆက်လက်ရန်',
+                        style: TextStyle(
+                          fontFamily: 'Walone-B',
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  CupertinoIcons.arrow_right,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
         )
       ],
       persistentFooterAlignment: AlignmentDirectional.center,
