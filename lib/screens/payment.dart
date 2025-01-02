@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/constants.dart';
@@ -21,9 +22,11 @@ class Payment extends StatefulWidget {
 class _PaymentState extends State<Payment> {
   final _formKey = GlobalKey<FormState>();
 
-  final _textController = TextEditingController();
+  final _fullNameController = TextEditingController();
 
   final _phoneNumberController = TextEditingController();
+
+  final _rCodeController = TextEditingController();
 
   final _pageController = PageController();
 
@@ -73,7 +76,7 @@ class _PaymentState extends State<Payment> {
                   height: 8,
                 ),
                 ReusableTextformfield(
-                  textEditingController: _textController,
+                  textEditingController: _fullNameController,
                   validating: (value) {
                     if (value == null || value.isEmpty) {
                       return languageProvider.lan == 'English'
@@ -94,6 +97,7 @@ class _PaymentState extends State<Payment> {
                   height: 8,
                 ),
                 ReusableTextformfield(
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
                   textEditingController: _phoneNumberController,
                   keyboardType: TextInputType.phone,
                   validating: (value) {
@@ -338,7 +342,7 @@ class _PaymentState extends State<Payment> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: ReusableTextformfield(
-                    textEditingController: _textController,
+                    textEditingController: _rCodeController,
                     validating: (value) {
                       return null;
                     },
