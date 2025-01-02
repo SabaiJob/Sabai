@@ -45,7 +45,14 @@ class Qr extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Scan this Qr to make payment'),
+                      const Text(
+                        'Scan this Qr to make payment',
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontFamily: 'Bricolage-R',
+                          color: Color(0xff363B3F),
+                        ),
+                      ),
                       Image.asset(
                         'images/qr.png',
                         width: 195,
