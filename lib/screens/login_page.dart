@@ -139,6 +139,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+      persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: [
         Column(
           children: [

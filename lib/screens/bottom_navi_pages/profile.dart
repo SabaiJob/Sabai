@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
@@ -11,13 +14,31 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final List<String> languages = ['English', 'Myanmar'];
+  FileImage? _selectedImage;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: source);
+    if (image != null) {
+      setState(() {
+        _selectedImage = FileImage(File(image.path));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
-    List<String> languages = ['English', 'Myanmar'];
+
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
     return Scaffold(
@@ -54,25 +75,35 @@ class Profile extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  const CircleAvatar(
+                  _selectedImage != null ?
+                   CircleAvatar(
                     radius: 40,
+                    foregroundImage: _selectedImage!,
+                  ) : const CircleAvatar(
+                    radius: 40,
+                    foregroundImage: AssetImage('icons/temp1.png',),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: const Color(0xFFFFEBF6),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFFED7EA),
-                            width: 3,
-                          )),
-                      padding: const EdgeInsets.all(3),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Color(0xFFFF3997),
-                        size: 12,
+                    child: GestureDetector(
+                      onTap: (){
+                        _pickImage(ImageSource.gallery);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFFFEBF6),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFFED7EA),
+                              width: 3,
+                            )),
+                        padding: const EdgeInsets.all(3),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Color(0xFFFF3997),
+                          size: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -190,7 +221,7 @@ class Profile extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>  RoseCountPage()));
+                                builder: (context) => RoseCountPage()));
                       },
                       child: SizedBox(
                         child: Column(
