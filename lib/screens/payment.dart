@@ -359,134 +359,10 @@ class _PaymentState extends State<Payment> {
                     height: 200,
                     child: PageView(
                       controller: _pageController,
-                      children: [
-                        Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'images/quotation.png',
-                                  width: 10,
-                                  height: 10,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'images/avatar1.png',
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    const Text(
-                                      'Jessica Felicio',
-                                      style: TextStyle(
-                                        fontSize: 12.5,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xff363B3F),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'images/quotation.png',
-                                  width: 10,
-                                  height: 10,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'images/avatar1.png',
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    const Text(
-                                      'Jessica Felicio',
-                                      style: TextStyle(
-                                        fontSize: 12.5,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xff363B3F),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'images/quotation.png',
-                                  width: 10,
-                                  height: 10,
-                                ),
-                                const Expanded(
-                                  child: Text(
-                                    'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'images/avatar1.png',
-                                        width: 25,
-                                        height: 25,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      const Text(
-                                        'Jessica Felicio',
-                                        style: TextStyle(
-                                          fontSize: 12.5,
-                                          fontFamily: 'Bricolage-R',
-                                          color: Color(0xff363B3F),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                      children: const [
+                        ReviewCard(),
+                        ReviewCard(),
+                        ReviewCard(),
                       ],
                     ),
                   ),
@@ -570,6 +446,58 @@ class _PaymentState extends State<Payment> {
         )
       ],
       persistentFooterAlignment: AlignmentDirectional.center,
+    );
+  }
+}
+
+class ReviewCard extends StatelessWidget {
+  const ReviewCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              'images/quotation.png',
+              width: 10,
+              height: 10,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: Text(
+                'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
+              ),
+            ),
+            Row(
+              children: [
+                Image.asset(
+                  'images/avatar1.png',
+                  width: 25,
+                  height: 25,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const Text(
+                  'Jessica Felicio',
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontFamily: 'Bricolage-R',
+                    color: Color(0xff363B3F),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
