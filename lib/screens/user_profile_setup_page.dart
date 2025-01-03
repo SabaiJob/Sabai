@@ -29,10 +29,13 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
   String? selectedCity;
   final List<String> durationItems = ['Months', 'Years'];
   final List<String> durationItemsMM = ['လ', 'နှစ်'];
+  final List<String> languageLevelsEng = ['Novice', 'Basic', 'Conversational', 'Working Proficiency', 'Fluenct' ];
+  final List<String> languageLevelsMm = [''];
   String? selectedDuration = 'Years';
   String? selectedDurationMM = 'နှစ်';
   String? selectedOptionPp;
   String? selectedOptionWp;
+  String? selectedLanguageLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -368,46 +371,59 @@ class _UserProfileSetupPageState extends State<UserProfileSetupPage> {
                 ),
               ),
               // Thai Language Proficiency
-              const SizedBox(
-                width: 400,
-                height: 36,
-                child: TextField(
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-R',
-                    fontWeight: FontWeight.w100,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.start,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00ffffff),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00ffffff),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: ("will be provided later"),
-                    contentPadding:
-                        EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                    hintStyle: TextStyle(
-                      color: Color(0xFF7B838A),
-                      fontSize: 14,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
+              // const SizedBox(
+              //   width: 400,
+              //   height: 36,
+              //   child: TextField(
+              //     style: TextStyle(
+              //       fontFamily: 'Bricolage-R',
+              //       fontWeight: FontWeight.w100,
+              //       fontSize: 14,
+              //     ),
+              //     textAlign: TextAlign.start,
+              //     decoration: InputDecoration(
+              //       enabledBorder: OutlineInputBorder(
+              //         borderSide: BorderSide(
+              //           color: Color(0x00ffffff),
+              //           width: 2,
+              //         ),
+              //         borderRadius: BorderRadius.all(Radius.circular(8)),
+              //       ),
+              //       focusedBorder: OutlineInputBorder(
+              //         borderSide: BorderSide(
+              //           color: Color(0x00ffffff),
+              //           width: 2,
+              //         ),
+              //         borderRadius: BorderRadius.all(Radius.circular(8)),
+              //       ),
+              //       filled: true,
+              //       fillColor: Colors.white,
+              //       hintText: ("will be provided later"),
+              //       contentPadding:
+              //           EdgeInsets.only(top: 1, bottom: 1, left: 10),
+              //       hintStyle: TextStyle(
+              //         color: Color(0xFF7B838A),
+              //         fontSize: 14,
+              //       ),
+              //       border: OutlineInputBorder(
+              //         borderSide: BorderSide.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              ReusableDropdown(
+                  dropdownItems: languageLevelsEng,
+                  selectedItem: selectedLanguageLevel,
+                  cusHeight: 36,
+                  cusWidth: 400,
+                  whenOnChanged: (value) {
+                    setState(() {
+                      selectedLanguageLevel = value;
+                    });
+                  },
+                  hintText: languageProvider.lan == 'English'
+                      ? 'Select your Thai proficiency'
+                      : 'ခရိုင် ရွေးချယ်ပါ'),
 
               //Do you have passport Y/N question
               Container(

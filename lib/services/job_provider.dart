@@ -42,7 +42,7 @@ class JobProvider extends ChangeNotifier {
   }
 
   void addBestMatched(String category) {
-    _bestMatched.clear(); // Clear previous matches
+   // _bestMatched.clear(); // Clear previous matches
     List<String> jobsToAdd = [];
 
     if (category.contains('Restaurant')) {

@@ -37,7 +37,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _selectedDate = date;
       isBirthdayError = false;
     });
-    print('Selected Date: $date'); // Do something with the selected date
+    print('Selected Date: $date'); 
   }
 
   // Form Key and Controllers

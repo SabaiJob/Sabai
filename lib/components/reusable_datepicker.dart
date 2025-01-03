@@ -17,21 +17,47 @@ class _ReusableDatePickerState extends State<ReusableDatePicker> {
 
   DateTime? _selectedDate;
 
+  // Future<void> _pickDate(BuildContext context) async {
+  //   DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: _selectedDate ??
+  //         DateTime(2000), // Default or previously selected date
+  //     firstDate: DateTime(1950),
+  //     lastDate: DateTime.now(),
+  //   );
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       _selectedDate = pickedDate;
+  //     });
+  //     widget.onDateSelected(pickedDate); // Pass the selected date back
+  //   }
+  // }
   Future<void> _pickDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ??
-          DateTime(2000), // Default or previously selected date
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-      widget.onDateSelected(pickedDate); // Pass the selected date back
-    }
+  DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: _selectedDate ?? DateTime(2000), // Default or previously selected date
+    firstDate: DateTime(1950),
+    lastDate: DateTime.now(),
+    builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: ThemeData.light().copyWith(
+          primaryColor: Colors.teal, 
+          //accentColor: Colors.teal, // For widgets like buttons
+          colorScheme: const ColorScheme.light(primary: Colors.black), 
+          buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary), // Button text style
+        ),
+        child: child!,
+      );
+    },
+  );
+  
+  if (pickedDate != null) {
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+    widget.onDateSelected(pickedDate); // Pass the selected date back
   }
+}
 
   @override
   Widget build(BuildContext context) {
