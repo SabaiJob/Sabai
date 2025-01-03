@@ -131,7 +131,7 @@ class _PricingPlanState extends State<PricingPlan> {
                   initialPage: 1,
                   autoPlay: false,
                   enlargeCenterPage: true,
-                  enableInfiniteScroll: false, // Disables infinite scrolling.
+                  enableInfiniteScroll: true, // Disables infinite scrolling.
                   viewportFraction: Platform.isAndroid ? 0.5 : 0.55,
                   onPageChanged: (index, reason) {
                     setState(() {
@@ -271,54 +271,76 @@ class PricingContainer extends StatelessWidget {
                 ],
               ),
             ),
-          Column(
+          Stack(
             children: [
-              RichText(
-                text: TextSpan(
-                  text: price,
-                  style: const TextStyle(
-                      fontSize: 19.53,
-                      fontFamily: 'Bricolage-SMB',
-                      color: Colors.black),
+              SizedBox(
+                width: double.infinity,
+                child: Column(
                   children: [
-                    price != 'Free'
-                        ? const TextSpan(
-                            text: ' THB',
-                            style: TextStyle(
-                              fontSize: 15.63,
-                              fontFamily: 'Bricolage-R',
-                              color: Color(0xff616971),
-                            ),
-                          )
-                        : const TextSpan(text: ''),
+                    RichText(
+                      text: TextSpan(
+                        text: price,
+                        style: const TextStyle(
+                            fontSize: 19.53,
+                            fontFamily: 'Bricolage-SMB',
+                            color: Colors.black),
+                        children: [
+                          price != 'Free'
+                              ? const TextSpan(
+                                  text: ' THB',
+                                  style: TextStyle(
+                                    fontSize: 15.63,
+                                    fontFamily: 'Bricolage-R',
+                                    color: Color(0xff616971),
+                                  ),
+                                )
+                              : const TextSpan(text: ''),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    if (price != 'Free')
+                      Text(
+                        plan,
+                        style: const TextStyle(
+                          fontSize: 15.63,
+                          fontFamily: 'Bricolage-R',
+                          color: Color(0xff4C5258),
+                        ),
+                      ),
+                    if (current == 'active')
+                      const Text(
+                        'Current',
+                        style: TextStyle(
+                          fontSize: 15.63,
+                          fontFamily: 'Bricolage-R',
+                          color: Color(0xff28A745),
+                        ),
+                      ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              if (price != 'Free')
-                Text(
-                  plan,
-                  style: const TextStyle(
-                    fontSize: 15.63,
-                    fontFamily: 'Bricolage-R',
-                    color: Color(0xff4C5258),
+              if (price != '250' && isSelected)
+                Positioned(
+                  top: 0,
+                  right: 20,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xffFFEBF6),
+                    ),
+                    child: Icon(
+                      Icons.check_circle_outline,
+                      color: primaryPinkColor,
+                    ),
                   ),
-                ),
-              if (current == 'active')
-                const Text(
-                  'Current',
-                  style: TextStyle(
-                    fontSize: 15.63,
-                    fontFamily: 'Bricolage-R',
-                    color: Color(0xff28A745),
-                  ),
-                ),
+                )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 15, left: 15),
+            padding: const EdgeInsets.only(bottom: 10, left: 15),
             child: Column(
               children: [
                 PriceTexts(

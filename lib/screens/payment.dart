@@ -168,9 +168,15 @@ class _PaymentState extends State<Payment> {
                                   ),
                                 ),
                                 if (widget.plan == 1)
-                                  const Icon(
-                                    Icons.check_circle_outline,
-                                    color: primaryPinkColor,
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xffFFEBF6),
+                                    ),
+                                    child: const Icon(
+                                      Icons.check_circle_outline,
+                                      color: primaryPinkColor,
+                                    ),
                                   )
                               ],
                             ),
@@ -242,9 +248,15 @@ class _PaymentState extends State<Payment> {
                                   ),
                                 ),
                                 if (widget.plan == 0)
-                                  const Icon(
-                                    Icons.check_circle_outline,
-                                    color: primaryPinkColor,
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xffFFEBF6),
+                                    ),
+                                    child: const Icon(
+                                      Icons.check_circle_outline,
+                                      color: primaryPinkColor,
+                                    ),
                                   )
                               ],
                             ),
