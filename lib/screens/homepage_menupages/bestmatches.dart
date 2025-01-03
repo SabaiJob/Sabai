@@ -16,7 +16,7 @@ class BestMatches extends StatelessWidget {
               itemCount:
                   jobProvider.bestMatched.length, // Total number of items
               itemBuilder: (context, index) {
-                final job = jobProvider.combineJobs[index];
+                final job = jobProvider.bestMatched[index];
                 return WorkCard(
                   job['jobTitle'],
                   job['isPartner'],

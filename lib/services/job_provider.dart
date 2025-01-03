@@ -10,13 +10,23 @@ class JobProvider extends ChangeNotifier {
   ];
 
   final List<String> _restaurantJobs = ['Barista', 'Chef'];
-  final List<String> _hotelJobs = ['Housekeeper', 'Janitorial Staff'];
+  final List<String> _hotelJobs = ['Janitorial Staff'];
 
   List<String> get allJobs => _allJobs;
 
   final List<String> _savedJobs = [];
-
   List<String> get savedJobs => _savedJobs;
+
+  final List<bool> _isPartner = [
+    true,
+    true,
+    false,
+    true,
+    false,
+  ];
+
+  final List<Map<String, dynamic>> _bestMatched = [];
+  List<Map<String, dynamic>> get bestMatched => _bestMatched;
 
   void toggleSavedJobs(String jobTitle) {
     if (_savedJobs.contains(jobTitle)) {
@@ -31,24 +41,28 @@ class JobProvider extends ChangeNotifier {
     return savedJobs.contains(jobTitle);
   }
 
-  final List<String> _bestMatched = [];
-  List<String> get bestMatched => _bestMatched;
   void addBestMatched(String category) {
+    _bestMatched.clear(); // Clear previous matches
+    List<String> jobsToAdd = [];
+
     if (category.contains('Restaurant')) {
-      _bestMatched.addAll(_restaurantJobs);
+      jobsToAdd = _restaurantJobs;
     } else if (category.contains('Hotel')) {
-      _bestMatched.addAll(_hotelJobs);
+      jobsToAdd = _hotelJobs;
+    }
+
+    // Add jobs with their partner status
+    for (String job in jobsToAdd) {
+      int index = _allJobs.indexOf(job);
+      if (index != -1) {
+        _bestMatched.add({
+          'jobTitle': job,
+          'isPartner': _isPartner[index],
+        });
+      }
     }
     notifyListeners();
   }
-
-  final List<bool> _isPartner = [
-    true,
-    true,
-    false,
-    true,
-    false,
-  ];
 
   List<Map<String, dynamic>> get combineJobs {
     List<Map<String, dynamic>> combined = [];
