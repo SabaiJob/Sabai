@@ -363,7 +363,7 @@ class _PaymentState extends State<Payment> {
                         Card(
                           color: Colors.white,
                           child: Padding(
-                            padding: const EdgeInsets.all(15),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
