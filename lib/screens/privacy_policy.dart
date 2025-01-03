@@ -114,10 +114,15 @@ class PrivacyPolicy extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        'Sabai Jobs ("ကျွန်ုပ်တို့", "သင့်", သို့မဟုတ် "ကျွန်ုပ်တို့၏") သည် သင်၏ ကိုယ်ရေးအချက်အလက်များကို ကာကွယ်ရန် တာဝန်ယူပါသည်။ ဤကိုယ်ရေးအချက်အလက် မူဝါဒသည် သင်၏ အလုပ်ရှာဖွေရေး စက်ရုံဝန်ဆောင်မှုများ ("ဝန်ဆောင်မှုများ") ကို အသုံးပြုသည့်အခါ၊ ကျွန်ုပ်တို့က သင်၏ အချက်အလက်များကို စုဆောင်း၊ အသုံးပြု၊ ဖော်ပြ၊ နှင့် ကာကွယ်ပေးသည့် နည်းလမ်းများကို ရှင်းလင်းဖော်ပြပါသည်။ သင်သည် ဝန်ဆောင်မှုများကို ဝင်ရောက်သုံးစွဲခြင်းဖြင့် ဤကိုယ်ရေးအချက်အလက် မူဝါဒ၏ သဘောတူညီချက်ကို လက်ခံသည်ဟု ယူဆပါသည်။ သင်သည် ဤသဘောတူညီချက်နှင့် သဘောတူမပါက ဝန်ဆောင်မှုများကို အသုံးပြုမည်မဟုတ်ပါ။',
-                        style: infoTextStyleMn,
-                      ),
+                      languageProvider.lan == 'English'
+                          ? const Text(
+                              'Sabai Jobs ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our job portal services ("Services"). By accessing or using our Services, you agree to the terms of this Privacy Policy. If you do not agree with the terms, please do not use our Services.',
+                              style: infoTextStyle,
+                            )
+                          : const Text(
+                              'Sabai Jobs ("ကျွန်ုပ်တို့", "သင့်", သို့မဟုတ် "ကျွန်ုပ်တို့၏") သည် သင်၏ ကိုယ်ရေးအချက်အလက်များကို ကာကွယ်ရန် တာဝန်ယူပါသည်။ ဤကိုယ်ရေးအချက်အလက် မူဝါဒသည် သင်၏ အလုပ်ရှာဖွေရေး စက်ရုံဝန်ဆောင်မှုများ ("ဝန်ဆောင်မှုများ") ကို အသုံးပြုသည့်အခါ၊ ကျွန်ုပ်တို့က သင်၏ အချက်အလက်များကို စုဆောင်း၊ အသုံးပြု၊ ဖော်ပြ၊ နှင့် ကာကွယ်ပေးသည့် နည်းလမ်းများကို ရှင်းလင်းဖော်ပြပါသည်။ သင်သည် ဝန်ဆောင်မှုများကို ဝင်ရောက်သုံးစွဲခြင်းဖြင့် ဤကိုယ်ရေးအချက်အလက် မူဝါဒ၏ သဘောတူညီချက်ကို လက်ခံသည်ဟု ယူဆပါသည်။ သင်သည် ဤသဘောတူညီချက်နှင့် သဘောတူမပါက ဝန်ဆောင်မှုများကို အသုံးပြုမည်မဟုတ်ပါ။',
+                              style: infoTextStyleMn,
+                            ),
                       const SizedBox(
                         height: 10,
                       ),
