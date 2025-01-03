@@ -457,12 +457,8 @@ class _PaymentState extends State<Payment> {
                                   height: 10,
                                 ),
                                 const Expanded(
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 10.0),
-                                    child: Text(
-                                      'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
-                                    ),
+                                  child: Text(
+                                    'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
                                   ),
                                 ),
                                 Expanded(
