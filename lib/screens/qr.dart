@@ -59,7 +59,6 @@ class Qr extends StatelessWidget {
                         height: 195,
                       ),
                       const SizedBox(
-                        height: 15,
                         child: Divider(
                           height: 2,
                           indent: 30,
@@ -67,67 +66,33 @@ class Qr extends StatelessWidget {
                           color: Color(0xffF0F1F2),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.file_download_outlined,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {},
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.file_download_outlined,
+                                  color: primaryPinkColor,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 12.5,
                                     color: primaryPinkColor,
-                                    size: 16,
                                   ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Save',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 12.5,
-                                      color: primaryPinkColor,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
-                            const SizedBox(
-                              height: 40, // Height of the divider
-                              child: VerticalDivider(
-                                width: 16, // Space taken horizontally
-                                thickness: 1, // Thickness of the divider
-                                color: Color(0xffF0F1F2), // Divider color
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    Icons.share,
-                                    color: primaryPinkColor,
-                                    size: 12,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Share',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 12.5,
-                                      color: primaryPinkColor,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       )
                     ],
                   ),
