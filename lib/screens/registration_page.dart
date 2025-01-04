@@ -1,3 +1,4 @@
+// OLD Registration Page
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
@@ -37,7 +38,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _selectedDate = date;
       isBirthdayError = false;
     });
-    print('Selected Date: $date'); 
+    print('Selected Date: $date');
   }
 
   // Form Key and Controllers
@@ -368,25 +369,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           children: [
             TextButton(
               onPressed: () {
-                // if (_formKey.currentState!.validate()) {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => const OtpVerificationPage(
-                //         navWidget: UserProfileSetupPage(),
-                //         signUp: true,
-                //       ),
-                //     ),
-                //   );
-                // } else {
-                //   // form validation failed
-                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                //     content: languageProvider.lan == 'English'
-                //         ? const Text(
-                //             "Please completed all the required fields")
-                //         : const Text(
-                //             "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-                // }
                 setState(() {
                   isGenderError = _selectedGender == null;
                   isBirthdayError = _selectedDate == null;
@@ -423,14 +405,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   print('DOB : $_selectedDate');
                   print('Phone Number : $_phoneNumberController');
                 }
-                // else {
-                //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                //       content: languageProvider.lan == 'English'
-                //           ? const Text(
-                //               "Please complete all the required fields")
-                //           : const Text(
-                //               "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-                // }
               },
               style: TextButton.styleFrom(
                 fixedSize: const Size(375, 42),
@@ -477,3 +451,265 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/services.dart';
+// import 'package:provider/provider.dart';
+// import 'package:sabai_app/components/reusable_content_holder.dart';
+// import 'package:sabai_app/components/reusable_datepicker.dart';
+// import 'package:sabai_app/components/reusable_dropdown.dart';
+// import 'package:sabai_app/components/reusable_label.dart';
+// import 'package:sabai_app/components/reusable_textformfield.dart';
+// import 'package:sabai_app/components/reusable_title_holder.dart';
+// import 'package:sabai_app/constants.dart';
+// import '../services/language_provider.dart';
+
+// class RegistrationPage extends StatefulWidget {
+//   const RegistrationPage({super.key});
+
+//   @override
+//   State<RegistrationPage> createState() => _RegistrationPageState();
+// }
+
+// class _RegistrationPageState extends State<RegistrationPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   final _pageController = PageController();
+
+//   // State Variables
+//   final _fullNameController = TextEditingController();
+//   final _phoneNumberController = TextEditingController();
+//   final List<String> _genderItemsEng = ['Male', 'Female', 'Others'];
+//   final List<String> _genderItemsMm = ['ကျား', 'မ', 'အခြား'];
+//   String? _selectedGender;
+//   DateTime? _selectedDate;
+//   int _currentPage = 0;
+//   bool isGenderError = false;
+//   bool isBirthdayError = false;
+//   String genderErrorMessage = '';
+//   String birthdayErrorMessage = '';
+
+//   // Handle Date Selection
+//   void _handleDateSelected(DateTime date) {
+//     setState(() {
+//       _selectedDate = date;
+//       isBirthdayError = false;
+//     });
+//   }
+
+//   // Navigate to the Next Page
+//   void _nextPage() {
+//     if (_formKey.currentState!.validate() &&
+//         !isGenderError &&
+//         !isBirthdayError) {
+//       if (_currentPage < 2) {
+//         _pageController.nextPage(
+//           duration: const Duration(milliseconds: 300),
+//           curve: Curves.easeInOut,
+//         );
+//         setState(() {
+//           _currentPage++;
+//         });
+//       } else {
+//         // Perform final submission or navigation
+//         print("Form submitted");
+//       }
+//     }
+//   }
+
+//   @override
+//   void dispose() {
+//     _fullNameController.dispose();
+//     _phoneNumberController.dispose();
+//     _pageController.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     var languageProvider = Provider.of<LanguageProvider>(context);
+
+//     return Scaffold(
+//       backgroundColor: const Color(0xFFF7F7F7),
+//       appBar: AppBar(
+//         backgroundColor: const Color(0xFFF7F7F7),
+//         bottom: PreferredSize(
+//             preferredSize: const Size.fromHeight(1.0),
+//             child: Container(
+//               color: Colors.grey.shade300,
+//               height: 1.0,
+//             )),
+//         surfaceTintColor: Colors.transparent,
+//         shadowColor: Colors.transparent,
+//         title: languageProvider.lan == 'English'
+//             ? const Text(
+//                 "Create Profile",
+//                 style: appBarTitleStyleEng,
+//               )
+//             : const Text(
+//                 'ပရိုဖိုင် ဖန်တီးရန်',
+//                 style: appBarTitleStyleMn,
+//               ),
+//         centerTitle: true,
+//         iconTheme: const IconThemeData(
+//           color: Color(0xFFFF3997),
+//         ),
+//       ),
+//       body: Form(
+//         key: _formKey,
+//         child: PageView(
+//           controller: _pageController,
+//           physics: const NeverScrollableScrollPhysics(),
+//           children: [
+//             // Page 1: Personal Information
+//             SingleChildScrollView(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(20),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     ReusableTitleHolder(
+//                       title: languageProvider.lan == 'English'
+//                           ? 'Tell Us About Yourself'
+//                           : 'ကိုယ်ရေးကိုယ်တာအချက်လက်',
+//                     ),
+//                     ReusableContentHolder(
+                      // content: languageProvider.lan == 'English'
+                      //     ? 'Provide your basic information to get started.'
+                      //     : 'သင့်ကိုယ်ရေးအချက်အလက်ထည့်ပါ။',
+//                     ),
+//                     ReusableLabelHolder(
+                      // labelName: languageProvider.lan == 'English'
+                      //     ? 'Full Name'
+                      //     : 'အမည်',
+                      // textStyle: languageProvider.lan == 'English'
+                      //     ? labelStyleEng
+                      //     : labelStyleMm,
+                      // isStarred: true,
+//                     ),
+//                     ReusableTextformfield(
+                      // keyboardType: TextInputType.name,
+                      // textEditingController: _fullNameController,
+                      // validating: (value) {
+                      //   if (value == null || value.isEmpty) {
+                      //     return languageProvider.lan == 'English'
+                      //         ? "Full Name is required"
+                      //         : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                      //   }
+                      //   return null;
+                      // },
+                      // hint: languageProvider.lan == 'English'
+                      //     ? 'Enter your full name'
+                      //     : 'သင့်အမည် ထည့်ပါ',
+//                     ),
+//                     ReusableLabelHolder(
+                      // labelName:
+                      //     languageProvider.lan == 'English' ? 'Gender' : 'လိင်',
+                      // textStyle: languageProvider.lan == 'English'
+                      //     ? labelStyleEng
+                      //     : labelStyleMm,
+                      // isStarred: true,
+//                     ),
+            //         ReusableDropdown(
+            //           cusHeight: 36,
+            //           cusWidth: 400,
+            //           dropdownItems: languageProvider.lan == 'English'
+            //               ? _genderItemsEng
+            //               : _genderItemsMm,
+            //           selectedItem: _selectedGender,
+            //           whenOnChanged: (value) {
+            //             setState(() {
+            //               _selectedGender = value;
+            //               isGenderError = false;
+            //             });
+            //           },
+            //           hintText: languageProvider.lan == 'English'
+            //               ? 'Select One'
+            //               : 'တစ်ခုရွေးချယ်ပါ',
+            //         ),
+            //         if (isGenderError)
+            //           Padding(
+            //             padding: const EdgeInsets.only(top: 8.0),
+            //             child: Text(
+            //               genderErrorMessage,
+            //               style:
+            //                   const TextStyle(color: Colors.red, fontSize: 12),
+            //             ),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+//             // Page 2: Contact Information
+//             SingleChildScrollView(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(20),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     ReusableLabelHolder(
+//                       labelName: languageProvider.lan == 'English'
+//                           ? 'Phone Number'
+//                           : 'ဖုန်းနံပါတ်',
+//                       textStyle: languageProvider.lan == 'English'
+//                           ? labelStyleEng
+//                           : labelStyleMm,
+//                       isStarred: true,
+//                     ),
+//                     ReusableTextformfield(
+//                       keyboardType: TextInputType.phone,
+//                       textEditingController: _phoneNumberController,
+//                       validating: (value) {
+//                         if (value == null || value.isEmpty) {
+//                           return languageProvider.lan == 'English'
+//                               ? "Phone Number is required"
+//                               : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
+//                         }
+//                         return null;
+//                       },
+//                       hint: '+66 2134567',
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//       persistentFooterButtons: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             if (_currentPage > 0)
+//               TextButton(
+//                 onPressed: () {
+//                   _pageController.previousPage(
+//                     duration: const Duration(milliseconds: 300),
+//                     curve: Curves.easeInOut,
+//                   );
+//                   setState(() {
+//                     _currentPage--;
+//                   });
+//                 },
+//                 child: const Text("Back"),
+//               ),
+//             TextButton(
+//               onPressed: _nextPage,
+//               style: TextButton.styleFrom(
+//                 fixedSize: const Size(120, 42),
+//                 backgroundColor: const Color(0xffFF3997),
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(8),
+//                 ),
+//               ),
+//               child: Text(
+//                 _currentPage < 1 ? "Next" : "Submit",
+//                 style: const TextStyle(color: Colors.white),
+//               ),
+//             ),
+//           ],
+//         )
+//       ],
+//     );
+//   }
+// }
