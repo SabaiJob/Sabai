@@ -1,7 +1,12 @@
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'dart:typed_data';
 
 class Qr extends StatelessWidget {
   Qr({
@@ -12,6 +17,9 @@ class Qr extends StatelessWidget {
 
   final bool isKbz;
   final bool isPrompt;
+
+  final String imageUrl =
+      'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
   @override
   Widget build(BuildContext context) {
     //var languageProvider = Provider.of<LanguageProvider>(context);
@@ -53,8 +61,13 @@ class Qr extends StatelessWidget {
                           color: Color(0xff363B3F),
                         ),
                       ),
-                      Image.asset(
-                        'images/qr.png',
+                      // Image.asset(
+                      //   'images/qr.png',
+                      //   width: 195,
+                      //   height: 195,
+                      // ),
+                      Image.network(
+                        imageUrl,
                         width: 195,
                         height: 195,
                       ),
@@ -70,7 +83,31 @@ class Qr extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              try {
+                                final saved =
+                                    await ImageSaverUtil.saveNetworkImage(
+                                        imageUrl);
+                                // Show success or failure message
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(saved
+                                          ? 'Image saved successfully!'
+                                          : 'Failed to save image'),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error: $e'),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
                             child: const Row(
                               children: [
                                 Icon(
@@ -184,5 +221,43 @@ class Qr extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ImageSaverUtil {
+  static Future<bool> saveNetworkImage(String imageUrl) async {
+    try {
+      // Request permissions first
+      if (Platform.isAndroid) {
+        final storageStatus = await Permission.storage.request();
+        if (!storageStatus.isGranted) {
+          throw Exception('Storage permission not granted');
+        }
+      }
+
+      if (Platform.isIOS) {
+        final photosStatus = await Permission.photos.request();
+        if (!photosStatus.isGranted) {
+          throw Exception('Photos permission not granted');
+        }
+      }
+
+      // Download image
+      var response = await Dio().get(
+        imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      // Save image
+      final result = await ImageGallerySaverPlus.saveImage(
+          Uint8List.fromList(response.data),
+          quality: 100,
+          name: "sabai_${DateTime.now().millisecondsSinceEpoch}");
+
+      return result['isSuccess'] ?? false;
+    } catch (e) {
+      print('Error saving image: $e');
+      return false;
+    }
   }
 }
