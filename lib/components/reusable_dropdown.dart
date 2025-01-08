@@ -83,6 +83,7 @@ class ReusableDropdown extends StatelessWidget {
           height: 40,
         ),
         dropdownStyleData: const DropdownStyleData(
+          maxHeight: 200,
             elevation: 2,
             decoration: BoxDecoration(
               color: Colors.white,

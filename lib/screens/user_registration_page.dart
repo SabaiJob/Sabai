@@ -31,6 +31,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _yearsController = TextEditingController();
 
   int _currentPage = 0;
 
@@ -42,17 +43,30 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   String birthdayErrorMessage = '';
   DateTime? _selectedDate;
 
-  
-
   String? _selectedProvince;
+  bool isProvinceError = false;
+  String? provinceErrorMessage = '';
 
   String? selectedDuration = 'Years';
   String? selectedDurationMM = 'နှစ်';
+  bool isDurationError = false;
+  String? durationErrorMessage = '';
 
   String? _selectedLanguageLevel;
+  bool isLanguageLevelError = false;
+  String? languageLevelErrorMessage = '';
 
   String? selectedOptionPp;
+  bool isSelectedOptionPpError = false;
+  String? pPErrorMessage = '';
+
   String? selectedOptionWp;
+  bool isSelectedOptionWpError = false;
+  String? wPErrorMessage = '';
+
+  bool? showButton = false;
+
+  //String? selectedProvince;
 
   void _handleDateSelected(DateTime date) {
     setState(() {
@@ -62,25 +76,17 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     //print('Selected Date: $date');
   }
 
-  // Navigate to OTP Page
-  void _navToOTPPage() {
-    setState(() {
-      // Check for errors
+  void _scrollPages() {
+    if (_currentPage == _pageController.initialPage) {
       isGenderError = _selectedGender == null;
       isBirthdayError = _selectedDate == null;
-
-      // Assign error messages based on validation
-      genderErrorMessage = isGenderError ? "   Gender is required" : '';
-      birthdayErrorMessage = isBirthdayError ? "   Birthday is required" : '';
-    });
-
-    // Proceed only if the form is valid and there are no errors
-    bool isFormValid = _formKey.currentState!.validate();
-    bool noErrors = !isGenderError && !isBirthdayError;
-
-    if (isFormValid && noErrors) {
-      if (_currentPage < 3) {
-        //To remove later !!!!!
+      setState(() {
+        genderErrorMessage = isGenderError ? " Gender is required " : '';
+        birthdayErrorMessage = isBirthdayError ? ' Birthday is required ' : '';
+      });
+      bool isFormValid = _formKey.currentState!.validate();
+      bool noErrors = !isGenderError && !isBirthdayError;
+      if (isFormValid && noErrors) {
         print('Your Full Name: ${_fullNameController.text}');
         print('Your Gender: ${_selectedGender}');
         print('Your Birthday: ${_selectedDate}');
@@ -94,12 +100,80 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         setState(() {
           _currentPage++;
         });
+      }
+    }
+    if (_currentPage == 2) {
+      isProvinceError = _selectedProvince == null;
+      isLanguageLevelError = _selectedLanguageLevel == null;
+      isDurationError = _yearsController.text.trim().isEmpty;
+      isSelectedOptionPpError = selectedOptionPp == null;
+      isSelectedOptionWpError = selectedOptionWp == null;
+      setState(() {
+        provinceErrorMessage = isProvinceError ? ' Province is required ' : '';
+        durationErrorMessage = isDurationError ? ' Timeline is required ' : '';
+        languageLevelErrorMessage =
+            isLanguageLevelError ? ' Language Level is required ' : '';
+        pPErrorMessage =
+            isSelectedOptionPpError ? ' You need to answer this ' : '';
+        wPErrorMessage =
+            isSelectedOptionWpError ? ' You need to answer this ' : '';
+      });
+      bool noErrors = !isProvinceError &&
+          !isLanguageLevelError &&
+          !isDurationError &&
+          !isSelectedOptionPpError &&
+          !isSelectedOptionWpError;
+      if (noErrors) {
+        print('Your Province : ${_selectedProvince}');
+        print(
+            'Duration in Timeline : ${_yearsController.text} ${selectedDuration}');
+        print('Your Thai Language Proficiency : ${_selectedLanguageLevel}');
+        print(
+            'Congratulations! You have completed all the required fields for the registration');
       } else {
-        // Perform the final submission or navigation
-        print("Form submitted");
+        print('You need to complete all fields');
       }
     }
   }
+
+  // Navigate to OTP Page
+  // void _navToOTPPage() {
+  //   setState(() {
+  //     // Check for errors
+  //     isGenderError = _selectedGender == null;
+  //     isBirthdayError = _selectedDate == null;
+
+  //     // Assign error messages based on validation
+  //     genderErrorMessage = isGenderError ? "   Gender is required" : '';
+  //     birthdayErrorMessage = isBirthdayError ? "   Birthday is required" : '';
+  //   });
+
+  //   // Proceed only if the form is valid and there are no errors
+  //   bool isFormValid = _formKey.currentState!.validate();
+  //   bool noErrors = !isGenderError && !isBirthdayError;
+
+  //   if (isFormValid && noErrors) {
+  //     if (_currentPage < 3) {
+  //       //To remove later !!!!!
+  //       print('Your Full Name: ${_fullNameController.text}');
+  //       print('Your Gender: ${_selectedGender}');
+  //       print('Your Birthday: ${_selectedDate}');
+  //       print('Your Phone Number: ${_phoneNumberController.text}');
+  //       print('Your email address: ${_emailController.text}');
+  //       // Move to the next page
+  //       _pageController.nextPage(
+  //         duration: const Duration(milliseconds: 300),
+  //         curve: Curves.easeInOut,
+  //       );
+  //       setState(() {
+  //         _currentPage++;
+  //       });
+  //     } else {
+  //       // Perform the final submission or navigation
+  //       print("Form submitted");
+  //     }
+  //   }
+  // }
 
   // Navigate to Profile SetUp Page
   void _navToSetUp(String value) {
@@ -186,25 +260,27 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
           ],
         ),
       ),
+      //persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_currentPage > 0)
-              TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                  setState(() {
-                    _currentPage--;
-                  });
-                },
-                child: const Text("Back"),
-              ),
+            //back button
+            // if (_currentPage > 0)
+            //   TextButton(
+            //     onPressed: () {
+            //       _pageController.previousPage(
+            //         duration: const Duration(milliseconds: 300),
+            //         curve: Curves.easeInOut,
+            //       );
+            //       setState(() {
+            //         _currentPage--;
+            //       });
+            //     },
+            //     child: const Text("Back"),
+            //   ),
             TextButton(
-              onPressed: _navToOTPPage,
+              onPressed: _scrollPages,
               style: TextButton.styleFrom(
                 fixedSize: const Size(120, 42),
                 backgroundColor: const Color(0xffFF3997),
@@ -212,9 +288,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(
-                _currentPage < 1 ? "Next" : "Submit",
-                style: const TextStyle(color: Colors.white),
+              child: const Text(
+                //_currentPage < 1 ? "Next" : "Submit",
+                'Next',
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -303,7 +380,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               height: 36,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isGenderError ? Colors.red : Colors.white,
+                  color: isGenderError ? Colors.red : Colors.transparent,
                   width: 2,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -363,7 +440,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               height: 36,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isGenderError ? Colors.red : Colors.white,
+                  color: isGenderError ? Colors.red : Colors.transparent,
                   width: 2,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -621,21 +698,52 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             ),
           ),
           // Select District Dropdown
-          ReusableDropdown(
-              dropdownItems: sabaiAppData.provinceItemsInEng,
-              selectedItem: _selectedProvince,
-              cusHeight: 36,
-              cusWidth: 400,
-              whenOnChanged: (value) {
-                setState(() {
-                  _selectedProvince = value;
-                });
-              },
-              hintText: languageProvider.lan == 'English'
-                  ? 'Select Province'
-                  : 'ခရိုင် ရွေးချယ်ပါ'),
+          Container(
+            width: 400,
+            height: 36,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isProvinceError ? Colors.red : Colors.transparent,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: ReusableDropdown(
+                dropdownItems: sabaiAppData.provinceItemsInEng,
+                selectedItem: _selectedProvince,
+                cusHeight: 36,
+                cusWidth: 400,
+                whenOnChanged: (value) {
+                  setState(() {
+                    _selectedProvince = value;
+                    isProvinceError = false;
+                  });
+                },
+                hintText: languageProvider.lan == 'English'
+                    ? 'Select Province'
+                    : 'ခရိုင် ရွေးချယ်ပါ'),
+          ),
+          if (isProvinceError)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Text(
+                  provinceErrorMessage!,
+                  style: languageProvider.lan == 'English'
+                      ? const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Bricolage-M')
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Walone-R'),
+                ),
+              ),
+            ),
           Padding(
-            padding: const EdgeInsets.only(top: 20,bottom: 12),
+            padding: const EdgeInsets.only(top: 20, bottom: 12),
             child: Align(
               alignment: Alignment.topLeft,
               child: RichText(
@@ -682,25 +790,27 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 child: SizedBox(
                   height: 36,
                   child: TextField(
+                    controller: _yearsController,
+                    onChanged: (value) {
+                      setState(() {
+                        isDurationError = false;
+                      });
+                    },
+                    //onSubmitted: (value){},
                     style: languageProvider.lan == 'English'
                         ? const TextStyle(
                             fontFamily: 'Bricolage-R',
                             fontSize: 14,
+                            color: Color(0xFF7B838A),
                           )
                         : const TextStyle(
                             fontFamily: 'Walone-R',
                             fontSize: 14,
+                            color: Color(0xFF7B838A),
                           ),
                     textAlign: TextAlign.start,
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0x00ffffff),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
+                    decoration: InputDecoration(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00ffffff),
                           width: 2,
@@ -711,12 +821,26 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                       fillColor: Colors.white,
                       hintText: ("0"),
                       contentPadding:
-                          EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                      hintStyle: TextStyle(
+                          const EdgeInsets.only(top: 1, bottom: 1, left: 10),
+                      hintStyle: const TextStyle(
                         color: Color(0xFF7B838A),
                         fontSize: 14,
                       ),
-                      border: OutlineInputBorder(
+                      enabledBorder: isDurationError
+                          ? const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 2,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )
+                          : const OutlineInputBorder(
+                              borderSide: BorderSide(
+                              color: Color(0x00ffffff),
+                              width: 0,
+                            )),
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -744,8 +868,25 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               ),
             ],
           ),
+          if (_yearsController.text.trim().isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 1),
+              child: Text(
+                durationErrorMessage!,
+                style: languageProvider.lan == 'English'
+                    ? const TextStyle(
+                        color: Colors.red,
+                        fontSize: 10,
+                        fontFamily: 'Bricolage-M')
+                    : const TextStyle(
+                        color: Colors.red,
+                        fontSize: 10,
+                        fontFamily: 'Walone-R'),
+              ),
+            ),
+
           Padding(
-            padding: const EdgeInsets.only(top: 20,bottom: 12),
+            padding: const EdgeInsets.only(top: 20, bottom: 12),
             child: Align(
               alignment: Alignment.topLeft,
               child: RichText(
@@ -785,19 +926,50 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               ),
             ),
           ),
-          ReusableDropdown(
-              dropdownItems: sabaiAppData.languageLevelsInEng,
-              selectedItem: _selectedLanguageLevel,
-              cusHeight: 36,
-              cusWidth: 400,
-              whenOnChanged: (value) {
-                setState(() {
-                  _selectedLanguageLevel = value;
-                });
-              },
-              hintText: languageProvider.lan == 'English'
-                  ? 'Select your Thai proficiency'
-                  : 'ခရိုင် ရွေးချယ်ပါ'),
+          Container(
+            width: 400,
+            height: 36,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isLanguageLevelError ? Colors.red : Colors.transparent,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: ReusableDropdown(
+                dropdownItems: sabaiAppData.languageLevelsInEng,
+                selectedItem: _selectedLanguageLevel,
+                cusHeight: 36,
+                cusWidth: 400,
+                whenOnChanged: (value) {
+                  setState(() {
+                    _selectedLanguageLevel = value;
+                    isLanguageLevelError = false;
+                  });
+                },
+                hintText: languageProvider.lan == 'English'
+                    ? 'Select your Thai proficiency'
+                    : 'ခရိုင် ရွေးချယ်ပါ'),
+          ),
+          if (isLanguageLevelError)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Text(
+                  languageLevelErrorMessage!,
+                  style: languageProvider.lan == 'English'
+                      ? const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Bricolage-M')
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Walone-R'),
+                ),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 12),
             child: Align(
@@ -839,6 +1011,25 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               ),
             ),
           ),
+          if (isSelectedOptionPpError)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Text(
+                  pPErrorMessage!,
+                  style: languageProvider.lan == 'English'
+                      ? const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Bricolage-M')
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Walone-R'),
+                ),
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -848,6 +1039,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 rButtonChoosen: (value) {
                   setState(() {
                     selectedOptionPp = value;
+                    isSelectedOptionPpError = false;
                   });
                 },
                 rButtonName: languageProvider.lan == 'English' ? 'Yes' : 'ရှိ',
@@ -861,6 +1053,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 rButtonChoosen: (value) {
                   setState(() {
                     selectedOptionPp = value;
+                     isSelectedOptionPpError = false;
                   });
                 },
                 rButtonName: languageProvider.lan == 'English' ? 'No' : 'မရှိ',
@@ -871,7 +1064,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 20,bottom: 12),
+                  padding: const EdgeInsets.only(top: 20, bottom: 12),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: languageProvider.lan == 'English'
@@ -940,7 +1133,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             )
           ],
           Padding(
-            padding: const EdgeInsets.only(top: 20,bottom: 12),
+            padding: const EdgeInsets.only(top: 20, bottom: 12),
             child: Align(
               alignment: Alignment.topLeft,
               child: RichText(
@@ -980,6 +1173,25 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               ),
             ),
           ),
+          if (isSelectedOptionWpError)
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Text(
+                  wPErrorMessage!,
+                  style: languageProvider.lan == 'English'
+                      ? const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Bricolage-M')
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                          fontFamily: 'Walone-R'),
+                ),
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -989,6 +1201,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 rButtonChoosen: (value) {
                   setState(() {
                     selectedOptionWp = value;
+                    isSelectedOptionWpError = false;
                   });
                 },
                 rButtonName: languageProvider.lan == 'English' ? 'Yes' : 'ရှိ',
@@ -1002,6 +1215,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 rButtonChoosen: (value) {
                   setState(() {
                     selectedOptionWp = value;
+                    isSelectedOptionWpError = false;
                   });
                 },
                 rButtonName: languageProvider.lan == 'English' ? 'No' : 'မရှိ',
