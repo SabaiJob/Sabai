@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const int totalSteps = 5;
+const int totalSteps = 4;
 
 const appBarTitleStyleEng = TextStyle(
   fontFamily: 'Bricolage-M',

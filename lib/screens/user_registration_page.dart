@@ -1,5 +1,6 @@
 // NEW USER REGISTRATION PAGE
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
@@ -32,6 +33,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _yearsController = TextEditingController();
+  final TextEditingController _passportController = TextEditingController();
+  final TextEditingController _pinCodeController = TextEditingController();
 
   int _currentPage = 0;
 
@@ -64,9 +67,10 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   bool isSelectedOptionWpError = false;
   String? wPErrorMessage = '';
 
-  bool? showButton = false;
+  bool? isPassportFieldError = false;
+  String? passportFieldErrorMessage = '';
 
-  //String? selectedProvince;
+  int _progressStep = 0;
 
   void _handleDateSelected(DateTime date) {
     setState(() {
@@ -99,15 +103,30 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         );
         setState(() {
           _currentPage++;
+          _progressStep++;
         });
       }
-    }
-    if (_currentPage == 2) {
+    } else if (_currentPage == 1) {
+      String enteredPinCode = _pinCodeController.text.trim();
+      if (enteredPinCode == sabaiAppData.fixedPinNumber) {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentPage++;
+          _progressStep++;
+        });
+      }
+    } else {
       isProvinceError = _selectedProvince == null;
       isLanguageLevelError = _selectedLanguageLevel == null;
       isDurationError = _yearsController.text.trim().isEmpty;
       isSelectedOptionPpError = selectedOptionPp == null;
       isSelectedOptionWpError = selectedOptionWp == null;
+      isPassportFieldError =
+          selectedOptionPp == 'Yes' && _passportController.text.trim().isEmpty;
+
       setState(() {
         provinceErrorMessage = isProvinceError ? ' Province is required ' : '';
         durationErrorMessage = isDurationError ? ' Timeline is required ' : '';
@@ -117,78 +136,32 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
             isSelectedOptionPpError ? ' You need to answer this ' : '';
         wPErrorMessage =
             isSelectedOptionWpError ? ' You need to answer this ' : '';
+        passportFieldErrorMessage = isPassportFieldError!
+            ? ' You need to fill your passport number '
+            : '';
       });
       bool noErrors = !isProvinceError &&
           !isLanguageLevelError &&
           !isDurationError &&
           !isSelectedOptionPpError &&
-          !isSelectedOptionWpError;
+          !isSelectedOptionWpError &&
+          !isPassportFieldError!;
       if (noErrors) {
         print('Your Province : ${_selectedProvince}');
         print(
             'Duration in Timeline : ${_yearsController.text} ${selectedDuration}');
         print('Your Thai Language Proficiency : ${_selectedLanguageLevel}');
+        print('Do you have passport ? Y/N : ${selectedOptionPp}');
+        print('Your passport number: ${_passportController.text}');
+        print('Do you have work permit ? Y/N ${selectedOptionWp}');
         print(
             'Congratulations! You have completed all the required fields for the registration');
+        setState(() {
+          _progressStep++;
+        });
       } else {
         print('You need to complete all fields');
       }
-    }
-  }
-
-  // Navigate to OTP Page
-  // void _navToOTPPage() {
-  //   setState(() {
-  //     // Check for errors
-  //     isGenderError = _selectedGender == null;
-  //     isBirthdayError = _selectedDate == null;
-
-  //     // Assign error messages based on validation
-  //     genderErrorMessage = isGenderError ? "   Gender is required" : '';
-  //     birthdayErrorMessage = isBirthdayError ? "   Birthday is required" : '';
-  //   });
-
-  //   // Proceed only if the form is valid and there are no errors
-  //   bool isFormValid = _formKey.currentState!.validate();
-  //   bool noErrors = !isGenderError && !isBirthdayError;
-
-  //   if (isFormValid && noErrors) {
-  //     if (_currentPage < 3) {
-  //       //To remove later !!!!!
-  //       print('Your Full Name: ${_fullNameController.text}');
-  //       print('Your Gender: ${_selectedGender}');
-  //       print('Your Birthday: ${_selectedDate}');
-  //       print('Your Phone Number: ${_phoneNumberController.text}');
-  //       print('Your email address: ${_emailController.text}');
-  //       // Move to the next page
-  //       _pageController.nextPage(
-  //         duration: const Duration(milliseconds: 300),
-  //         curve: Curves.easeInOut,
-  //       );
-  //       setState(() {
-  //         _currentPage++;
-  //       });
-  //     } else {
-  //       // Perform the final submission or navigation
-  //       print("Form submitted");
-  //     }
-  //   }
-  // }
-
-  // Navigate to Profile SetUp Page
-  void _navToSetUp(String value) {
-    if (value == sabaiAppData.fixedPinNumber) {
-      if (_currentPage < 3) {
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-        setState(() {
-          _currentPage++;
-        });
-      }
-    } else {
-      print('Wrong Pin Code');
     }
   }
 
@@ -235,15 +208,15 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 24),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
               child: StepProgressIndicator(
-                roundedEdges: Radius.circular(10),
+                roundedEdges: const Radius.circular(10),
                 padding: 0.0,
                 totalSteps: totalSteps,
-                currentStep: 0,
-                selectedColor: Color(0xFFFF3997),
-                unselectedColor: Color.fromARGB(100, 76, 82, 88),
+                currentStep: _progressStep,
+                selectedColor: const Color(0xFFFF3997),
+                unselectedColor: const Color.fromARGB(100, 76, 82, 88),
                 size: 8.0,
               ),
             ),
@@ -260,46 +233,61 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
           ],
         ),
       ),
-      //persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //back button
-            // if (_currentPage > 0)
-            //   TextButton(
-            //     onPressed: () {
-            //       _pageController.previousPage(
-            //         duration: const Duration(milliseconds: 300),
-            //         curve: Curves.easeInOut,
-            //       );
-            //       setState(() {
-            //         _currentPage--;
-            //       });
-            //     },
-            //     child: const Text("Back"),
-            //   ),
-            TextButton(
-              onPressed: _scrollPages,
-              style: TextButton.styleFrom(
-                fixedSize: const Size(120, 42),
-                backgroundColor: const Color(0xffFF3997),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+      persistentFooterAlignment: AlignmentDirectional.center,
+      persistentFooterButtons: ((_currentPage == _pageController.initialPage ||
+              _currentPage == 2))
+          ? [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: _scrollPages,
+                    style: TextButton.styleFrom(
+                      fixedSize: const Size(343, 42),
+                      backgroundColor: const Color(0xffFF3997),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(8), // Set the border radius
+                      ),
+                    ),
+                    child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  languageProvider.lan == 'English'
+                      ? const Text(
+                          'Continue',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-B',
+                            fontSize: 15.63,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'ဆက်လက်ရန်',
+                          style: TextStyle(
+                            fontFamily: 'Walone-B',
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Icon(
+                    CupertinoIcons.arrow_right,
+                    color: Colors.white,
+                  ),
+                ],
               ),
-              child: const Text(
-                //_currentPage < 1 ? "Next" : "Submit",
-                'Next',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        )
-      ],
+                  ),
+                ],
+              )
+            ]
+          : null,
     );
   }
 
+  // Registration Page
   Widget _buildRegistrationPage() {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return SingleChildScrollView(
@@ -594,9 +582,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
           PinCodeTextField(
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            controller: _pinCodeController,
             appContext: context,
             length: 6,
-            onCompleted: _navToSetUp,
+            onCompleted: (value) {
+              _scrollPages();
+            },
             enableActiveFill: true,
             pinTheme: PinTheme(
               borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -796,7 +787,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                         isDurationError = false;
                       });
                     },
-                    //onSubmitted: (value){},
                     style: languageProvider.lan == 'English'
                         ? const TextStyle(
                             fontFamily: 'Bricolage-R',
@@ -837,9 +827,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                             )
                           : const OutlineInputBorder(
                               borderSide: BorderSide(
-                              color: Color(0x00ffffff),
-                              width: 0,
-                            )),
+                                color: Color(0x00ffffff),
+                                width: 0,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
                       border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
                       ),
@@ -1053,7 +1045,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 rButtonChoosen: (value) {
                   setState(() {
                     selectedOptionPp = value;
-                     isSelectedOptionPpError = false;
+                    isSelectedOptionPpError = false;
                   });
                 },
                 rButtonName: languageProvider.lan == 'English' ? 'No' : 'မရှိ',
@@ -1091,6 +1083,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                   width: 400,
                   height: 36,
                   child: TextField(
+                    controller: _passportController,
+                    onChanged: (value) {
+                      setState(() {
+                        isPassportFieldError = false;
+                      });
+                    },
                     style: const TextStyle(
                       fontFamily: 'Bricolage-R',
                       fontWeight: FontWeight.w100,
@@ -1098,13 +1096,20 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                     ),
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0x00ffffff),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
+                      enabledBorder: isPassportFieldError!
+                          ? const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 2,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )
+                          : const OutlineInputBorder(
+                              borderSide: BorderSide(
+                              color: Color(0x00ffffff),
+                              width: 0,
+                            )),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00ffffff),
@@ -1129,6 +1134,25 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                     ),
                   ),
                 ),
+                if (isPassportFieldError!)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        passportFieldErrorMessage!,
+                        style: languageProvider.lan == 'English'
+                            ? const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Bricolage-M')
+                            : const TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontFamily: 'Walone-R'),
+                      ),
+                    ),
+                  ),
               ],
             )
           ],
@@ -1227,3 +1251,19 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     );
   }
 }
+
+
+//back button
+                      // if (_currentPage > 0)
+                      //   TextButton(
+                      //     onPressed: () {
+                      //       _pageController.previousPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //       setState(() {
+                      //         _currentPage--;
+                      //       });
+                      //     },
+                      //     child: const Text("Back"),
+                      //   ),
