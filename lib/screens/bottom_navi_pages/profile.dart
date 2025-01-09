@@ -10,6 +10,7 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/privacy_policy.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/screens/terms_and_conditions_page.dart';
+import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,15 +26,15 @@ class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
 
-  Future<void> _pickImage(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: source);
-    if (image != null) {
-      setState(() {
-        _selectedImage = FileImage(File(image.path));
-      });
-    }
-  }
+  // Future<void> _pickImage(ImageSource source) async {
+  //   final ImagePicker picker = ImagePicker();
+  //   final XFile? image = await picker.pickImage(source: source);
+  //   if (image != null) {
+  //     setState(() {
+  //       _selectedImage = FileImage(File(image.path));
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -75,20 +76,31 @@ class _ProfileState extends State<Profile> {
             children: [
               Stack(
                 children: [
-                  _selectedImage != null ?
-                   CircleAvatar(
-                    radius: 40,
-                    foregroundImage: _selectedImage!,
-                  ) : const CircleAvatar(
-                    radius: 40,
-                    foregroundImage: AssetImage('icons/temp1.png',),
-                  ),
+                  _selectedImage != null
+                      ? CircleAvatar(
+                          radius: 40,
+                          foregroundImage: _selectedImage!,
+                        )
+                      : const CircleAvatar(
+                          radius: 40,
+                          foregroundImage: AssetImage(
+                            'icons/temp1.png',
+                          ),
+                        ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: GestureDetector(
-                      onTap: (){
-                        _pickImage(ImageSource.gallery);
+                      onTap: () async {
+                        //_pickImage(ImageSource.gallery);
+                        //ImagePickerHelper.pickImage(ImageSource.gallery);
+                        FileImage? image = await ImagePickerHelper.pickImage(
+                            ImageSource.gallery);
+                        if (image != null) {
+                          setState(() {
+                            _selectedImage = image;
+                          });
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

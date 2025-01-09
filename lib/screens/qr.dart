@@ -3,14 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'dart:typed_data';
 
-class Qr extends StatelessWidget {
-  Qr({
+class Qr extends StatefulWidget {
+  const Qr({
     super.key,
     required this.isPrompt,
     required this.isKbz,
@@ -19,8 +21,22 @@ class Qr extends StatelessWidget {
   final bool isKbz;
   final bool isPrompt;
 
+  @override
+  State<Qr> createState() => _QrState();
+}
+
+class _QrState extends State<Qr> {
   final String imageUrl =
       'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
+
+  FileImage? _selectedImage;
+  
+  void _clearImage() {
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -146,7 +162,9 @@ class Qr extends StatelessWidget {
                     child: ClipOval(
                       // Add this to make the image circular
                       child: Image.asset(
-                        isKbz == true ? 'images/kbz.png' : 'images/prompt.png',
+                        widget.isKbz == true
+                            ? 'images/kbz.png'
+                            : 'images/prompt.png',
                         fit: BoxFit
                             .fill, // This ensures the image fills the circle
                       ),
@@ -169,7 +187,7 @@ class Qr extends StatelessWidget {
                   const Align(
                     alignment: AlignmentDirectional.topStart,
                     child: Text(
-                      'After you complete the payment',
+                      'After you complete the payment,',
                       style: TextStyle(
                         fontFamily: 'Bricolage-M',
                         fontSize: 12.5,
@@ -180,46 +198,89 @@ class Qr extends StatelessWidget {
                   const SizedBox(
                     height: 13,
                   ),
-                  Container(
-                    width: 343,
-                    height: 113,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: primaryPinkColor,
-                      ),
-                    ),
-                    child: TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8), // Set the border radius
+                  GestureDetector(
+                    onTap: () async {
+                      FileImage? image = await ImagePickerHelper.pickImage(
+                          ImageSource.gallery);
+                      if (image != null) {
+                        setState(() {
+                          _selectedImage = image;
+                        });
+                      }
+                    },
+                    child: _selectedImage == null
+                        ? Container(
+                            width: double.infinity,
+                            height: 113,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: primaryPinkColor,
+                                ),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8))),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.folder,
+                                  color: primaryPinkColor,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Upload photo',
+                                  style: TextStyle(
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 10,
+                                    color: primaryPinkColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(
+                            height: 1,
                           ),
+                  ),
+                  if (_selectedImage != null) ...[
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          child: Image.file(
+                          _selectedImage!.file,
+                          fit: BoxFit.fitWidth,
+                          height: 113,
+                          width: double.infinity,
                         ),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              CupertinoIcons.folder,
-                              color: primaryPinkColor,
-                              size: 16,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Upload photo',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 10,
+                        ),
+                        Positioned(
+                          left: 310,
+                          top: 10,
+                          child: GestureDetector(
+                            onTap: _clearImage,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 1),
+                              width: 16,
+                              height: 16,
+                              decoration: const BoxDecoration(
+                                  color: Color(0xFFF0F1F2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4))),
+                              child: const Icon(
+                                Icons.clear,
+                                size: 12,
                                 color: primaryPinkColor,
                               ),
                             ),
-                          ],
-                        )),
-                  )
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
                 ],
               ),
             )
