@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/community.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/contribute_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
@@ -20,16 +21,17 @@ class NavigationHomepage extends StatefulWidget {
 
 class _NavigationHomepageState extends State<NavigationHomepage> {
   late List<Widget> widgetList;
-  int currentIndex = 0;
+  int currentIndex = 2;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     widgetList = [
+      const Community(),
+      const ContributePage(),
       JobListingPage(
         showBottomSheet: widget.showButtonSheet,
       ),
-      const ContributePage(),
       const SaveJobs(),
       const Profile(),
     ];
@@ -73,13 +75,18 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           onTap: onTabChange,
           items: [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.work_outline_outlined),
-              label: languageProvider.lan == 'English' ? 'Jobs' : 'အလုပ်ရှာ',
+              icon: const Icon(Icons.apartment),
+              label:
+                  languageProvider.lan == 'English' ? 'Community' : 'အလုပ်ရှာ',
             ),
             BottomNavigationBarItem(
               icon: const Icon(CupertinoIcons.add_circled),
               label:
                   languageProvider.lan == 'English' ? 'Contribute' : 'အလုပ်တင်',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.work_outline_outlined),
+              label: languageProvider.lan == 'English' ? 'Jobs' : 'အလုပ်ရှာ',
             ),
             BottomNavigationBarItem(
               icon: const Icon(CupertinoIcons.heart),
