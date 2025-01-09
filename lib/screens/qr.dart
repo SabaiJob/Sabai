@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,7 +23,7 @@ class Qr extends StatelessWidget {
       'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
   @override
   Widget build(BuildContext context) {
-    //var languageProvider = Provider.of<LanguageProvider>(context);
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -157,7 +158,7 @@ class Qr extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(
                     height: 40,
@@ -165,54 +166,59 @@ class Qr extends StatelessWidget {
                       height: 10,
                     ),
                   ),
-                  const Text(
-                    'After you complete the payment',
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-M',
-                      fontSize: 12.5,
-                      color: Colors.black,
+                  const Align(
+                    alignment: AlignmentDirectional.topStart,
+                    child: Text(
+                      'After you complete the payment',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 12.5,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 13,
                   ),
                   Container(
-                    width: 375,
-                    height: 42,
+                    width: 343,
+                    height: 113,
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: primaryPinkColor,
                       ),
                     ),
                     child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Set the border radius
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8), // Set the border radius
+                          ),
                         ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.file_upload_outlined,
-                            color: primaryPinkColor,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Upload e-receipt or screenshot',
-                            style: TextStyle(
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.folder,
+                              color: primaryPinkColor,
+                              size: 16,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Upload photo',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 10,
                                 color: primaryPinkColor,
-                                fontFamily: 'Bricolage-M'),
-                          )
-                        ],
-                      ),
-                    ),
+                              ),
+                            ),
+                          ],
+                        )),
                   )
                 ],
               ),
@@ -220,6 +226,54 @@ class Qr extends StatelessWidget {
           ],
         ),
       ),
+      persistentFooterButtons: [
+        Container(
+          width: 375,
+          height: 42,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+              backgroundColor: const Color(0xffFF3997),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Set the border radius
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                languageProvider.lan == 'English'
+                    ? const Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontFamily: 'Bricolage-B',
+                          fontSize: 15.63,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'ဆက်လက်ရန်',
+                        style: TextStyle(
+                          fontFamily: 'Walone-B',
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  CupertinoIcons.arrow_right,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+      persistentFooterAlignment: AlignmentDirectional.center,
     );
   }
 }
