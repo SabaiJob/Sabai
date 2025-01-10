@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/payment_verifying.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'dart:typed_data';
@@ -297,7 +298,16 @@ class _QrState extends State<Qr> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextButton(
-            onPressed: _selectedImage != null ? () {} : null,
+            onPressed: _selectedImage != null
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PaymentVerifying(),
+                      ),
+                    );
+                  }
+                : null,
             style: TextButton.styleFrom(
               backgroundColor: _selectedImage != null
                   ? const Color(0xffFF3997)

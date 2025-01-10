@@ -394,9 +394,8 @@ class _PaymentState extends State<Payment> {
           child: TextButton(
             onPressed: () {
               setState(() {
-                if (isKBZ == false && isPrompt == false) {
-                  color = Colors.red;
-                } else {
+                if (_formKey.currentState!.validate() &&
+                    (isKBZ == true || isPrompt == true)) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -406,18 +405,17 @@ class _PaymentState extends State<Payment> {
                       ),
                     ),
                   );
+                } else {
+                  color = Colors.red;
+                  // form validation failed
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: languageProvider.lan == 'English'
+                          ? const Text(
+                              "Please completed all the required fields")
+                          : const Text(
+                              "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
                 }
               });
-
-              if (_formKey.currentState!.validate()) {
-              } else {
-                // form validation failed
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: languageProvider.lan == 'English'
-                        ? const Text("Please completed all the required fields")
-                        : const Text(
-                            "လိုအပ်သောအကွက်များအားလုံးကို ဖြည့်စွက်ပါ။")));
-              }
             },
             style: TextButton.styleFrom(
               backgroundColor: const Color(0xffFF3997),
