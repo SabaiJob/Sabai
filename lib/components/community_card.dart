@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/community_detail.dart';
 
 class CommunityCard extends StatelessWidget {
   const CommunityCard({super.key, required this.orgName, required this.label});
@@ -9,6 +10,14 @@ class CommunityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CommunityDetail(),
+          ),
+        );
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),

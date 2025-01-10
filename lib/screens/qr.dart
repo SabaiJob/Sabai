@@ -30,7 +30,7 @@ class _QrState extends State<Qr> {
       'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
 
   FileImage? _selectedImage;
-  
+
   void _clearImage() {
     setState(() {
       _selectedImage = null;
@@ -246,18 +246,20 @@ class _QrState extends State<Qr> {
                   ),
                   if (_selectedImage != null) ...[
                     Stack(
+                      alignment: Alignment.topRight,
                       children: [
                         ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
                           child: Image.file(
-                          _selectedImage!.file,
-                          fit: BoxFit.fitWidth,
-                          height: 113,
-                          width: double.infinity,
-                        ),
+                            _selectedImage!.file,
+                            fit: BoxFit.fitWidth,
+                            height: 113,
+                            width: double.infinity,
+                          ),
                         ),
                         Positioned(
-                          left: 310,
+                          right: 10,
                           top: 10,
                           child: GestureDetector(
                             onTap: _clearImage,
@@ -295,9 +297,11 @@ class _QrState extends State<Qr> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextButton(
-            onPressed: () {},
+            onPressed: _selectedImage != null ? () {} : null,
             style: TextButton.styleFrom(
-              backgroundColor: const Color(0xffFF3997),
+              backgroundColor: _selectedImage != null
+                  ? const Color(0xffFF3997)
+                  : Colors.pink.shade100,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // Set the border radius
               ),
