@@ -137,38 +137,41 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(
-                getNavItems().length,
-                (index) => GestureDetector(
-                  onTapDown: (_) {
-                    _menuItemAnimations[index].forward();
-                  },
-                  onTapUp: (_) {
-                    _menuItemAnimations[index].reverse();
-                    _navigateToPage(index);
-                  },
-                  onTapCancel: () {
-                    _menuItemAnimations[index].reverse();
-                  },
-                  child: ScaleTransition(
-                    scale: _menuItemScaleAnimations[index],
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: _selectedIndex == index
-                            ? Colors.white
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        getNavItems()[index],
-                        style: const TextStyle(
-                          color: Color(0xffFF3997),
-                          fontFamily: 'Bricolage-R',
-                          fontSize: 12.5,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(
+                  getNavItems().length,
+                  (index) => GestureDetector(
+                    onTapDown: (_) {
+                      _menuItemAnimations[index].forward();
+                    },
+                    onTapUp: (_) {
+                      _menuItemAnimations[index].reverse();
+                      _navigateToPage(index);
+                    },
+                    onTapCancel: () {
+                      _menuItemAnimations[index].reverse();
+                    },
+                    child: ScaleTransition(
+                      scale: _menuItemScaleAnimations[index],
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          getNavItems()[index],
+                          style: const TextStyle(
+                            color: Color(0xffFF3997),
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 12.5,
+                          ),
                         ),
                       ),
                     ),
