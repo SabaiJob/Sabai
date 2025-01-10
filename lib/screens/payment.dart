@@ -8,18 +8,26 @@ import 'package:sabai_app/screens/qr.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class Payment extends StatefulWidget {
-  Payment({
+  final int? plan;
+
+  const Payment({
     required this.plan,
     super.key,
   });
-
-  late int plan;
 
   @override
   State<Payment> createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> {
+  late int? selectedPlan;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedPlan = widget.plan; // Initialize with the widget's plan
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   final _fullNameController = TextEditingController();
@@ -119,7 +127,7 @@ class _PaymentState extends State<Payment> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        widget.plan = 1;
+                        selectedPlan = 1;
                       });
                     },
                     child: Container(
@@ -199,7 +207,7 @@ class _PaymentState extends State<Payment> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        widget.plan = 0;
+                        selectedPlan = 0;
                       });
                     },
                     child: Container(
