@@ -2,12 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
-import 'package:sabai_app/screens/registration_pages/otp_code_verification_page.dart';
-import 'package:sabai_app/screens/registration_pages/registration_additional_info_page.dart';
-import 'package:sabai_app/screens/registration_pages/registration_user_info_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/registration_additional_info_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/registration_user_info_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -16,10 +16,12 @@ class RegistrationControllerPage extends StatefulWidget {
   const RegistrationControllerPage({super.key});
 
   @override
-  State<RegistrationControllerPage> createState() => _RegistrationControllerPageState();
+  State<RegistrationControllerPage> createState() =>
+      _RegistrationControllerPageState();
 }
 
-class _RegistrationControllerPageState extends State<RegistrationControllerPage> {
+class _RegistrationControllerPageState
+    extends State<RegistrationControllerPage> {
   SabaiAppData sabaiAppData = SabaiAppData();
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
@@ -81,7 +83,8 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
       _isBirthdayError = _selectedDate == null;
       setState(() {
         _genderErrorMessage = _isGenderError ? " Gender is required " : '';
-        _birthdayErrorMessage = _isBirthdayError ? ' Birthday is required ' : '';
+        _birthdayErrorMessage =
+            _isBirthdayError ? ' Birthday is required ' : '';
       });
       bool isFormValid = _formKey.currentState!.validate();
       bool noErrors = !_isGenderError && !_isBirthdayError;
@@ -125,8 +128,10 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
           _selectedOptionPp == 'Yes' && _passportController.text.trim().isEmpty;
 
       setState(() {
-        _provinceErrorMessage = _isProvinceError ? ' Province is required ' : '';
-        _durationErrorMessage = _isDurationError ? ' Timeline is required ' : '';
+        _provinceErrorMessage =
+            _isProvinceError ? ' Province is required ' : '';
+        _durationErrorMessage =
+            _isDurationError ? ' Timeline is required ' : '';
         _languageLevelErrorMessage =
             _isLanguageLevelError ? ' Language Level is required ' : '';
         _pPErrorMessage =
@@ -153,8 +158,14 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
         print('Do you have work permit ? Y/N ${_selectedOptionWp}');
         print(
             'Congratulations! You have completed all the required fields for the registration');
+        // Move to the next page
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
         setState(() {
           _progressStep++;
+          _currentPage++;
         });
       } else {
         print('You need to complete all fields');
@@ -191,7 +202,7 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F1F2),
+      backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
         bottom: PreferredSize(
@@ -259,7 +270,6 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
                     whenOnComplete: _handleOTPVerificationPage),
-               
                 RegistrationAdditionalInfoPage(
                     isProvinceError: _isProvinceError,
                     selectedProvince: _selectedProvince,
@@ -320,6 +330,12 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
                         _isSelectedOptionWpError = false;
                       });
                     }),
+                SelectJobCategoryPage(jobCateoryLenght: sabaiAppData.jobCategoryInEng.length, jobCategoryList: sabaiAppData.jobCategoryInEng, whenOnChanged: (value,index){
+                  setState(() {
+                    sabaiAppData.jobCategoryInEng[index!]['selected'] =
+                                value!;
+                  });
+                },),
               ],
             ))
           ],
@@ -327,7 +343,8 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: ((_currentPage == _pageController.initialPage ||
-              _currentPage == 2))
+              _currentPage == 2 ||
+              _currentPage == 3))
           ? [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -346,9 +363,10 @@ class _RegistrationControllerPageState extends State<RegistrationControllerPage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         languageProvider.lan == 'English'
-                            ? const Text(
-                                'Continue',
-                                style: TextStyle(
+                            ? Text(
+                              _currentPage == 3 ?
+                                'Create Profile ':'Continue',
+                                style: const TextStyle(
                                   fontFamily: 'Bricolage-B',
                                   fontSize: 15.63,
                                   color: Colors.white,

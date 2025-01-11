@@ -1,3 +1,6 @@
+// old job category page
+// will delete later
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +9,6 @@ import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-
 import '../constants.dart';
 
 class JobCategoryPage extends StatefulWidget {

@@ -55,21 +55,29 @@ class SabaiAppData {
 
   final List<String> _languageLevelsInMm = ['will add values later'];
 
-  final List<String> _jobCategoriesInEng = [
-    'Hotel 🏨',
-    'Restaurant 🧑‍🍳',
-    'Beauty 💋',
-    'Teaching\t👩‍🏫',
+  final List<Map<String, dynamic>> _jobCategoriesInEng = [
+    {'name': 'Hotels', 'emoji': '🏨', 'selected': false},
+    {'name': 'Restaurants', 'emoji': '👨‍🍳', 'selected': false},
+    {'name': 'Beauty', 'emoji': '💋', 'selected': false},
+    {'name': 'Teaching', 'emoji': '👩‍🏫', 'selected': false},
+    {'name': 'Healthcare', 'emoji': '🏥', 'selected': false},
+    {'name': 'Construction', 'emoji': '🏗️', 'selected': false},
+    {'name': 'Technology', 'emoji': '💻', 'selected': false},
+    {'name': 'Transportation', 'emoji': '🚛', 'selected': false},
+    {'name': 'Finance', 'emoji': '💰', 'selected': false},
+    {'name': 'Art & Design', 'emoji': '🎨', 'selected': false},
+    {'name': 'Sports', 'emoji': '⚽', 'selected': false},
+    {'name': 'Retail', 'emoji': '🛍️', 'selected': false},
+    {'name': 'Media', 'emoji': '🎥', 'selected': false},
+    {'name': 'Agriculture', 'emoji': '🌾', 'selected': false},
   ];
 
-  final List<String> _jobCategoriesInMm = [
-    'ဟိုတယ်များ 🏨',
-    'စားသောက်ဆိုင်များ 🧑‍🍳',
-    'အလှပရေးရာ 💋',
-    'သင်ကြားရေး\t👩‍🏫',
+  final List<Map<String, dynamic>> _jobCategoriesInMm = [
+    {'name': 'ဟိုတယ်များ', 'emoji': '🏨', 'selected': true},
+    {'name': 'စားသောက်ဆိုင်များ', 'emoji': '👨‍🍳', 'selected': false},
+    {'name': 'အလှပရေးရာ', 'emoji': '💋', 'selected': false},
+    {'name': 'သင်ကြားရေး', 'emoji': '👩‍🏫', 'selected': false},
   ];
-
-  
 
   String get fixedPinNumber => _fixedPinNumber;
 
@@ -89,7 +97,7 @@ class SabaiAppData {
 
   List<String> get languageLevelsInMm => _languageLevelsInMm;
 
-  List<String> get jobCategoryInEng => _jobCategoriesInEng;
+  List<Map<String, dynamic>> get jobCategoryInEng => _jobCategoriesInEng;
 
-  List<String> get jobCategoryInMm => _jobCategoriesInMm;
+  List<Map<String, dynamic>> get jobCategoryInMm => _jobCategoriesInMm;
 }
