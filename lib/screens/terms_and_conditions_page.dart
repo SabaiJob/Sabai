@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sabai_app/constants.dart';
 
 class TermsAndConditionsPage extends StatelessWidget {
   const TermsAndConditionsPage({super.key});
