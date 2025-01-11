@@ -1,12 +1,13 @@
-// NEW USER REGISTRATION PAGE
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/registration_additional_info_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/registration_user_info_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
+import 'package:sabai_app/screens/success_page.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -182,7 +183,7 @@ class _RegistrationControllerPageState
   }
 
   // Create Profile
-  void _handleCreateProfile() {
+  void _handleCreateProfile(LanguageProvider languageProvider) {
     bool isAnyJobCategorySelected = sabaiAppData.jobCategoryInEng
         .any((category) => category['selected'] == true);
     if (!isAnyJobCategorySelected) {
@@ -206,6 +207,21 @@ class _RegistrationControllerPageState
             .toList();
         print('did you choose something? Y/N ${isAnyJobCategorySelected}');
         print('Selected Categories: ${selectedJobCategories}');
+        _progressStep++;
+        showDoubleCircleLoadingBox(context, languageProvider.lan);
+        Future.delayed(
+          const Duration(seconds: 3),
+          () {
+            if (!mounted) return;
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SuccessPage(),
+              ),
+            );
+          },
+        );
       });
     }
   }
@@ -381,7 +397,7 @@ class _RegistrationControllerPageState
                       } else if (_currentPage == 2) {
                         _handleProfileSetUp();
                       } else {
-                        _handleCreateProfile();
+                        _handleCreateProfile(languageProvider);
                       }
                     },
                     style: TextButton.styleFrom(
