@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+	    <key>LSApplicationQueriesSchemes</key>
+        <array>
+          <string>sms</string>
+          <string>tel</string>
+        </array>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>https</string>
+        </array>
 	    <key>NSPhotoLibraryAddUsageDescription</key>
         <string>We need permission to save photos and videos to your library for your convenience.</string>
         <key>NSPhotoLibraryUsageDescription</key>
