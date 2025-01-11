@@ -1,10 +1,11 @@
-// no longer in
+// no longer in use
+// will delete later
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/screens/user_profile_setup_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';

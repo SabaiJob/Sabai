@@ -55,6 +55,22 @@ class SabaiAppData {
 
   final List<String> _languageLevelsInMm = ['will add values later'];
 
+  final List<String> _jobCategoriesInEng = [
+    'Hotel 🏨',
+    'Restaurant 🧑‍🍳',
+    'Beauty 💋',
+    'Teaching\t👩‍🏫',
+  ];
+
+  final List<String> _jobCategoriesInMm = [
+    'ဟိုတယ်များ 🏨',
+    'စားသောက်ဆိုင်များ 🧑‍🍳',
+    'အလှပရေးရာ 💋',
+    'သင်ကြားရေး\t👩‍🏫',
+  ];
+
+  
+
   String get fixedPinNumber => _fixedPinNumber;
 
   List<String> get provinceItemsInEng => _provinceItemsInEng;
@@ -72,4 +88,8 @@ class SabaiAppData {
   List<String> get languageLevelsInEng => _languageLevelsInEng;
 
   List<String> get languageLevelsInMm => _languageLevelsInMm;
+
+  List<String> get jobCategoryInEng => _jobCategoriesInEng;
+
+  List<String> get jobCategoryInMm => _jobCategoriesInMm;
 }

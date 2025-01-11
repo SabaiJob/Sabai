@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/change_language_dropdown_button.dart';
 import 'package:sabai_app/screens/login_page.dart';
-import 'package:sabai_app/screens/user_registration_page.dart';
+import 'package:sabai_app/screens/registration_pages/registration_controller_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../services/language_provider.dart';
 
@@ -259,7 +259,7 @@ class _WalkthroughState extends State<Walkthrough> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const UserRegistrationPage(),
+                              builder: (context) => const RegistrationControllerPage(),
                             ),
                           );
                         },
