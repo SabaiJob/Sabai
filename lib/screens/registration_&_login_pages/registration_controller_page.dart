@@ -1,5 +1,4 @@
 // NEW USER REGISTRATION PAGE
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/constants.dart';
@@ -77,7 +76,8 @@ class _RegistrationControllerPageState
     //print('Selected Date: $date');
   }
 
-  void _scrollPages() {
+  // User Registration
+  void _handleUserRegistration() {
     if (_currentPage == _pageController.initialPage) {
       _isGenderError = _selectedGender == null;
       _isBirthdayError = _selectedDate == null;
@@ -105,19 +105,10 @@ class _RegistrationControllerPageState
         });
       }
     }
-    // else if (_currentPage == 1) {
-    //   String enteredPinCode = _pinCodeController.text.trim();
-    //   if (enteredPinCode == sabaiAppData.fixedPinNumber) {
-    //     _pageController.nextPage(
-    //       duration: const Duration(milliseconds: 300),
-    //       curve: Curves.easeInOut,
-    //     );
-    //     setState(() {
-    //       _currentPage++;
-    //       _progressStep++;
-    //     });
-    //   }
-    // }
+  }
+
+  // Profile Set Up (additional info)
+  void _handleProfileSetUp() {
     if (_currentPage == 2) {
       _isProvinceError = _selectedProvince == null;
       _isLanguageLevelError = _selectedLanguageLevel == null;
@@ -173,7 +164,8 @@ class _RegistrationControllerPageState
     }
   }
 
-  void _handleOTPVerificationPage(String value) {
+  // OTP Code Verification
+  void _handleOTPVerificationPage(String enteredPinCode) {
     if (_currentPage == 1) {
       String enteredPinCode = _pinCodeController.text.trim();
       if (enteredPinCode == sabaiAppData.fixedPinNumber) {
@@ -186,6 +178,35 @@ class _RegistrationControllerPageState
           _progressStep++;
         });
       }
+    }
+  }
+
+  // Create Profile
+  void _handleCreateProfile() {
+    bool isAnyJobCategorySelected = sabaiAppData.jobCategoryInEng
+        .any((category) => category['selected'] == true);
+    if (!isAnyJobCategorySelected) {
+      print('Error: Please select at least one job category.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select at least one job category.',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    } else {
+      setState(() {
+        var selectedJobCategories = sabaiAppData.jobCategoryInEng
+            .where((category) => category['selected'] == true)
+            .map((category) => category['name'])
+            .toList();
+        print('did you choose something? Y/N ${isAnyJobCategorySelected}');
+        print('Selected Categories: ${selectedJobCategories}');
+      });
     }
   }
 
@@ -330,12 +351,16 @@ class _RegistrationControllerPageState
                         _isSelectedOptionWpError = false;
                       });
                     }),
-                SelectJobCategoryPage(jobCateoryLenght: sabaiAppData.jobCategoryInEng.length, jobCategoryList: sabaiAppData.jobCategoryInEng, whenOnChanged: (value,index){
-                  setState(() {
-                    sabaiAppData.jobCategoryInEng[index!]['selected'] =
-                                value!;
-                  });
-                },),
+                SelectJobCategoryPage(
+                  jobCateoryLenght: sabaiAppData.jobCategoryInEng.length,
+                  jobCategoryList: sabaiAppData.jobCategoryInEng,
+                  whenOnChanged: (value, index) {
+                    setState(() {
+                      sabaiAppData.jobCategoryInEng[index!]['selected'] =
+                          value!;
+                    });
+                  },
+                ),
               ],
             ))
           ],
@@ -350,7 +375,15 @@ class _RegistrationControllerPageState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: _scrollPages,
+                    onPressed: () {
+                      if (_currentPage == _pageController.initialPage) {
+                        _handleUserRegistration();
+                      } else if (_currentPage == 2) {
+                        _handleProfileSetUp();
+                      } else {
+                        _handleCreateProfile();
+                      }
+                    },
                     style: TextButton.styleFrom(
                       fixedSize: const Size(343, 42),
                       backgroundColor: const Color(0xffFF3997),
@@ -364,8 +397,9 @@ class _RegistrationControllerPageState
                       children: [
                         languageProvider.lan == 'English'
                             ? Text(
-                              _currentPage == 3 ?
-                                'Create Profile ':'Continue',
+                                _currentPage == 3
+                                    ? 'Create Profile '
+                                    : 'Continue',
                                 style: const TextStyle(
                                   fontFamily: 'Bricolage-B',
                                   fontSize: 15.63,
