@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/community.dart';
-import 'package:sabai_app/screens/bottom_navi_pages/contribute_page.dart';
+import 'package:sabai_app/screens/contribution_pages/contribute_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
@@ -28,7 +28,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     super.initState();
     widgetList = [
       const Community(),
-      const ContributePage(),
+      const Placeholder(),
       JobListingPage(
         showBottomSheet: widget.showButtonSheet,
       ),
@@ -37,10 +37,81 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     ];
   }
 
+  // void onTabChange(index) {
+  //   if (index == 1) {
+  //     showModalBottomSheet(
+  //       backgroundColor: Colors.transparent,
+  //       context: context,
+  //       isScrollControlled: true,
+  //       builder: (context) {
+  //         return DraggableScrollableSheet(
+  //           initialChildSize: 0.8,
+  //           maxChildSize: 0.9,
+  //           builder: (context, scrollController) {
+  //             return Container(
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.vertical(
+  //                   top: Radius.circular(20),
+  //                 ),
+  //               ),
+  //               child: PageView(
+  //                 children: const [
+  //                   ContributePage(),
+  //                   Text('B'),
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       },
+  //     );
+  //   } else {
+  //     setState(() {
+  //       currentIndex = index;
+  //     });
+  //   }
+  // }
   void onTabChange(index) {
-    setState(() {
-      currentIndex = index;
-    });
+    if (index == 1) {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled:
+            true, // Ensures the bottom sheet adjusts to keyboard
+        builder: (context) {
+          return DraggableScrollableSheet(
+            initialChildSize: 0.8,
+            maxChildSize: 0.9,
+            builder: (context, scrollController) {
+              return Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context)
+                      .viewInsets
+                      .bottom, // Adjust padding
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+                child: PageView(
+                  children: const [
+                    ContributePage(),
+                    Text('B'),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      setState(() {
+        currentIndex = index;
+      });
+    }
   }
 
   @override
