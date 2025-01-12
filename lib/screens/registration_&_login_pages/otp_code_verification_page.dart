@@ -5,11 +5,15 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:sabai_app/services/otp_code_timer_provider.dart';
 
 class OtpCodeVerificationPage extends StatelessWidget {
   final TextEditingController pinCodeController;
   final Function(String) whenOnComplete;
-  const OtpCodeVerificationPage({super.key, required this.pinCodeController, required this.whenOnComplete});
+  const OtpCodeVerificationPage(
+      {super.key,
+      required this.pinCodeController,
+      required this.whenOnComplete});
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +66,85 @@ class OtpCodeVerificationPage extends StatelessWidget {
               shape: PinCodeFieldShape.box,
             ),
           ),
+          // Align(
+          //   alignment: Alignment.topLeft,
+          //   child: ReusableContentHolder(
+          //     content: languageProvider.lan == 'English'
+          //         ? 'Having trouble? Request a new OTP.'
+          //         : 'ပြဿနာရှိနေပါသလား? OTP ကုဒ်အသစ်ကိုပြန်တောင်းရန်\n00:27.',
+          //   ),
+          // ),
+
           Align(
             alignment: Alignment.topLeft,
-            child: ReusableContentHolder(
-              content: languageProvider.lan == 'English'
-                  ? 'Having trouble? Request a new OTP.'
-                  : 'ပြဿနာရှိနေပါသလား? OTP ကုဒ်အသစ်ကိုပြန်တောင်းရန်\n00:27.',
+            child: Consumer<OtpCodeTimerProvider>(
+              builder: (context, otpTimer, child) {
+                return Row(
+                  children: [
+                    const Text(
+                      'Having trouble?',
+                      style: TextStyle(
+                        fontSize: 15.63,
+                        fontFamily: 'Bricolage-R',
+                        color: Color(0xFF6C757D),
+                      ),
+                    ),
+                    const SizedBox(width: 5,),
+                    otpTimer.isTimerActive
+                        ? Text(
+                            'Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.',
+                            style: const TextStyle(
+                              color: Color(0xFF6C757D),
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 15.63,
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: otpTimer.isTimerActive
+                                ? null
+                                : () {
+                                    otpTimer.resetTimer();
+                                    print("Resending OTP...");
+                                  },
+                            child: const Text(
+                              'Request a new OTP',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-SMB',
+                                fontSize: 15.63,
+                                color: Color(0xFFFF3997),
+                              ),
+                            ),
+                          ),
+                    // Text(
+                    //   otpTimer.isTimerActive
+                    //       ? 'Having trouble? Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.'
+                    //       : 'Having trouble? Request a new OTP.',
+                    //   style: const TextStyle(fontSize: 16),
+                    // ),
+                    // const SizedBox(height: 10),
+                    // GestureDetector(
+                    //   onTap: otpTimer.isTimerActive
+                    //       ? null
+                    //       : () {
+                    //           otpTimer.resetTimer();
+                    //           // Add logic to resend OTP here
+                    //           print("Resending OTP...");
+                    //         },
+                    //   child: Text(
+                    //     'Request a new OTP.',
+                    //     style: TextStyle(
+                    //       color: otpTimer.isTimerActive
+                    //           ? Colors.grey
+                    //           : Colors.blue,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                );
+              },
             ),
-          ),
+          )
         ],
       ),
     );

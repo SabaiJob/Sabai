@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
+import 'package:sabai_app/services/otp_code_timer_provider.dart';
 
 void main() {
   runApp(
@@ -10,6 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => JobProvider()),
+        ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider())
       ],
       child: const Sabai(),
     ),
