@@ -6,13 +6,12 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
-import 'dart:ui' show Size;
 
 class Posting extends StatefulWidget {
-  Posting({this.url, this.img, super.key});
+  const Posting({this.url, this.img, super.key});
 
-  String? url = '';
-  String? img = '';
+  final String? url;
+  final String? img;
 
   @override
   State<Posting> createState() => _PostingState();
@@ -28,7 +27,7 @@ class _PostingState extends State<Posting> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: LeadingIcon(),
+        leading: const LeadingIcon(),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),
