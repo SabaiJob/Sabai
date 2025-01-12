@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:sabai_app/components/reusable_alertbox.dart';
@@ -5,6 +6,7 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
+import 'dart:ui' show Size;
 
 class Posting extends StatefulWidget {
   Posting({this.url, this.img, super.key});
@@ -26,6 +28,7 @@ class _PostingState extends State<Posting> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        leading: LeadingIcon(),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),
@@ -279,6 +282,137 @@ class RowWrapper extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LeadingIcon extends StatefulWidget {
+  const LeadingIcon({super.key});
+
+  @override
+  State<LeadingIcon> createState() => _LeadingIconState();
+}
+
+class _LeadingIconState extends State<LeadingIcon> {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              child: SizedBox(
+                width: 320,
+                height: 323,
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Image.asset(
+                            'images/draft.png',
+                            width: 140,
+                            height: 75.06,
+                          ),
+                          const Text(
+                            'Save this post as a draft',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-M',
+                              fontSize: 19.53,
+                            ),
+                          ),
+                          const Text(
+                            'If you discard now, you’ll lose this post.',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 12.5,
+                              color: Color(0xff6C757D),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          DraftTextButtons(
+                            function: () {},
+                            text: 'Save Draft',
+                          ),
+                          DraftTextButtons(
+                            function: () {},
+                            text: 'Discard Post',
+                          ),
+                          DraftTextButtons(
+                            function: () {},
+                            text: 'Keep Editing',
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        CupertinoIcons.xmark_circle,
+                        size: 28,
+                        color: primaryPinkColor,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      icon: const Icon(
+        Icons.arrow_back,
+        color: primaryPinkColor,
+      ),
+    );
+  }
+}
+
+class DraftTextButtons extends StatelessWidget {
+  const DraftTextButtons(
+      {required this.function, required this.text, super.key});
+
+  final Function() function;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 288,
+      height: 30,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          alignment: Alignment.center,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(
+              color: Color(0xffF0F1F2),
+            ),
+          ),
+        ),
+        onPressed: function,
+        child: Text(
+          textAlign: TextAlign.center,
+          text,
+          style: TextStyle(
+            fontFamily: 'Bricolage-R',
+            fontSize: 12.5,
+            color: text.contains('Discard') ? Colors.red : primaryPinkColor,
+          ),
         ),
       ),
     );

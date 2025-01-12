@@ -7,12 +7,12 @@ import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class SelectJobCategoryPage extends StatelessWidget {
-  final int? jobCateoryLenght;
+  final int? jobCategoryLength;
   final List? jobCategoryList;
   final Function(bool?, int?) whenOnChanged;
   const SelectJobCategoryPage(
       {super.key,
-      required this.jobCateoryLenght,
+      required this.jobCategoryLength,
       required this.jobCategoryList,
       required this.whenOnChanged});
 
@@ -49,50 +49,52 @@ class SelectJobCategoryPage extends StatelessWidget {
 
           // Job Categories List
           SizedBox(
-              height: 400,
-              child: ListView.separated(
-                  separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
-                      ),
-                  itemCount: jobCateoryLenght!,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.white,
-                      child: CheckboxListTile(
-                        checkboxScaleFactor: 0.75,
-                        title: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              jobCategoryList![index]['name'],
-                              style: const TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 15.62,
-                              ),
-                            ),
-                            Text(
-                              jobCategoryList![index]['emoji'],
-                              style: const TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 15.63,
-                              ),
-                            ),
-                          ],
+            height: 400,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 10,
+              ),
+              itemCount: jobCategoryLength!,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: Colors.white,
+                  child: CheckboxListTile(
+                    checkboxScaleFactor: 0.75,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          jobCategoryList![index]['name'],
+                          style: const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 15.62,
+                          ),
                         ),
-                        activeColor: Colors.pink,
-                        value: jobCategoryList![index]['selected'],
-                        // onChanged: (value) {
-                        //   setState(() {
-                            // sabaiAppData.jobCategoryInEng[index]['selected'] =
-                            //     value!;
-                        //   });
-                        // },
-                        onChanged: (value){
-                          whenOnChanged(value, index);
-                        },
-                      ),
-                    );
-                  })),
+                        Text(
+                          jobCategoryList![index]['emoji'],
+                          style: const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 15.63,
+                          ),
+                        ),
+                      ],
+                    ),
+                    activeColor: Colors.pink,
+                    value: jobCategoryList![index]['selected'],
+                    // onChanged: (value) {
+                    //   setState(() {
+                    // sabaiAppData.jobCategoryInEng[index]['selected'] =
+                    //     value!;
+                    //   });
+                    // },
+                    onChanged: (value) {
+                      whenOnChanged(value, index);
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

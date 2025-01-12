@@ -368,7 +368,7 @@ class _RegistrationControllerPageState
                       });
                     }),
                 SelectJobCategoryPage(
-                  jobCateoryLenght: sabaiAppData.jobCategoryInEng.length,
+                  jobCategoryLength: sabaiAppData.jobCategoryInEng.length,
                   jobCategoryList: sabaiAppData.jobCategoryInEng,
                   whenOnChanged: (value, index) {
                     setState(() {
@@ -448,18 +448,17 @@ class _RegistrationControllerPageState
   }
 }
 
-
 //back button
-                      // if (_currentPage > 0)
-                      //   TextButton(
-                      //     onPressed: () {
-                      //       _pageController.previousPage(
-                      //         duration: const Duration(milliseconds: 300),
-                      //         curve: Curves.easeInOut,
-                      //       );
-                      //       setState(() {
-                      //         _currentPage--;
-                      //       });
-                      //     },
-                      //     child: const Text("Back"),
-                      //   ),
+// if (_currentPage > 0)
+//   TextButton(
+//     onPressed: () {
+//       _pageController.previousPage(
+//         duration: const Duration(milliseconds: 300),
+//         curve: Curves.easeInOut,
+//       );
+//       setState(() {
+//         _currentPage--;
+//       });
+//     },
+//     child: const Text("Back"),
+//   ),
