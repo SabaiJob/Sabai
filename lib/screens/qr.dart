@@ -241,47 +241,67 @@ class _QrState extends State<Qr> {
                               ],
                             ),
                           )
-                        : const SizedBox(
-                            height: 1,
-                          ),
+                        : const SizedBox(),
                   ),
                   if (_selectedImage != null) ...[
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          child: Image.file(
-                            _selectedImage!.file,
-                            fit: BoxFit.fitWidth,
-                            height: 113,
-                            width: double.infinity,
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                insetPadding: const EdgeInsets.all(20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    _selectedImage!.file,
+                                    fit: BoxFit
+                                        .contain, 
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            child: Image.file(
+                              _selectedImage!.file,
+                              fit: BoxFit.fitWidth,
+                              height: 113,
+                              width: double.infinity,
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          right: 10,
-                          top: 10,
-                          child: GestureDetector(
-                            onTap: _clearImage,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 1, horizontal: 1),
-                              width: 16,
-                              height: 16,
-                              decoration: const BoxDecoration(
-                                  color: Color(0xFFF0F1F2),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4))),
-                              child: const Icon(
-                                Icons.clear,
-                                size: 12,
-                                color: primaryPinkColor,
+                          Positioned(
+                            right: 10,
+                            top: 10,
+                            child: GestureDetector(
+                              onTap: _clearImage,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 1, horizontal: 1),
+                                width: 16,
+                                height: 16,
+                                decoration: const BoxDecoration(
+                                    color: Color(0xFFF0F1F2),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4))),
+                                child: const Icon(
+                                  Icons.clear,
+                                  size: 12,
+                                  color: primaryPinkColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ]
                 ],
