@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_alertbox.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Posting extends StatefulWidget {
   const Posting({this.url, this.img, super.key});
@@ -27,7 +31,9 @@ class _PostingState extends State<Posting> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: const LeadingIcon(),
+        leading: LeadingIcon(
+          url: widget.url!,
+        ),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),
@@ -288,15 +294,42 @@ class RowWrapper extends StatelessWidget {
 }
 
 class LeadingIcon extends StatefulWidget {
-  const LeadingIcon({super.key});
+  const LeadingIcon({required this.url, super.key});
+
+  final String url;
 
   @override
   State<LeadingIcon> createState() => _LeadingIconState();
 }
 
 class _LeadingIconState extends State<LeadingIcon> {
+  Future<void> saveDraft(JobProvider jobProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('url', widget.url);
+    jobProvider.setDraft(true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NavigationHomepage(),
+      ),
+    );
+  }
+
+  Future<void> deleteDraft(JobProvider jobProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('url');
+    jobProvider.setDraft(false);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NavigationHomepage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var jobProvider = Provider.of<JobProvider>(context);
     return IconButton(
       onPressed: () {
         showDialog(
@@ -342,15 +375,21 @@ class _LeadingIconState extends State<LeadingIcon> {
                             height: 20,
                           ),
                           DraftTextButtons(
-                            function: () {},
+                            function: () {
+                              saveDraft(jobProvider);
+                            },
                             text: 'Save Draft',
                           ),
                           DraftTextButtons(
-                            function: () {},
+                            function: () {
+                              deleteDraft(jobProvider);
+                            },
                             text: 'Discard Post',
                           ),
                           DraftTextButtons(
-                            function: () {},
+                            function: () {
+                              Navigator.pop(context);
+                            },
                             text: 'Keep Editing',
                           ),
                         ],

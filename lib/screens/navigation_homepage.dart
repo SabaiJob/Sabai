@@ -6,7 +6,10 @@ import 'package:sabai_app/screens/contribution_pages/contribute_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
+import 'package:sabai_app/screens/contribution_pages/posting.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationHomepage extends StatefulWidget {
   final bool showButtonSheet;
@@ -37,76 +40,59 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     ];
   }
 
-  // void onTabChange(index) {
-  //   if (index == 1) {
-  //     showModalBottomSheet(
-  //       backgroundColor: Colors.transparent,
-  //       context: context,
-  //       isScrollControlled: true,
-  //       builder: (context) {
-  //         return DraggableScrollableSheet(
-  //           initialChildSize: 0.8,
-  //           maxChildSize: 0.9,
-  //           builder: (context, scrollController) {
-  //             return Container(
-  //               decoration: const BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.vertical(
-  //                   top: Radius.circular(20),
-  //                 ),
-  //               ),
-  //               child: PageView(
-  //                 children: const [
-  //                   ContributePage(),
-  //                   Text('B'),
-  //                 ],
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       },
-  //     );
-  //   } else {
-  //     setState(() {
-  //       currentIndex = index;
-  //     });
-  //   }
-  // }
-  void onTabChange(index) {
+  Future<String?> getDraft() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('url');
+  }
+
+  Future<void> onTabChange(index, JobProvider jobProvider) async {
     if (index == 1) {
-      showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        isScrollControlled:
-            true, // Ensures the bottom sheet adjusts to keyboard
-        builder: (context) {
-          return DraggableScrollableSheet(
-            initialChildSize: 0.8,
-            maxChildSize: 0.9,
-            builder: (context, scrollController) {
-              return Container(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context)
-                      .viewInsets
-                      .bottom, // Adjust padding
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
+      if (jobProvider.isDraft == true) {
+        String? url = await getDraft();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Posting(
+              url: url,
+            ),
+          ),
+        );
+      } else {
+        showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          isScrollControlled:
+              true, // Ensures the bottom sheet adjusts to keyboard
+          builder: (context) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.8,
+              maxChildSize: 0.9,
+              builder: (context, scrollController) {
+                return Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context)
+                        .viewInsets
+                        .bottom, // Adjust padding
                   ),
-                ),
-                child: PageView(
-                  children: const [
-                    ContributePage(),
-                    Text('B'),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      );
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  child: PageView(
+                    children: const [
+                      ContributePage(),
+                      Text('B'),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      }
+      ;
     } else {
       setState(() {
         currentIndex = index;
@@ -117,6 +103,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 90,
@@ -143,7 +130,10 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
                   fontSize: 10,
                 ),
           type: BottomNavigationBarType.fixed,
-          onTap: onTabChange,
+          //onTap: onTabChange,
+          onTap: (value) {
+            onTabChange(value, jobProvider);
+          },
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.apartment),

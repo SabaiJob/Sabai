@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class JobProvider extends ChangeNotifier {
+  bool _isDraft = false;
+
+  bool get isDraft {
+    return _isDraft;
+  }
+
+  void setDraft(bool isDraft) {
+    _isDraft = isDraft;
+    notifyListeners();
+  }
+
   final List<String> _allJobs = [
     'Barista',
     'Chef',
@@ -42,7 +53,7 @@ class JobProvider extends ChangeNotifier {
   }
 
   void addBestMatched(String category) {
-   // _bestMatched.clear(); // Clear previous matches
+    // _bestMatched.clear(); // Clear previous matches
     List<String> jobsToAdd = [];
 
     if (category.contains('Restaurant')) {
