@@ -102,6 +102,93 @@ class _QrState extends State<Qr> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
+                            // it works
+                            // onPressed: () async {
+                            //   if (Platform.isIOS) {
+                            //     var status = await Permission.photos.status;
+                            //     print(
+                            //         "Initial photo permission status: $status");
+
+                            //     if (status.isPermanentlyDenied) {
+                            //       // Show dialog explaining why we need permission and how to enable it
+                            //       if (context.mounted) {
+                            //         showDialog(
+                            //           context: context,
+                            //           builder: (BuildContext context) {
+                            //             return AlertDialog(
+                            //               title: const Text(
+                            //                   'Photos Access Required'),
+                            //               content: const Text(
+                            //                   'To save images, please enable Photos access in your device Settings:\n\n'
+                            //                   '1. Open Settings\n'
+                            //                   '2. Find Sabai App\n'
+                            //                   '3. Tap Photos\n'
+                            //                   '4. Select "All Photos" or "Selected Photos"'),
+                            //               actions: [
+                            //                 TextButton(
+                            //                   onPressed: () =>
+                            //                       Navigator.pop(context),
+                            //                   child: const Text('Cancel'),
+                            //                 ),
+                            //                 TextButton(
+                            //                   onPressed: () async {
+                            //                     Navigator.pop(context);
+                            //                     await openAppSettings();
+                            //                   },
+                            //                   child:
+                            //                       const Text('Open Settings'),
+                            //                 ),
+                            //               ],
+                            //             );
+                            //           },
+                            //         );
+                            //       }
+                            //       return; // Don't proceed with saving
+                            //     }
+
+                            //     if (status.isDenied) {
+                            //       status = await Permission.photos.request();
+                            //       print(
+                            //           "Photo permission status after request: $status");
+
+                            //       if (!status.isGranted) {
+                            //         if (context.mounted) {
+                            //           ScaffoldMessenger.of(context)
+                            //               .showSnackBar(
+                            //             const SnackBar(
+                            //               content: Text(
+                            //                   'Photos permission is required to save images'),
+                            //             ),
+                            //           );
+                            //         }
+                            //         return; // Don't proceed with saving
+                            //       }
+                            //     }
+                            //   }
+
+                            //   try {
+                            //     final saved =
+                            //         await ImageSaverUtil.saveNetworkImage(
+                            //             imageUrl);
+                            //     if (context.mounted) {
+                            //       ScaffoldMessenger.of(context).showSnackBar(
+                            //         SnackBar(
+                            //           content: Text(saved
+                            //               ? 'Image saved successfully!'
+                            //               : 'Failed to save image'),
+                            //         ),
+                            //       );
+                            //     }
+                            //   } catch (e) {
+                            //     print("Error saving image: $e");
+                            //     if (context.mounted) {
+                            //       ScaffoldMessenger.of(context).showSnackBar(
+                            //         SnackBar(content: Text('Error: $e')),
+                            //       );
+                            //     }
+                            //   }
+                            // },
+                            // siss hmue
                             onPressed: () async {
                               try {
                                 final saved =
@@ -202,8 +289,8 @@ class _QrState extends State<Qr> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      FileImage? image = await imagePickerHelper.pickImage(
-                          ImageSource.gallery);
+                      FileImage? image = await imagePickerHelper
+                          .pickImage(ImageSource.gallery);
                       if (image != null) {
                         setState(() {
                           _selectedImage = image;
@@ -259,8 +346,7 @@ class _QrState extends State<Qr> {
                                   borderRadius: BorderRadius.circular(12),
                                   child: Image.file(
                                     _selectedImage!.file,
-                                    fit: BoxFit
-                                        .contain, 
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               );
@@ -373,7 +459,7 @@ class _QrState extends State<Qr> {
     );
   }
 }
-
+// siss hmue
 class ImageSaverUtil {
   static Future<bool> saveNetworkImage(String imageUrl) async {
     try {
@@ -411,3 +497,188 @@ class ImageSaverUtil {
     }
   }
 }
+
+// it works
+// class ImageSaverUtil {
+//   static Future<bool> saveNetworkImage(String imageUrl) async {
+//     try {
+//       // Check platform
+//       if (!Platform.isAndroid && !Platform.isIOS) {
+//         print('Platform not supported for image saving');
+//         return false;
+//       }
+
+//       // Request permissions with better error handling
+//       if (Platform.isAndroid) {
+//         final storageStatus = await Permission.storage.status;
+//         if (storageStatus.isDenied) {
+//           final result = await Permission.storage.request();
+//           if (!result.isGranted) {
+//             print('Storage permission denied by user');
+//             return false;
+//           }
+//         }
+
+//         // For Android 10 and above
+//         if (storageStatus.isPermanentlyDenied) {
+//           print(
+//               'Storage permission permanently denied, please enable from settings');
+//           return false;
+//         }
+//       }
+
+//       if (Platform.isIOS) {
+//         final photosStatus = await Permission.photos.status;
+//         if (photosStatus.isDenied) {
+//           final result = await Permission.photos.request();
+//           if (!result.isGranted) {
+//             print('Photos permission denied by user');
+//             return false;
+//           }
+//         }
+
+//         if (photosStatus.isPermanentlyDenied) {
+//           print(
+//               'Photos permission permanently denied, please enable from settings');
+//           return false;
+//         }
+//       }
+
+//       // Download image with timeout and response validation
+//       final response = await Dio().get(
+//         imageUrl,
+//         options: Options(
+//           responseType: ResponseType.bytes,
+//           receiveTimeout: const Duration(seconds: 15),
+//           sendTimeout: const Duration(seconds: 15),
+//         ),
+//       );
+
+//       if (response.data == null || response.data.length == 0) {
+//         print('Downloaded image data is empty');
+//         return false;
+//       }
+
+//       // Save image with detailed result handling
+//       final result = await ImageGallerySaverPlus.saveImage(
+//         Uint8List.fromList(response.data),
+//         quality: 100,
+//         name: "sabai_${DateTime.now().millisecondsSinceEpoch}",
+//       );
+
+//       print('Image save result: $result');
+
+//       if (result == null) {
+//         print('Save result is null');
+//         return false;
+//       }
+
+//       return result['isSuccess'] ?? false;
+//     } catch (e, stackTrace) {
+//       print('Error saving image: $e');
+//       print('Stack trace: $stackTrace');
+//       return false;
+//     }
+//   }
+// }
+
+// class PermissionHandler {
+//   static Future<bool> handleImagePermissions(BuildContext context) async {
+//     if (Platform.isIOS) {
+//       final status = await Permission.photos.status;
+
+//       if (status.isDenied) {
+//         final result = await Permission.photos.request();
+//         if (!result.isGranted) {
+//           if (context.mounted) {
+//             _showPermissionDialog(
+//               context,
+//               'Photos Access Required',
+//               'Please allow access to your photo gallery to save images.',
+//             );
+//           }
+//           return false;
+//         }
+//       }
+
+//       if (status.isPermanentlyDenied) {
+//         if (context.mounted) {
+//           _showPermissionDialog(
+//             context,
+//             'Photos Access Required',
+//             'Please enable photos access in your device settings to save images.',
+//             showOpenSettings: true,
+//           );
+//         }
+//         return false;
+//       }
+
+//       return status.isGranted;
+//     }
+
+//     if (Platform.isAndroid) {
+//       final status = await Permission.storage.status;
+
+//       if (status.isDenied) {
+//         final result = await Permission.storage.request();
+//         if (!result.isGranted) {
+//           if (context.mounted) {
+//             _showPermissionDialog(
+//               context,
+//               'Storage Access Required',
+//               'Please allow access to your device storage to save images.',
+//             );
+//           }
+//           return false;
+//         }
+//       }
+
+//       if (status.isPermanentlyDenied) {
+//         if (context.mounted) {
+//           _showPermissionDialog(
+//             context,
+//             'Storage Access Required',
+//             'Please enable storage access in your device settings to save images.',
+//             showOpenSettings: true,
+//           );
+//         }
+//         return false;
+//       }
+
+//       return status.isGranted;
+//     }
+
+//     return false;
+//   }
+
+//   static void _showPermissionDialog(
+//     BuildContext context,
+//     String title,
+//     String message, {
+//     bool showOpenSettings = false,
+//   }) {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: Text(title),
+//           content: Text(message),
+//           actions: [
+//             TextButton(
+//               onPressed: () => Navigator.pop(context),
+//               child: const Text('Cancel'),
+//             ),
+//             if (showOpenSettings)
+//               TextButton(
+//                 onPressed: () {
+//                   openAppSettings();
+//                   Navigator.pop(context);
+//                 },
+//                 child: const Text('Open Settings'),
+//               ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+// }

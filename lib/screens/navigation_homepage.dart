@@ -98,7 +98,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
                       ContributePage(
                         whenUploadPhotoOnTap: whenUploadPhotoOnTap,
                       ),
-                      UploadPhotoPage(),
+                      const UploadPhotoPage(),
                     ],
                   ),
                 );
