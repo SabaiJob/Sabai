@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     var languageProvider = Provider.of<LanguageProvider>(context);
 
     List<bool> isSelected =
@@ -94,7 +95,7 @@ class _ProfileState extends State<Profile> {
                       onTap: () async {
                         //_pickImage(ImageSource.gallery);
                         //ImagePickerHelper.pickImage(ImageSource.gallery);
-                        FileImage? image = await ImagePickerHelper.pickImage(
+                        FileImage? image = await imagePickerHelper.pickImage(
                             ImageSource.gallery);
                         if (image != null) {
                           setState(() {

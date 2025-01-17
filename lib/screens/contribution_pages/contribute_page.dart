@@ -6,7 +6,8 @@ import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import '../../components/reusable_alertbox.dart';
 
 class ContributePage extends StatefulWidget {
-  const ContributePage({super.key});
+  Function() whenUploadPhotoOnTap;
+  ContributePage({super.key, required this.whenUploadPhotoOnTap});
 
   @override
   State<ContributePage> createState() => _ContributePageState();
@@ -98,6 +99,7 @@ class _ContributePageState extends State<ContributePage> {
                 children: [
                   Expanded(
                     child: TextField(
+                      style: const TextStyle(overflow: TextOverflow.ellipsis),
                       controller: linkController,
                       decoration: const InputDecoration(
                         hintStyle: TextStyle(
@@ -248,6 +250,7 @@ class _ContributePageState extends State<ContributePage> {
               height: 30,
             ),
             GestureDetector(
+              onTap: widget.whenUploadPhotoOnTap,
               child: Container(
                 width: double.infinity,
                 height: 42,

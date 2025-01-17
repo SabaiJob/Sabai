@@ -7,6 +7,7 @@ import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
+import 'package:sabai_app/screens/contribution_pages/upload_photo_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,16 @@ class NavigationHomepage extends StatefulWidget {
 }
 
 class _NavigationHomepageState extends State<NavigationHomepage> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  void whenUploadPhotoOnTap() {
+    _pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    setState(() {
+      _currentPage++;
+    });
+  }
+
   late List<Widget> widgetList;
   int currentIndex = 2;
   @override
@@ -81,9 +92,13 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
                     ),
                   ),
                   child: PageView(
-                    children: const [
-                      ContributePage(),
-                      Text('B'),
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      ContributePage(
+                        whenUploadPhotoOnTap: whenUploadPhotoOnTap,
+                      ),
+                      UploadPhotoPage(),
                     ],
                   ),
                 );

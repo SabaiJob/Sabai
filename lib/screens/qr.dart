@@ -41,6 +41,7 @@ class _QrState extends State<Qr> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -201,7 +202,7 @@ class _QrState extends State<Qr> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      FileImage? image = await ImagePickerHelper.pickImage(
+                      FileImage? image = await imagePickerHelper.pickImage(
                           ImageSource.gallery);
                       if (image != null) {
                         setState(() {

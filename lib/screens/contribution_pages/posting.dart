@@ -1,21 +1,23 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_alertbox.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Posting extends StatefulWidget {
-  const Posting({this.url, this.img, super.key});
+  const Posting({this.url, this.selectedImages, super.key});
 
   final String? url;
-  final String? img;
+  final List<XFile>? selectedImages;
 
   @override
   State<Posting> createState() => _PostingState();
@@ -24,16 +26,21 @@ class Posting extends StatefulWidget {
 class _PostingState extends State<Posting> {
   PreviewData? _previewData;
   final textController = TextEditingController();
+  ImagePickerHelper imagePickerHelper = ImagePickerHelper();
 
   @override
   Widget build(BuildContext context) {
-    final uri = Uri.tryParse(widget.url!);
+    final uri = widget.url != null ? Uri.tryParse(widget.url!) : null;
+    //final uri = Uri.tryParse(widget.url!);
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: LeadingIcon(
-          url: widget.url!,
-        ),
+        leading: widget.url != null
+            ? LeadingIcon(url: widget.url!)
+            : const BackButton(color: primaryPinkColor),
+        // leading: LeadingIcon(
+        //   url: widget.url!,
+        // ),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),
@@ -63,7 +70,6 @@ class _PostingState extends State<Posting> {
                       return const ReusableAlertBox();
                     },
                   );
-
                   Future.delayed(const Duration(seconds: 3), () {
                     Navigator.pop(context);
                     showDialog(
@@ -177,6 +183,8 @@ class _PostingState extends State<Posting> {
                       ],
                     ),
                   ),
+
+                  // TextField
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
@@ -188,48 +196,87 @@ class _PostingState extends State<Posting> {
                           fontFamily: 'Bricolage-R',
                           fontSize: 14,
                           color: Colors.grey,
-                        ), // Remove the default underline
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      if (uri != null && await canLaunchUrl(uri)) {
-                        await launchUrl(uri,
-                            mode: LaunchMode.externalApplication);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Could not launch ${widget.url}'),
-                          ),
-                        );
-                      }
-                    },
-                    child: Card(
-                      color: Colors.white,
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: LinkPreview(
-                          linkStyle: const TextStyle(
-                            color: Colors.blue,
-                            fontFamily: 'Bricolage-R',
-                            decoration: TextDecoration.none,
-                            fontSize: 12.5,
-                          ),
-                          enableAnimation: true,
-                          onPreviewDataFetched: (data) {
-                            setState(() {
-                              _previewData = data;
-                            });
-                          },
-                          previewData: _previewData,
-                          text: uri.toString(),
-                          width: MediaQuery.of(context).size.width,
                         ),
                       ),
                     ),
                   ),
+
+                  //Link Preview
+                  if (uri != null) ...[
+                    GestureDetector(
+                      onTap: () async {
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri,
+                              mode: LaunchMode.externalApplication);
+                        } else {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Could not launch ${widget.url}'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: LinkPreview(
+                            linkStyle: const TextStyle(
+                              color: Colors.blue,
+                              fontFamily: 'Bricolage-R',
+                              decoration: TextDecoration.none,
+                              fontSize: 12.5,
+                            ),
+                            enableAnimation: true,
+                            onPreviewDataFetched: (data) {
+                              setState(() {
+                                _previewData = data;
+                              });
+                            },
+                            previewData: _previewData,
+                            text: uri.toString(),
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  //Images Grid
+                  if (widget.selectedImages != null &&
+                      widget.selectedImages!.isNotEmpty) ...[
+                    SizedBox(
+                      height: 300,
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                        ),
+                        itemCount: widget.selectedImages!.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              print("Tapped on image ${index + 1}");
+                            },
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8.0)),
+                              child: Image.file(
+                                File(widget.selectedImages![index].path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),
@@ -249,6 +296,7 @@ class RowWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     return AnimatedPadding(
       curve: Curves.easeOut,
       padding: EdgeInsets.only(
@@ -456,3 +504,43 @@ class DraftTextButtons extends StatelessWidget {
     );
   }
 }
+
+ // Link Preview O
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     if (uri != null && await canLaunchUrl(uri)) {
+                  //       await launchUrl(uri,
+                  //           mode: LaunchMode.externalApplication);
+                  //     } else {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         SnackBar(
+                  //           content: Text('Could not launch ${widget.url}'),
+                  //         ),
+                  //       );
+                  //     }
+                  //   },
+                  //   child: Card(
+                  //     color: Colors.white,
+                  //     elevation: 2,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10.0),
+                  //       child: LinkPreview(
+                  //         linkStyle: const TextStyle(
+                  //           color: Colors.blue,
+                  //           fontFamily: 'Bricolage-R',
+                  //           decoration: TextDecoration.none,
+                  //           fontSize: 12.5,
+                  //         ),
+                  //         enableAnimation: true,
+                  //         onPreviewDataFetched: (data) {
+                  //           setState(() {
+                  //             _previewData = data;
+                  //           });
+                  //         },
+                  //         previewData: _previewData,
+                  //         text: uri.toString(),
+                  //         width: MediaQuery.of(context).size.width,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
