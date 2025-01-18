@@ -27,7 +27,19 @@ class _PostingState extends State<Posting> {
   PreviewData? _previewData;
   final textController = TextEditingController();
   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+  List<XFile>? _images = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _images = widget.selectedImages ?? [];
+  }
 
+  void _addImages(List<XFile> newImages) {
+    setState(() {
+      _images!.addAll(newImages);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final uri = widget.url != null ? Uri.tryParse(widget.url!) : null;
@@ -246,8 +258,7 @@ class _PostingState extends State<Posting> {
                   ],
 
                   //Images Grid
-                  if (widget.selectedImages != null &&
-                      widget.selectedImages!.isNotEmpty) ...[
+                  if (_images != null) ...[
                     SizedBox(
                       height: 300,
                       child: GridView.builder(
@@ -258,7 +269,7 @@ class _PostingState extends State<Posting> {
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
                         ),
-                        itemCount: widget.selectedImages!.length,
+                        itemCount:  _images!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
@@ -268,7 +279,7 @@ class _PostingState extends State<Posting> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(8.0)),
                               child: Image.file(
-                                File(widget.selectedImages![index].path),
+                                File(_images![index].path),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -281,9 +292,9 @@ class _PostingState extends State<Posting> {
               ),
             ),
           ),
-          const Align(
+          Align(
             alignment: Alignment.bottomLeft,
-            child: RowWrapper(),
+            child: RowWrapper(whenOnPressedAddPhoto: _addImages,),
           )
         ],
       ),
@@ -292,7 +303,8 @@ class _PostingState extends State<Posting> {
 }
 
 class RowWrapper extends StatelessWidget {
-  const RowWrapper({super.key});
+  final Function(List<XFile>) whenOnPressedAddPhoto;
+  const RowWrapper({super.key, required this.whenOnPressedAddPhoto});
 
   @override
   Widget build(BuildContext context) {
@@ -321,7 +333,16 @@ class RowWrapper extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () async{
+                final images = await imagePickerHelper.pickMultipleImage();
+                if(images.isNotEmpty){
+                  whenOnPressedAddPhoto(images);
+                }else{
+                   ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No images selected')),
+                  );
+                }
+              },
               icon: const Icon(
                 Icons.broken_image_outlined,
                 color: primaryPinkColor,
