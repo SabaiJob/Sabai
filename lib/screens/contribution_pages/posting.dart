@@ -40,6 +40,8 @@ class _PostingState extends State<Posting> {
       _images!.addAll(newImages);
     });
   }
+  
+
   @override
   Widget build(BuildContext context) {
     final uri = widget.url != null ? Uri.tryParse(widget.url!) : null;
@@ -256,33 +258,77 @@ class _PostingState extends State<Posting> {
                       ),
                     ),
                   ],
-
+                  const SizedBox(
+                    height: 20,
+                  ),
                   //Images Grid
                   if (_images != null) ...[
                     SizedBox(
-                      height: 300,
+                      height: 400,
                       child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          //crossAxisCount: (MediaQuery.of(context).size.width / 200).floor(),
+                          crossAxisCount: 2,
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
                         ),
-                        itemCount:  _images!.length,
+                        itemCount: _images!.length,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              print("Tapped on image ${index + 1}");
-                            },
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8.0)),
-                              child: Image.file(
-                                File(_images![index].path),
-                                fit: BoxFit.cover,
+                          return Stack(
+                            fit: StackFit.expand,
+                            alignment: Alignment.topRight,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                insetPadding: const EdgeInsets.all(20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    File(_images![index].path),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              );
+                            });
+                                  print("Tapped on image ${index + 1}");
+                                },
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8.0)),
+                                  child: Image.file(
+                                    File(_images![index].path),
+                                    fit: BoxFit.cover,
+                                    repeat: ImageRepeat.noRepeat,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Positioned(
+                                top: 2,
+                                right: 2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _images!.removeAt(index);
+                                      print("Successfully remove image ${index + 1}");
+                                    });
+                                  },
+                                  child:  const Icon(
+                                    CupertinoIcons.xmark_circle_fill,
+                                    size: 25,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              )
+                            ],
                           );
                         },
                       ),
@@ -294,7 +340,9 @@ class _PostingState extends State<Posting> {
           ),
           Align(
             alignment: Alignment.bottomLeft,
-            child: RowWrapper(whenOnPressedAddPhoto: _addImages,),
+            child: RowWrapper(
+              whenOnPressedAddPhoto: _addImages,
+            ),
           )
         ],
       ),
@@ -333,12 +381,12 @@ class RowWrapper extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () async{
+              onPressed: () async {
                 final images = await imagePickerHelper.pickMultipleImage();
-                if(images.isNotEmpty){
+                if (images.isNotEmpty) {
                   whenOnPressedAddPhoto(images);
-                }else{
-                   ScaffoldMessenger.of(context).showSnackBar(
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('No images selected')),
                   );
                 }
@@ -565,3 +613,13 @@ class DraftTextButtons extends StatelessWidget {
                   //     ),
                   //   ),
                   // ),
+
+  // void _addImages(List<XFile> newImages) {
+  //   setState(() {
+  //     // Filter out images that are already in the _images list
+  //     newImages.removeWhere((newImage) =>
+  //         _images!.any((existingImage) => existingImage.path == newImage.path));
+  //     // Add the remaining new images
+  //     _images!.addAll(newImages);
+  //   });
+  // }
