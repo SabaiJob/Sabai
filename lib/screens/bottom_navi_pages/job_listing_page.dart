@@ -13,7 +13,10 @@ import 'package:sabai_app/services/language_provider.dart';
 
 class JobListingPage extends StatefulWidget {
   final bool showBottomSheet;
-  const JobListingPage({super.key, this.showBottomSheet = false});
+  const JobListingPage({
+    super.key,
+    this.showBottomSheet = false,
+  });
 
   @override
   State<JobListingPage> createState() => _JobListingPageState();

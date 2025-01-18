@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/change_language_dropdown_button.dart';
+import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/log_in_controller_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/registration_controller_page.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../components/walkthrough_button.dart';
 import '../services/language_provider.dart';
 
 class Walkthrough extends StatefulWidget {
@@ -248,100 +252,44 @@ class _WalkthroughState extends State<Walkthrough> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      width: 343,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegistrationControllerPage(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xffFF3997),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8), // Set the border radius
-                          ),
-                        ),
-                        child: languageProvider.lan == 'English'
-                            ? Text(
-                                'Get Started',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              )
-                            : const Text(
-                                'အကောင့်အသစ်ပြုလုပ်ရန်',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Walone-B',
-                                ),
-                              ),
-                      ),
+                    Button(
+                      languageProvider: languageProvider,
+                      textEng: 'Get Started',
+                      textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
+                      color: primaryPinkColor,
+                      widget: const RegistrationControllerPage(),
+                      tColor: Colors.white,
+                      bColor: primaryPinkColor,
+                      isGuest: false,
                     ),
                     const SizedBox(
                       height: 13,
                     ),
-                    Container(
-                      width: 343,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color(0xffFF3997),
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LogInControllerPage(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8), // Set the border radius
-                          ),
-                        ),
-                        child: languageProvider.lan == "English"
-                            ? Text(
-                                'Log In',
-                                style: GoogleFonts.bricolageGrotesque(
-                                  textStyle: const TextStyle(
-                                    color: Color(0xffFF3997),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              )
-                            : const Text(
-                                '၀င်ရောက်ရန်',
-                                style: TextStyle(
-                                  color: Color(0xffFF3997),
-                                  fontSize: 14,
-                                  fontFamily: 'Walone-B',
-                                ),
-                              ),
-                      ),
+                    Button(
+                      languageProvider: languageProvider,
+                      textEng: 'Log In',
+                      textMm: '၀င်ရောက်ရန်',
+                      color: Colors.white,
+                      widget: const LogInControllerPage(),
+                      tColor: primaryPinkColor,
+                      bColor: primaryPinkColor,
+                      isGuest: false,
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 13,
+                    ),
+                    Button(
+                      languageProvider: languageProvider,
+                      textEng: 'Continue as guest',
+                      textMm: '၀င်ရောက်ရန်',
+                      color: backgroundColor,
+                      widget: const JobListingPage(),
+                      tColor: primaryPinkColor,
+                      bColor: Colors.white,
+                      isGuest: true,
+                    ),
+                    const SizedBox(
+                      height: 30,
                     )
                   ],
                 ),

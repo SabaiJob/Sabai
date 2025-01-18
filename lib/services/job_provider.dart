@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class JobProvider extends ChangeNotifier {
+  bool _isGuest = false;
+
+  bool get isGuest {
+    return _isGuest;
+  }
+
+  void setGuest(bool isGuest) {
+    _isGuest = isGuest;
+  }
+
   bool _isDraft = false;
 
   bool get isDraft {

@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/walkthrough_button.dart';
+import 'package:sabai_app/constants.dart';
 import '../screens/job_details_page.dart';
+import '../screens/registration_&_login_pages/log_in_controller_page.dart';
+import '../screens/registration_&_login_pages/registration_controller_page.dart';
 import '../services/job_provider.dart';
 import '../services/language_provider.dart';
 
@@ -23,8 +27,17 @@ class _WorkCardState extends State<WorkCard> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const JobDetailsPage()));
+        if (jobProvider.isGuest == true) {
+          showBottomSheet(
+            context: context,
+            builder: (context) {
+              return guestBotoom(language);
+            },
+          );
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const JobDetailsPage()));
+        }
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -173,7 +186,7 @@ class _WorkCardState extends State<WorkCard> {
                                 ),
                               ),
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                     ],
                   ),
                   const SizedBox(
@@ -440,6 +453,98 @@ class _WorkCardState extends State<WorkCard> {
           ],
         ),
       ),
+    );
+  }
+
+  BottomSheet guestBotoom(LanguageProvider language) {
+    return BottomSheet(
+      backgroundColor: Colors.white,
+      onClosing: () {},
+      builder: (context) {
+        return SizedBox(
+          height: 500,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Stack(
+              children: [
+                Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'images/guest.png',
+                          width: 196,
+                          height: 196,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'You\'re in Guest Mode',
+                          style: TextStyle(
+                              fontSize: 19.53, fontFamily: 'Bricolage-SMB,'),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          textAlign: TextAlign.center,
+                          'To explore jobs tailored to your skills and\npreferences, please sign up or log in.',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 12.5,
+                            color: Color(0xff6C757D),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Button(
+                          languageProvider: language,
+                          textEng: 'Get Started',
+                          textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
+                          color: primaryPinkColor,
+                          widget: const RegistrationControllerPage(),
+                          tColor: Colors.white,
+                          bColor: primaryPinkColor,
+                          isGuest: true,
+                        ),
+                        const SizedBox(
+                          height: 13,
+                        ),
+                        Button(
+                          languageProvider: language,
+                          textEng: 'Log In',
+                          textMm: '၀င်ရောက်ရန်',
+                          color: Colors.white,
+                          widget: const LogInControllerPage(),
+                          tColor: primaryPinkColor,
+                          bColor: primaryPinkColor,
+                          isGuest: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      CupertinoIcons.xmark_circle,
+                      size: 28,
+                      color: primaryPinkColor,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
