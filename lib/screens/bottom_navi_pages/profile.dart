@@ -78,10 +78,34 @@ class _ProfileState extends State<Profile> {
               Stack(
                 children: [
                   _selectedImage != null
-                      ? CircleAvatar(
-                          radius: 40,
-                          foregroundImage: _selectedImage!,
-                        )
+                      ? GestureDetector(
+                        onTap: (){
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: ClipOval(
+                                  child: Image.file(
+                                    _selectedImage!.file,
+                                    width: 300,
+                                    height: 300,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                )
+                              );
+                            });
+                        },
+                        child: CircleAvatar(
+                            radius: 40,
+                            foregroundImage: _selectedImage!,
+                          ),
+                      )
                       : CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.grey[400],
