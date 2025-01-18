@@ -285,7 +285,7 @@ class _WalkthroughState extends State<Walkthrough> {
                       color: backgroundColor,
                       widget: const JobListingPage(),
                       tColor: primaryPinkColor,
-                      bColor: Colors.white,
+                      bColor: Colors.transparent,
                       isGuest: true,
                     ),
                     const SizedBox(

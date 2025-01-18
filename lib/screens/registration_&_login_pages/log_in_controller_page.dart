@@ -5,6 +5,7 @@ import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/log_in_form_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import '../../constants.dart';
 
@@ -39,10 +40,11 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   }
 
   // OTP Code Verification
-  void _handleOTPVerificationPage(String enteredPinCode) {
+  void _handleOTPVerificationPage(String enteredPinCode, JobProvider jobProvider) {
     if (_currentPage == 1) {
       String enteredPinCode = _pinCodeController.text.trim();
       if (enteredPinCode == sabaiAppData.fixedPinNumber) {
+        jobProvider.setGuest(false);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const NavigationHomepage(showButtonSheet: false,)));
         // _pageController.nextPage(
         //   duration: const Duration(milliseconds: 300),
@@ -58,6 +60,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -99,7 +102,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     phoneNumberController: _phoneNumberController),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    whenOnComplete: _handleOTPVerificationPage)
+                    whenOnComplete: (value){
+                      _handleOTPVerificationPage(value, jobProvider);
+                    })
               ],
             ))
           ],

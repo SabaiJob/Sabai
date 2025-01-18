@@ -8,6 +8,7 @@ import 'package:sabai_app/screens/registration_&_login_pages/registration_additi
 import 'package:sabai_app/screens/registration_&_login_pages/registration_user_info_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
 import 'package:sabai_app/screens/success_page.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -166,10 +167,11 @@ class _RegistrationControllerPageState
   }
 
   // OTP Code Verification
-  void _handleOTPVerificationPage(String enteredPinCode) {
+  void _handleOTPVerificationPage(String enteredPinCode, JobProvider jobProvider) {
     if (_currentPage == 1) {
       String enteredPinCode = _pinCodeController.text.trim();
       if (enteredPinCode == sabaiAppData.fixedPinNumber) {
+        jobProvider.setGuest(false);
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -238,6 +240,7 @@ class _RegistrationControllerPageState
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -306,7 +309,9 @@ class _RegistrationControllerPageState
                     }),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    whenOnComplete: _handleOTPVerificationPage),
+                    whenOnComplete: (value){
+                      _handleOTPVerificationPage(value, jobProvider);
+                    }),
                 RegistrationAdditionalInfoPage(
                     isProvinceError: _isProvinceError,
                     selectedProvince: _selectedProvince,
