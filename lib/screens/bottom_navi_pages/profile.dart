@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
@@ -82,25 +82,132 @@ class _ProfileState extends State<Profile> {
                           radius: 40,
                           foregroundImage: _selectedImage!,
                         )
-                      : const CircleAvatar(
+                      : CircleAvatar(
                           radius: 40,
-                          foregroundImage: AssetImage(
-                            'icons/temp1.png',
+                          backgroundColor: Colors.grey[400],
+                          child: Icon(
+                            Icons.person,
+                            size: 50.0,
+                            color: Colors.grey[200],
+                            blendMode: BlendMode.luminosity,
                           ),
                         ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: GestureDetector(
-                      onTap: () async {
-                        //_pickImage(ImageSource.gallery);
-                        //ImagePickerHelper.pickImage(ImageSource.gallery);
-                        FileImage? image = await imagePickerHelper.pickImage(
-                            ImageSource.gallery);
-                        if (image != null) {
-                          setState(() {
-                            _selectedImage = image;
-                          });
+                      onTap: () {
+                        if (Platform.isIOS) {
+                          showCupertinoModalPopup(
+                              context: context,
+                              builder: (context) => CupertinoActionSheet(
+                                    actions: [
+                                      CupertinoActionSheetAction(
+                                        onPressed: () async {
+                                          FileImage? image =
+                                              await imagePickerHelper.pickImage(
+                                                  ImageSource.gallery);
+                                          if (image != null) {
+                                            setState(() {
+                                              _selectedImage = image;
+                                            });
+                                          }
+                                        },
+                                        child: Text('Upload New Picture',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[600],
+                                            )),
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        onPressed: () {
+                                          setState(() {
+                                            _selectedImage = null;
+                                            
+                                          });
+                                        },
+                                        child: Text('Remove Profile Picture',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[600],
+                                            )),
+                                      ),
+                                    ],
+                                  ));
+                        }
+                        if (Platform.isAndroid) {
+                          showModalBottomSheet(
+                              backgroundColor: Colors.white,
+                              scrollControlDisabledMaxHeightRatio: 0.25,
+                              context: context,
+                              builder: (context) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          onPressed: () async {
+                                            FileImage? image =
+                                                await imagePickerHelper
+                                                    .pickImage(
+                                                        ImageSource.gallery);
+                                            if (image != null) {
+                                              setState(() {
+                                                _selectedImage = image;
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(Icons.image,
+                                              size: 20,
+                                              color: Colors.grey[600]),
+                                          label: Text(
+                                            'Update Profile Picture',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey[600]),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 12, horizontal: 16),
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 247, 226, 233),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        OutlinedButton.icon(
+                                          onPressed: () {
+                                            setState(() {
+                                              _selectedImage = null;
+                                            });
+                                          },
+                                          icon: Icon(Icons.delete,
+                                              size: 20,
+                                              color: Colors.grey[600]),
+                                          label: Text(
+                                            'Remove Profile Picture',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey[600]),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 12, horizontal: 16),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
                         }
                       },
                       child: Container(
