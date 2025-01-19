@@ -13,7 +13,393 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Posting extends StatefulWidget {
+// class Posting extends StatefulWidget {
+//   const Posting({this.url, this.selectedImages, super.key});
+
+//   final String? url;
+//   final List<XFile>? selectedImages;
+
+//   @override
+//   State<Posting> createState() => _PostingState();
+// }
+
+// class _PostingState extends State<Posting> {
+//   PreviewData? _previewData;
+//   final textController = TextEditingController();
+//   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+//   List<XFile>? _images = [];
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     _images = widget.selectedImages ?? [];
+//   }
+
+//   void _addImages(List<XFile> newImages) {
+//     setState(() {
+//       _images!.addAll(newImages);
+//     });
+//   }
+  
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final uri = widget.url != null ? Uri.tryParse(widget.url!) : null;
+//     //final uri = Uri.tryParse(widget.url!);
+//     return Scaffold(
+//       backgroundColor: backgroundColor,
+      // appBar: AppBar(
+      //   leading: widget.url != null
+      //       ? LeadingIcon(url: widget.url!)
+      //       : const BackButton(color: primaryPinkColor),
+      //   // leading: LeadingIcon(
+      //   //   url: widget.url!,
+      //   // ),
+      //   iconTheme: const IconThemeData(
+      //     color: primaryPinkColor,
+      //   ),
+      //   backgroundColor: backgroundColor,
+      //   title: const Text(
+      //     'Post',
+      //     style: appBarTitleStyleEng,
+      //   ),
+      //   centerTitle: true,
+      //   actions: [
+      //     Padding(
+      //       padding: const EdgeInsets.only(right: 15.0),
+      //       child: SizedBox(
+      //         width: 78,
+      //         height: 35,
+      //         child: TextButton(
+      //           style: TextButton.styleFrom(
+      //             backgroundColor: primaryPinkColor,
+      //             shape: RoundedRectangleBorder(
+      //               borderRadius: BorderRadius.circular(4),
+      //             ),
+      //           ),
+      //           onPressed: () {
+      //             showDialog(
+      //               context: context,
+      //               builder: (context) {
+      //                 return const ReusableAlertBox();
+      //               },
+      //             );
+      //             Future.delayed(const Duration(seconds: 3), () {
+      //               Navigator.pop(context);
+      //               showDialog(
+      //                   context: context,
+      //                   builder: (context) {
+      //                     return Dialog(
+      //                       backgroundColor: Colors.white,
+      //                       child: SizedBox(
+      //                         height: 340,
+      //                         width: 324,
+      //                         child: Column(
+      //                           mainAxisAlignment:
+      //                               MainAxisAlignment.spaceEvenly,
+      //                           children: [
+      //                             Image.asset(
+      //                               'images/contribute_success.png',
+      //                               width: 140,
+      //                               height: 140,
+      //                             ),
+      //                             const Text(
+      //                               '🎉 Woohoo! Thank You!',
+      //                               style: TextStyle(
+      //                                 fontFamily: 'Bricolage-SMB',
+      //                                 fontSize: 19.53,
+      //                               ),
+      //                             ),
+      //                             const Text(
+      //                               textAlign: TextAlign.center,
+      //                               'We’ll review your contribution and let\nyou know when it’s ready!',
+      //                               style: TextStyle(
+      //                                 fontFamily: 'Bricolage-R',
+      //                                 fontSize: 15.63,
+      //                                 color: Color(0xff6C757D),
+      //                               ),
+      //                             ),
+      //                             SizedBox(
+      //                               width: 292,
+      //                               height: 35,
+      //                               child: TextButton(
+      //                                 style: TextButton.styleFrom(
+      //                                   shape: RoundedRectangleBorder(
+      //                                     borderRadius:
+      //                                         BorderRadius.circular(8),
+      //                                   ),
+      //                                   backgroundColor: primaryPinkColor,
+      //                                 ),
+      //                                 onPressed: () {
+      //                                   Navigator.pushReplacement(
+      //                                     context,
+      //                                     MaterialPageRoute(
+      //                                       builder: (context) =>
+      //                                           const NavigationHomepage(),
+      //                                     ),
+      //                                   );
+      //                                 },
+      //                                 child: const Text(
+      //                                   'Done',
+      //                                   style: TextStyle(
+      //                                     fontFamily: 'Bricolage-R',
+      //                                     fontSize: 12.5,
+      //                                     color: Colors.white,
+      //                                   ),
+      //                                 ),
+      //                               ),
+      //                             )
+      //                           ],
+      //                         ),
+      //                       ),
+      //                     );
+      //                   });
+      //             });
+      //           },
+      //           child: const Text(
+      //             'Contribute',
+      //             style: TextStyle(
+      //               fontSize: 10,
+      //               fontFamily: 'Bricolage-B',
+      //               color: Colors.white,
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     )
+      //   ],
+      // ),
+//       body: Stack(
+//         children: [
+//           SingleChildScrollView(
+//             child: Padding(
+//               padding: const EdgeInsets.all(15.0),
+//               child: Column(
+//                 children: [
+//                   SizedBox(
+//                     width: double.infinity,
+//                     child: Wrap(
+//                       alignment: WrapAlignment.start,
+//                       crossAxisAlignment: WrapCrossAlignment.center,
+//                       children: [
+//                         Image.asset(
+//                           'images/avatar2.png',
+//                           width: 40,
+//                           height: 40,
+//                         ),
+//                         const Text(
+//                           'Cameron Williamson',
+//                           style: TextStyle(
+//                             fontSize: 15.63,
+//                             fontFamily: 'Bricolage-SMB',
+//                           ),
+//                         )
+//                       ],
+//                     ),
+//                   ),
+
+//                   // TextField
+//                   Container(
+//                     padding: const EdgeInsets.symmetric(horizontal: 10),
+//                     child: TextField(
+//                       controller: textController,
+//                       decoration: const InputDecoration(
+//                         border: InputBorder.none,
+//                         hintText: 'Say something',
+//                         hintStyle: TextStyle(
+//                           fontFamily: 'Bricolage-R',
+//                           fontSize: 14,
+//                           color: Colors.grey,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+
+//                   //Link Preview
+//                   if (uri != null) ...[
+//                     GestureDetector(
+//                       onTap: () async {
+//                         if (await canLaunchUrl(uri)) {
+//                           await launchUrl(uri,
+//                               mode: LaunchMode.externalApplication);
+//                         } else {
+//                           if (mounted) {
+//                             ScaffoldMessenger.of(context).showSnackBar(
+//                               SnackBar(
+//                                 content: Text('Could not launch ${widget.url}'),
+//                               ),
+//                             );
+//                           }
+//                         }
+//                       },
+//                       child: Card(
+//                         color: Colors.white,
+//                         elevation: 2,
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(10.0),
+//                           child: LinkPreview(
+//                             linkStyle: const TextStyle(
+//                               color: Colors.blue,
+//                               fontFamily: 'Bricolage-R',
+//                               decoration: TextDecoration.none,
+//                               fontSize: 12.5,
+//                             ),
+//                             enableAnimation: true,
+//                             onPreviewDataFetched: (data) {
+//                               setState(() {
+//                                 _previewData = data;
+//                               });
+//                             },
+//                             previewData: _previewData,
+//                             text: uri.toString(),
+//                             width: MediaQuery.of(context).size.width,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                   const SizedBox(
+//                     height: 20,
+//                   ),
+//                   //Images Grid
+//                   if (_images != null) ...[
+//                     SizedBox(
+//                       height: 600,
+//                       child: GridView.builder(
+//                         gridDelegate:
+//                             const SliverGridDelegateWithFixedCrossAxisCount(
+//                           childAspectRatio: 1,
+//                           //crossAxisCount: (MediaQuery.of(context).size.width / 200).floor(),
+//                           crossAxisCount: 2,
+//                           crossAxisSpacing: 8.0,
+//                           mainAxisSpacing: 8.0,
+//                         ),
+//                         itemCount: _images!.length,
+//                         itemBuilder: (context, index) {
+//                           return Stack(
+//                             fit: StackFit.expand,
+//                             alignment: Alignment.topRight,
+//                             children: [
+//                               GestureDetector(
+//                                 onTap: () {
+//                                   showDialog(
+//                             context: context,
+//                             builder: (context) {
+//                               return Dialog(
+//                                 insetPadding: const EdgeInsets.all(20),
+//                                 shape: RoundedRectangleBorder(
+//                                   borderRadius: BorderRadius.circular(12),
+//                                 ),
+//                                 child: ClipRRect(
+//                                   borderRadius: BorderRadius.circular(12),
+//                                   child: Image.file(
+//                                     File(_images![index].path),
+//                                     fit: BoxFit.contain,
+//                                   ),
+//                                 ),
+//                               );
+//                             });
+//                                   print("Tapped on image ${index + 1}");
+//                                 },
+//                                 child: ClipRRect(
+//                                   borderRadius: const BorderRadius.all(
+//                                       Radius.circular(8.0)),
+//                                   child: Image.file(
+//                                     File(_images![index].path),
+//                                     fit: BoxFit.cover,
+//                                     repeat: ImageRepeat.noRepeat,
+//                                   ),
+//                                 ),
+//                               ),
+//                               Positioned(
+//                                 top: 2,
+//                                 right: 2,
+//                                 child: GestureDetector(
+//                                   onTap: () {
+//                                     setState(() {
+//                                       _images!.removeAt(index);
+//                                       print("Successfully remove image ${index + 1}");
+//                                     });
+//                                   },
+//                                   child:  const Icon(
+//                                     CupertinoIcons.xmark_circle_fill,
+//                                     size: 25,
+//                                     color: Colors.white70,
+//                                   ),
+//                                 ),
+//                               )
+//                             ],
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                   ]
+//                 ],
+//               ),
+//             ),
+//           ),
+//           Align(
+//             alignment: Alignment.bottomLeft,
+//             child: RowWrapper(
+//               whenOnPressedAddPhoto: _addImages,
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+ // Link Preview O
+                  // GestureDetector(
+                  //   onTap: () async {
+                  //     if (uri != null && await canLaunchUrl(uri)) {
+                  //       await launchUrl(uri,
+                  //           mode: LaunchMode.externalApplication);
+                  //     } else {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         SnackBar(
+                  //           content: Text('Could not launch ${widget.url}'),
+                  //         ),
+                  //       );
+                  //     }
+                  //   },
+                  //   child: Card(
+                  //     color: Colors.white,
+                  //     elevation: 2,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(10.0),
+                  //       child: LinkPreview(
+                  //         linkStyle: const TextStyle(
+                  //           color: Colors.blue,
+                  //           fontFamily: 'Bricolage-R',
+                  //           decoration: TextDecoration.none,
+                  //           fontSize: 12.5,
+                  //         ),
+                  //         enableAnimation: true,
+                  //         onPreviewDataFetched: (data) {
+                  //           setState(() {
+                  //             _previewData = data;
+                  //           });
+                  //         },
+                  //         previewData: _previewData,
+                  //         text: uri.toString(),
+                  //         width: MediaQuery.of(context).size.width,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
+  // void _addImages(List<XFile> newImages) {
+  //   setState(() {
+  //     // Filter out images that are already in the _images list
+  //     newImages.removeWhere((newImage) =>
+  //         _images!.any((existingImage) => existingImage.path == newImage.path));
+  //     // Add the remaining new images
+  //     _images!.addAll(newImages);
+  //   });
+  // }
+  class Posting extends StatefulWidget {
   const Posting({this.url, this.selectedImages, super.key});
 
   final String? url;
@@ -28,11 +414,22 @@ class _PostingState extends State<Posting> {
   final textController = TextEditingController();
   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
   List<XFile>? _images = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _images = widget.selectedImages ?? [];
+    _initializeImages();
+  }
+
+  void _initializeImages() {
+    if (widget.selectedImages != null) {
+      _images = widget.selectedImages;
+    } else if (widget.url != null) {
+      // Check if the URL is a file path (from camera)
+      if (!widget.url!.startsWith('http') && !widget.url!.startsWith('https')) {
+        _images = [XFile(widget.url!)];
+      }
+    }
   }
 
   void _addImages(List<XFile> newImages) {
@@ -40,15 +437,88 @@ class _PostingState extends State<Posting> {
       _images!.addAll(newImages);
     });
   }
-  
+
+  Widget _buildImageGrid() {
+    if (_images == null || _images!.isEmpty) return const SizedBox();
+
+    return SizedBox(
+      height: 600,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 1,
+          crossAxisCount: 2,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+        itemCount: _images!.length,
+        itemBuilder: (context, index) {
+          return Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.topRight,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        insetPadding: const EdgeInsets.all(20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.file(
+                            File(_images![index].path),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  child: Image.file(
+                    File(_images![index].path),
+                    fit: BoxFit.cover,
+                    repeat: ImageRepeat.noRepeat,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 2,
+                right: 2,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _images!.removeAt(index);
+                    });
+                  },
+                  child: const Icon(
+                    CupertinoIcons.xmark_circle_fill,
+                    size: 25,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final uri = widget.url != null ? Uri.tryParse(widget.url!) : null;
-    //final uri = Uri.tryParse(widget.url!);
+    final uri = widget.url != null && 
+               (widget.url!.startsWith('http') || widget.url!.startsWith('https')) 
+               ? Uri.tryParse(widget.url!) 
+               : null;
+
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: AppBar(
+            appBar: AppBar(
         leading: widget.url != null
             ? LeadingIcon(url: widget.url!)
             : const BackButton(color: primaryPinkColor),
@@ -79,6 +549,7 @@ class _PostingState extends State<Posting> {
                 ),
                 onPressed: () {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) {
                       return const ReusableAlertBox();
@@ -87,6 +558,7 @@ class _PostingState extends State<Posting> {
                   Future.delayed(const Duration(seconds: 3), () {
                     Navigator.pop(context);
                     showDialog(
+                      barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return Dialog(
@@ -176,6 +648,7 @@ class _PostingState extends State<Posting> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
+                  // User info section
                   SizedBox(
                     width: double.infinity,
                     child: Wrap(
@@ -198,7 +671,7 @@ class _PostingState extends State<Posting> {
                     ),
                   ),
 
-                  // TextField
+                  // Text input field
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
@@ -215,19 +688,16 @@ class _PostingState extends State<Posting> {
                     ),
                   ),
 
-                  //Link Preview
+                  // Link preview if URL is provided
                   if (uri != null) ...[
                     GestureDetector(
                       onTap: () async {
                         if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri,
-                              mode: LaunchMode.externalApplication);
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
                         } else {
                           if (mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Could not launch ${widget.url}'),
-                              ),
+                              SnackBar(content: Text('Could not launch ${widget.url}')),
                             );
                           }
                         }
@@ -258,82 +728,10 @@ class _PostingState extends State<Posting> {
                       ),
                     ),
                   ],
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  //Images Grid
-                  if (_images != null) ...[
-                    SizedBox(
-                      height: 400,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 1,
-                          //crossAxisCount: (MediaQuery.of(context).size.width / 200).floor(),
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 8.0,
-                          mainAxisSpacing: 8.0,
-                        ),
-                        itemCount: _images!.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            fit: StackFit.expand,
-                            alignment: Alignment.topRight,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                insetPadding: const EdgeInsets.all(20),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    File(_images![index].path),
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              );
-                            });
-                                  print("Tapped on image ${index + 1}");
-                                },
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8.0)),
-                                  child: Image.file(
-                                    File(_images![index].path),
-                                    fit: BoxFit.cover,
-                                    repeat: ImageRepeat.noRepeat,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 2,
-                                right: 2,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _images!.removeAt(index);
-                                      print("Successfully remove image ${index + 1}");
-                                    });
-                                  },
-                                  child:  const Icon(
-                                    CupertinoIcons.xmark_circle_fill,
-                                    size: 25,
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ]
+                  const SizedBox(height: 20),
+                  
+                  // Images grid
+                  _buildImageGrid(),
                 ],
               ),
             ),
@@ -343,7 +741,7 @@ class _PostingState extends State<Posting> {
             child: RowWrapper(
               whenOnPressedAddPhoto: _addImages,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -573,53 +971,3 @@ class DraftTextButtons extends StatelessWidget {
     );
   }
 }
-
- // Link Preview O
-                  // GestureDetector(
-                  //   onTap: () async {
-                  //     if (uri != null && await canLaunchUrl(uri)) {
-                  //       await launchUrl(uri,
-                  //           mode: LaunchMode.externalApplication);
-                  //     } else {
-                  //       ScaffoldMessenger.of(context).showSnackBar(
-                  //         SnackBar(
-                  //           content: Text('Could not launch ${widget.url}'),
-                  //         ),
-                  //       );
-                  //     }
-                  //   },
-                  //   child: Card(
-                  //     color: Colors.white,
-                  //     elevation: 2,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(10.0),
-                  //       child: LinkPreview(
-                  //         linkStyle: const TextStyle(
-                  //           color: Colors.blue,
-                  //           fontFamily: 'Bricolage-R',
-                  //           decoration: TextDecoration.none,
-                  //           fontSize: 12.5,
-                  //         ),
-                  //         enableAnimation: true,
-                  //         onPreviewDataFetched: (data) {
-                  //           setState(() {
-                  //             _previewData = data;
-                  //           });
-                  //         },
-                  //         previewData: _previewData,
-                  //         text: uri.toString(),
-                  //         width: MediaQuery.of(context).size.width,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
-  // void _addImages(List<XFile> newImages) {
-  //   setState(() {
-  //     // Filter out images that are already in the _images list
-  //     newImages.removeWhere((newImage) =>
-  //         _images!.any((existingImage) => existingImage.path == newImage.path));
-  //     // Add the remaining new images
-  //     _images!.addAll(newImages);
-  //   });
-  // }

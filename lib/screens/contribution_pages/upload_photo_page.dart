@@ -6,7 +6,8 @@ import 'package:sabai_app/services/image_picker_helper.dart';
 
 
 class UploadPhotoPage extends StatelessWidget {
-  const UploadPhotoPage({super.key});
+  final Function()? whenCameraIsCalled;
+  const UploadPhotoPage({super.key, required this.whenCameraIsCalled});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class UploadPhotoPage extends StatelessWidget {
               height: 30,
             ),
             GestureDetector(
-              onTap: (){},
+              onTap: whenCameraIsCalled,
               child: Container(
                 width: double.infinity,
                 height: 42,

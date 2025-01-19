@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,8 @@ class NavigationHomepage extends StatefulWidget {
 }
 
 class _NavigationHomepageState extends State<NavigationHomepage> {
+  List<CameraDescription> cameras = [];
+  CameraController? cameraController;
   final PageController _pageController = PageController();
   int _currentPage = 0;
   void whenUploadPhotoOnTap() {
@@ -36,6 +39,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
 
   late List<Widget> widgetList;
   int currentIndex = 2;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -98,7 +102,9 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
                       ContributePage(
                         whenUploadPhotoOnTap: whenUploadPhotoOnTap,
                       ),
-                      const UploadPhotoPage(),
+                      UploadPhotoPage(
+                        whenCameraIsCalled: _initCamera,
+                      ),
                     ],
                   ),
                 );
@@ -107,11 +113,38 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           },
         );
       }
-      ;
     } else {
       setState(() {
         currentIndex = index;
       });
+    }
+  }
+
+  
+  Future<void> _initCamera() async {
+    cameras = await availableCameras();
+    if (cameras.isNotEmpty) {
+      cameraController = CameraController(
+        cameras[0],
+        ResolutionPreset.low,
+      );
+
+      try {
+        await cameraController!.initialize();
+        if (mounted) {
+          // After camera is initialized, navigate to camera preview
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CameraPreviewScreen(
+                cameraController: cameraController!,
+              ),
+            ),
+          );
+        }
+      } catch (e) {
+        print('Error initializing camera: $e');
+      }
     }
   }
 
@@ -174,39 +207,114 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
               icon: const Icon(CupertinoIcons.profile_circled),
               label: languageProvider.lan == 'English' ? 'Me' : 'ပရိုဖိုင်',
             ),
-            // _buildItem(Icons.work_outline_outlined, 'Jobs', 0),
-            // _buildItem(CupertinoIcons.add_circled, 'Contribute', 1),
-            // _buildItem(CupertinoIcons.heart, 'Saved', 2),
-            // _buildItem(CupertinoIcons.profile_circled, 'Me', 3),
           ],
         ),
       ),
       body: widgetList[currentIndex],
     );
   }
+}
 
-  // BottomNavigationBarItem _buildItem(IconData icon, String label, int index) {
-  //   return BottomNavigationBarItem(
-  //     icon: Icon(icon),
-  //     label: currentIndex != index ? label : '',
-  //     activeIcon: Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Icon(icon),
-  //         const SizedBox(
-  //           height: 1,
-  //         ),
-  //         Text(
-  //           label,
-  //           style: const TextStyle(fontSize: 12, color: Color(0xffFF3997)),
-  //         ),
-  //         if (currentIndex == index)
-  //           const Icon(
-  //             CupertinoIcons.staroflife_fill,
-  //             size: 8,
-  //           )
-  //       ],
-  //     ),
-  //   );
-  // }
+class CameraPreviewScreen extends StatelessWidget {
+  final CameraController cameraController;
+
+  const CameraPreviewScreen({
+    super.key,
+    required this.cameraController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      extendBodyBehindAppBar: true,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              // Adjust the CameraPreview to fit screen
+              Center(
+                child: AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: CameraPreview(cameraController),
+                ),
+              ),
+
+              // Capture Button and Gradient Overlay
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        try {
+                          final XFile photo =
+                              await cameraController.takePicture();
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Posting(
+                                  url: photo.path,
+                                ),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print('Error taking picture: $e');
+                        }
+                      },
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 4,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 36,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Positioned.fill(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       gradient: LinearGradient(
+              //         colors: [
+              //           Colors.black.withOpacity(0.6),
+              //           Colors.transparent,
+              //           Colors.black.withOpacity(0.6),
+              //         ],
+              //         begin: Alignment.topCenter,
+              //         end: Alignment.bottomCenter,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

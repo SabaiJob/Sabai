@@ -6,8 +6,8 @@ import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import '../../components/reusable_alertbox.dart';
 
 class ContributePage extends StatefulWidget {
-  Function() whenUploadPhotoOnTap;
-  ContributePage({super.key, required this.whenUploadPhotoOnTap});
+  final Function() whenUploadPhotoOnTap;
+  const ContributePage({super.key, required this.whenUploadPhotoOnTap});
 
   @override
   State<ContributePage> createState() => _ContributePageState();
@@ -125,6 +125,7 @@ class _ContributePageState extends State<ContributePage> {
                       Future<bool> canShare =
                           isUrlReachable(linkController.text);
                       showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return const ReusableAlertBox();
