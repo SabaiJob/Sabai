@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/community_card.dart';
-import 'package:sabai_app/constants.dart';
 
 class LaborRight extends StatelessWidget {
   LaborRight({super.key});

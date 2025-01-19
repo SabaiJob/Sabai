@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/popup_widget.dart';
 import 'package:sabai_app/components/walkthrough_button.dart';
 import 'package:sabai_app/constants.dart';
 import '../screens/job_details_page.dart';
@@ -8,6 +9,7 @@ import '../screens/registration_&_login_pages/log_in_controller_page.dart';
 import '../screens/registration_&_login_pages/registration_controller_page.dart';
 import '../services/job_provider.dart';
 import '../services/language_provider.dart';
+import 'package:popover/popover.dart';
 
 class WorkCard extends StatefulWidget {
   final String jobTitle;
@@ -313,47 +315,7 @@ class _WorkCardState extends State<WorkCard> {
                           const SizedBox(
                             width: 50,
                           ),
-                          Card(
-                            color: const Color(0xffEAF6EC),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  const Icon(
-                                    CupertinoIcons.info_circle,
-                                    size: 11,
-                                    color: Color(0xff28A745),
-                                  ),
-                                  const SizedBox(
-                                    width: 3,
-                                  ),
-                                  language.lan == 'English'
-                                      ? const Text(
-                                          'Level-3',
-                                          style: TextStyle(
-                                            fontFamily: 'Bricolage-R',
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'အဆင့် - ၃',
-                                          style: TextStyle(
-                                            fontFamily: 'Walone-B',
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          JobLevelCard(language: language),
                         ],
                       )
                     ],
@@ -545,6 +507,70 @@ class _WorkCardState extends State<WorkCard> {
           ),
         );
       },
+    );
+  }
+}
+
+class JobLevelCard extends StatelessWidget {
+  const JobLevelCard({
+    super.key,
+    required this.language,
+  });
+
+  final LanguageProvider language;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showPopover(
+        context: context,
+        bodyBuilder: (context) => const PopupWidget(),
+        direction: PopoverDirection.top,
+        width: 130,
+        backgroundColor: const Color(0xfff0f1f2),
+        arrowWidth: 10,
+        arrowHeight: 8,
+        radius: 4,
+      ),
+      child: Card(
+        color: const Color(0xffEAF6EC),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Icon(
+                CupertinoIcons.info_circle,
+                size: 11,
+                color: Color(0xff28A745),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              language.lan == 'English'
+                  ? const Text(
+                      'Level-3',
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-R',
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    )
+                  : const Text(
+                      'အဆင့် - ၃',
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

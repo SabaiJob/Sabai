@@ -9,27 +9,30 @@ class ReusableTextformfield extends StatelessWidget {
   final String? Function(String?)? validating;
   final String? hint;
   final List<TextInputFormatter>? formatter;
-  const ReusableTextformfield(
-      {super.key,
-      this.keyboardType = TextInputType.text,
-      this.formatter,
-      required this.textEditingController,
-      required this.validating,
-      required this.hint});
+
+  const ReusableTextformfield({
+    super.key,
+    this.keyboardType = TextInputType.text,
+    this.formatter,
+    required this.textEditingController,
+    required this.validating,
+    required this.hint,
+  });
   //const ReusableTextformfield({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var languageProvier = Provider.of<LanguageProvider>(context);
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return SizedBox(
       width: 400,
       height: 56,
       child: TextFormField(
-        inputFormatters: formatter,
-        keyboardType: keyboardType,
+          textInputAction: TextInputAction.done,
+          inputFormatters: formatter,
+          keyboardType: keyboardType,
           controller: textEditingController,
           validator: validating,
-          style: languageProvier.lan == 'English'
+          style: languageProvider.lan == 'English'
               ? const TextStyle(
                   fontFamily: 'Bricolage-R',
                   fontSize: 14,
@@ -73,13 +76,11 @@ class ReusableTextformfield extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
             helperText: '',
-            errorStyle: languageProvier.lan == 'English' ? const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Bricolage-M') : const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Walone-R'),
+            errorStyle: languageProvider.lan == 'English'
+                ? const TextStyle(
+                    color: Colors.red, fontSize: 10, fontFamily: 'Bricolage-M')
+                : const TextStyle(
+                    color: Colors.red, fontSize: 10, fontFamily: 'Walone-R'),
             errorMaxLines: 1,
           )),
     );
