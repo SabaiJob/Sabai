@@ -26,6 +26,7 @@ class _WorkCardState extends State<WorkCard> {
     var language = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
     bool? isSaved = jobProvider.isSaved(widget.jobTitle);
+    bool? isGuest = jobProvider.isGuest;
 
     return GestureDetector(
       onTap: () {
@@ -96,7 +97,14 @@ class _WorkCardState extends State<WorkCard> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              jobProvider.toggleSavedJobs(widget.jobTitle);
+                              isGuest == true
+                                  ? showBottomSheet(
+                                      context: context,
+                                      builder: (context) =>
+                                          guestBotoom(language),
+                                    )
+                                  : jobProvider
+                                      .toggleSavedJobs(widget.jobTitle);
                             },
                             icon: isSaved == false
                                 ? const Icon(
@@ -171,8 +179,14 @@ class _WorkCardState extends State<WorkCard> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    jobProvider
-                                        .toggleSavedJobs(widget.jobTitle);
+                                    jobProvider.isGuest == true
+                                        ? showBottomSheet(
+                                            context: context,
+                                            builder: (context) =>
+                                                guestBotoom(language),
+                                          )
+                                        : jobProvider
+                                            .toggleSavedJobs(widget.jobTitle);
                                   },
                                   icon: isSaved == false
                                       ? const Icon(
