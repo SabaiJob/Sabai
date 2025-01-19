@@ -55,20 +55,34 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     ];
   }
 
-  Future<String?> getDraft() async {
+  Future<String?> getUrl() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('url');
+  }
+
+  Future<String?> getLocation() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('location');
+  }
+
+  Future<bool?> getIsLocated() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLocated');
   }
 
   Future<void> onTabChange(index, JobProvider jobProvider) async {
     if (index == 1) {
       if (jobProvider.isDraft == true) {
-        String? url = await getDraft();
+        String? url = await getUrl();
+        String? location = await getLocation();
+        bool? isLocated = await getIsLocated();
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Posting(
               url: url,
+              location: location,
+              isLocated: isLocated,
             ),
           ),
         );
@@ -120,7 +134,6 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     }
   }
 
-  
   Future<void> _initCamera() async {
     cameras = await availableCameras();
     if (cameras.isNotEmpty) {
