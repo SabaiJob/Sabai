@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
-
 
 class UploadPhotoPage extends StatelessWidget {
   final Function()? whenCameraIsCalled;
@@ -11,12 +9,13 @@ class UploadPhotoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+    ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     return SingleChildScrollView(
-      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          const SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            const SizedBox(
               height: 5,
             ),
             Container(
@@ -83,10 +82,15 @@ class UploadPhotoPage extends StatelessWidget {
               height: 30,
             ),
             GestureDetector(
-              onTap: ()async{
+              onTap: () async {
                 final images = await imagePickerHelper.pickMultipleImage();
-                if(images != null && images.isNotEmpty){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Posting(selectedImages: images,)));
+                if (images != null && images.isNotEmpty) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Posting(
+                                selectedImages: images,
+                              )));
                 }
               },
               child: Container(
@@ -110,8 +114,8 @@ class UploadPhotoPage extends StatelessWidget {
                 ),
               ),
             )
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
