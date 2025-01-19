@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
@@ -79,33 +78,32 @@ class _ProfileState extends State<Profile> {
                 children: [
                   _selectedImage != null
                       ? GestureDetector(
-                        onTap: (){
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                backgroundColor: Colors.transparent,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ClipOval(
-                                  child: Image.file(
-                                    _selectedImage!.file,
-                                    width: 300,
-                                    height: 300,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                )
-                              );
-                            });
-                        },
-                        child: CircleAvatar(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: ClipOval(
+                                          child: Image.file(
+                                            _selectedImage!.file,
+                                            width: 300,
+                                            height: 300,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ));
+                                });
+                          },
+                          child: CircleAvatar(
                             radius: 40,
                             foregroundImage: _selectedImage!,
                           ),
-                      )
+                        )
                       : CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.grey[400],
@@ -147,7 +145,6 @@ class _ProfileState extends State<Profile> {
                                         onPressed: () {
                                           setState(() {
                                             _selectedImage = null;
-                                            
                                           });
                                         },
                                         child: Text('Remove Profile Picture',

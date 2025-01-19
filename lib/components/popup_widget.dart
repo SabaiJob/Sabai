@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sabai_app/constants.dart';
 
 class PopupWidget extends StatelessWidget {
   const PopupWidget({super.key});
