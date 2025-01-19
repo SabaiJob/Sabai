@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
+import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/screens/advanced_filter_page.dart';
 import 'package:sabai_app/screens/homepage_menupages/all.dart';
 import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/notification.dart';
+import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobListingPage extends StatefulWidget {
@@ -133,6 +135,15 @@ class _JobListingPageState extends State<JobListingPage>
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var jobProvider = Provider.of<JobProvider>(context);
+    final combineJobs = jobProvider.combineJobs;
+
+    final filterJobs = combineJobs.where((job) {
+      bool matchQuery =
+          job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
+      return matchQuery;
+    }).toList();
+
     return Scaffold(
       backgroundColor: const Color(0xffF7F7F7),
       appBar: AppBar(
@@ -322,81 +333,15 @@ class _JobListingPageState extends State<JobListingPage>
             ),
             if (isSearching) ...[
               Expanded(
-                // child: StreamBuilder<QuerySnapshot>(
-                //   stream:
-                //   FirebaseFirestore.instance.collection('events').snapshots(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(
-                //           color: Color(0xFF6597E1),
-                //         ),
-                //       );
-                //     }
-                //
-                //     if (snapshot.hasError) {
-                //       return Center(child: Text('Error: ${snapshot.error}'));
-                //     }
-                //
-                //     final events = snapshot.data!.docs;
-                //
-                //     // Filter events based on the search query
-                //     final filteredEvents = events.where((event) {
-                //       var data = event.data() as Map<String, dynamic>;
-                //       return data['name']
-                //           .toString()
-                //           .toLowerCase()
-                //           .contains(searchQuery.toLowerCase());
-                //     }).toList();
-                //
-                //     return ListView.builder(
-                //       itemCount: filteredEvents.length,
-                //       itemBuilder: (context, index) {
-                //         var data =
-                //         filteredEvents[index].data() as Map<String, dynamic>;
-                //         String imageUrl =
-                //             data['img'] ?? ''; // Use a default value if null
-                //         return ListTile(
-                //           onTap: () {
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                   builder: (context) => Event(
-                //                     name: data['name'],
-                //                     about: data['about'],
-                //                     isDone: data['isDone'],
-                //                     detail: data['detail'],
-                //                     img: data['img'],
-                //                     img2: data['img2'],
-                //                     hasButton: data['hasButton'],
-                //                   ),
-                //                 ));
-                //           },
-                //           title: Text(
-                //             data['name'],
-                //             maxLines: 1,
-                //             overflow: TextOverflow.ellipsis,
-                //             style: const TextStyle(
-                //                 fontSize: 16, color: Colors.black),
-                //           ),
-                //           leading: CircleAvatar(
-                //             backgroundImage: imageUrl.isNotEmpty
-                //                 ? NetworkImage(imageUrl)
-                //                 : const NetworkImage(
-                //                 'https://www.stsbeijing.org/wp-content/uploads/2022/05/ThaiUni4.png'), // Use a placeholder image
-                //           ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // ),
-                child: Container(
-                  width: 500,
-                  color: Colors.grey,
-                  child: const Center(
-                    child: Text('Search Items will appear here'),
-                  ),
-                ),
+                child: ListView.builder(
+                    itemCount: filterJobs.length,
+                    itemBuilder: (context, index) {
+                      var job = filterJobs[index];
+                      return WorkCard(
+                        job['jobTitle'],
+                        job['isPartner'],
+                      );
+                    }),
               ),
             ] else ...[
               Container(

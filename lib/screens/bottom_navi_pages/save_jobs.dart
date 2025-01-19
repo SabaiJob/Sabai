@@ -23,9 +23,12 @@ class _SaveJobsState extends State<SaveJobs> {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
     List<String> savedJobs = jobProvider.savedJobs;
-    final combineJobs = jobProvider.combineJobs;
+    //final combineJobs = jobProvider.combineJobs;
+    final savedJobsDetails = jobProvider.combineJobs.where((job) {
+      return savedJobs.contains(job['jobTitle']);
+    }).toList();
 
-    final filterJobs = combineJobs.where((job) {
+    final filterJobs = savedJobsDetails.where((job) {
       bool matchesQuery =
           job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
       return matchesQuery;
