@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:sabai_app/constants.dart';
 
 class AddLocation extends StatefulWidget {
+  const AddLocation({super.key});
+
   @override
   _AddLocationState createState() => _AddLocationState();
 }
@@ -135,11 +137,6 @@ class _AddLocationState extends State<AddLocation> {
                                   true // Set this to true when a location is selected
                             };
                             Navigator.pop(context, locationData);
-                            // Handle location selection
-                            print('Selected: ${place['display_name']}');
-                            print(
-                                'Coordinates: ${place['lat']}, ${place['lon']}');
-                            // You can pass this data back to the parent widget
                           },
                         ),
                       ),
