@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 class OtpCodeTimerProvider extends ChangeNotifier {
   Timer? _timer;
-  int _initialTime = 60;
+  int _initialTime = 59;
   bool _isTimerActive = false;
 
   int get remainingTime => _initialTime;
   bool get isTimerActive => _isTimerActive;
 
   void startTimer() {
-    _initialTime = 60;
+    _initialTime = 59;
     _isTimerActive = true;
     notifyListeners();
 

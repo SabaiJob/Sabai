@@ -42,8 +42,8 @@ class _WalkthroughState extends State<Walkthrough> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Dropdown at the top
-                const Padding(
-                  padding: EdgeInsets.only(top: 60, left: 25),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 20),
                   child: Align(alignment: Alignment.topLeft, child: DropDown()),
                 ),
                 const SizedBox(
@@ -52,6 +52,9 @@ class _WalkthroughState extends State<Walkthrough> {
                 // PageView with page indicator
                 Column(
                   children: [
+                    const SizedBox(
+                      height: 100,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

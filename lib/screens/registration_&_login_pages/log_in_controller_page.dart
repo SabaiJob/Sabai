@@ -7,6 +7,7 @@ import 'package:sabai_app/screens/registration_&_login_pages/log_in_form_page.da
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/phone_number_provider.dart';
 import '../../constants.dart';
 
 class LogInControllerPage extends StatefulWidget {
@@ -26,11 +27,12 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   final TextEditingController _phoneNumberController = TextEditingController();
 
   // User Log In
-  void _handleUserLogin() {
+  void _handleUserLogin(PhoneNumberProvider phoneNumberProvider) {
     bool isFormValid = _formKey.currentState!.validate();
     if (isFormValid) {
       print('Your full name: ${_fullNameController.text}');
       print('Your Phone Number: ${_phoneNumberController.text}');
+      phoneNumberProvider.setPhoneNumber(_phoneNumberController.text.toString().trim());
       _pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       setState(() {
@@ -46,13 +48,6 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
       if (enteredPinCode == sabaiAppData.fixedPinNumber) {
         jobProvider.setGuest(false);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const NavigationHomepage(showButtonSheet: false,)));
-        // _pageController.nextPage(
-        //   duration: const Duration(milliseconds: 300),
-        //   curve: Curves.easeInOut,
-        // );
-        // setState(() {
-        //   _currentPage++;
-        // });
       }
     }
   }
@@ -61,6 +56,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
+    var phoneNumberProvider = Provider.of<PhoneNumberProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -104,6 +100,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     pinCodeController: _pinCodeController,
                     whenOnComplete: (value){
                       _handleOTPVerificationPage(value, jobProvider);
+                      
                     })
               ],
             ))
@@ -117,7 +114,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: _handleUserLogin,
+                    onPressed: (){
+                      _handleUserLogin(phoneNumberProvider);
+                    },
                     style: TextButton.styleFrom(
                       fixedSize: const Size(343, 42),
                       backgroundColor: const Color(0xffFF3997),

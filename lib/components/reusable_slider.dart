@@ -34,7 +34,7 @@ class _ReusableSliderState extends State<ReusableSlider> {
                           value: widget.currentValue,
                           min: widget.minAmount,
                           max: widget.maxAmount,
-                          divisions: ((widget.maxAmount - widget.minAmount)).toInt(),
+                          divisions: ((widget.maxAmount - widget.minAmount)/100).toInt(),
                           activeColor: const Color(0xffFF3997),
                           thumbColor: Colors.white,
                           label: '${widget.currentValue.toStringAsFixed(0)} ${widget.unit}',

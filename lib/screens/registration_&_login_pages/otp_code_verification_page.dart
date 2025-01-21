@@ -6,6 +6,7 @@ import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sabai_app/services/otp_code_timer_provider.dart';
+import 'package:sabai_app/services/phone_number_provider.dart';
 
 class OtpCodeVerificationPage extends StatelessWidget {
   final TextEditingController pinCodeController;
@@ -29,14 +30,18 @@ class OtpCodeVerificationPage extends StatelessWidget {
                   : 'OTP ကုဒ်ကို စစ်ဆေးပါ',
             ),
           ),
-          Container(
+          Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 32),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: ReusableContentHolder(
-                  content: languageProvider.lan == "English"
-                      ? 'We sent a SMS with your OTP code to\n+66 2134567.'
-                      : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို +66 2134567 သို့\nပို့ခဲ့ပါပြီ။'),
+            child: SizedBox(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Consumer<PhoneNumberProvider>(builder: (context, phoneNumberProvider, child){
+                  return ReusableContentHolder(
+                    content: languageProvider.lan == "English"
+                        ? 'We sent a SMS with your OTP code to ${phoneNumberProvider.phoneNumber}'
+                        : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို  ${phoneNumberProvider.phoneNumber} သို့ ပို့ခဲ့ပါပြီ။');
+                })
+              ),
             ),
           ),
           PinCodeTextField(
@@ -66,15 +71,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
               shape: PinCodeFieldShape.box,
             ),
           ),
-          // Align(
-          //   alignment: Alignment.topLeft,
-          //   child: ReusableContentHolder(
-          //     content: languageProvider.lan == 'English'
-          //         ? 'Having trouble? Request a new OTP.'
-          //         : 'ပြဿနာရှိနေပါသလား? OTP ကုဒ်အသစ်ကိုပြန်တောင်းရန်\n00:27.',
-          //   ),
-          // ),
-
+        
           Align(
             alignment: Alignment.topLeft,
             child: Consumer<OtpCodeTimerProvider>(
@@ -89,7 +86,9 @@ class OtpCodeVerificationPage extends StatelessWidget {
                         color: Color(0xFF6C757D),
                       ),
                     ),
-                    const SizedBox(width: 5,),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     otpTimer.isTimerActive
                         ? Text(
                             'Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.',
@@ -115,31 +114,6 @@ class OtpCodeVerificationPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                    // Text(
-                    //   otpTimer.isTimerActive
-                    //       ? 'Having trouble? Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.'
-                    //       : 'Having trouble? Request a new OTP.',
-                    //   style: const TextStyle(fontSize: 16),
-                    // ),
-                    // const SizedBox(height: 10),
-                    // GestureDetector(
-                    //   onTap: otpTimer.isTimerActive
-                    //       ? null
-                    //       : () {
-                    //           otpTimer.resetTimer();
-                    //           // Add logic to resend OTP here
-                    //           print("Resending OTP...");
-                    //         },
-                    //   child: Text(
-                    //     'Request a new OTP.',
-                    //     style: TextStyle(
-                    //       color: otpTimer.isTimerActive
-                    //           ? Colors.grey
-                    //           : Colors.blue,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 );
               },

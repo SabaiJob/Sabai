@@ -9,6 +9,7 @@ import 'package:sabai_app/screens/registration_&_login_pages/registration_user_i
 import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
 import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/services/phone_number_provider.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -79,7 +80,7 @@ class _RegistrationControllerPageState
   }
 
   // User Registration
-  void _handleUserRegistration() {
+  void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
     if (_currentPage == _pageController.initialPage) {
       _isGenderError = _selectedGender == null;
       _isBirthdayError = _selectedDate == null;
@@ -96,6 +97,7 @@ class _RegistrationControllerPageState
         print('Your Birthday: ${_selectedDate}');
         print('Your Phone Number: ${_phoneNumberController.text}');
         print('Your email address: ${_emailController.text}');
+        phoneNumberProvider.setPhoneNumber(_phoneNumberController.text.toString().trim());
         // Move to the next page
         _pageController.nextPage(
           duration: const Duration(milliseconds: 300),
@@ -241,6 +243,7 @@ class _RegistrationControllerPageState
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
+    var phoneNumberProvider = Provider.of<PhoneNumberProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -311,6 +314,7 @@ class _RegistrationControllerPageState
                     pinCodeController: _pinCodeController,
                     whenOnComplete: (value){
                       _handleOTPVerificationPage(value, jobProvider);
+                      
                     }),
                 RegistrationAdditionalInfoPage(
                     isProvinceError: _isProvinceError,
@@ -398,7 +402,7 @@ class _RegistrationControllerPageState
                   TextButton(
                     onPressed: () {
                       if (_currentPage == _pageController.initialPage) {
-                        _handleUserRegistration();
+                        _handleUserRegistration(phoneNumberProvider);
                       } else if (_currentPage == 2) {
                         _handleProfileSetUp();
                       } else {

@@ -22,10 +22,11 @@ class Posting extends StatefulWidget {
       this.selectedImages,
       super.key});
 
-  final String? url;
-  final List<XFile>? selectedImages;
+  String? url;
+  List<XFile>? selectedImages = [];
   late String? location;
   late bool? isLocated = false;
+   // Add this to track the current URL
 
   @override
   State<Posting> createState() => _PostingState();
@@ -36,23 +37,44 @@ class _PostingState extends State<Posting> {
   final textController = TextEditingController();
   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
   List<XFile>? _images = [];
+  String? _currentUrl;
+ 
 
   @override
   void initState() {
     super.initState();
+    _currentUrl = widget.url; // Store initial URL
     _initializeImages();
+    _restoreDraftImages();
   }
-
   void _initializeImages() {
-    if (widget.selectedImages != null) {
+    if (widget.selectedImages != null && widget.selectedImages!.isNotEmpty) {
       _images = widget.selectedImages;
     } else if (widget.url != null) {
-      // Check if the URL is a file path (from camera)
       if (!widget.url!.startsWith('http') && !widget.url!.startsWith('https')) {
-        _images = [XFile(widget.url!)];
+        final file = File(widget.url!);
+        if (file.existsSync()) {
+          _images = [XFile(widget.url!)];
+        }
       }
+    } else {
+      _images = []; // Ensure it’s initialized
     }
   }
+
+  Future<void> _restoreDraftImages() async {
+  final prefs = await SharedPreferences.getInstance();
+  final imagePaths = prefs.getStringList('draft_images');
+  if (imagePaths != null && imagePaths.isNotEmpty) {
+    final validPaths = imagePaths.where((path) => File(path).existsSync()).toList();
+    debugPrint('Restored paths: $validPaths'); // Debugging
+    if (validPaths.isNotEmpty) {
+      setState(() {
+        _images = validPaths.map((path) => XFile(path)).toList();
+      });
+    }
+  }
+}
 
   void _addImages(List<XFile> newImages) {
     setState(() {
@@ -74,6 +96,12 @@ class _PostingState extends State<Posting> {
         ),
         itemCount: _images!.length,
         itemBuilder: (context, index) {
+          final imagePath = _images![index].path;
+          if (!File(imagePath).existsSync()) {
+            debugPrint('Invalid file: $imagePath'); 
+            // Skip invalid files
+            return const SizedBox();
+          }
           return Stack(
             fit: StackFit.expand,
             alignment: Alignment.topRight,
@@ -114,6 +142,11 @@ class _PostingState extends State<Posting> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      // If this image was from camera (matches the URL), clear the URL
+                      if (_images![index].path == _currentUrl) {
+                        _currentUrl = null;
+                        widget.url = null;
+                      }
                       _images!.removeAt(index);
                     });
                   },
@@ -144,16 +177,14 @@ class _PostingState extends State<Posting> {
       appBar: AppBar(
         leading: (widget.url != null ||
                 widget.location != null ||
-                widget.isLocated != null)
+                widget.isLocated != null ||
+                (_images != null && _images!.isNotEmpty))
             ? LeadingIcon(
                 url: widget.url ?? '',
                 location: widget.location ?? '',
                 isLocated: widget.isLocated ?? false,
               )
             : const BackButton(color: primaryPinkColor),
-        // leading: LeadingIcon(
-        //   url: widget.url!,
-        // ),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),
@@ -507,6 +538,15 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.setString('url', widget.url);
     await prefs.setString('location', widget.location);
     await prefs.setBool('isLocated', widget.isLocated);
+    // Get the current images from the Posting widget
+    final postingState = context.findAncestorStateOfType<_PostingState>();
+    if (postingState != null && postingState._images != null) {
+      // Convert XFile paths to list of strings
+      final imagePaths =
+          postingState._images!.map((image) => image.path).toList();
+      // Save image paths as string list
+      await prefs.setStringList('draft_images', imagePaths);
+    }
     jobProvider.setDraft(true);
     Navigator.pushReplacement(
       context,
@@ -521,6 +561,7 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.remove('url');
     await prefs.remove('location');
     await prefs.remove('isLocated');
+    await prefs.remove('draft_images');
     jobProvider.setDraft(false);
     Navigator.pushReplacement(
       context,
@@ -530,12 +571,69 @@ class _LeadingIconState extends State<LeadingIcon> {
     );
   }
 
+  // bool _isPageEmpty() {
+  //   final postingState = context.findAncestorStateOfType<_PostingState>();
+  //   final hasImages = postingState != null && postingState._images != null && postingState._images!.isNotEmpty;
+  //   final hasUrl = widget.url.isNotEmpty;
+  //   final hasLocation = widget.location.isNotEmpty;
+  //   final textNotEmpty = postingState != null && postingState.textController.text.trim().isNotEmpty;
+
+  //   return !(hasImages || hasUrl || hasLocation || textNotEmpty);
+  // }
+  // bool _isPageEmpty() {
+  //   final postingState = context.findAncestorStateOfType<_PostingState>();
+    
+  //   // Check for images - ensure we handle both null and empty cases
+  //   final hasImages = postingState?._images?.isNotEmpty ?? false;
+    
+  //   // Check URL - handle null case
+  //   final hasUrl = widget.url.isNotEmpty;
+    
+  //   // Check location - handle null case
+  //   final hasLocation = widget.location.isNotEmpty;
+    
+  //   // Check text content - handle null case
+  //   final hasText = postingState?.textController.text.trim().isNotEmpty ?? false;
+    
+  //   // Debug prints to help identify the state
+  //   debugPrint('Has Images: $hasImages');
+  //   debugPrint('Has URL: $hasUrl');
+  //   debugPrint('Has Location: $hasLocation');
+  //   debugPrint('Has Text: $hasText');
+    
+  //   // Page is empty only if all conditions are false
+  //   return !(hasImages || hasUrl || hasLocation || hasText);
+  // }
+  bool _isPageEmpty() {
+    final postingState = context.findAncestorStateOfType<_PostingState>();
+    
+    // Check for images
+    final hasImages = postingState?._images?.isNotEmpty ?? false;
+    
+    // Check URL - now using the tracked URL from PostingState
+    final hasUrl = postingState?._currentUrl?.isNotEmpty ?? false;
+    
+    // Check location
+    final hasLocation = widget.location.isNotEmpty;
+    
+    // Check text content
+    final hasText = postingState?.textController.text.trim().isNotEmpty ?? false;
+    
+    debugPrint('Empty Check - Images: $hasImages, URL: $hasUrl, Location: $hasLocation, Text: $hasText');
+    
+    return !(hasImages || hasUrl || hasLocation || hasText);
+  }
+
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
     return IconButton(
       onPressed: () {
-        showDialog(
+        if(_isPageEmpty()){
+         deleteDraft(jobProvider);
+          Navigator.pop(context);
+        }else{
+          showDialog(
           context: context,
           builder: (context) {
             return Dialog(
@@ -614,6 +712,8 @@ class _LeadingIconState extends State<LeadingIcon> {
             );
           },
         );
+        }
+        
       },
       icon: const Icon(
         Icons.arrow_back,

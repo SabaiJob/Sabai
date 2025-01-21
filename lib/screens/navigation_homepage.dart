@@ -139,7 +139,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     if (cameras.isNotEmpty) {
       cameraController = CameraController(
         cameras[0],
-        ResolutionPreset.low,
+        ResolutionPreset.high,
       );
 
       try {

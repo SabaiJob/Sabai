@@ -249,7 +249,6 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                 ),
               ),
               // Reusable ChipChoice
-              // TODO REFACTOR THIS
               Wrap(
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.start,
