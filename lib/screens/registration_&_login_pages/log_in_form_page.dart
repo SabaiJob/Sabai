@@ -69,7 +69,7 @@ class LogInFormPage extends StatelessWidget {
                   isStarred: true,
                 ),
               ),
-
+              // Full Name TextFormField
               ReusableTextformfield(
                   keyboardType: TextInputType.name,
                   textEditingController: fullNameController,
@@ -98,7 +98,7 @@ class LogInFormPage extends StatelessWidget {
                   isStarred: true,
                 ),
               ),
-
+              // Phone Number TextFormField
               ReusableTextformfield(
                 formatter: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.phone,

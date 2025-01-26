@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
@@ -22,6 +23,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          //title
           Align(
             alignment: Alignment.topLeft,
             child: ReusableTitleHolder(
@@ -30,6 +32,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                   : 'OTP ကုဒ်ကို စစ်ဆေးပါ',
             ),
           ),
+          //description
           Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 32),
             child: SizedBox(
@@ -44,6 +47,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
               ),
             ),
           ),
+          //pincode textfield
           PinCodeTextField(
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -51,9 +55,6 @@ class OtpCodeVerificationPage extends StatelessWidget {
             appContext: context,
             length: 6,
             onCompleted: whenOnComplete,
-            // onCompleted: (value) {
-            //   _scrollPages();
-            // },
             enableActiveFill: true,
             pinTheme: PinTheme(
               borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -71,7 +72,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
               shape: PinCodeFieldShape.box,
             ),
           ),
-        
+          //otp re-request
           Align(
             alignment: Alignment.topLeft,
             child: Consumer<OtpCodeTimerProvider>(
@@ -80,11 +81,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                   children: [
                     const Text(
                       'Having trouble?',
-                      style: TextStyle(
-                        fontSize: 15.63,
-                        fontFamily: 'Bricolage-R',
-                        color: Color(0xFF6C757D),
-                      ),
+                      style: otpCodeRequestTextStyle,
                     ),
                     const SizedBox(
                       width: 5,
@@ -92,11 +89,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                     otpTimer.isTimerActive
                         ? Text(
                             'Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.',
-                            style: const TextStyle(
-                              color: Color(0xFF6C757D),
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 15.63,
-                            ),
+                            style: otpCodeTimerTextStyle,
                           )
                         : GestureDetector(
                             onTap: otpTimer.isTimerActive
@@ -107,11 +100,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                                   },
                             child: const Text(
                               'Request a new OTP',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-SMB',
-                                fontSize: 15.63,
-                                color: Color(0xFFFF3997),
-                              ),
+                              style: otpCodeReRequestTextStyle,
                             ),
                           ),
                   ],

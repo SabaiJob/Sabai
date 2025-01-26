@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class ReusableDropdown extends StatelessWidget {
@@ -33,17 +34,9 @@ class ReusableDropdown extends StatelessWidget {
         ),
         hint: Text(
           hintText!,
-          style: languageProvider == 'English'
-              ? const TextStyle(
-                  fontFamily: 'Bricolage-R',
-                  fontSize: 14,
-                  color: Color(0xFF7B838A),
-                )
-              : const TextStyle(
-                  fontFamily: 'Walone-R',
-                  fontSize: 14,
-                  color: Color(0xFF7B838A),
-                ),
+          style: languageProvider.lan == 'English'
+              ? dropdownHintTextStyleEng
+              : dropdownHintTextStyleMm,
         ),
         isExpanded: true,
         items: dropdownItems
@@ -83,6 +76,7 @@ class ReusableDropdown extends StatelessWidget {
           height: 40,
         ),
         dropdownStyleData: const DropdownStyleData(
+          offset: Offset(0, -5),
           maxHeight: 200,
             elevation: 2,
             decoration: BoxDecoration(

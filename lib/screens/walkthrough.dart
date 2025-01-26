@@ -5,8 +5,7 @@ import 'package:sabai_app/components/change_language_dropdown_button.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/log_in_controller_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/registration_controller_page.dart';
-import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/registration_pages_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../components/walkthrough_button.dart';
 import '../services/language_provider.dart';
@@ -41,60 +40,53 @@ class _WalkthroughState extends State<Walkthrough> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Dropdown at the top
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  child: Align(alignment: Alignment.topLeft, child: DropDown()),
+                // Switch Language
+                const Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: DropDown(),
+                  ),
                 ),
+                //SizedBox
                 const SizedBox(
                   height: 50,
                 ),
-                // PageView with page indicator
+                //Colum includes Title, Banner, Banner Indicator
                 Column(
                   children: [
                     const SizedBox(
                       height: 100,
                     ),
+                    //Title
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         languageProvider.lan == 'English'
                             ? const Text(
                                 'Welcome to',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-M',
-                                  fontSize: 24.41,
-                                ),
+                                style: walkthroughTitleStyleEng,
                               )
                             : const Text(
                                 'Sabai Jobs',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-B',
-                                  fontSize: 30.52,
-                                  color: Color(0xffFF3997),
-                                ),
+                                style: sabaiJobStyle,
                               ),
+                        //SizedBox
                         const SizedBox(
                           width: 10,
                         ),
                         languageProvider.lan == 'English'
                             ? const Text(
                                 'Sabai Jobs',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-B',
-                                  fontSize: 30.52,
-                                  color: Color(0xffFF3997),
-                                ),
+                                style: sabaiJobStyle,
                               )
                             : const Text(
                                 'မှကြိုဆိုပါတယ်',
-                                style: TextStyle(
-                                  fontFamily: 'Walone-B',
-                                  fontSize: 24.41,
-                                ),
+                                style: walkthroughTitleStyleMm,
                               ),
                       ],
                     ),
+                    // Banner with PageView
                     SizedBox(
                       height: 50,
                       child: PageView(
@@ -170,6 +162,7 @@ class _WalkthroughState extends State<Walkthrough> {
                         ],
                       ),
                     ),
+                    // Banner Indicator
                     SmoothPageIndicator(
                       controller: _controller,
                       count: 4,
@@ -181,93 +174,70 @@ class _WalkthroughState extends State<Walkthrough> {
                     ),
                   ],
                 ),
+                //Colum includes description, Get Started, Log In, Continue as Guest buttons
                 Column(
                   children: [
                     languageProvider.lan == 'English'
+                        // description in Eng
                         ? RichText(
                             textAlign: TextAlign.center,
-                            text: TextSpan(
+                            text: const TextSpan(
                               text: 'By registering, you accept our ',
-                              style: GoogleFonts.bricolageGrotesque(
-                                textStyle: const TextStyle(
-                                  fontSize: 12.5,
-                                  color: Color(0xff4C5258),
-                                ),
-                              ),
+                              style: walkthroughDescriptionEng,
                               children: [
                                 TextSpan(
                                   text: 'Terms and Conditions of \nUse ',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      fontSize: 12.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff4C5258),
-                                    ),
-                                  ),
+                                  style: walkthroughDescriptionBoldEng,
                                 ),
-                                const TextSpan(
+                                TextSpan(
                                   text: 'and our ',
                                 ),
                                 TextSpan(
                                   text: 'Privacy Policy.',
-                                  style: GoogleFonts.bricolageGrotesque(
-                                    textStyle: const TextStyle(
-                                      fontSize: 12.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff4C5258),
-                                    ),
-                                  ),
+                                  style: walkthroughDescriptionBoldEng,
                                 ),
                               ],
                             ),
                           )
+                        // description in Mm
                         : RichText(
                             textAlign: TextAlign.center,
                             text: const TextSpan(
                                 text:
                                     'စာရင်းသွင်းခြင်းဖြင့် သင့်အနေနှင့် ကျွန်ုပ်တို့၏',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xff4C5258),
-                                  fontFamily: 'Walone-R',
-                                ),
+                                style: walkthroughDescriptionMm,
                                 children: [
                                   TextSpan(
                                     text:
                                         'အသုံးပြုမှုစည်းမျဉ်းများနှင့်\nကိုယ်ရေးအချက်အလက်မူဝါဒ',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff4C5258),
-                                      fontFamily: 'Walone-R',
-                                    ),
+                                    style: walkthroughDescriptionBoldMm,
                                   ),
                                   TextSpan(
                                     text: 'ကို လက်ခံသည်ဟု ယူဆပါသည်',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xff4C5258),
-                                      fontFamily: 'Walone-R',
-                                    ),
+                                    style: walkthroughDescriptionMm,
                                   ),
                                 ]),
                           ),
+                    //SizedBox
                     const SizedBox(
                       height: 15,
                     ),
+                    //Get Started
                     Button(
                       languageProvider: languageProvider,
                       textEng: 'Get Started',
                       textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
                       color: primaryPinkColor,
-                      widget: const RegistrationControllerPage(),
+                      widget: const RegistrationPagesController(),
                       tColor: Colors.white,
                       bColor: primaryPinkColor,
                       isGuest: false,
                     ),
+                    //SizedBox
                     const SizedBox(
                       height: 13,
                     ),
+                    //Log in
                     Button(
                       languageProvider: languageProvider,
                       textEng: 'Log In',
@@ -278,19 +248,22 @@ class _WalkthroughState extends State<Walkthrough> {
                       bColor: primaryPinkColor,
                       isGuest: false,
                     ),
+                    //SizedBox
                     const SizedBox(
                       height: 13,
                     ),
+                    //Continue as Guest
                     Button(
                       languageProvider: languageProvider,
                       textEng: 'Continue as guest',
-                      textMm: '၀င်ရောက်ရန်',
+                      textMm: 'ဧည့်သည်အဖြစ် ဆက်သွားပါ',
                       color: backgroundColor,
                       widget: const JobListingPage(),
                       tColor: primaryPinkColor,
                       bColor: Colors.transparent,
                       isGuest: true,
                     ),
+                    //SizedBox
                     const SizedBox(
                       height: 30,
                     )

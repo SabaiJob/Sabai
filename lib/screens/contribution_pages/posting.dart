@@ -224,65 +224,71 @@ class _PostingState extends State<Posting> {
                         builder: (context) {
                           return Dialog(
                             backgroundColor: Colors.white,
-                            child: SizedBox(
-                              height: 340,
-                              width: 324,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                    'images/contribute_success.png',
-                                    width: 140,
-                                    height: 140,
-                                  ),
-                                  const Text(
-                                    '🎉 Woohoo! Thank You!',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-SMB',
-                                      fontSize: 19.53,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              child: SizedBox(
+                                height: 340,
+                                width: 324,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Image.asset(
+                                      'images/contribute_success.png',
+                                      width: 140,
+                                      height: 140,
                                     ),
-                                  ),
-                                  const Text(
-                                    textAlign: TextAlign.center,
-                                    'We’ll review your contribution and let\nyou know when it’s ready!',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 15.63,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 292,
-                                    height: 35,
-                                    child: TextButton(
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        backgroundColor: primaryPinkColor,
+                                    const Text(
+                                      '🎉 Woohoo! Thank You!',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-SMB',
+                                        fontSize: 19.53,
                                       ),
-                                      onPressed: () {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const NavigationHomepage(),
+                                    ),
+                                    const Text(
+                                      textAlign: TextAlign.center,
+                                      'We’ll review your contribution and let\nyou know when it’s ready!',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 15.63,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 292,
+                                      height: 29,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Done',
-                                        style: TextStyle(
-                                          fontFamily: 'Bricolage-R',
-                                          fontSize: 12.5,
-                                          color: Colors.white,
+                                          backgroundColor: primaryPinkColor,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const NavigationHomepage(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Done',
+                                            style: TextStyle(
+                                              fontFamily: 'Bricolage-R',
+                                              fontSize: 12.5,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sabai_app/components/reusable_dropdown.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:sabai_app/components/reusable_label.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
 import 'package:sabai_app/constants.dart';
@@ -14,148 +14,69 @@ class AdvancedFilterPage extends StatefulWidget {
 }
 
 class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
-  Set<int> selectedIndices = {};
-  List<Map<String, dynamic>> filteredItems = [];
-  Set<Map<String, dynamic>> selectedItems = {};
-  final LayerLink _layerLink = LayerLink();
-  bool _isDropdownOpen = false;
-  // final List<String> jobNameItemsEng = [
-  //   'Chef',
-  //   'Barista',
-  //   'Teacher',
-  //   'Housekeeper'
-  // ];
-  // String? selectedJobName;
-  String? selectedJobLocation;
-  String? selectedJobTypeOption;
+  // Set<int> selectedJobCategoryIndices = {};
+  // Set<int> selectedJobTypeIndices = {};
+  // String? selectedJobLocation;
+  // String? selectedJobTypeOption;
+  // String? selectedLanguageOption;
+  // String? selectedVerificationOption;
+  // double currentValue = 1000.00;
+
+  // Variables to store selected filter values
+  List<dynamic> selectedJobNames = [];
+  List<int> selectedJobCategoryIndices = [];
+  List<dynamic> selectedJobLocations = [];
+  List<int> selectedJobTypeIndices = [];
   String? selectedLanguageOption;
   String? selectedVerificationOption;
   double currentValue = 1000.00;
 
-  void toggleDropdown() {
+  // Method to collect all selected filter values
+  Map<String, dynamic> collectFilterValues() {
+    return {
+      'jobNames': selectedJobNames,
+      'jobCategories': selectedJobCategoryIndices
+          .map((index) => SabaiAppData().jobCategoryInEng[index])
+          .toList(),
+      'jobLocations': selectedJobLocations,
+      'jobTypes': selectedJobTypeIndices
+          .map((index) => SabaiAppData().jobTypes[index])
+          .toList(),
+      'thaiLanguageRequired': selectedLanguageOption == 'Yes',
+      'verificationRequired': selectedVerificationOption == 'Yes',
+      'salaryRange': currentValue,
+    };
+  }
+
+  // Method to clear all filters
+  void clearFilters() {
     setState(() {
-      _isDropdownOpen = !_isDropdownOpen;
+      selectedJobNames.clear();
+      selectedJobCategoryIndices.clear();
+      selectedJobLocations.clear();
+      selectedJobTypeIndices.clear();
+      selectedLanguageOption = null;
+      selectedVerificationOption = null;
+      currentValue = 1000.00;
     });
   }
 
-  String getSelectedItemsText() {
-    if (selectedItems.isEmpty) {
-      return 'Select job name';
-    }
-    return selectedItems
-        .map((item) => "${item['emoji']} ${item['name']}")
-        .join(', ');
-  }
-
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    filteredItems = SabaiAppData().jobCategoryInEng;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     SabaiAppData sabaiAppData = SabaiAppData();
+    var jobNameItems = sabaiAppData.jobCategoryInEng
+        .map((category) => DropdownItem(
+            label: '${category['name']} ${category['emoji']}', value: category))
+        .toList();
+    var jobLocation = sabaiAppData.provinceItemsInEng
+        .map((province) => DropdownItem(label: province, value: province))
+        .toList();
     return Scaffold(
-      floatingActionButton: _isDropdownOpen
-          ? CompositedTransformFollower(
-              link: _layerLink,
-              showWhenUnlinked: false,
-              offset: const Offset(0.0, 40.0),
-              child: Material(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                elevation: 2,
-                child: Container(
-                  width: 343,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 327,
-                        height: 36,
-                        child: TextField(
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(CupertinoIcons.search),
-                            prefixIconColor: Colors.pink,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 10),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              borderSide: BorderSide(
-                                color: Color(0xFFF0F1F2),
-                                width: 1,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              borderSide: BorderSide(
-                                color: Color(0xFFF0F1F2),
-                                width: 1.0,
-                              ),
-                            ),
-                            hintText: 'Search...',
-                            hintStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              filteredItems = sabaiAppData.jobCategoryInEng
-                                  .where((item) => item['name']
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()))
-                                  .toList();
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      LimitedBox(
-                        maxHeight: 212,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: filteredItems.length,
-                          itemBuilder: (context, index) {
-                            final item = filteredItems[index];
-                            return CheckboxListTile(
-                              activeColor: Colors.pink,
-                              checkboxScaleFactor: 0.8,
-                              title: Text(
-                                "${item['name']} ${item['emoji']}",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              value: selectedItems.contains(item),
-                              onChanged: (isChecked) {
-                                setState(() {
-                                  if (isChecked == true) {
-                                    selectedItems.add(item);
-                                  } else {
-                                    selectedItems.remove(item);
-                                  }
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          : null,
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
         bottom: PreferredSize(
@@ -184,71 +105,84 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               //Job Name
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Job Name',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
+                child: ReusableLabelHolder(
+                    labelName: 'Job Name',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
+              ),
+              // Job Name Dropdown with search bar
+              SizedBox(
+                width: 343,
+                child: MultiDropdown(
+                  onSelectionChange: (selectedItems) {
+                    setState(() {
+                      selectedJobNames = selectedItems;
+                    });
+                  },
+                  enabled: true,
+                  items: jobNameItems,
+                  fieldDecoration: const FieldDecoration(
+                    backgroundColor: Colors.white,
+                    hintText: 'Select Job Name',
+                    hintStyle: textfieldHintTextStyleEng,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFF0F1F2),
                       ),
                     ),
                   ),
-                ),
-              ),
-              // TODO to replace with new dropdown that contains search bar
-              CompositedTransformTarget(
-          link: _layerLink,
-          child: GestureDetector(
-            onTap: toggleDropdown,
-            child: Container(
-              width: 343,
-              height: 36,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: const Color(0xFFF0F1F2)),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      getSelectedItemsText(),
-                      style: const TextStyle(fontSize: 14),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                  searchEnabled: true,
+                  searchDecoration: const SearchFieldDecoration(
+                    searchIcon: Icon(
+                      Icons.search,
+                      color: primaryPinkColor,
+                    ),
+                    hintText: 'Search Job By Name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFF0F1F2),
+                      ),
                     ),
                   ),
-                  Icon(_isDropdownOpen
-                      ? CupertinoIcons.chevron_up
-                      : CupertinoIcons.chevron_down, color: primaryPinkColor, size: 15,),
-                ],
+                  chipDecoration: const ChipDecoration(
+                    wrap: true,
+                    spacing: 8,
+                    runSpacing: 10,
+                    deleteIcon: Icon(
+                      Icons.close,
+                      size: 11,
+                      color: primaryPinkColor,
+                    ),
+                    labelStyle: TextStyle(
+                      fontFamily: 'Bricolage-R',
+                      fontSize: 12,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  dropdownDecoration: const DropdownDecoration(
+                    marginTop: 5,
+                    maxHeight: 212,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  dropdownItemDecoration: const DropdownItemDecoration(
+                      selectedIcon: Icon(
+                    Icons.check_box,
+                    size: 20,
+                    color: primaryPinkColor,
+                  )),
+                ),
               ),
-            ),
-          ),
-        ),
-        
               // Job Category
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Job Category',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
+                child: ReusableLabelHolder(
+                    labelName: 'Job Category',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
               ),
-              // Reusable ChipChoice
+              // Job Category
               Wrap(
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.start,
@@ -266,35 +200,28 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       children: [
                         Text(
                           jobCategory['name'],
-                          style: const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 14,
-                              color: Color(0xFF7B838A)),
+                          style: choiceChipItemStyle,
                         ),
                         Text(
                           jobCategory['emoji'],
-                          style: const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 14,
-                              color: Color(0xFF7B838A)),
+                          style: choiceChipItemStyle,
                         )
                       ],
                     ),
-                    selected: selectedIndices.contains(index),
+                    selected: selectedJobCategoryIndices.contains(index),
                     onSelected: (selected) {
                       setState(() {
                         if (selected) {
-                          selectedIndices.add(index);
+                          selectedJobCategoryIndices.add(index);
                         } else {
-                          selectedIndices.remove(index);
+                          selectedJobCategoryIndices.remove(index);
                         }
                       });
                     },
-                    
                     selectedColor: Colors.transparent,
                     backgroundColor: Colors.white,
                     side: BorderSide(
-                      color: selectedIndices.contains(index)
+                      color: selectedJobCategoryIndices.contains(index)
                           ? Colors.pink
                           : Colors.transparent,
                       width: 2,
@@ -308,110 +235,144 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               // Job Location
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Job Location',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
+                child: ReusableLabelHolder(
+                    labelName: 'Job Location',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
+              ),
+              //Job Location dropdown
+              SizedBox(
+                width: 343,
+                child: MultiDropdown(
+                  onSelectionChange: (selectedItems) {
+                    setState(() {
+                      selectedJobLocations = selectedItems;
+                    });
+                  },
+                  enabled: true,
+                  items: jobLocation,
+                  fieldDecoration: const FieldDecoration(
+                    backgroundColor: Colors.white,
+                    hintText: 'Select Job Location',
+                    hintStyle: textfieldHintTextStyleEng,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFF0F1F2),
                       ),
                     ),
                   ),
+                  searchEnabled: true,
+                  searchDecoration: const SearchFieldDecoration(
+                    searchIcon: Icon(
+                      Icons.search,
+                      color: primaryPinkColor,
+                    ),
+                    hintText: 'Search Job By Province',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(
+                        color: Color(0xFFF0F1F2),
+                      ),
+                    ),
+                  ),
+                  chipDecoration: const ChipDecoration(
+                    wrap: true,
+                    spacing: 8,
+                    runSpacing: 10,
+                    deleteIcon: Icon(
+                      Icons.close,
+                      size: 11,
+                      color: primaryPinkColor,
+                    ),
+                    labelStyle: TextStyle(
+                      fontFamily: 'Bricolage-R',
+                      fontSize: 12,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  dropdownDecoration: const DropdownDecoration(
+                    marginTop: 5,
+                    maxHeight: 212,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  dropdownItemDecoration: const DropdownItemDecoration(
+                      selectedIcon: Icon(
+                    Icons.check_box,
+                    size: 20,
+                    color: primaryPinkColor,
+                  )),
                 ),
-              ),
-              ReusableDropdown(
-                dropdownItems: sabaiAppData.provinceItemsInEng,
-                selectedItem: selectedJobLocation,
-                whenOnChanged: (value) {
-                  setState(() {
-                    selectedJobLocation = value;
-                  });
-                },
-                cusWidth: 343,
-                cusHeight: 36,
-                hintText: 'Select job location',
               ),
               // Job Type
-              const SizedBox(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Job Type',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: ReusableLabelHolder(
+                    labelName: 'Job Type',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
               ),
               //Job Type Radio Button
-              Row(
-                children: [
-                  ReusableRadioButton(
-                      rButtonValue: 'Remote',
-                      rButtonSelectedValue: selectedJobTypeOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedJobTypeOption = value;
-                        });
-                      },
-                      rButtonName: 'Remote'),
-                  ReusableRadioButton(
-                      rButtonValue: 'Full Time',
-                      rButtonSelectedValue: selectedJobTypeOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedJobTypeOption = value;
-                        });
-                      },
-                      rButtonName: 'Full Time'),
-                  ReusableRadioButton(
-                      rButtonValue: 'Hybrid',
-                      rButtonSelectedValue: selectedJobTypeOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedJobTypeOption = value;
-                        });
-                      },
-                      rButtonName: 'Hybrid'),
-                ],
-              ),
-              Row(
-                children: [
-                  ReusableRadioButton(
-                      rButtonValue: 'On Site',
-                      rButtonSelectedValue: selectedJobTypeOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedJobTypeOption = value;
-                        });
-                      },
-                      rButtonName: 'On Site'),
-                ],
+              Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                spacing: 10.0,
+                runSpacing: 1.5,
+                children: List.generate(sabaiAppData.jobTypes.length, (index) {
+                  final jobType = sabaiAppData.jobTypes[index];
+                  return ChoiceChip(
+                    showCheckmark: false,
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          jobType,
+                          style: choiceChipItemStyle,
+                        ),
+                      ],
+                    ),
+                    selected: selectedJobTypeIndices.contains(index),
+                    // onSelected: (selected) {
+                    //   setState(() {
+                    //     if (selected) {
+                    //       selectedJobTypeIndices = [index];
+                    //     } else {
+                    //       selectedJobTypeIndices.clear();
+                    //     }
+                    //   });
+                    // },
+                    onSelected: (selected) {
+                      setState(() {
+                        if (selected) {
+                          selectedJobTypeIndices.add(index);
+                        } else {
+                          selectedJobTypeIndices.remove(index);
+                        }
+                      });
+                    },
+                    selectedColor: Colors.transparent,
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                      color: selectedJobTypeIndices.contains(index)
+                          ? Colors.pink
+                          : Colors.transparent,
+                      width: 2,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  );
+                }),
               ),
               // Thai Language Requirements
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Thai Language Requirement',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
+                child: ReusableLabelHolder(
+                    labelName: 'Thai Language Requirement',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
               ),
               // Thai Language Requirements Radio Button
               Row(
@@ -439,19 +400,10 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               // Salary Range
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Salary Range',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
+                child: ReusableLabelHolder(
+                    labelName: 'Salary Range',
+                    textStyle: lablelHolderEng,
+                    isStarred: false),
               ),
               // Salary Range Slider
               ReusableSlider(
@@ -467,19 +419,14 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               // Verification
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: SizedBox(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Verification',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 15.63,
-                        color: Colors.black,
-                      ),
+                child: ReusableLabelHolder(
+                    labelName: 'Verification',
+                    textStyle: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 15.63,
+                      color: Colors.black,
                     ),
-                  ),
-                ),
+                    isStarred: false),
               ),
               // Verification Radio Button
               Row(
@@ -515,7 +462,14 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               width: 343,
               height: 42,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Collect and use filter values
+                  final filterValues = collectFilterValues();
+                  print(filterValues); // Or pass to another screen/function
+
+                  // Example: Navigate back with filter values
+                  Navigator.pop(context, filterValues);
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),
                   shape: RoundedRectangleBorder(
@@ -540,7 +494,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               width: 343,
               height: 42,
               child: TextButton(
-                onPressed: () {},
+                onPressed: clearFilters,
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius:

@@ -81,12 +81,6 @@ class SelectJobCategoryPage extends StatelessWidget {
                     ),
                     activeColor: Colors.pink,
                     value: jobCategoryList![index]['selected'],
-                    // onChanged: (value) {
-                    //   setState(() {
-                    // sabaiAppData.jobCategoryInEng[index]['selected'] =
-                    //     value!;
-                    //   });
-                    // },
                     onChanged: (value) {
                       whenOnChanged(value, index);
                     },

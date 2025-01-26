@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/registration_additional_info_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/registration_user_info_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/complete_user_registration_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/initial_registration_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
 import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
@@ -14,16 +13,16 @@ import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-class RegistrationControllerPage extends StatefulWidget {
-  const RegistrationControllerPage({super.key});
+class RegistrationPagesController extends StatefulWidget {
+  const RegistrationPagesController({super.key});
 
   @override
-  State<RegistrationControllerPage> createState() =>
-      _RegistrationControllerPageState();
+  State<RegistrationPagesController> createState() =>
+      _RegistrationPagesControllerState();
 }
 
-class _RegistrationControllerPageState
-    extends State<RegistrationControllerPage> {
+class _RegistrationPagesControllerState
+    extends State<RegistrationPagesController> {
   SabaiAppData sabaiAppData = SabaiAppData();
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
@@ -275,6 +274,7 @@ class _RegistrationControllerPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // fixed progress indicator
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
               child: StepProgressIndicator(
@@ -287,12 +287,13 @@ class _RegistrationControllerPageState
                 size: 8.0,
               ),
             ),
+            // Page View
             Expanded(
                 child: PageView(
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                RegistrationUserInfoPage(
+                InitialRegistrationPage(
                     formKey: _formKey,
                     fullNameController: _fullNameController,
                     phoneNumberController: _phoneNumberController,
@@ -316,7 +317,7 @@ class _RegistrationControllerPageState
                       _handleOTPVerificationPage(value, jobProvider);
                       
                     }),
-                RegistrationAdditionalInfoPage(
+                CompleteUserInfoPage(
                     isProvinceError: _isProvinceError,
                     selectedProvince: _selectedProvince,
                     whenProvinceOnChanged: (value) {
@@ -391,6 +392,7 @@ class _RegistrationControllerPageState
           ],
         ),
       ),
+      //fixed continue button across the pages
       persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: ((_currentPage == _pageController.initialPage ||
               _currentPage == 2 ||
@@ -414,7 +416,7 @@ class _RegistrationControllerPageState
                       backgroundColor: const Color(0xffFF3997),
                       shape: RoundedRectangleBorder(
                         borderRadius:
-                            BorderRadius.circular(8), // Set the border radius
+                            BorderRadius.circular(8), 
                       ),
                     ),
                     child: Row(
@@ -425,27 +427,16 @@ class _RegistrationControllerPageState
                                 _currentPage == 3
                                     ? 'Create Profile '
                                     : 'Continue',
-                                style: const TextStyle(
-                                  fontFamily: 'Bricolage-B',
-                                  fontSize: 15.63,
-                                  color: Colors.white,
-                                ),
+                                style: textButtonTextStyleEng,
                               )
                             : const Text(
                                 'ဆက်လက်ရန်',
-                                style: TextStyle(
-                                  fontFamily: 'Walone-B',
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                                style: textButtonTextStyleMm,
                               ),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          CupertinoIcons.arrow_right,
-                          color: Colors.white,
-                        ),
+                        rightArrowIcon,
                       ],
                     ),
                   ),

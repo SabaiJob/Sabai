@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/reusable_container.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_datepicker.dart';
 import 'package:sabai_app/components/reusable_dropdown.dart';
@@ -11,7 +12,7 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
-class RegistrationUserInfoPage extends StatelessWidget {
+class InitialRegistrationPage extends StatelessWidget {
   // Key for validation
   final GlobalKey<FormState> formKey;
 
@@ -36,9 +37,7 @@ class RegistrationUserInfoPage extends StatelessWidget {
   final String birthdayErrorMessage;
   final Function(DateTime date) handleDateSelected;
 
-  
-
-  const RegistrationUserInfoPage({
+  const InitialRegistrationPage({
     super.key,
     required this.formKey,
     required this.fullNameController,
@@ -58,7 +57,6 @@ class RegistrationUserInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     SabaiAppData sabaiAppData = SabaiAppData();
-
     return SingleChildScrollView(
       child: Form(
         key: formKey,
@@ -76,7 +74,6 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 ),
               ),
             ),
-
             // subtitle
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
@@ -88,8 +85,7 @@ class RegistrationUserInfoPage extends StatelessWidget {
                         : 'အကောင့်အသစ်ပြုလုပ်ရန် သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုထည့်သွင်းပေးပါ။ သင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့ ဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'),
               ),
             ),
-
-            // Full Name Title
+            // Full Name Label
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: ReusableLabelHolder(
@@ -101,7 +97,6 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 isStarred: true,
               ),
             ),
-
             // Full Name Textform Field
             ReusableTextformfield(
                 keyboardType: TextInputType.name,
@@ -117,8 +112,7 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 hint: languageProvider.lan == 'English'
                     ? 'Enter your full name'
                     : 'သင့်အမည် ထည့်ပါ'),
-
-            // Gender Title
+            // Gender Label
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: ReusableLabelHolder(
@@ -130,19 +124,10 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 isStarred: true,
               ),
             ),
-
             // Gender Dropdown
-            Container(
-              width: 400,
-              height: 36,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isGenderError ? Colors.red : Colors.transparent,
-                  width: 2,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-              ),
-              child: ReusableDropdown(
+            ReusableContainer(
+              hasError: isGenderError,
+              childWidget: ReusableDropdown(
                 dropdownItems: languageProvider.lan == 'English'
                     ? sabaiAppData.genderItemsInEng
                     : sabaiAppData.genderItemsInMm,
@@ -150,17 +135,12 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 cusHeight: 36,
                 cusWidth: 400,
                 whenOnChanged: onGenderChanged,
-                // whenOnChanged: (value) {
-                //   setState(() {
-                //     _selectedGender = value;
-                //     isGenderError = false;
-                //   });
-                // },
                 hintText: languageProvider.lan == 'English'
                     ? 'Select One'
                     : 'တစ်ခုရွေးချယ်ပါ',
               ),
             ),
+            //when gender is empty
             if (isGenderError)
               Align(
                 alignment: Alignment.topLeft,
@@ -169,14 +149,8 @@ class RegistrationUserInfoPage extends StatelessWidget {
                   child: Text(
                     genderErrorMessage,
                     style: languageProvider.lan == 'English'
-                        ? const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Bricolage-M')
-                        : const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Walone-R'),
+                        ? errorTextStyleEng
+                        : errorTextStyleMm,
                   ),
                 ),
               ),
@@ -193,22 +167,15 @@ class RegistrationUserInfoPage extends StatelessWidget {
               ),
             ),
             //Birthday Picker
-            Container(
-              width: 400,
-              height: 36,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isGenderError ? Colors.red : Colors.transparent,
-                  width: 2,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-              ),
-              child: ReusableDatePicker(
+            ReusableContainer(
+              hasError: isBirthdayError,
+              childWidget: ReusableDatePicker(
                   choosenLanguage: languageProvider.lan == 'English'
                       ? ('Select Date')
                       : ('နေ့စွဲ ရွေးချယ်ပါ'),
                   onDateSelected: handleDateSelected),
             ),
+            //when birthday is empty
             if (isBirthdayError)
               Align(
                 alignment: Alignment.topLeft,
@@ -217,14 +184,8 @@ class RegistrationUserInfoPage extends StatelessWidget {
                   child: Text(
                     birthdayErrorMessage,
                     style: languageProvider.lan == 'English'
-                        ? const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Bricolage-M')
-                        : const TextStyle(
-                            color: Colors.red,
-                            fontSize: 10,
-                            fontFamily: 'Walone-R'),
+                        ? errorTextStyleEng
+                        : errorTextStyleMm,
                   ),
                 ),
               ),
@@ -269,7 +230,6 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 isStarred: false,
               ),
             ),
-
             // Email Address TextField
             SizedBox(
               width: 400,
@@ -278,39 +238,19 @@ class RegistrationUserInfoPage extends StatelessWidget {
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: languageProvider.lan == 'English'
-                    ? const TextStyle(
-                        fontFamily: 'Bricolage-R',
-                        fontSize: 14,
-                      )
-                    : const TextStyle(
-                        fontFamily: 'Walone-R',
-                        fontSize: 14,
-                      ),
+                    ? textfieldTextStyleEng
+                    : textfieldTextStyleMm,
                 textAlign: TextAlign.start,
                 decoration: InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0x00ffffff),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0x00ffffff),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
+                  enabledBorder: enableBorderStyle,
+                  focusedBorder: focusedBorderStyle,
                   filled: true,
                   fillColor: Colors.white,
                   hintText: languageProvider.lan == 'English'
                       ? ("Enter your email address")
                       : ('သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
-                  hintStyle: const TextStyle(
-                    color: Color(0xFF7B838A),
-                    fontSize: 14,
-                  ),
+                  hintStyle: languageProvider.lan == 'English' ?
+                  textfieldHintTextStyleEng: textfieldHintTextStyleMm,
                   contentPadding:
                       const EdgeInsets.only(top: 1, bottom: 1, left: 10),
                   border: const OutlineInputBorder(

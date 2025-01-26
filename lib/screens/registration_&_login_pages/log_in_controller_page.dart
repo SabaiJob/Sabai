@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
@@ -131,27 +130,16 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                         languageProvider.lan == 'English'
                             ? const Text(
                                 'Log In',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-B',
-                                  fontSize: 15.63,
-                                  color: Colors.white,
-                                ),
+                                style: textButtonTextStyleEng,
                               )
                             : const Text(
                                 'ဆက်လက်ရန်',
-                                style: TextStyle(
-                                  fontFamily: 'Walone-B',
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                                style: textButtonTextStyleMm,
                               ),
                         const SizedBox(
                           width: 10,
                         ),
-                        const Icon(
-                          CupertinoIcons.arrow_right,
-                          color: Colors.white,
-                        ),
+                        rightArrowIcon,
                       ],
                     ),
                   ),

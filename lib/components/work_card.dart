@@ -6,7 +6,7 @@ import 'package:sabai_app/components/walkthrough_button.dart';
 import 'package:sabai_app/constants.dart';
 import '../screens/job_details_page.dart';
 import '../screens/registration_&_login_pages/log_in_controller_page.dart';
-import '../screens/registration_&_login_pages/registration_controller_page.dart';
+import '../screens/registration_&_login_pages/registration_pages_controller.dart';
 import '../services/job_provider.dart';
 import '../services/language_provider.dart';
 import 'package:popover/popover.dart';
@@ -481,7 +481,7 @@ class _WorkCardState extends State<WorkCard> {
                           textEng: 'Get Started',
                           textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
                           color: primaryPinkColor,
-                          widget: const RegistrationControllerPage(),
+                          widget: const RegistrationPagesController(),
                           tColor: Colors.white,
                           bColor: primaryPinkColor,
                           isGuest: true,

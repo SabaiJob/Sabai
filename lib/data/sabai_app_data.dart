@@ -79,6 +79,8 @@ class SabaiAppData {
     {'name': 'သင်ကြားရေး', 'emoji': '👩‍🏫', 'selected': false},
   ];
 
+  final List<String> _jobType = ['Remote', 'Full Time', 'Hybrid', 'On Site'];
+
   String get fixedPinNumber => _fixedPinNumber;
 
   List<String> get provinceItemsInEng => _provinceItemsInEng;
@@ -100,4 +102,6 @@ class SabaiAppData {
   List<Map<String, dynamic>> get jobCategoryInEng => _jobCategoriesInEng;
 
   List<Map<String, dynamic>> get jobCategoryInMm => _jobCategoriesInMm;
+
+  List<String> get jobTypes => _jobType;
 }
