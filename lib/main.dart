@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
 import 'package:sabai_app/services/otp_code_timer_provider.dart';
@@ -13,7 +14,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => JobProvider()),
         ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider()),
-        ChangeNotifierProvider(create: (context) => PhoneNumberProvider())
+        ChangeNotifierProvider(create: (context) => PhoneNumberProvider()),
+        ChangeNotifierProvider(create: (context) => JobFilterProvider()),
       ],
       child: const Sabai(),
     ),

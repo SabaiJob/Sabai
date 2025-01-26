@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_label.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
+import 'package:sabai_app/services/jobfilter_provider.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
   const AdvancedFilterPage({super.key});
@@ -14,14 +16,7 @@ class AdvancedFilterPage extends StatefulWidget {
 }
 
 class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
-  // Set<int> selectedJobCategoryIndices = {};
-  // Set<int> selectedJobTypeIndices = {};
-  // String? selectedJobLocation;
-  // String? selectedJobTypeOption;
-  // String? selectedLanguageOption;
-  // String? selectedVerificationOption;
-  // double currentValue = 1000.00;
-
+  SabaiAppData sabaiAppData = SabaiAppData();
   // Variables to store selected filter values
   List<dynamic> selectedJobNames = [];
   List<int> selectedJobCategoryIndices = [];
@@ -36,14 +31,22 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     return {
       'jobNames': selectedJobNames,
       'jobCategories': selectedJobCategoryIndices
-          .map((index) => SabaiAppData().jobCategoryInEng[index])
+          .map((index) => sabaiAppData.jobCategoryInEng[index]['name'])
           .toList(),
       'jobLocations': selectedJobLocations,
       'jobTypes': selectedJobTypeIndices
-          .map((index) => SabaiAppData().jobTypes[index])
+          .map((index) => sabaiAppData.jobTypes[index])
           .toList(),
-      'thaiLanguageRequired': selectedLanguageOption == 'Yes',
-      'verificationRequired': selectedVerificationOption == 'Yes',
+      'thaiLanguageRequired': selectedLanguageOption == 'Yes'
+          ? true
+          : selectedLanguageOption == 'No'
+              ? false
+              : null,
+      'verificationRequired': selectedVerificationOption == 'Yes'
+          ? true
+          : selectedVerificationOption == 'No'
+              ? false
+              : null,
       'salaryRange': currentValue,
     };
   }
@@ -55,15 +58,65 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       selectedJobCategoryIndices.clear();
       selectedJobLocations.clear();
       selectedJobTypeIndices.clear();
-      selectedLanguageOption = null;
-      selectedVerificationOption = null;
+      selectedLanguageOption = null; // Reset to null
+      selectedVerificationOption = null; // Reset to null
       currentValue = 1000.00;
     });
+    // Clear filters in the provider
+    Provider.of<JobFilterProvider>(context, listen: false)
+        .updateFilterValues(null);
+
+    // Navigate back to the JobListingPage
+    Navigator.pop(context);
   }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final filterProvider =
+          Provider.of<JobFilterProvider>(context, listen: false);
+      final existingFilters = filterProvider.filterValues;
+
+      if (existingFilters != null) {
+        setState(() {
+          selectedJobNames = existingFilters['jobNames'] ?? [];
+          selectedJobCategoryIndices = existingFilters['jobCategories'] != null
+              ? List.generate(
+                  existingFilters['jobCategories'].length,
+                  (index) => sabaiAppData.jobCategoryInEng.indexWhere(
+                    (cat) =>
+                        cat['name'] == existingFilters['jobCategories'][index],
+                  ),
+                ).where((index) => index != -1).toList()
+              : [];
+          selectedJobLocations = existingFilters['jobLocations'] ?? [];
+          selectedJobTypeIndices = existingFilters['jobTypes'] != null
+              ? List.generate(
+                  existingFilters['jobTypes'].length,
+                  (index) => sabaiAppData.jobTypes
+                      .indexOf(existingFilters['jobTypes'][index]),
+                ).where((index) => index != -1).toList()
+              : [];
+
+          // Restore radio button values (handle null)
+          selectedLanguageOption =
+              existingFilters['thaiLanguageRequired'] == true
+                  ? 'Yes'
+                  : existingFilters['thaiLanguageRequired'] == false
+                      ? 'No'
+                      : null;
+          selectedVerificationOption =
+              existingFilters['verificationRequired'] == true
+                  ? 'Yes'
+                  : existingFilters['verificationRequired'] == false
+                      ? 'No'
+                      : null;
+
+          currentValue = existingFilters['salaryRange'] ?? 1000.00;
+        });
+      }
+    });
   }
 
   @override
@@ -467,7 +520,11 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   final filterValues = collectFilterValues();
                   print(filterValues); // Or pass to another screen/function
 
-                  // Example: Navigate back with filter values
+                  // Use Provider to update filter values
+                  Provider.of<JobFilterProvider>(context, listen: false)
+                      .updateFilterValues(filterValues);
+
+                  // Navigate back
                   Navigator.pop(context, filterValues);
                 },
                 style: TextButton.styleFrom(

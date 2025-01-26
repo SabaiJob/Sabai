@@ -12,6 +12,7 @@ import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/notification.dart';
 import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobListingPage extends StatefulWidget {
@@ -50,24 +51,6 @@ class _JobListingPageState extends State<JobListingPage>
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = "";
   bool isSearching = false;
-
-  Map? filterValues;
-
-  int _calculateFilterCount(Map? filterValues) {
-    if (filterValues == null) return 0;
-
-    int count = 0;
-    count += (filterValues['jobNames'] as List?)?.length ?? 0;
-    count += (filterValues['jobCategories'] as List?)?.length ?? 0;
-    count += (filterValues['jobLocations'] as List?)?.length ?? 0;
-    count += (filterValues['jobTypes'] as List?)?.length ?? 0;
-    count += filterValues['thaiLanguageRequired'] == true ? 1 : 0;
-    count += filterValues['verificationRequired'] == true ? 1 : 0;
-    count += (filterValues['salaryRange'] > 1000.00) ? 1 : 0;
-
-    return count;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -154,6 +137,7 @@ class _JobListingPageState extends State<JobListingPage>
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
+    var filterProvider = Provider.of<JobFilterProvider>(context);
     final combineJobs = jobProvider.combineJobs;
 
     final filterJobs = combineJobs.where((job) {
@@ -325,9 +309,7 @@ class _JobListingPageState extends State<JobListingPage>
                 Badge(
                   textColor: primaryPinkColor,
                   backgroundColor: const Color(0xFFFED7EA),
-                  label: Text(filterValues == null
-                      ? '0'
-                      : _calculateFilterCount(filterValues).toString()),
+                  label: Text(filterProvider.calculateFilterCount().toString()),
                   child: IconButton(
                     color: const Color(0xffFF3997),
                     onPressed: () async {
@@ -335,21 +317,11 @@ class _JobListingPageState extends State<JobListingPage>
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const AdvancedFilterPage()));
-
+                                   const AdvancedFilterPage()));
                       if (result != null) {
-                        setState(() {
-                          filterValues = result;
-                        });
+                        filterProvider.updateFilterValues(result);
                       }
                     },
-                    // onPressed: () {
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               const AdvancedFilterPage()));
-                    // },
                     icon: const Icon(
                       CupertinoIcons.slider_horizontal_3,
                     ),
@@ -365,28 +337,6 @@ class _JobListingPageState extends State<JobListingPage>
                     ),
                   ),
                 ),
-                // IconButton(
-                //   color: const Color(0xffFF3997),
-                //   onPressed: () {
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => const AdvancedFilterPage()));
-                //   },
-                //   icon: const Icon(
-                //     CupertinoIcons.slider_horizontal_3,
-                //   ),
-                //   style: IconButton.styleFrom(
-                //     backgroundColor: Colors.white,
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(8),
-                //       side: const BorderSide(
-                //         color: Color(0xffF0F1F2),
-                //         width: 2,
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             const SizedBox(
