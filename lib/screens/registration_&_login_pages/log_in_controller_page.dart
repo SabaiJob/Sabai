@@ -8,6 +8,8 @@ import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
 import '../../constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LogInControllerPage extends StatefulWidget {
   const LogInControllerPage({super.key});
@@ -25,28 +27,167 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
+  //user login
+  Future<void> userLogin() async {
+    const String url =
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/login/';
+
+    final Map<String, dynamic> requestBody = {
+      'full_name': _fullNameController.text,
+      'phone': _phoneNumberController.text,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode(requestBody),
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        requestOTP();
+        setState(() {
+          _currentPage++;
+        });
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login failed: ${response.body}'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+          ),
+        );
+      }
+    }
+  }
+
+  //request OTP
+  Future<void> requestOTP() async {
+    const String url =
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
+
+    final Map<String, dynamic> requestBody = {
+      "phone": _phoneNumberController.text,
+    };
+
+    try {
+      final otpReqResponse = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody),
+      );
+
+      if (otpReqResponse.statusCode == 200) {
+        // Move to the next page
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        // Handle errors
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('OTP request failed: ${otpReqResponse.body}'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
+
   // User Log In
   void _handleUserLogin(PhoneNumberProvider phoneNumberProvider) {
     bool isFormValid = _formKey.currentState!.validate();
     if (isFormValid) {
       print('Your full name: ${_fullNameController.text}');
       print('Your Phone Number: ${_phoneNumberController.text}');
-      phoneNumberProvider.setPhoneNumber(_phoneNumberController.text.toString().trim());
-      _pageController.nextPage(
-          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-      setState(() {
-        _currentPage++;
-      });
+      phoneNumberProvider
+          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+      // _pageController.nextPage(
+      //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+      // setState(() {
+      //   _currentPage++;
+      // });
+      userLogin();
     }
   }
 
   // OTP Code Verification
-  void _handleOTPVerificationPage(String enteredPinCode, JobProvider jobProvider) {
+  void _handleOTPVerificationPage(
+      String enteredPinCode, JobProvider jobProvider) async {
     if (_currentPage == 1) {
       String enteredPinCode = _pinCodeController.text.trim();
-      if (enteredPinCode == sabaiAppData.fixedPinNumber) {
-        jobProvider.setGuest(false);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const NavigationHomepage(showButtonSheet: false,)));
+      // if (enteredPinCode == sabaiAppData.fixedPinNumber) {
+      //   jobProvider.setGuest(false);
+      //   Navigator.pushReplacement(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => const NavigationHomepage(
+      //                 showButtonSheet: false,
+      //               )));
+      // }
+      const String url =
+          'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/login/';
+
+      final Map<String, dynamic> requestBody = {
+        "phone": _phoneNumberController.text,
+        "otp": enteredPinCode,
+      };
+
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(requestBody),
+        );
+
+        if (response.statusCode == 200 && response.statusCode < 300) {
+          jobProvider.setGuest(false);
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => const NavigationHomepage(
+          //       showButtonSheet: false,
+          //     ),
+          //   ),
+          // );
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const NavigationHomepage(
+                showButtonSheet: false,
+              ),
+            ),
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('OTP confirmation failed: ${response.body}'),
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+        }
       }
     }
   }
@@ -97,9 +238,8 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     phoneNumberController: _phoneNumberController),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    whenOnComplete: (value){
+                    whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
-                      
                     })
               ],
             ))
@@ -113,7 +253,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: (){
+                    onPressed: () {
                       _handleUserLogin(phoneNumberProvider);
                     },
                     style: TextButton.styleFrom(

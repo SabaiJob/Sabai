@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
@@ -12,6 +13,8 @@ import 'package:sabai_app/services/phone_number_provider.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegistrationPagesController extends StatefulWidget {
   const RegistrationPagesController({super.key});
@@ -33,6 +36,97 @@ class _RegistrationPagesControllerState
   final TextEditingController _yearsController = TextEditingController();
   final TextEditingController _passportController = TextEditingController();
   final TextEditingController _pinCodeController = TextEditingController();
+
+  //register user
+  Future<void> registerUser() async {
+    const String url =
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/register/';
+
+    String selectedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+
+    final Map<String, dynamic> requestBody = {
+      "phone": _phoneNumberController.text,
+      "full_name": _fullNameController.text,
+      "email": _emailController.text,
+      "date_of_birth": selectedDate,
+      "gender": _selectedGender,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 201) {
+        //OTP request
+        requestOTP();
+        setState(() {
+          _currentPage++;
+          _progressStep++;
+        });
+      } else {
+        // Handle errors
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Registration failed: ${response.body}'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+          ),
+        );
+      }
+    }
+  }
+
+  //request OTP
+  Future<void> requestOTP() async {
+    const String url =
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
+
+    final Map<String, dynamic> requestBody = {
+      "phone": _phoneNumberController.text,
+    };
+
+    try {
+      final otpReqResponse = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(requestBody),
+      );
+
+      if (otpReqResponse.statusCode == 200) {
+        // Move to the next page
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        // Handle errors
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('OTP request failed: ${otpReqResponse.body}'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
 
   int _currentPage = 0;
 
@@ -96,16 +190,14 @@ class _RegistrationPagesControllerState
         print('Your Birthday: ${_selectedDate}');
         print('Your Phone Number: ${_phoneNumberController.text}');
         print('Your email address: ${_emailController.text}');
-        phoneNumberProvider.setPhoneNumber(_phoneNumberController.text.toString().trim());
+        phoneNumberProvider
+            .setPhoneNumber(_phoneNumberController.text.toString().trim());
         // Move to the next page
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-        setState(() {
-          _currentPage++;
-          _progressStep++;
-        });
+        // _pageController.nextPage(
+        //   duration: const Duration(milliseconds: 300),
+        //   curve: Curves.easeInOut,
+        // );
+        registerUser();
       }
     }
   }
@@ -168,19 +260,68 @@ class _RegistrationPagesControllerState
   }
 
   // OTP Code Verification
-  void _handleOTPVerificationPage(String enteredPinCode, JobProvider jobProvider) {
+  void _handleOTPVerificationPage(
+      String enteredPinCode, JobProvider jobProvider) async {
     if (_currentPage == 1) {
       String enteredPinCode = _pinCodeController.text.trim();
-      if (enteredPinCode == sabaiAppData.fixedPinNumber) {
-        jobProvider.setGuest(false);
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
+
+      //modified part
+      // if (enteredPinCode == sabaiAppData.fixedPinNumber) {
+      //   jobProvider.setGuest(false);
+      //   _pageController.nextPage(
+      //     duration: const Duration(milliseconds: 300),
+      //     curve: Curves.easeInOut,
+      //   );
+      //   setState(() {
+      //     _currentPage++;
+      //     _progressStep++;
+      //   });
+      // }
+
+      const String url =
+          'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
+
+      final Map<String, dynamic> requestBody = {
+        "phone": _phoneNumberController.text,
+        "otp": enteredPinCode,
+      };
+
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(requestBody),
         );
-        setState(() {
-          _currentPage++;
-          _progressStep++;
-        });
+
+        if (response.statusCode == 200) {
+          jobProvider.setGuest(false);
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+          setState(() {
+            _currentPage++;
+            _progressStep++;
+          });
+        } else {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('OTP confirmation failed: ${response.body}'),
+              ),
+            );
+          }
+          print(response.body);
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: $e'),
+            ),
+          );
+        }
+        print(e);
       }
     }
   }
@@ -313,9 +454,8 @@ class _RegistrationPagesControllerState
                     }),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    whenOnComplete: (value){
+                    whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
-                      
                     }),
                 CompleteUserInfoPage(
                     isProvinceError: _isProvinceError,
@@ -415,8 +555,7 @@ class _RegistrationPagesControllerState
                       fixedSize: const Size(343, 42),
                       backgroundColor: const Color(0xffFF3997),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), 
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Row(
