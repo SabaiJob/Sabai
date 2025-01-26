@@ -181,6 +181,8 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
               ),
             );
           }
+          print(response.body);
+          print(response.statusCode);
         }
       } catch (e) {
         if (mounted) {
