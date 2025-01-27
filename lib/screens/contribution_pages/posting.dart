@@ -20,12 +20,14 @@ class Posting extends StatefulWidget {
       this.isLocated,
       this.url,
       this.selectedImages,
+      this.draftText,
       super.key});
 
   String? url;
   List<XFile>? selectedImages = [];
   late String? location;
   late bool? isLocated = false;
+  final String? draftText;
    // Add this to track the current URL
 
   @override
@@ -34,7 +36,7 @@ class Posting extends StatefulWidget {
 
 class _PostingState extends State<Posting> {
   PreviewData? _previewData;
-  final textController = TextEditingController();
+  final TextEditingController textController = TextEditingController();
   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
   List<XFile>? _images = [];
   String? _currentUrl;
@@ -46,6 +48,10 @@ class _PostingState extends State<Posting> {
     _currentUrl = widget.url; // Store initial URL
     _initializeImages();
     _restoreDraftImages();
+    // Initialize text controller with draft text
+    if (widget.draftText != null) {
+      textController.text = widget.draftText!;
+    }
   }
   void _initializeImages() {
     if (widget.selectedImages != null && widget.selectedImages!.isNotEmpty) {
@@ -177,12 +183,13 @@ class _PostingState extends State<Posting> {
       appBar: AppBar(
         leading: (widget.url != null ||
                 widget.location != null ||
-                widget.isLocated != null ||
+                widget.isLocated != null ||textController.text.trim().isNotEmpty ||
                 (_images != null && _images!.isNotEmpty))
             ? LeadingIcon(
                 url: widget.url ?? '',
                 location: widget.location ?? '',
                 isLocated: widget.isLocated ?? false,
+                draftText: widget.draftText ?? '',
               )
             : const BackButton(color: primaryPinkColor),
         iconTheme: const IconThemeData(
@@ -361,6 +368,8 @@ class _PostingState extends State<Posting> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
                       controller: textController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -527,12 +536,14 @@ class LeadingIcon extends StatefulWidget {
     required this.url,
     required this.location,
     required this.isLocated,
+    required this.draftText,
     super.key,
   });
 
   final String url;
   final String location;
   final bool isLocated;
+  final String draftText;
 
   @override
   State<LeadingIcon> createState() => _LeadingIconState();
@@ -546,6 +557,9 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.setBool('isLocated', widget.isLocated);
     // Get the current images from the Posting widget
     final postingState = context.findAncestorStateOfType<_PostingState>();
+    if(postingState != null){
+      await prefs.setString('draftText', postingState.textController.text);
+    }
     if (postingState != null && postingState._images != null) {
       // Convert XFile paths to list of strings
       final imagePaths =
@@ -568,6 +582,7 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.remove('location');
     await prefs.remove('isLocated');
     await prefs.remove('draft_images');
+    await prefs.remove('draftText');
     jobProvider.setDraft(false);
     Navigator.pushReplacement(
       context,

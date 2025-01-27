@@ -70,11 +70,17 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     return prefs.getBool('isLocated');
   }
 
+  Future<String?> getDraftText() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('draftText');
+  }
+
   Future<void> onTabChange(index, JobProvider jobProvider) async {
     if (index == 1) {
       if (jobProvider.isDraft == true) {
         String? url = await getUrl();
         String? location = await getLocation();
+        String? draftText = await getDraftText();
         bool? isLocated = await getIsLocated();
         Navigator.push(
           context,
@@ -83,6 +89,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
               url: url,
               location: location,
               isLocated: isLocated,
+              draftText: draftText,
             ),
           ),
         );
