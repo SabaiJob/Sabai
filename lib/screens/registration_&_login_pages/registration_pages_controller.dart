@@ -3,10 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/complete_user_registration_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/initial_registration_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
 import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
@@ -203,7 +205,7 @@ class _RegistrationPagesControllerState
   }
 
   // Profile Set Up (additional info)
-  void _handleProfileSetUp() {
+  void _handleProfileSetUp() async {
     if (_currentPage == 2) {
       _isProvinceError = _selectedProvince == null;
       _isLanguageLevelError = _selectedLanguageLevel == null;
@@ -237,22 +239,57 @@ class _RegistrationPagesControllerState
       if (noErrors) {
         print('Your Province : ${_selectedProvince}');
         print(
-            'Duration in Timeline : ${_yearsController.text} ${_selectedDurationEng}');
-        print('Your Thai Language Proficiency : ${_selectedLanguageLevel}');
-        print('Do you have passport ? Y/N : ${_selectedOptionPp}');
+            'Duration in Timeline : ${_yearsController.text} $_selectedDurationEng');
+        print('Your Thai Language Proficiency : $_selectedLanguageLevel');
+        print('Do you have passport ? Y/N : $_selectedOptionPp');
         print('Your passport number: ${_passportController.text}');
-        print('Do you have work permit ? Y/N ${_selectedOptionWp}');
+        print('Do you have work permit ? Y/N $_selectedOptionWp');
         print(
             'Congratulations! You have completed all the required fields for the registration');
-        // Move to the next page
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-        setState(() {
-          _progressStep++;
-          _currentPage++;
-        });
+
+        //post user's info api
+        try {
+          final response = await ApiService.post(
+            '/auth/userinfo/',
+            {
+              "province": _selectedProvince,
+              "duration_in_thailand":
+                  '${_yearsController.text} $_selectedDurationEng',
+              "thai_proficiency": _selectedLanguageLevel,
+              "has_passport": _selectedOptionPp,
+              "passport_number": _phoneNumberController.text,
+              "has_work_permit": _selectedOptionWp,
+            },
+          );
+          if (response.statusCode >= 200 && response.statusCode < 300) {
+            // Move to the next page
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+            setState(() {
+              _progressStep++;
+              _currentPage++;
+            });
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Adding info fail: ${response.body}'),
+                ),
+              );
+            }
+            print(response.body);
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('error: $e'),
+              ),
+            );
+          }
+        }
       } else {
         print('You need to complete all fields');
       }
@@ -301,6 +338,10 @@ class _RegistrationPagesControllerState
 
         if (response.statusCode >= 200 && response.statusCode < 300) {
           jobProvider.setGuest(false);
+          final responseData = json.decode(response.body);
+          final token = responseData['token'];
+          print(token);
+          await TokenService.saveToken(token);
           _pageController.nextPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
