@@ -59,7 +59,7 @@ class _RegistrationPagesControllerState
         body: json.encode(requestBody),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         //OTP request
         requestOTP();
         setState(() {
@@ -281,9 +281,15 @@ class _RegistrationPagesControllerState
       const String url =
           'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
 
+      String selectedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
+        "full_name": _fullNameController.text,
+        "email": _emailController.text,
+        "date_of_birth": selectedDate,
+        "gender": _selectedGender,
       };
 
       try {
@@ -293,7 +299,7 @@ class _RegistrationPagesControllerState
           body: json.encode(requestBody),
         );
 
-        if (response.statusCode == 200) {
+        if (response.statusCode >= 200 && response.statusCode < 300) {
           jobProvider.setGuest(false);
           _pageController.nextPage(
             duration: const Duration(milliseconds: 300),
