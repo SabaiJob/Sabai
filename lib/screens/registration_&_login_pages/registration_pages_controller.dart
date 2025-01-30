@@ -39,6 +39,7 @@ class _RegistrationPagesControllerState
   final TextEditingController _passportController = TextEditingController();
   final TextEditingController _pinCodeController = TextEditingController();
 
+  List<Map<String, dynamic>> _jobCategories = [];
   //register user
   Future<void> registerUser() async {
     const String url =
@@ -262,6 +263,8 @@ class _RegistrationPagesControllerState
             },
           );
           if (response.statusCode >= 200 && response.statusCode < 300) {
+            //fetch the job categories
+            getJobCategory();
             // Move to the next page
             _pageController.nextPage(
               duration: const Duration(milliseconds: 300),
@@ -374,9 +377,9 @@ class _RegistrationPagesControllerState
   }
 
   // Create Profile
-  void _handleCreateProfile(LanguageProvider languageProvider) {
-    bool isAnyJobCategorySelected = sabaiAppData.jobCategoryInEng
-        .any((category) => category['selected'] == true);
+  void _handleCreateProfile(LanguageProvider languageProvider){
+    bool isAnyJobCategorySelected =
+        _jobCategories.any((category) => category['selected'] == true);
     if (!isAnyJobCategorySelected) {
       print('Error: Please select at least one job category.');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -391,8 +394,8 @@ class _RegistrationPagesControllerState
       );
       return;
     } else {
-      setState(() {
-        var selectedJobCategories = sabaiAppData.jobCategoryInEng
+      setState((){
+        var selectedJobCategories = _jobCategories
             .where((category) => category['selected'] == true)
             .map((category) => category['name'])
             .toList();
@@ -413,7 +416,41 @@ class _RegistrationPagesControllerState
             );
           },
         );
+
+        // try{
+        //   final response = await ApiService.post('/auth/user/job-preferences/', {
+        //       'preferences' : _jobCategories[]
+        //   });
+        // }catch(e){
+        //   print(e);
+        // }
       });
+    }
+  }
+
+  // get job categories
+  Future<void> getJobCategory() async {
+    try {
+      final response = await ApiService.get('/jobs/categories/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final List<dynamic> data = json.decode(response.body);
+        final List<Map<String, dynamic>> jobCategories = data.map((job) {
+          String name = job['name'];
+          String imageLink = job['image'];
+          return {
+            'name': name ?? 'Unknown',
+            'image': imageLink ?? '',
+            'selected': false,
+          };
+        }).toList();
+        setState(() {
+          _jobCategories = jobCategories;
+        });
+      } else {
+        print('error: ${response.body} , ststusCode: ${response.statusCode} ');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -565,15 +602,23 @@ class _RegistrationPagesControllerState
                       });
                     }),
                 SelectJobCategoryPage(
-                  jobCategoryLength: sabaiAppData.jobCategoryInEng.length,
-                  jobCategoryList: sabaiAppData.jobCategoryInEng,
-                  whenOnChanged: (value, index) {
-                    setState(() {
-                      sabaiAppData.jobCategoryInEng[index!]['selected'] =
-                          value!;
-                    });
-                  },
-                ),
+                    jobCategoryLength: _jobCategories.length,
+                    jobCategoryList: _jobCategories,
+                    whenOnChanged: (value, index) {
+                      setState(() {
+                        _jobCategories[index!]['selected'] = value!;
+                      });
+                    })
+                // SelectJobCategoryPage(
+                //   jobCategoryLength: sabaiAppData.jobCategoryInEng.length,
+                //   jobCategoryList: sabaiAppData.jobCategoryInEng,
+                //   whenOnChanged: (value, index) {
+                //     setState(() {
+                //       sabaiAppData.jobCategoryInEng[index!]['selected'] =
+                //           value!;
+                //     });
+                //   },
+                // ),
               ],
             ))
           ],

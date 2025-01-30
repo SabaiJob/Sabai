@@ -1,5 +1,4 @@
 // NEW JOB CATEGORY PAGE
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
@@ -61,24 +60,20 @@ class SelectJobCategoryPage extends StatelessWidget {
                   child: CheckboxListTile(
                     checkboxScaleFactor: 0.75,
                     title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          jobCategoryList![index]['name'],
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.62,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            jobCategoryList![index]['name'],
+                            style: const TextStyle(
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 15.62,
+                            ),
                           ),
-                        ),
-                        Text(
-                          jobCategoryList![index]['emoji'],
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.63,
+                          Image.network(
+                            jobCategoryList![index]['image'],
+                            scale: 55,
                           ),
-                        ),
-                      ],
-                    ),
+                        ]),
                     activeColor: Colors.pink,
                     value: jobCategoryList![index]['selected'],
                     onChanged: (value) {
