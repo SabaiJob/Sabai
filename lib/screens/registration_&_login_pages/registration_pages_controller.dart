@@ -376,8 +376,38 @@ class _RegistrationPagesControllerState
     }
   }
 
+  Future<void> completeRrgristration(
+      List selectedJobCategories, LanguageProvider languageProvider) async {
+    try {
+      final response = await ApiService.post('/auth/user/job-preferences/',
+          {'preferences': selectedJobCategories});
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        _progressStep++;
+        showDoubleCircleLoadingBox(context, languageProvider.lan);
+        Future.delayed(
+          const Duration(seconds: 3),
+          () {
+            if (!mounted) return;
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SuccessPage(),
+              ),
+            );
+          },
+        );
+      } else {
+        print('Error : ${response.body}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Create Profile
-  void _handleCreateProfile(LanguageProvider languageProvider){
+  void _handleCreateProfile(LanguageProvider languageProvider) {
     bool isAnyJobCategorySelected =
         _jobCategories.any((category) => category['selected'] == true);
     if (!isAnyJobCategorySelected) {
@@ -394,36 +424,15 @@ class _RegistrationPagesControllerState
       );
       return;
     } else {
-      setState((){
+      setState(() {
         var selectedJobCategories = _jobCategories
             .where((category) => category['selected'] == true)
-            .map((category) => category['name'])
+            .map((category) => category['id'])
             .toList();
         print('did you choose something? Y/N ${isAnyJobCategorySelected}');
         print('Selected Categories: ${selectedJobCategories}');
-        _progressStep++;
-        showDoubleCircleLoadingBox(context, languageProvider.lan);
-        Future.delayed(
-          const Duration(seconds: 3),
-          () {
-            if (!mounted) return;
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SuccessPage(),
-              ),
-            );
-          },
-        );
 
-        // try{
-        //   final response = await ApiService.post('/auth/user/job-preferences/', {
-        //       'preferences' : _jobCategories[]
-        //   });
-        // }catch(e){
-        //   print(e);
-        // }
+        completeRrgristration(selectedJobCategories, languageProvider);
       });
     }
   }
@@ -437,10 +446,12 @@ class _RegistrationPagesControllerState
         final List<Map<String, dynamic>> jobCategories = data.map((job) {
           String name = job['name'];
           String imageLink = job['image'];
+          int id = job['id'];
           return {
             'name': name ?? 'Unknown',
             'image': imageLink ?? '',
             'selected': false,
+            'id': id,
           };
         }).toList();
         setState(() {
