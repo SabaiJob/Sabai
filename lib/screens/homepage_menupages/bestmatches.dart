@@ -17,10 +17,12 @@ class BestMatches extends StatelessWidget {
                   jobProvider.bestMatched.length, // Total number of items
               itemBuilder: (context, index) {
                 final job = jobProvider.bestMatched[index];
-                return WorkCard(
-                  job['jobTitle'],
-                  job['isPartner'],
-                );
+                return
+                    //   WorkCard(
+                    //   job['jobTitle'],
+                    //   job['isPartner'],
+                    // );
+                    Text('null');
               },
             )
           : const Center(

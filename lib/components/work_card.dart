@@ -13,8 +13,21 @@ import 'package:popover/popover.dart';
 
 class WorkCard extends StatefulWidget {
   final String jobTitle;
+  final String companyName;
+  final int minSalary;
+  final int maxSalary;
+  final String location;
+  final String currency;
   final bool isPartner;
-  const WorkCard(this.jobTitle, this.isPartner, {super.key});
+  const WorkCard(
+      {required this.jobTitle,
+      required this.isPartner,
+      required this.companyName,
+      required this.location,
+      required this.maxSalary,
+      required this.minSalary,
+      required this.currency,
+      super.key});
 
   @override
   State<WorkCard> createState() => _WorkCardState();
@@ -144,17 +157,17 @@ class _WorkCardState extends State<WorkCard> {
                             ),
                           ),
                           RichText(
-                            text: const TextSpan(
+                            text: TextSpan(
                               text: 'By ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontFamily: 'Bricolage-R',
                                 color: Color(0xff6C757D),
                               ),
                               children: [
                                 TextSpan(
-                                  text: 'Starbucks Thailand',
-                                  style: TextStyle(
+                                  text: widget.companyName,
+                                  style: const TextStyle(
                                     fontFamily: 'Bricolage-B',
                                     fontSize: 10,
                                     color: Color(0xff6C757D),
@@ -300,9 +313,9 @@ class _WorkCardState extends State<WorkCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       language.lan == 'English'
-                          ? const Text(
-                              '18000 ~ 28000 THB',
-                              style: TextStyle(
+                          ? Text(
+                              '${widget.minSalary} ~ ${widget.maxSalary} ${widget.currency}',
+                              style: const TextStyle(
                                 fontFamily: 'Bricolage-M',
                                 fontSize: 12.5,
                                 color: Color(0xff4C5258),
@@ -318,9 +331,9 @@ class _WorkCardState extends State<WorkCard> {
                             ),
                       Row(
                         children: [
-                          const Text(
-                            'Bangkok',
-                            style: TextStyle(
+                          Text(
+                            widget.location,
+                            style: const TextStyle(
                               fontFamily: 'Bricolage-M',
                               fontSize: 12.5,
                               color: Color(0xff4C5258),

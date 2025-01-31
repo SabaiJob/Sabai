@@ -20,10 +20,12 @@ class Partnerships extends StatelessWidget {
         itemCount: partnerJobs.length, // Total number of items
         itemBuilder: (context, index) {
           final job = partnerJobs[index];
-          return WorkCard(
-            job['jobTitle'],
-            job['isPartner'],
-          );
+          return
+              //   WorkCard(
+              //   job['jobTitle'],
+              //   job['isPartner'],
+              // );
+              Text('null');
         },
       ),
     );

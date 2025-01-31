@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
+import '../screens/registration_&_login_pages/api_service.dart';
 
 class JobProvider extends ChangeNotifier {
   bool _isGuest = false;
@@ -22,6 +26,41 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //api integration All jobs page
+  List<Map<String, dynamic>> _jobInfo = [];
+  bool _isLoading = false;
+
+  List<Map<String, dynamic>> get jobInfo => _jobInfo;
+  bool get isLoading => _isLoading;
+
+  Future<void> getJobs(bool isLoading) async {
+    _isLoading = isLoading;
+    notifyListeners();
+
+    try {
+      final response = await ApiService.get('/jobs/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data.containsKey('results') && data['results'] is List) {
+          final List<dynamic> jobs = data['results'];
+          _jobInfo =
+              jobs.map((job) => job['info'] as Map<String, dynamic>).toList();
+        } else {
+          print('Invalid response structure: ${response.body}');
+        }
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+      _jobInfo = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  //hardcoded stuff
   final List<String> _allJobs = [
     'Barista',
     'Chef',

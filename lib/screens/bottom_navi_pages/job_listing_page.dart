@@ -317,7 +317,7 @@ class _JobListingPageState extends State<JobListingPage>
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                   const AdvancedFilterPage()));
+                                  const AdvancedFilterPage()));
                       if (result != null) {
                         filterProvider.updateFilterValues(result);
                       }
@@ -348,10 +348,12 @@ class _JobListingPageState extends State<JobListingPage>
                     itemCount: filterJobs.length,
                     itemBuilder: (context, index) {
                       var job = filterJobs[index];
-                      return WorkCard(
-                        job['jobTitle'],
-                        job['isPartner'],
-                      );
+                      return
+                          //   WorkCard(
+                          //   job['jobTitle'],
+                          //   job['isPartner'],
+                          // );
+                          Text('null');
                     }),
               ),
             ] else ...[

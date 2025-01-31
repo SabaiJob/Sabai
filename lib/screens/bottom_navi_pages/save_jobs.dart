@@ -158,10 +158,12 @@ class _SaveJobsState extends State<SaveJobs> {
                       itemCount: filterJobs.length,
                       itemBuilder: (context, index) {
                         var jobs = filterJobs[index];
-                        return WorkCard(
-                          jobs['jobTitle'],
-                          jobs['isPartner'],
-                        );
+                        return
+                            //   WorkCard(
+                            //   jobs['jobTitle'],
+                            //   jobs['isPartner'],
+                            // );
+                            Text('null');
                       })),
             ] else ...[
               Align(
@@ -190,10 +192,12 @@ class _SaveJobsState extends State<SaveJobs> {
                             final job = jobProvider.combineJobs.firstWhere(
                               (j) => j['jobTitle'] == savedJobs[index],
                             );
-                            return WorkCard(
-                              job['jobTitle'],
-                              job['isPartner'],
-                            );
+                            return
+                                //   WorkCard(
+                                //   job['jobTitle'],
+                                //   job['isPartner'],
+                                // );
+                                Text('null');
                           },
                         )
                       : const Center(
