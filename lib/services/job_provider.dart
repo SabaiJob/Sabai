@@ -27,11 +27,18 @@ class JobProvider extends ChangeNotifier {
   }
 
   //api integration All jobs page
+
+  String _type = '';
   List<Map<String, dynamic>> _jobInfo = [];
+  List<Map<String, dynamic>> _adInfo = [];
+  List<dynamic> _jobs = [];
   bool _isLoading = false;
 
   List<Map<String, dynamic>> get jobInfo => _jobInfo;
+  List<Map<String, dynamic>> get adInfo => _adInfo;
+  List<dynamic> get allTypeJobs => _jobs;
   bool get isLoading => _isLoading;
+  String get type => _type;
 
   Future<void> getJobs(bool isLoading) async {
     _isLoading = isLoading;
@@ -42,9 +49,20 @@ class JobProvider extends ChangeNotifier {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
-          final List<dynamic> jobs = data['results'];
-          _jobInfo =
-              jobs.map((job) => job['info'] as Map<String, dynamic>).toList();
+          _jobs = data['results'];
+          _jobInfo = _jobs
+              .where((job) => job['type'] == 'job')
+              .map((job) => job['info'] as Map<String, dynamic>)
+              .toList();
+          _adInfo = _jobs
+              .where((job) => job['type'] == 'ads')
+              .map((job) => job['info'] as Map<String, dynamic>)
+              .toList();
+          _type = _jobInfo.isNotEmpty
+              ? 'job'
+              : _adInfo.isNotEmpty
+                  ? 'ads'
+                  : '';
         } else {
           print('Invalid response structure: ${response.body}');
         }
@@ -54,6 +72,7 @@ class JobProvider extends ChangeNotifier {
     } catch (e) {
       print('Exception: $e');
       _jobInfo = [];
+      _adInfo = [];
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -72,7 +91,7 @@ class JobProvider extends ChangeNotifier {
   final List<String> _restaurantJobs = ['Barista', 'Chef'];
   final List<String> _hotelJobs = ['Janitorial Staff'];
 
-  List<String> get allJobs => _allJobs;
+  //List<String> get allJobs => _allJobs;
 
   final List<String> _savedJobs = [];
   List<String> get savedJobs => _savedJobs;

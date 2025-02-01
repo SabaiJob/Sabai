@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/ad_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import '../../components/work_card.dart';
 
 class All extends StatefulWidget {
-  const All({
-    super.key,
-  });
+  const All({super.key});
 
   @override
   State<All> createState() => _AllState();
@@ -16,14 +15,13 @@ class All extends StatefulWidget {
 class _AllState extends State<All> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    fetchJobs();
+    Future.microtask(() => fetchJobs());
   }
 
   void fetchJobs() async {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
-    await jobProvider.getJobs(true); // Fetch the jobs
+    await jobProvider.getJobs(true);
   }
 
   @override
@@ -44,18 +42,27 @@ class _AllState extends State<All> {
                 ),
               )
             : ListView.builder(
-                itemCount: jobProvider.jobInfo.length, // Total number of items
+                itemCount: jobProvider.allTypeJobs.length,
                 itemBuilder: (context, index) {
-                  final jobInfo = jobProvider.jobInfo;
-                  return WorkCard(
-                    jobTitle: jobInfo[index]['title'],
-                    companyName: jobInfo[index]['company_name'],
-                    location: jobInfo[index]['location'],
-                    minSalary: jobInfo[index]['salary_min'],
-                    maxSalary: jobInfo[index]['salary_max'],
-                    currency: jobInfo[index]['currency'],
-                    isPartner: true,
-                  );
+                  final job = jobProvider.allTypeJobs[index];
+                  if (job['type'] == 'job') {
+                    final jobInfo = job['info'] as Map<String, dynamic>;
+                    return WorkCard(
+                      jobTitle: jobInfo['title'],
+                      companyName: jobInfo['company_name'],
+                      location: jobInfo['location'],
+                      minSalary: jobInfo['salary_min'],
+                      maxSalary: jobInfo['salary_max'],
+                      currency: jobInfo['currency'],
+                      isPartner: true,
+                    );
+                  } else {
+                    final adInfo = job['info'] as Map<String, dynamic>;
+                    return AdCard(
+                      url: adInfo['link'],
+                      imageUrl: adInfo['poster'],
+                    );
+                  }
                 },
               ),
       ),

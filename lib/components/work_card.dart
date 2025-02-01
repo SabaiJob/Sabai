@@ -11,7 +11,7 @@ import '../services/job_provider.dart';
 import '../services/language_provider.dart';
 import 'package:popover/popover.dart';
 
-class WorkCard extends StatefulWidget {
+class WorkCard extends StatelessWidget {
   final String jobTitle;
   final String companyName;
   final int minSalary;
@@ -30,15 +30,10 @@ class WorkCard extends StatefulWidget {
       super.key});
 
   @override
-  State<WorkCard> createState() => _WorkCardState();
-}
-
-class _WorkCardState extends State<WorkCard> {
-  @override
   Widget build(BuildContext context) {
     var language = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    bool? isSaved = jobProvider.isSaved(widget.jobTitle);
+    bool? isSaved = jobProvider.isSaved(jobTitle);
     bool? isGuest = jobProvider.isGuest;
 
     return GestureDetector(
@@ -63,7 +58,7 @@ class _WorkCardState extends State<WorkCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.isPartner == true
+            isPartner == true
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,8 +111,7 @@ class _WorkCardState extends State<WorkCard> {
                                       builder: (context) =>
                                           guestBotoom(language),
                                     )
-                                  : jobProvider
-                                      .toggleSavedJobs(widget.jobTitle);
+                                  : jobProvider.toggleSavedJobs(jobTitle);
                             },
                             icon: isSaved == false
                                 ? const Icon(
@@ -150,7 +144,7 @@ class _WorkCardState extends State<WorkCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.jobTitle,
+                            jobTitle,
                             style: const TextStyle(
                               fontSize: 15.63,
                               fontFamily: 'Bricolage-M',
@@ -166,7 +160,7 @@ class _WorkCardState extends State<WorkCard> {
                               ),
                               children: [
                                 TextSpan(
-                                  text: widget.companyName,
+                                  text: companyName,
                                   style: const TextStyle(
                                     fontFamily: 'Bricolage-B',
                                     fontSize: 10,
@@ -178,7 +172,7 @@ class _WorkCardState extends State<WorkCard> {
                           ),
                         ],
                       ),
-                      widget.isPartner == false
+                      isPartner == false
                           ? Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: Container(
@@ -198,8 +192,7 @@ class _WorkCardState extends State<WorkCard> {
                                             builder: (context) =>
                                                 guestBotoom(language),
                                           )
-                                        : jobProvider
-                                            .toggleSavedJobs(widget.jobTitle);
+                                        : jobProvider.toggleSavedJobs(jobTitle);
                                   },
                                   icon: isSaved == false
                                       ? const Icon(
@@ -314,7 +307,7 @@ class _WorkCardState extends State<WorkCard> {
                     children: [
                       language.lan == 'English'
                           ? Text(
-                              '${widget.minSalary} ~ ${widget.maxSalary} ${widget.currency}',
+                              '$minSalary ~ $maxSalary $currency',
                               style: const TextStyle(
                                 fontFamily: 'Bricolage-M',
                                 fontSize: 12.5,
@@ -332,7 +325,7 @@ class _WorkCardState extends State<WorkCard> {
                       Row(
                         children: [
                           Text(
-                            widget.location,
+                            location,
                             style: const TextStyle(
                               fontFamily: 'Bricolage-M',
                               fontSize: 12.5,
