@@ -93,7 +93,7 @@ class _AllState extends State<All> {
                       maxSalary: jobInfo['salary_max'],
                       currency: jobInfo['currency'],
                       jobId: jobInfo['id'],
-                      isPartner: true,
+                      isPartner: jobInfo['is_partner'],
                     );
                   } else {
                     final adInfo = job['info'] as Map<String, dynamic>;

@@ -138,12 +138,21 @@ class _JobListingPageState extends State<JobListingPage>
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
     var filterProvider = Provider.of<JobFilterProvider>(context);
-    final combineJobs = jobProvider.combineJobs;
-
-    final filterJobs = combineJobs.where((job) {
-      bool matchQuery =
-          job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
-      return matchQuery;
+    // final combineJobs = jobProvider.combineJobs;
+    //
+    // final filterJobs = combineJobs.where((job) {
+    //   bool matchQuery =
+    //       job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
+    //   return matchQuery;
+    // }).toList();
+    final jobs =
+        jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
+    final filterJobs = jobs.where((job) {
+      final jobInfo = job['info'] as Map<String, dynamic>;
+      final jobTitle = jobInfo['title'] as String;
+      bool matchesQuery =
+          jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
+      return matchesQuery;
     }).toList();
 
     return Scaffold(
@@ -348,12 +357,17 @@ class _JobListingPageState extends State<JobListingPage>
                     itemCount: filterJobs.length,
                     itemBuilder: (context, index) {
                       var job = filterJobs[index];
-                      return
-                          //   WorkCard(
-                          //   job['jobTitle'],
-                          //   job['isPartner'],
-                          // );
-                          Text('null');
+                      var jobInfo = job['info'] as Map<String, dynamic>;
+                      return WorkCard(
+                        jobTitle: jobInfo['title'],
+                        isPartner: jobInfo['is_partner'],
+                        companyName: jobInfo['company_name'],
+                        location: jobInfo['location'],
+                        maxSalary: jobInfo['salary_max'],
+                        minSalary: jobInfo['salary_min'],
+                        currency: jobInfo['currency'],
+                        jobId: jobInfo['id'],
+                      );
                     }),
               ),
             ] else ...[
