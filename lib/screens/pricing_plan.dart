@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sabai_app/screens/payment.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'dart:io';
 
 class PricingPlan extends StatefulWidget {
   const PricingPlan({super.key});
@@ -14,37 +16,93 @@ class PricingPlan extends StatefulWidget {
 
 class _PricingPlanState extends State<PricingPlan> {
   final CarouselSliderController _controller = CarouselSliderController();
-  int _currentIndex = 0; // Default to show the second container in the center.
+  int _currentIndex = 2; // Default to show the second container in the center.
 
-  final List<Map<String, dynamic>> priceDetail = [
-    {
-      'price': '500',
-      'text1': '20 job post a day',
-      'text2': 'Verified jobs',
-      'text3': '10 roses a day',
-      'text4': 'Early access to new jobs',
-      'plan': '3 months',
-      'current': '',
-    },
-    {
-      'price': '250',
-      'text1': '20 job post a day',
-      'text2': 'Verified jobs',
-      'text3': '10 roses a day',
-      'text4': 'Early access to new jobs',
-      'plan': '1 month',
-      'current': '',
-    },
-    {
-      'price': 'Free',
-      'text1': '20 job post a day',
-      'text2': 'Verified jobs',
-      'text3': '10 roses a day',
-      'text4': 'Early access to new jobs',
-      'plan': '',
-      'current': 'active',
-    },
-  ];
+  // final List<Map<String, dynamic>> priceDetail = [
+  //   {
+  //     'price': '500',
+  //     'text1': '20 job post a day',
+  //     'text2': 'Verified jobs',
+  //     'text3': '10 roses a day',
+  //     'text4': 'Early access to new jobs',
+  //     'plan': '3 months',
+  //     'current': '',
+  //   },
+  //   {
+  //     'price': '250',
+  //     'text1': '20 job post a day',
+  //     'text2': 'Verified jobs',
+  //     'text3': '10 roses a day',
+  //     'text4': 'Early access to new jobs',
+  //     'plan': '1 month',
+  //     'current': '',
+  //   },
+  //   {
+  //     'price': 'Free',
+  //     'text1': '20 job post a day',
+  //     'text2': 'Verified jobs',
+  //     'text3': '10 roses a day',
+  //     'text4': 'Early access to new jobs',
+  //     'plan': '',
+  //     'current': 'active',
+  //   },
+  // ];
+  List<Map<String, dynamic>> priceDetail = [];
+
+  Future<void> getPricingPlan() async {
+    try {
+      final response = await ApiService.get('/sales/pricing/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final List<dynamic> data = json.decode(response.body);
+        final List<Map<String, dynamic>> detail = data.map((job) {
+          String price = job['price'];
+          String plan = "${job['duration_in_months']} months";
+          String text1 = job['checked_benefits'][0] ?? '';
+          String text2 = job['checked_benefits'][1] ?? '';
+          String text3 = job['checked_benefits'][2] ?? '';
+          String text4 = job['checked_benefits'][3] ?? '';
+          String text5 = job['checked_benefits'][4] ?? '';
+          String current = '';
+          String uncheck = job['unchecked_benefits'][0] ?? '';
+          return {
+            'price': price,
+            'plan': plan,
+            'text1': text1,
+            'text2': text2,
+            'text3': text3,
+            'text4': text4,
+            'text5': text5,
+            'current': current,
+            'uncheck': uncheck,
+          };
+        }).toList();
+        setState(() {
+          priceDetail = detail;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("error : ${response.body}"),
+          ),
+        );
+        print('error ${response.body}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error fetching the data $e}'),
+        ),
+      );
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPricingPlan();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +179,20 @@ class _PricingPlanState extends State<PricingPlan> {
                         text2: entry.value['text2'],
                         text3: entry.value['text3'],
                         text4: entry.value['text4'],
+                        text5: entry.value['text5'],
                         plan: entry.value['plan'],
                         current: entry.value['current'],
+                        uncheckText: entry.value['uncheck'],
                       ),
                     )
                     .toList(),
                 options: CarouselOptions(
-                  height: 300,
-                  initialPage: 0,
+                  height: 320,
+                  initialPage: 2,
                   autoPlay: false,
                   enlargeCenterPage: true,
                   enableInfiniteScroll: true, // Disables infinite scrolling.
-                  viewportFraction: Platform.isAndroid ? 0.5 : 0.55,
+                  viewportFraction: 0.55,
                   onPageChanged: (index, reason) {
                     setState(() {
                       _currentIndex = index;
@@ -161,7 +221,7 @@ class _PricingPlanState extends State<PricingPlan> {
                   height: 42,
                   width: 343,
                   decoration: BoxDecoration(
-                    color: _currentIndex != 2
+                    color: _currentIndex != 1
                         ? primaryPinkColor
                         : const Color(0x40FF3997),
                     borderRadius: BorderRadius.circular(8),
@@ -196,6 +256,8 @@ class PricingContainer extends StatelessWidget {
     required this.text2,
     required this.text3,
     required this.text4,
+    required this.text5,
+    required this.uncheckText,
     super.key,
   });
 
@@ -207,6 +269,8 @@ class PricingContainer extends StatelessWidget {
   final String text2;
   final String text3;
   final String text4;
+  final String text5;
+  final String uncheckText;
 
   @override
   Widget build(BuildContext context) {
@@ -222,15 +286,15 @@ class PricingContainer extends StatelessWidget {
         color: isSelected ? Colors.white : Colors.grey.shade200,
       ),
       child: Column(
-        mainAxisAlignment: price == '250'
+        mainAxisAlignment: price == '250.00'
             ? MainAxisAlignment.spaceBetween
             : MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (price == '250')
+          if (price == '250.00')
             Container(
               padding: const EdgeInsets.only(left: 7),
-              width: 199,
+              width: 207,
               height: 37,
               decoration: const BoxDecoration(
                 border: Border(
@@ -277,13 +341,13 @@ class PricingContainer extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: price,
+                    text: price != '0.00' ? price : 'Free',
                     style: const TextStyle(
                         fontSize: 19.53,
                         fontFamily: 'Bricolage-SMB',
                         color: Colors.black),
                     children: [
-                      price != 'Free'
+                      price != '0.00'
                           ? const TextSpan(
                               text: ' THB',
                               style: TextStyle(
@@ -299,7 +363,7 @@ class PricingContainer extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                if (price != 'Free')
+                if (price != '0.00')
                   Text(
                     plan,
                     style: const TextStyle(
@@ -324,38 +388,56 @@ class PricingContainer extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10, left: 15),
             child: Column(
               children: [
-                PriceTexts(
-                  text: text1,
-                  iconColor: primaryPinkColor,
-                  textColor: Colors.black,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                PriceTexts(
-                  text: text2,
-                  iconColor: primaryPinkColor,
-                  textColor: Colors.black,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                PriceTexts(
-                  text: text3,
-                  iconColor: primaryPinkColor,
-                  textColor: Colors.black,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                PriceTexts(
-                  text: text4,
-                  iconColor: price == 'Free'
-                      ? const Color(0xffC4C8CB)
-                      : primaryPinkColor,
-                  textColor:
-                      price == 'Free' ? const Color(0xffC4C8CB) : Colors.black,
-                ),
+                if (text1.isNotEmpty)
+                  PriceTexts(
+                    text: text1,
+                  ),
+                if (text1.isNotEmpty)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if (text2.isNotEmpty)
+                  PriceTexts(
+                    text: text2,
+                  ),
+                if (text2.isNotEmpty)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if (text3.isNotEmpty)
+                  PriceTexts(
+                    text: text3,
+                  ),
+                if (text3.isNotEmpty)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if (text4.isNotEmpty)
+                  PriceTexts(
+                    text: text4,
+                    // iconColor: price == 'Free'
+                    //     ? const Color(0xffC4C8CB)
+                    //     : primaryPinkColor,
+                    // textColor: price == 'Free'
+                    //     ? const Color(0xffC4C8CB)
+                    //     : Colors.black,
+                  ),
+                if (text4.isNotEmpty)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if (text5.isNotEmpty)
+                  PriceTexts(
+                    text: text5,
+                  ),
+                if (text5.isNotEmpty)
+                  const SizedBox(
+                    height: 10,
+                  ),
+                if (uncheckText.isNotEmpty)
+                  UncheckedText(
+                    text: uncheckText,
+                  ),
               ],
             ),
           )
@@ -369,33 +451,64 @@ class PriceTexts extends StatelessWidget {
   const PriceTexts({
     super.key,
     required this.text,
-    required this.iconColor,
-    required this.textColor,
   });
 
   final String text;
-  final Color iconColor;
-  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Icon(
-          Icons.check,
-          size: 16,
-          color: iconColor,
-        ),
+        if (text.isNotEmpty)
+          const Icon(
+            Icons.check,
+            size: 16,
+            color: primaryPinkColor,
+          ),
         const SizedBox(
           width: 5,
         ),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12.5,
             fontFamily: 'Bricolage-R',
-            color: textColor,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class UncheckedText extends StatelessWidget {
+  const UncheckedText({
+    super.key,
+    required this.text,
+  });
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        if (text.isNotEmpty)
+          const Icon(
+            Icons.check,
+            size: 16,
+            color: Color(0xffC4C8CB),
+          ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12.5,
+            fontFamily: 'Bricolage-R',
+            color: Color(0xffC4C8CB),
           ),
         ),
       ],

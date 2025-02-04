@@ -13,15 +13,37 @@ class All extends StatefulWidget {
 }
 
 class _AllState extends State<All> {
+  final ScrollController _scrollController = ScrollController();
+  int _currentPage = 1;
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() => fetchJobs());
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Check if there are more pages to load
+      if (_currentPage < jobProvider.totalPages) {
+        _currentPage++;
+        fetchJobs();
+      }
+    }
   }
 
   void fetchJobs() async {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
-    await jobProvider.getJobs(true);
+    await jobProvider.getJobs(_currentPage == 1, page: _currentPage);
   }
 
   @override
@@ -33,17 +55,33 @@ class _AllState extends State<All> {
         color: primaryPinkColor,
         backgroundColor: const Color(0xffFFEBF6),
         onRefresh: () async {
-          await jobProvider.getJobs(false);
+          // Reset to the first page on refresh
+          _currentPage = 1;
+          await jobProvider.getJobs(false, page: _currentPage);
         },
-        child: jobProvider.isLoading
+        child: jobProvider.isLoading && _currentPage == 1
             ? const Center(
                 child: CircularProgressIndicator(
                   color: primaryPinkColor,
                 ),
               )
             : ListView.builder(
-                itemCount: jobProvider.allTypeJobs.length,
+                controller: _scrollController,
+                itemCount: jobProvider.allTypeJobs.length + 1,
                 itemBuilder: (context, index) {
+                  if (index == jobProvider.allTypeJobs.length) {
+                    // Show a loading indicator at the bottom if there are more pages to load
+                    if (_currentPage < jobProvider.totalPages) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryPinkColor,
+                        ),
+                      );
+                    } else {
+                      // No more pages to load
+                      return Container();
+                    }
+                  }
                   final job = jobProvider.allTypeJobs[index];
                   if (job['type'] == 'job') {
                     final jobInfo = job['info'] as Map<String, dynamic>;
@@ -54,6 +92,7 @@ class _AllState extends State<All> {
                       minSalary: jobInfo['salary_min'],
                       maxSalary: jobInfo['salary_max'],
                       currency: jobInfo['currency'],
+                      jobId: jobInfo['id'],
                       isPartner: true,
                     );
                   } else {

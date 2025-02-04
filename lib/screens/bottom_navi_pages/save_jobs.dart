@@ -19,18 +19,38 @@ class _SaveJobsState extends State<SaveJobs> {
   bool isSearching = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchSavedJobs();
+  }
+
+  void fetchSavedJobs() async {
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    await jobProvider.fetchSavedJobs();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    List<String> savedJobs = jobProvider.savedJobs;
-    //final combineJobs = jobProvider.combineJobs;
-    final savedJobsDetails = jobProvider.combineJobs.where((job) {
-      return savedJobs.contains(job['jobTitle']);
-    }).toList();
+    // List<int> savedJobs = jobProvider.savedJobs;
+    // //final combineJobs = jobProvider.combineJobs;
+    // final savedJobsDetails = jobProvider.combineJobs.where((job) {
+    //   return savedJobs.contains(job['jobTitle']);
+    // }).toList();
 
-    final filterJobs = savedJobsDetails.where((job) {
+    // final filterJobs = savedJobsDetails.where((job) {
+    //   bool matchesQuery =
+    //       job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
+    //   return matchesQuery;
+    // }).toList();
+
+    final filterJobs = jobProvider.savedJobList.where((job) {
+      final jobInfo = job['job'] as Map<String, dynamic>;
+      final jobTitle = jobInfo['title'] as String;
       bool matchesQuery =
-          job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
+          jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
       return matchesQuery;
     }).toList();
 
@@ -154,24 +174,31 @@ class _SaveJobsState extends State<SaveJobs> {
             ),
             if (isSearching) ...[
               Expanded(
-                  child: ListView.builder(
-                      itemCount: filterJobs.length,
-                      itemBuilder: (context, index) {
-                        var jobs = filterJobs[index];
-                        return
-                            //   WorkCard(
-                            //   jobs['jobTitle'],
-                            //   jobs['isPartner'],
-                            // );
-                            Text('null');
-                      })),
+                child: ListView.builder(
+                  itemCount: filterJobs.length,
+                  itemBuilder: (context, index) {
+                    var jobs = filterJobs[index];
+                    final jobInfo = jobs['job'] as Map<String, dynamic>;
+                    return WorkCard(
+                      jobTitle: jobInfo['title'],
+                      isPartner: jobInfo['is_partner'],
+                      companyName: jobInfo['company_name'],
+                      location: jobInfo['location'],
+                      maxSalary: jobInfo['salary_max'],
+                      minSalary: jobInfo['salary_min'],
+                      currency: jobInfo['currency'],
+                      jobId: jobInfo['id'],
+                    );
+                  },
+                ),
+              ),
             ] else ...[
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    'Saved (${jobProvider.savedJobs.length}) jobs',
+                    'Saved (${jobProvider.savedJobList.length}) jobs',
                     style: const TextStyle(
                       fontFamily: 'Bricolage-M',
                       fontSize: 15.63,
@@ -185,19 +212,23 @@ class _SaveJobsState extends State<SaveJobs> {
               Expanded(
                 child: Container(
                   color: const Color(0xffF7F7F7),
-                  child: savedJobs.isNotEmpty
+                  child: jobProvider.savedJobList.isNotEmpty
                       ? ListView.builder(
-                          itemCount: savedJobs.length, // Total number of items
+                          itemCount: jobProvider
+                              .savedJobList.length, // Total number of items
                           itemBuilder: (context, index) {
-                            final job = jobProvider.combineJobs.firstWhere(
-                              (j) => j['jobTitle'] == savedJobs[index],
+                            final job = jobProvider.savedJobList[index];
+                            final jobInfo = job['job'] as Map<String, dynamic>;
+                            return WorkCard(
+                              jobTitle: jobInfo['title'],
+                              isPartner: jobInfo['is_partner'],
+                              companyName: jobInfo['company_name'],
+                              location: jobInfo['location'],
+                              maxSalary: jobInfo['salary_max'],
+                              minSalary: jobInfo['salary_min'],
+                              currency: jobInfo['currency'],
+                              jobId: jobInfo['id'],
                             );
-                            return
-                                //   WorkCard(
-                                //   job['jobTitle'],
-                                //   job['isPartner'],
-                                // );
-                                Text('null');
                           },
                         )
                       : const Center(

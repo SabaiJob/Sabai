@@ -19,6 +19,7 @@ class WorkCard extends StatelessWidget {
   final String location;
   final String currency;
   final bool isPartner;
+  final int jobId;
   const WorkCard(
       {required this.jobTitle,
       required this.isPartner,
@@ -27,13 +28,14 @@ class WorkCard extends StatelessWidget {
       required this.maxSalary,
       required this.minSalary,
       required this.currency,
+      required this.jobId,
       super.key});
 
   @override
   Widget build(BuildContext context) {
     var language = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    bool? isSaved = jobProvider.isSaved(jobTitle);
+    bool? isSaved = jobProvider.isSaved(jobId);
     bool? isGuest = jobProvider.isGuest;
 
     return GestureDetector(
@@ -58,7 +60,7 @@ class WorkCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            isPartner == true
+            isPartner
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +113,7 @@ class WorkCard extends StatelessWidget {
                                       builder: (context) =>
                                           guestBotoom(language),
                                     )
-                                  : jobProvider.toggleSavedJobs(jobTitle);
+                                  : jobProvider.saveJob(jobId, context);
                             },
                             icon: isSaved == false
                                 ? const Icon(
@@ -192,7 +194,10 @@ class WorkCard extends StatelessWidget {
                                             builder: (context) =>
                                                 guestBotoom(language),
                                           )
-                                        : jobProvider.toggleSavedJobs(jobTitle);
+                                        : jobProvider.saveJob(
+                                            jobId,
+                                            context,
+                                          );
                                   },
                                   icon: isSaved == false
                                       ? const Icon(
@@ -310,7 +315,7 @@ class WorkCard extends StatelessWidget {
                               '$minSalary ~ $maxSalary $currency',
                               style: const TextStyle(
                                 fontFamily: 'Bricolage-M',
-                                fontSize: 12.5,
+                                fontSize: 10,
                                 color: Color(0xff4C5258),
                               ),
                             )
@@ -318,7 +323,7 @@ class WorkCard extends StatelessWidget {
                               '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
                               style: TextStyle(
                                 fontFamily: 'Walone-B',
-                                fontSize: 11,
+                                fontSize: 10,
                                 color: Color(0xff4C5258),
                               ),
                             ),
@@ -328,7 +333,7 @@ class WorkCard extends StatelessWidget {
                             location,
                             style: const TextStyle(
                               fontFamily: 'Bricolage-M',
-                              fontSize: 12.5,
+                              fontSize: 10,
                               color: Color(0xff4C5258),
                             ),
                           ),
