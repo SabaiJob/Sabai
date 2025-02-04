@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
+import 'package:sabai_app/screens/on_premium_page.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/privacy_policy.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/screens/terms_and_conditions_page.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
@@ -24,6 +28,25 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
+  late Map<String, dynamic> userData;
+
+  Future<void> getProfileData()async{
+    try{
+      final response = await ApiService.get('/auth/token/verify/');
+      if(response.statusCode >= 200 && response.statusCode < 300){
+        final Map<String,dynamic> data = jsonDecode(response.body);
+        setState(() {
+          userData = data;
+        });
+        print(userData);
+      }else{
+        print(response.body);
+      }
+    }catch(e){
+
+    }
+
+  }
 
   // Future<void> _pickImage(ImageSource source) async {
   //   final ImagePicker picker = ImagePicker();
@@ -34,7 +57,11 @@ class _ProfileState extends State<Profile> {
   //     });
   //   }
   // }
-
+  @override
+  void initState() {
+    super.initState();
+    getProfileData();
+  }
   @override
   Widget build(BuildContext context) {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
@@ -43,7 +70,7 @@ class _ProfileState extends State<Profile> {
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         bottom: PreferredSize(
@@ -253,8 +280,8 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 10,
               ),
-              const Text('Cameron Williamson',
-                  style: TextStyle(
+               Text(userData['username'],
+                  style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Bricolage-B',
                     fontSize: 12.5,
@@ -265,7 +292,7 @@ class _ProfileState extends State<Profile> {
 
               Text(
                   languageProvider.lan == 'English'
-                      ? '+66 45789032'
+                      ? userData['phone']
                       : '+၆၆ ၆၇၂၈၁၉၃၂',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
@@ -644,6 +671,11 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       onTap: () {
+                        userData['is_premium'] == true ?
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OnPremiumPackage())) :
                         Navigator.push(
                             context,
                             MaterialPageRoute(
