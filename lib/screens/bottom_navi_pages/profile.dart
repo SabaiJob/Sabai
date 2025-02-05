@@ -28,24 +28,21 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
-  late Map<String, dynamic> userData;
+  Map<String, dynamic>? userData; // Change late to nullable
 
-  Future<void> getProfileData()async{
-    try{
+  Future<void> getProfileData() async {
+    try {
       final response = await ApiService.get('/auth/token/verify/');
-      if(response.statusCode >= 200 && response.statusCode < 300){
-        final Map<String,dynamic> data = jsonDecode(response.body);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
         setState(() {
           userData = data;
         });
         print(userData);
-      }else{
+      } else {
         print(response.body);
       }
-    }catch(e){
-
-    }
-
+    } catch (e) {}
   }
 
   // Future<void> _pickImage(ImageSource source) async {
@@ -60,8 +57,9 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    getProfileData();
+    Future.microtask(() => getProfileData());
   }
+
   @override
   Widget build(BuildContext context) {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
@@ -69,6 +67,17 @@ class _ProfileState extends State<Profile> {
 
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
+
+    if (userData == null) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      ); // Show loading state
+    }
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -280,7 +289,7 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 10,
               ),
-               Text(userData['username'],
+              Text(userData!['username'],
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Bricolage-B',
@@ -292,7 +301,7 @@ class _ProfileState extends State<Profile> {
 
               Text(
                   languageProvider.lan == 'English'
-                      ? userData['phone']
+                      ? userData!['phone']
                       : '+၆၆ ၆၇၂၈၁၉၃၂',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
@@ -671,15 +680,16 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       onTap: () {
-                        userData['is_premium'] == true ?
-                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const OnPremiumPackage())) :
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PricingPlan()));
+                        userData!['is_premium'] == true
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OnPremiumPackage()))
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const PricingPlan()));
                       },
                     ),
                     const SizedBox(

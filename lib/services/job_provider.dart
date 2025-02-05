@@ -102,6 +102,58 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
+  //fetch partner jobs
+
+  // New variables for partner jobs
+  List<dynamic> _partnerJobs = [];
+  bool _isLoadingPartnerJobs = false;
+  int _currentPartnerPage = 1;
+  int totalPartnerPages = 1;
+  // New getters for partner jobs
+  List<dynamic> get partnerJobs => _partnerJobs;
+  bool get isLoadingPartnerJobs => _isLoadingPartnerJobs;
+
+  // New method to fetch partner jobs
+  Future<void> getPartnerJobs(bool isLoading, {int page = 1}) async {
+    _isLoadingPartnerJobs = isLoading;
+    notifyListeners();
+
+    try {
+      final response = await ApiService.get('/jobs/?page=$page');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data.containsKey('results') && data['results'] is List) {
+          final newJobs = data['results'];
+          if (page == 1) {
+            _partnerJobs = newJobs
+                .where((job) =>
+                    job['type'] == 'job' && job['info']['is_partner'] == true)
+                .toList();
+          } else {
+            _partnerJobs.addAll(newJobs
+                .where((job) =>
+                    job['type'] == 'job' && job['info']['is_partner'] == true)
+                .toList());
+          }
+
+          if (data.containsKey('total_pages')) {
+            totalPartnerPages = data['total_pages'];
+          }
+        } else {
+          print('Invalid response structure: ${response.body}');
+        }
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+      _partnerJobs = [];
+    } finally {
+      _isLoadingPartnerJobs = false;
+      notifyListeners();
+    }
+  }
+
   //save job with API
   Future<void> saveJob(int jobId, BuildContext context) async {
     try {
