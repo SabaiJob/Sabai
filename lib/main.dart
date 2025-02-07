@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
 import 'package:sabai_app/services/otp_code_timer_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
 
 void main() {
@@ -16,20 +19,44 @@ void main() {
         ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider()),
         ChangeNotifierProvider(create: (context) => PhoneNumberProvider()),
         ChangeNotifierProvider(create: (context) => JobFilterProvider()),
+        ChangeNotifierProvider(create: (context) => PaymentProvider()),
       ],
       child: const Sabai(),
     ),
   );
 }
 
-class Sabai extends StatelessWidget {
+class Sabai extends StatefulWidget {
   const Sabai({super.key});
 
   @override
+  State<Sabai> createState() => _SabaiState();
+}
+
+class _SabaiState extends State<Sabai> {
+  Future<Widget> _isUserLogin() async {
+    final token = await TokenService.getToken();
+    if (token == null) {
+      return const Walkthrough();
+    } else {
+      return const NavigationHomepage();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Walkthrough(),
+      home: FutureBuilder<Widget>(
+        future: _isUserLogin(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
+          }
+          return snapshot.data ?? const Walkthrough();
+        },
+      ),
     );
   }
 }

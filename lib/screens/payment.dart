@@ -6,6 +6,7 @@ import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/qr.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 
 class Payment extends StatefulWidget {
   final int? plan;
@@ -46,6 +47,7 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -127,13 +129,13 @@ class _PaymentState extends State<Payment> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedPlan = 1;
+                        selectedPlan = 0;
                       });
                     },
                     child: Container(
                       width: double.infinity,
                       height: 69,
-                      decoration: widget.plan == 1
+                      decoration: widget.plan == 0
                           ? BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               color: Colors.white,
@@ -175,7 +177,7 @@ class _PaymentState extends State<Payment> {
                                     ],
                                   ),
                                 ),
-                                if (widget.plan == 1)
+                                if (widget.plan == 0)
                                   Container(
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -207,13 +209,13 @@ class _PaymentState extends State<Payment> {
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedPlan = 0;
+                        selectedPlan = 2;
                       });
                     },
                     child: Container(
                       width: double.infinity,
                       height: 69,
-                      decoration: widget.plan == 0
+                      decoration: widget.plan == 2
                           ? BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               color: Colors.white,
@@ -255,7 +257,7 @@ class _PaymentState extends State<Payment> {
                                     ],
                                   ),
                                 ),
-                                if (widget.plan == 0)
+                                if (widget.plan == 2)
                                   Container(
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
@@ -404,6 +406,9 @@ class _PaymentState extends State<Payment> {
               setState(() {
                 if (_formKey.currentState!.validate() &&
                     (isKBZ == true || isPrompt == true)) {
+                  isKBZ == true
+                      ? paymentProvider.setPaymentMethodId(1)
+                      : paymentProvider.setPaymentMethodId(2);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

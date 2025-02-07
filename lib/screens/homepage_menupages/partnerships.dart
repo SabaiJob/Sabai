@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../components/ad_card.dart';
 import '../../components/work_card.dart';
 import '../../constants.dart';
 import '../../services/job_provider.dart';
@@ -80,17 +81,25 @@ class _PartnershipsState extends State<Partnerships> {
                     }
                   }
                   final job = jobProvider.partnerJobs[index];
-                  final jobInfo = job['info'] as Map<String, dynamic>;
-                  return WorkCard(
-                    jobTitle: jobInfo['title'],
-                    companyName: jobInfo['company_name'],
-                    location: jobInfo['location'],
-                    minSalary: jobInfo['salary_min'],
-                    maxSalary: jobInfo['salary_max'],
-                    currency: jobInfo['currency'],
-                    jobId: jobInfo['id'],
-                    isPartner: jobInfo['is_partner'],
-                  );
+                  if (job['type'] == 'job') {
+                    final jobInfo = job['info'] as Map<String, dynamic>;
+                    return WorkCard(
+                      jobTitle: jobInfo['title'],
+                      companyName: jobInfo['company_name'],
+                      location: jobInfo['location'],
+                      minSalary: jobInfo['salary_min'],
+                      maxSalary: jobInfo['salary_max'],
+                      currency: jobInfo['currency'],
+                      jobId: jobInfo['id'],
+                      isPartner: jobInfo['is_partner'],
+                    );
+                  } else {
+                    final adInfo = job['info'] as Map<String, dynamic>;
+                    return AdCard(
+                      url: adInfo['link'],
+                      imageUrl: adInfo['poster'],
+                    );
+                  }
                 },
               ),
       ),

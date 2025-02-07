@@ -1,5 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
 
 class PaymentVerifying extends StatefulWidget {
@@ -37,10 +38,10 @@ class _PaymentVerifyingState extends State<PaymentVerifying>
       () {
         if (!mounted) return;
         _controller.stop();
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const PricingPlan(),
+            builder: (context) => const NavigationHomepage(),
           ),
         );
       },

@@ -56,7 +56,7 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.get('/jobs/?page=$page');
+      final response = await ApiService.get('/jobs/search/?page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -68,20 +68,6 @@ class JobProvider extends ChangeNotifier {
             // Append new jobs to the existing list
             _jobs.addAll(newJobs);
           }
-          _jobInfo = _jobs
-              .where((job) => job['type'] == 'job')
-              .map((job) => job['info'] as Map<String, dynamic>)
-              .toList();
-          _adInfo = _jobs
-              .where((job) => job['type'] == 'ads')
-              .map((job) => job['info'] as Map<String, dynamic>)
-              .toList();
-          _type = _jobInfo.isNotEmpty
-              ? 'job'
-              : _adInfo.isNotEmpty
-                  ? 'ads'
-                  : '';
-
           // Update total pages
           if (data.containsKey('total_pages')) {
             totalPages = data['total_pages'];
@@ -102,12 +88,92 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
+  //fetch best matches jobs
+
+  List<dynamic> _bestMatchedJobs = [];
+  bool _isLoadingBestMatchedJobs = false;
+  int totalBestMatchedPages = 1;
+  // New getters for partner jobs
+  List<dynamic> get bestMatchedJobs => _bestMatchedJobs;
+  bool get isLoadingBestMatchedJobs => _isLoadingBestMatchedJobs;
+
+  Future<void> getBestMatchedJobs(bool isLoading, {int page = 1}) async {
+    _isLoadingBestMatchedJobs = isLoading;
+    notifyListeners();
+
+    try {
+      final response = await ApiService.get('/jobs/best-matches/?page=$page');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data.containsKey('results') && data['results'] is List) {
+          final newJobs = data['results'];
+          if (page == 1) {
+            // Reset the list if it's the first page
+            _bestMatchedJobs = newJobs;
+          } else {
+            // Append new jobs to the existing list
+            _bestMatchedJobs.addAll(newJobs);
+          }
+          // Update total pages
+          if (data.containsKey('total_pages')) {
+            totalBestMatchedPages = data['total_pages'];
+          }
+        } else {
+          print('Invalid response structure: ${response.body}');
+        }
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+      _bestMatchedJobs = [];
+    } finally {
+      _isLoadingBestMatchedJobs = false;
+      notifyListeners();
+    }
+  }
+
+  // Future<void> getBestMatchedJobs(bool isLoading, {int page = 1}) async {
+  //   _isLoadingBestMatchedJobs = isLoading;
+  //   notifyListeners();
+  //
+  //   try {
+  //     final response = await ApiService.get('/jobs/best-matches/?page=$page');
+  //     if (response.statusCode >= 200 && response.statusCode < 300) {
+  //       final Map<String, dynamic> data = json.decode(response.body);
+  //       if (data.containsKey('results') && data['results'] is List) {
+  //         final newJobs = data['results'];
+  //         if (page == 1) {
+  //           _bestMatchedJobs =
+  //               newJobs.where((job) => job['type'] == 'job').toList();
+  //         } else {
+  //           _bestMatchedJobs
+  //               .addAll(newJobs.where((job) => job['type'] == 'job').toList());
+  //         }
+  //
+  //         if (data.containsKey('total_pages')) {
+  //           totalBestMatchedPages = data['total_pages'];
+  //         }
+  //       } else {
+  //         print('Invalid response structure: ${response.body}');
+  //       }
+  //     } else {
+  //       print('Error: ${response.statusCode} - ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     print('Exception: $e');
+  //     _bestMatchedJobs = [];
+  //   } finally {
+  //     _isLoadingBestMatchedJobs = false;
+  //     notifyListeners();
+  //   }
+  // }
+
   //fetch partner jobs
 
   // New variables for partner jobs
   List<dynamic> _partnerJobs = [];
   bool _isLoadingPartnerJobs = false;
-  int _currentPartnerPage = 1;
   int totalPartnerPages = 1;
   // New getters for partner jobs
   List<dynamic> get partnerJobs => _partnerJobs;
@@ -118,21 +184,44 @@ class JobProvider extends ChangeNotifier {
     _isLoadingPartnerJobs = isLoading;
     notifyListeners();
 
+    // try {
+    //   final response = await ApiService.get('/jobs/search/?page=$page');
+    //   if (response.statusCode >= 200 && response.statusCode < 300) {
+    //     final Map<String, dynamic> data = json.decode(response.body);
+    //     if (data.containsKey('results') && data['results'] is List) {
+    //       final newJobs = data['results'];
+    //       if (page == 1) {
+    //         // Reset the list if it's the first page
+    //         _jobs = newJobs;
+    //       } else {
+    //         // Append new jobs to the existing list
+    //         _jobs.addAll(newJobs);
+    //       }
+    //       // Update total pages
+    //       if (data.containsKey('total_pages')) {
+    //         totalPages = data['total_pages'];
+    //       }
+    //     } else {
+    //       print('Invalid response structure: ${response.body}');
+    //     }
+    //   } else {
+    //     print('Error: ${response.statusCode} - ${response.body}');
+    //   }
+    // }
+
     try {
-      final response = await ApiService.get('/jobs/?page=$page');
+      final response = await ApiService.get('/jobs/search/?page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
           final newJobs = data['results'];
           if (page == 1) {
             _partnerJobs = newJobs
-                .where((job) =>
-                    job['type'] == 'job' && job['info']['is_partner'] == true)
+                .where((job) => job['info']['is_partner'] == true)
                 .toList();
           } else {
             _partnerJobs.addAll(newJobs
-                .where((job) =>
-                    job['type'] == 'job' && job['info']['is_partner'] == true)
+                .where((job) => job['info']['is_partner'] == true)
                 .toList());
           }
 
@@ -161,11 +250,6 @@ class JobProvider extends ChangeNotifier {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print(response.body);
         toggleSavedJobs(jobId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully save the job!'),
-          ),
-        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -183,15 +267,6 @@ class JobProvider extends ChangeNotifier {
   }
 
   late List<int> _savedJobs = [];
-  // void toggleSavedJobs(int jobId) {
-  //   if (_savedJobs.contains(jobId)) {
-  //     _savedJobs.remove(jobId);
-  //   } else {
-  //     _savedJobs.add(jobId);
-  //   }
-  //   notifyListeners();
-  // }
-
   bool isSaved(int jobId) {
     return _savedJobs.contains(jobId);
   }

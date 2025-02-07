@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,9 +9,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/payment_verifying.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'dart:typed_data';
+import 'package:sabai_app/services/payment_provider.dart';
+import 'package:dio/dio.dart';
 
 class Qr extends StatefulWidget {
   const Qr({
@@ -31,6 +35,8 @@ class _QrState extends State<Qr> {
       'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
 
   FileImage? _selectedImage;
+  Map<String, dynamic>? Kbz;
+  Map<String, dynamic>? prompt;
 
   void _clearImage() {
     setState(() {
@@ -38,10 +44,115 @@ class _QrState extends State<Qr> {
     });
   }
 
+  Future<void> fetchPaymentMethod() async {
+    try {
+      final response = await ApiService.get('/sales/payment-methods/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          Kbz = data[0];
+          prompt = data[1];
+        });
+      }
+    } catch (e) {}
+  }
+
+  // Future<String> fileImageToBase64(FileImage fileImage) async {
+  //   final file = File(fileImage.file.path);
+  //   final bytes = await file.readAsBytes();
+  //   return base64Encode(bytes);
+  // }
+  //
+  // Future<void> uploadPayment(
+  //     {required int pricingPlanId,
+  //     required int paymentMethodId,
+  //     required File fileImage}) async {
+  //   try {
+  //     //String base64Image = await fileImageToBase64(fileImage);
+  //     List<int> imageBytes = await fileImage.readAsBytes();
+  //     // Convert to Base64 string
+  //     String base64Image = base64Encode(imageBytes);
+  //     final response = await ApiService.post(
+  //       '/sales/subscribe/',
+  //       {
+  //         'pricing_plan': pricingPlanId,
+  //         "payment_method": paymentMethodId,
+  //         "payment_screenshot": base64Image,
+  //       },
+  //     );
+  //     if (response.statusCode >= 200 && response.statusCode < 300) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => const PaymentVerifying(),
+  //         ),
+  //       );
+  //       print("Payment uploaded successfully!");
+  //     } else {
+  //       print("Payment upload failed: ${response.statusCode} ${response.body}");
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  // Future<void> uploadPayment({
+  //   required int pricingPlanId,
+  //   required int paymentMethodId,
+  //   required File fileImage, // Change FileImage to File
+  // }) async {
+  //   try {
+  //     final fileName = fileImage.path.split('/').last;
+  //     List<int> imageBytes = await fileImage.readAsBytes();
+  //
+  //     // Convert to Base64 string
+  //     String base64Image = base64Encode(imageBytes);
+  //     print(base64Image);
+  //     FormData formData = FormData.fromMap({
+  //       'pricing_plan': pricingPlanId,
+  //       'payment_method': paymentMethodId,
+  //       'payment_screenshot': await MultipartFile.fromFile(
+  //         fileImage.path,
+  //         filename: fileName,
+  //       ),
+  //     });
+  //
+  //     final response =
+  //         await ApiService.uploadFile('/sales/subscribe/', formData);
+  //
+  //     if (response.statusCode! >= 200 && response.statusCode! < 300) {
+  //       print("Payment uploaded successfully!");
+  //       // Navigation should happen in the UI layer, not here
+  //     } else {
+  //       print("Payment upload failed: ${response.statusCode} ${response.data}");
+  //     }
+  //   } catch (e) {
+  //     print("Error uploading payment: $e");
+  //   }
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() => fetchPaymentMethod());
+  }
+
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+    if (Kbz == null && prompt == null) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      ); // Show loading state
+    }
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -80,15 +191,18 @@ class _QrState extends State<Qr> {
                           color: Color(0xff363B3F),
                         ),
                       ),
-                      // Image.asset(
-                      //   'images/qr.png',
-                      //   width: 195,
-                      //   height: 195,
-                      // ),
                       Image.network(
                         imageUrl,
                         width: 195,
-                        height: 195,
+                        height: 180,
+                      ),
+                      Text(
+                        widget.isKbz == true
+                            ? 'Account No: ${Kbz!["account_no"]}'
+                            : 'Account No: ${prompt!["account_no"]}',
+                        style: const TextStyle(
+                          fontFamily: 'Bricolage-M',
+                        ),
                       ),
                       const SizedBox(
                         child: Divider(
@@ -102,93 +216,6 @@ class _QrState extends State<Qr> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            // it works
-                            // onPressed: () async {
-                            //   if (Platform.isIOS) {
-                            //     var status = await Permission.photos.status;
-                            //     print(
-                            //         "Initial photo permission status: $status");
-
-                            //     if (status.isPermanentlyDenied) {
-                            //       // Show dialog explaining why we need permission and how to enable it
-                            //       if (context.mounted) {
-                            //         showDialog(
-                            //           context: context,
-                            //           builder: (BuildContext context) {
-                            //             return AlertDialog(
-                            //               title: const Text(
-                            //                   'Photos Access Required'),
-                            //               content: const Text(
-                            //                   'To save images, please enable Photos access in your device Settings:\n\n'
-                            //                   '1. Open Settings\n'
-                            //                   '2. Find Sabai App\n'
-                            //                   '3. Tap Photos\n'
-                            //                   '4. Select "All Photos" or "Selected Photos"'),
-                            //               actions: [
-                            //                 TextButton(
-                            //                   onPressed: () =>
-                            //                       Navigator.pop(context),
-                            //                   child: const Text('Cancel'),
-                            //                 ),
-                            //                 TextButton(
-                            //                   onPressed: () async {
-                            //                     Navigator.pop(context);
-                            //                     await openAppSettings();
-                            //                   },
-                            //                   child:
-                            //                       const Text('Open Settings'),
-                            //                 ),
-                            //               ],
-                            //             );
-                            //           },
-                            //         );
-                            //       }
-                            //       return; // Don't proceed with saving
-                            //     }
-
-                            //     if (status.isDenied) {
-                            //       status = await Permission.photos.request();
-                            //       print(
-                            //           "Photo permission status after request: $status");
-
-                            //       if (!status.isGranted) {
-                            //         if (context.mounted) {
-                            //           ScaffoldMessenger.of(context)
-                            //               .showSnackBar(
-                            //             const SnackBar(
-                            //               content: Text(
-                            //                   'Photos permission is required to save images'),
-                            //             ),
-                            //           );
-                            //         }
-                            //         return; // Don't proceed with saving
-                            //       }
-                            //     }
-                            //   }
-
-                            //   try {
-                            //     final saved =
-                            //         await ImageSaverUtil.saveNetworkImage(
-                            //             imageUrl);
-                            //     if (context.mounted) {
-                            //       ScaffoldMessenger.of(context).showSnackBar(
-                            //         SnackBar(
-                            //           content: Text(saved
-                            //               ? 'Image saved successfully!'
-                            //               : 'Failed to save image'),
-                            //         ),
-                            //       );
-                            //     }
-                            //   } catch (e) {
-                            //     print("Error saving image: $e");
-                            //     if (context.mounted) {
-                            //       ScaffoldMessenger.of(context).showSnackBar(
-                            //         SnackBar(content: Text('Error: $e')),
-                            //       );
-                            //     }
-                            //   }
-                            // },
-                            // siss hmue
                             onPressed: () async {
                               try {
                                 final saved =
@@ -407,12 +434,12 @@ class _QrState extends State<Qr> {
           child: TextButton(
             onPressed: _selectedImage != null
                 ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentVerifying(),
-                      ),
-                    );
+                    // uploadPayment(
+                    //   paymentMethodId: paymentProvider.paymentMethodId,
+                    //   pricingPlanId: paymentProvider.pricingPlanId,
+                    //   fileImage: _selectedImage!.file,
+                    // );
+                    print(_selectedImage);
                   }
                 : null,
             style: TextButton.styleFrom(
@@ -459,6 +486,7 @@ class _QrState extends State<Qr> {
     );
   }
 }
+
 // siss hmue
 class ImageSaverUtil {
   static Future<bool> saveNetworkImage(String imageUrl) async {
@@ -497,188 +525,3 @@ class ImageSaverUtil {
     }
   }
 }
-
-// it works
-// class ImageSaverUtil {
-//   static Future<bool> saveNetworkImage(String imageUrl) async {
-//     try {
-//       // Check platform
-//       if (!Platform.isAndroid && !Platform.isIOS) {
-//         print('Platform not supported for image saving');
-//         return false;
-//       }
-
-//       // Request permissions with better error handling
-//       if (Platform.isAndroid) {
-//         final storageStatus = await Permission.storage.status;
-//         if (storageStatus.isDenied) {
-//           final result = await Permission.storage.request();
-//           if (!result.isGranted) {
-//             print('Storage permission denied by user');
-//             return false;
-//           }
-//         }
-
-//         // For Android 10 and above
-//         if (storageStatus.isPermanentlyDenied) {
-//           print(
-//               'Storage permission permanently denied, please enable from settings');
-//           return false;
-//         }
-//       }
-
-//       if (Platform.isIOS) {
-//         final photosStatus = await Permission.photos.status;
-//         if (photosStatus.isDenied) {
-//           final result = await Permission.photos.request();
-//           if (!result.isGranted) {
-//             print('Photos permission denied by user');
-//             return false;
-//           }
-//         }
-
-//         if (photosStatus.isPermanentlyDenied) {
-//           print(
-//               'Photos permission permanently denied, please enable from settings');
-//           return false;
-//         }
-//       }
-
-//       // Download image with timeout and response validation
-//       final response = await Dio().get(
-//         imageUrl,
-//         options: Options(
-//           responseType: ResponseType.bytes,
-//           receiveTimeout: const Duration(seconds: 15),
-//           sendTimeout: const Duration(seconds: 15),
-//         ),
-//       );
-
-//       if (response.data == null || response.data.length == 0) {
-//         print('Downloaded image data is empty');
-//         return false;
-//       }
-
-//       // Save image with detailed result handling
-//       final result = await ImageGallerySaverPlus.saveImage(
-//         Uint8List.fromList(response.data),
-//         quality: 100,
-//         name: "sabai_${DateTime.now().millisecondsSinceEpoch}",
-//       );
-
-//       print('Image save result: $result');
-
-//       if (result == null) {
-//         print('Save result is null');
-//         return false;
-//       }
-
-//       return result['isSuccess'] ?? false;
-//     } catch (e, stackTrace) {
-//       print('Error saving image: $e');
-//       print('Stack trace: $stackTrace');
-//       return false;
-//     }
-//   }
-// }
-
-// class PermissionHandler {
-//   static Future<bool> handleImagePermissions(BuildContext context) async {
-//     if (Platform.isIOS) {
-//       final status = await Permission.photos.status;
-
-//       if (status.isDenied) {
-//         final result = await Permission.photos.request();
-//         if (!result.isGranted) {
-//           if (context.mounted) {
-//             _showPermissionDialog(
-//               context,
-//               'Photos Access Required',
-//               'Please allow access to your photo gallery to save images.',
-//             );
-//           }
-//           return false;
-//         }
-//       }
-
-//       if (status.isPermanentlyDenied) {
-//         if (context.mounted) {
-//           _showPermissionDialog(
-//             context,
-//             'Photos Access Required',
-//             'Please enable photos access in your device settings to save images.',
-//             showOpenSettings: true,
-//           );
-//         }
-//         return false;
-//       }
-
-//       return status.isGranted;
-//     }
-
-//     if (Platform.isAndroid) {
-//       final status = await Permission.storage.status;
-
-//       if (status.isDenied) {
-//         final result = await Permission.storage.request();
-//         if (!result.isGranted) {
-//           if (context.mounted) {
-//             _showPermissionDialog(
-//               context,
-//               'Storage Access Required',
-//               'Please allow access to your device storage to save images.',
-//             );
-//           }
-//           return false;
-//         }
-//       }
-
-//       if (status.isPermanentlyDenied) {
-//         if (context.mounted) {
-//           _showPermissionDialog(
-//             context,
-//             'Storage Access Required',
-//             'Please enable storage access in your device settings to save images.',
-//             showOpenSettings: true,
-//           );
-//         }
-//         return false;
-//       }
-
-//       return status.isGranted;
-//     }
-
-//     return false;
-//   }
-
-//   static void _showPermissionDialog(
-//     BuildContext context,
-//     String title,
-//     String message, {
-//     bool showOpenSettings = false,
-//   }) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: Text(title),
-//           content: Text(message),
-//           actions: [
-//             TextButton(
-//               onPressed: () => Navigator.pop(context),
-//               child: const Text('Cancel'),
-//             ),
-//             if (showOpenSettings)
-//               TextButton(
-//                 onPressed: () {
-//                   openAppSettings();
-//                   Navigator.pop(context);
-//                 },
-//                 child: const Text('Open Settings'),
-//               ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }

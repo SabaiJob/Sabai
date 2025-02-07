@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sabai_app/screens/payment.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PricingPlan extends StatefulWidget {
@@ -106,6 +108,7 @@ class _PricingPlanState extends State<PricingPlan> {
 
   @override
   Widget build(BuildContext context) {
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xffF7F7F7),
       appBar: AppBar(
@@ -205,8 +208,11 @@ class _PricingPlanState extends State<PricingPlan> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: GestureDetector(
-                onTap: _currentIndex != 2
+                onTap: _currentIndex != 1
                     ? () {
+                        _currentIndex == 2
+                            ? paymentProvider.setPricingPlanId(1)
+                            : paymentProvider.setPricingPlanId(2);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -215,6 +221,7 @@ class _PricingPlanState extends State<PricingPlan> {
                             ),
                           ),
                         );
+                        print(_currentIndex);
                       }
                     : null,
                 child: Container(

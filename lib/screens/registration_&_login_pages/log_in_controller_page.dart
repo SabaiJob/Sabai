@@ -4,6 +4,7 @@ import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/log_in_form_page.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
@@ -165,6 +166,10 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
           //     ),
           //   ),
           // );
+          final responseData = json.decode(response.body);
+          final token = responseData['token'];
+          print(token);
+          await TokenService.saveToken(token);
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const NavigationHomepage(

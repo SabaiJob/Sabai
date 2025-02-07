@@ -1023,13 +1023,16 @@ class _ProfileState extends State<Profile> {
                                         height: 30,
                                       ),
                                 GestureDetector(
+                                  onTap: () async {
+                                    await ApiService.logout(context);
+                                  },
                                   child: Container(
                                     width: 288,
                                     height: 29,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: Color(0xFFF0F1F2),
+                                        color: const Color(0xFFF0F1F2),
                                       ),
                                     ),
                                     child: Center(
@@ -1059,13 +1062,16 @@ class _ProfileState extends State<Profile> {
                                   height: 10,
                                 ),
                                 GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
                                   child: Container(
                                     width: 288,
                                     height: 29,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: Color(0xFFF0F1F2),
+                                        color: const Color(0xFFF0F1F2),
                                       ),
                                     ),
                                     child: Center(
