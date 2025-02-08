@@ -177,6 +177,7 @@ class _SaveJobsState extends State<SaveJobs> {
                       minSalary: jobInfo['salary_min'],
                       currency: jobInfo['currency'],
                       jobId: jobInfo['id'],
+                      closingAt: jobInfo['closing_at'],
                     );
                   },
                 ),
@@ -209,15 +210,15 @@ class _SaveJobsState extends State<SaveJobs> {
                             final job = jobProvider.savedJobList[index];
                             final jobInfo = job['job'] as Map<String, dynamic>;
                             return WorkCard(
-                              jobTitle: jobInfo['title'],
-                              isPartner: jobInfo['is_partner'],
-                              companyName: jobInfo['company_name'],
-                              location: jobInfo['location'],
-                              maxSalary: jobInfo['salary_max'],
-                              minSalary: jobInfo['salary_min'],
-                              currency: jobInfo['currency'],
-                              jobId: jobInfo['id'],
-                            );
+                                jobTitle: jobInfo['title'],
+                                isPartner: jobInfo['is_partner'],
+                                companyName: jobInfo['company_name'],
+                                location: jobInfo['location'],
+                                maxSalary: jobInfo['salary_max'],
+                                minSalary: jobInfo['salary_min'],
+                                currency: jobInfo['currency'],
+                                jobId: jobInfo['id'],
+                                closingAt: jobInfo['closing_at']);
                           },
                         )
                       : const Center(

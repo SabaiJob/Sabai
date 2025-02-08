@@ -367,6 +367,7 @@ class _JobListingPageState extends State<JobListingPage>
                         minSalary: jobInfo['salary_min'],
                         currency: jobInfo['currency'],
                         jobId: jobInfo['id'],
+                        closingAt: jobInfo['closing_at'],
                       );
                     }),
               ),

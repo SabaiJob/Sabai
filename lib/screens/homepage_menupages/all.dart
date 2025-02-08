@@ -94,6 +94,7 @@ class _AllState extends State<All> {
                       currency: jobInfo['currency'],
                       jobId: jobInfo['id'],
                       isPartner: jobInfo['is_partner'],
+                      closingAt: jobInfo['closing_at'],
                     );
                   } else {
                     final adInfo = job['info'] as Map<String, dynamic>;

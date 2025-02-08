@@ -20,6 +20,7 @@ class WorkCard extends StatelessWidget {
   final String currency;
   final bool isPartner;
   final int jobId;
+  final String closingAt;
   const WorkCard(
       {required this.jobTitle,
       required this.isPartner,
@@ -29,6 +30,7 @@ class WorkCard extends StatelessWidget {
       required this.minSalary,
       required this.currency,
       required this.jobId,
+      required this.closingAt,
       super.key});
 
   @override
@@ -37,7 +39,11 @@ class WorkCard extends StatelessWidget {
     var jobProvider = Provider.of<JobProvider>(context);
     bool? isSaved = jobProvider.isSaved(jobId);
     bool? isGuest = jobProvider.isGuest;
-
+    final closed = DateTime.parse(closingAt).toLocal();
+    final now = DateTime.now();
+    final timeDifference = closed.difference(now);
+    final isClosedDay = timeDifference.inDays;
+    final isClosedHour = timeDifference.inHours - 7;
     return GestureDetector(
       onTap: () {
         if (jobProvider.isGuest == true) {
@@ -50,6 +56,7 @@ class WorkCard extends StatelessWidget {
         } else {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const JobDetailsPage()));
+          print(timeDifference);
         }
       },
       child: Card(
@@ -220,9 +227,13 @@ class WorkCard extends StatelessWidget {
                     height: 10,
                   ),
                   language.lan == 'English'
-                      ? const Text(
-                          'Closing in 3 days',
-                          style: TextStyle(
+                      ? Text(
+                          timeDifference.isNegative
+                              ? 'Closed'
+                              : isClosedDay > 0
+                                  ? 'Closing in $isClosedDay days'
+                                  : 'Closing in $isClosedHour hours',
+                          style: const TextStyle(
                             fontFamily: 'Bricolage-R',
                             fontSize: 10,
                             color: Color(0xffDC3545),
