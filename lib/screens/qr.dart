@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/payment_verifying.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'dart:typed_data';
@@ -57,79 +58,54 @@ class _QrState extends State<Qr> {
     } catch (e) {}
   }
 
-  // Future<String> fileImageToBase64(FileImage fileImage) async {
-  //   final file = File(fileImage.file.path);
-  //   final bytes = await file.readAsBytes();
-  //   return base64Encode(bytes);
-  // }
-  //
-  // Future<void> uploadPayment(
-  //     {required int pricingPlanId,
-  //     required int paymentMethodId,
-  //     required File fileImage}) async {
-  //   try {
-  //     //String base64Image = await fileImageToBase64(fileImage);
-  //     List<int> imageBytes = await fileImage.readAsBytes();
-  //     // Convert to Base64 string
-  //     String base64Image = base64Encode(imageBytes);
-  //     final response = await ApiService.post(
-  //       '/sales/subscribe/',
-  //       {
-  //         'pricing_plan': pricingPlanId,
-  //         "payment_method": paymentMethodId,
-  //         "payment_screenshot": base64Image,
-  //       },
-  //     );
-  //     if (response.statusCode >= 200 && response.statusCode < 300) {
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => const PaymentVerifying(),
-  //         ),
-  //       );
-  //       print("Payment uploaded successfully!");
-  //     } else {
-  //       print("Payment upload failed: ${response.statusCode} ${response.body}");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  Future<void> uploadPayment({
+    required int pricingPlanId,
+    required int paymentMethodId,
+    required File fileImage,
+  }) async {
+    final token = await TokenService.getToken();
+    try {
+      String fileName = fileImage.path.split('/').last;
 
-  // Future<void> uploadPayment({
-  //   required int pricingPlanId,
-  //   required int paymentMethodId,
-  //   required File fileImage, // Change FileImage to File
-  // }) async {
-  //   try {
-  //     final fileName = fileImage.path.split('/').last;
-  //     List<int> imageBytes = await fileImage.readAsBytes();
-  //
-  //     // Convert to Base64 string
-  //     String base64Image = base64Encode(imageBytes);
-  //     print(base64Image);
-  //     FormData formData = FormData.fromMap({
-  //       'pricing_plan': pricingPlanId,
-  //       'payment_method': paymentMethodId,
-  //       'payment_screenshot': await MultipartFile.fromFile(
-  //         fileImage.path,
-  //         filename: fileName,
-  //       ),
-  //     });
-  //
-  //     final response =
-  //         await ApiService.uploadFile('/sales/subscribe/', formData);
-  //
-  //     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-  //       print("Payment uploaded successfully!");
-  //       // Navigation should happen in the UI layer, not here
-  //     } else {
-  //       print("Payment upload failed: ${response.statusCode} ${response.data}");
-  //     }
-  //   } catch (e) {
-  //     print("Error uploading payment: $e");
-  //   }
-  // }
+      FormData formData = FormData.fromMap({
+        "pricing_plan": pricingPlanId,
+        "payment_method": paymentMethodId,
+        "payment_screenshot":
+            await MultipartFile.fromFile(fileImage.path, filename: fileName),
+        "note": "Payment proof uploaded from Flutter app",
+      });
+
+      print("Form Data: $formData"); // Log the form data
+
+      Dio dio = Dio();
+      Response response = await dio.post(
+        "https://sabai-job-backend-k9wda.ondigitalocean.app/api/sales/subscribe/",
+        data: formData,
+        options: Options(
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print("Subscription order created successfully: ${response.data}");
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const PaymentVerifying()),
+          (route) => false,
+        );
+      } else {
+        print("Failed to create subscription order: ${response.statusCode}");
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print("DioError: ${e.response?.data}"); // Log the error response
+      } else {
+        print("Error uploading payment screenshot: $e");
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -439,6 +415,11 @@ class _QrState extends State<Qr> {
                     //   pricingPlanId: paymentProvider.pricingPlanId,
                     //   fileImage: _selectedImage!.file,
                     // );
+                    uploadPayment(
+                      pricingPlanId: paymentProvider.pricingPlanId,
+                      paymentMethodId: paymentProvider.paymentMethodId,
+                      fileImage: _selectedImage!.file,
+                    );
                     print(_selectedImage);
                   }
                 : null,

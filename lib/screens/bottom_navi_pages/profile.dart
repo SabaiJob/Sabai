@@ -17,6 +17,7 @@ import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -28,47 +29,47 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
-  Map<String, dynamic>? userData; // Change late to nullable
+  //Map<String, dynamic>? userData; // Change late to nullable
 
-  Future<void> getProfileData() async {
-    try {
-      final response = await ApiService.get('/auth/token/verify/');
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        setState(() {
-          userData = data;
-        });
-        print(userData);
-      } else {
-        print(response.body);
-      }
-    } catch (e) {}
-  }
-
-  // Future<void> _pickImage(ImageSource source) async {
-  //   final ImagePicker picker = ImagePicker();
-  //   final XFile? image = await picker.pickImage(source: source);
-  //   if (image != null) {
-  //     setState(() {
-  //       _selectedImage = FileImage(File(image.path));
-  //     });
+  // Future<void> getProfileData() async {
+  //   try {
+  //     final response = await ApiService.get('/auth/token/verify/');
+  //     if (response.statusCode >= 200 && response.statusCode < 300) {
+  //       final Map<String, dynamic> data = jsonDecode(response.body);
+  //       setState(() {
+  //         userData = data;
+  //       });
+  //       print(userData);
+  //     } else {
+  //       print(response.body);
+  //     }
+  //   } catch (e) {
+  //     print(e);
   //   }
   // }
+
+  void fetchUserData() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getProfileData();
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => getProfileData());
+    fetchUserData();
   }
 
   @override
   Widget build(BuildContext context) {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
 
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
 
-    if (userData == null) {
+    if (paymentProvider.userData == null) {
       return const Scaffold(
         backgroundColor: backgroundColor,
         body: Center(
@@ -157,114 +158,110 @@ class _ProfileState extends State<Profile> {
                       onTap: () {
                         if (Platform.isIOS) {
                           showCupertinoModalPopup(
-                              context: context,
-                              builder: (context) => CupertinoActionSheet(
-                                    actions: [
-                                      CupertinoActionSheetAction(
-                                        onPressed: () async {
-                                          FileImage? image =
-                                              await imagePickerHelper.pickImage(
-                                                  ImageSource.gallery);
-                                          if (image != null) {
-                                            setState(() {
-                                              _selectedImage = image;
-                                            });
-                                          }
-                                        },
-                                        child: Text('Upload New Picture',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.grey[600],
-                                            )),
-                                      ),
-                                      CupertinoActionSheetAction(
-                                        onPressed: () {
-                                          setState(() {
-                                            _selectedImage = null;
-                                          });
-                                        },
-                                        child: Text('Remove Profile Picture',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.grey[600],
-                                            )),
-                                      ),
-                                    ],
-                                  ));
+                            context: context,
+                            builder: (context) => CupertinoActionSheet(
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () async {
+                                    FileImage? image = await imagePickerHelper
+                                        .pickImage(ImageSource.gallery);
+                                    if (image != null) {
+                                      setState(() {
+                                        _selectedImage = image;
+                                      });
+                                    }
+                                  },
+                                  child: Text('Upload New Picture',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[600],
+                                      )),
+                                ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedImage = null;
+                                    });
+                                  },
+                                  child: Text(
+                                    'Remove Profile Picture',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         }
                         if (Platform.isAndroid) {
                           showModalBottomSheet(
-                              backgroundColor: Colors.white,
-                              scrollControlDisabledMaxHeightRatio: 0.25,
-                              context: context,
-                              builder: (context) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        ElevatedButton.icon(
-                                          onPressed: () async {
-                                            FileImage? image =
-                                                await imagePickerHelper
-                                                    .pickImage(
-                                                        ImageSource.gallery);
-                                            if (image != null) {
-                                              setState(() {
-                                                _selectedImage = image;
-                                              });
-                                            }
-                                          },
-                                          icon: Icon(Icons.image,
-                                              size: 20,
-                                              color: Colors.grey[600]),
-                                          label: Text(
-                                            'Update Profile Picture',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[600]),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 12, horizontal: 16),
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(8))),
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 247, 226, 233),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        OutlinedButton.icon(
-                                          onPressed: () {
-                                            setState(() {
-                                              _selectedImage = null;
-                                            });
-                                          },
-                                          icon: Icon(Icons.delete,
-                                              size: 20,
-                                              color: Colors.grey[600]),
-                                          label: Text(
-                                            'Remove Profile Picture',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[600]),
-                                          ),
-                                          style: OutlinedButton.styleFrom(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(8))),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 12, horizontal: 16),
-                                          ),
-                                        ),
-                                      ],
+                            backgroundColor: Colors.white,
+                            scrollControlDisabledMaxHeightRatio: 0.25,
+                            context: context,
+                            builder: (context) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      FileImage? image = await imagePickerHelper
+                                          .pickImage(ImageSource.gallery);
+                                      if (image != null) {
+                                        setState(() {
+                                          _selectedImage = image;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(Icons.image,
+                                        size: 20, color: Colors.grey[600]),
+                                    label: Text(
+                                      'Update Profile Picture',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600]),
                                     ),
-                                  ));
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 16),
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8))),
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 247, 226, 233),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  OutlinedButton.icon(
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedImage = null;
+                                      });
+                                    },
+                                    icon: Icon(Icons.delete,
+                                        size: 20, color: Colors.grey[600]),
+                                    label: Text(
+                                      'Remove Profile Picture',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600]),
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8))),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         }
                       },
                       child: Container(
@@ -289,7 +286,7 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 10,
               ),
-              Text(userData!['username'],
+              Text(paymentProvider.userData!['username'],
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Bricolage-B',
@@ -301,7 +298,7 @@ class _ProfileState extends State<Profile> {
 
               Text(
                   languageProvider.lan == 'English'
-                      ? userData!['phone']
+                      ? '${paymentProvider.userData!['phone']}'
                       : '+၆၆ ၆၇၂၈၁၉၃၂',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
@@ -680,7 +677,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       onTap: () {
-                        userData!['is_premium'] == true
+                        paymentProvider.userData!['is_premium'] == true
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(

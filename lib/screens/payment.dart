@@ -23,17 +23,24 @@ class Payment extends StatefulWidget {
 class _PaymentState extends State<Payment> {
   late int? selectedPlan;
 
+  void fetchUserData() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getProfileData();
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchUserData();
     selectedPlan = widget.plan; // Initialize with the widget's plan
   }
 
   final _formKey = GlobalKey<FormState>();
 
-  final _fullNameController = TextEditingController();
-
-  final _phoneNumberController = TextEditingController();
+  // final _fullNameController = TextEditingController();
+  //
+  // final _phoneNumberController = TextEditingController();
 
   final _rCodeController = TextEditingController();
 
@@ -48,6 +55,17 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
+
+    if (paymentProvider.userData == null) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      ); // Show loading state
+    }
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -85,19 +103,41 @@ class _PaymentState extends State<Payment> {
                 const SizedBox(
                   height: 8,
                 ),
-                ReusableTextformfield(
-                  textEditingController: _fullNameController,
-                  validating: (value) {
-                    if (value == null || value.isEmpty) {
-                      return languageProvider.lan == 'English'
-                          ? "Full Name is required"
-                          : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
-                    }
-                    return null;
-                  },
-                  hint: languageProvider.lan == 'English'
-                      ? 'Enter your full name'
-                      : 'သင့်အမည် ထည့်ပါ',
+                // ReusableTextformfield(
+                //   textEditingController: _fullNameController,
+                //   validating: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return languageProvider.lan == 'English'
+                //           ? "Full Name is required"
+                //           : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                //     }
+                //     return null;
+                //   },
+                //   hint: languageProvider.lan == 'English'
+                //       ? 'Enter your full name'
+                //       : 'သင့်အမည် ထည့်ပါ',
+                // ),
+                Container(
+                  width: double.infinity,
+                  height: 35,
+                  padding: const EdgeInsets.only(
+                    top: 6,
+                    left: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '${paymentProvider.userData!['username']}',
+                    style: const TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      color: Color(0xff616971),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 const Text(
                   'Phone Number',
@@ -106,23 +146,42 @@ class _PaymentState extends State<Payment> {
                 const SizedBox(
                   height: 8,
                 ),
-                ReusableTextformfield(
-                  formatter: [FilteringTextInputFormatter.digitsOnly],
-                  textEditingController: _phoneNumberController,
-                  keyboardType: TextInputType.phone,
-                  validating: (value) {
-                    if (value == null || value.isEmpty) {
-                      return languageProvider.lan == 'English'
-                          ? "Phone Number is required"
-                          : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
-                    }
-                    return null;
-                  },
-                  hint: '+66 2134567',
-                ),
-                const Text(
-                  'Chosen Package',
-                  style: labelStyleEng,
+                // ReusableTextformfield(
+                //   formatter: [FilteringTextInputFormatter.digitsOnly],
+                //   textEditingController: _phoneNumberController,
+                //   keyboardType: TextInputType.phone,
+                //   validating: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return languageProvider.lan == 'English'
+                //           ? "Phone Number is required"
+                //           : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
+                //     }
+                //     return null;
+                //   },
+                //   hint: '+66 2134567',
+                // ),
+                // const Text(
+                //   'Chosen Package',
+                //   style: labelStyleEng,
+                // ),
+                Container(
+                  width: double.infinity,
+                  height: 35,
+                  padding: const EdgeInsets.only(
+                    top: 6,
+                    left: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '${paymentProvider.userData!['phone']}',
+                    style: const TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      color: Color(0xff616971),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),

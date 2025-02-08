@@ -38,11 +38,9 @@ class _PaymentVerifyingState extends State<PaymentVerifying>
       () {
         if (!mounted) return;
         _controller.stop();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const NavigationHomepage(),
-          ),
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const NavigationHomepage()),
+          (route) => false,
         );
       },
     );

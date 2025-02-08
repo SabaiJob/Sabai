@@ -34,17 +34,6 @@ class _SaveJobsState extends State<SaveJobs> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    // List<int> savedJobs = jobProvider.savedJobs;
-    // //final combineJobs = jobProvider.combineJobs;
-    // final savedJobsDetails = jobProvider.combineJobs.where((job) {
-    //   return savedJobs.contains(job['jobTitle']);
-    // }).toList();
-
-    // final filterJobs = savedJobsDetails.where((job) {
-    //   bool matchesQuery =
-    //       job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
-    //   return matchesQuery;
-    // }).toList();
 
     final filterJobs = jobProvider.savedJobList.where((job) {
       final jobInfo = job['job'] as Map<String, dynamic>;
