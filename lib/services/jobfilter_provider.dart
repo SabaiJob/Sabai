@@ -51,6 +51,11 @@ class JobFilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setTitle(String value) {
+    title = value;
+    notifyListeners();
+  }
+
   List<dynamic> get allTypeJobs => _jobs;
   bool get isLoading => _isLoading;
 

@@ -11,6 +11,8 @@ import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 
+import '../services/job_provider.dart';
+
 class AdvancedFilterPage extends StatefulWidget {
   const AdvancedFilterPage({super.key});
 
@@ -115,6 +117,9 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       final filterProvider =
           Provider.of<JobFilterProvider>(context, listen: false);
       final existingFilters = filterProvider.filterValues;
+      //
+      final jobProvider = Provider.of<JobProvider>(context, listen: false);
+      jobProvider.getAllJobs();
 
       if (existingFilters != null) {
         setState(() {
@@ -160,14 +165,20 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   @override
   Widget build(BuildContext context) {
     SabaiAppData sabaiAppData = SabaiAppData();
-    var jobNameItems = sabaiAppData.jobCategoryInEng
-        .map((category) => DropdownItem(
-            label: '${category['name']} ${category['emoji']}', value: category))
+    var jobProvider = Provider.of<JobProvider>(context);
+    final allJobs = jobProvider.allTypeJobs
+        .where((job) => job['type'] == 'job')
+        .map((job) => job['info']['title'])
+        .toList();
+    var jobNameItems = jobProvider.allTypeJobs
+        .where((job) => job['type'] == 'job')
+        .map((job) => DropdownItem(
+            label: '${job['info']['title']}', value: '${job['info']['title']}'))
         .toList();
     var jobLocation = sabaiAppData.provinceItemsInEng
         .map((province) => DropdownItem(label: province, value: province))
         .toList();
-    if (_jobCategories == []) {
+    if (_jobCategories.isEmpty || jobProvider.isLoading) {
       return const Scaffold(
         backgroundColor: backgroundColor,
         body: Center(
@@ -215,6 +226,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               SizedBox(
                 width: 343,
                 child: MultiDropdown(
+                  singleSelect: true,
                   onSelectionChange: (selectedItems) {
                     setState(() {
                       selectedJobNames = selectedItems;
@@ -568,6 +580,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   final filterValues = collectFilterValues();
                   print(filterValues); // Or pass to another screen/function
                   print(filterValues['jobCategories'].join(','));
+                  print(allJobs);
+                  print(jobNameItems.length);
                   // Use Provider to update filter values
                   Provider.of<JobFilterProvider>(context, listen: false)
                       .updateFilterValues(filterValues);

@@ -88,6 +88,21 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> getAllJobs() async {
+    print("Checking jobs length: ${_jobs.length}"); // Debugging
+    _jobs.clear(); // ✅ Clear jobs before fetching all pages
+    int page = 1;
+    bool hasMorePages = true;
+    while (hasMorePages) {
+      await getJobs(true, page: page);
+      if (page >= totalPages) {
+        hasMorePages = false;
+      }
+      page++;
+    }
+    notifyListeners(); // ✅ Ensure UI updates after all jobs are loaded
+  }
+
   //fetch best matches jobs
 
   List<dynamic> _bestMatchedJobs = [];
@@ -133,42 +148,6 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
-  // Future<void> getBestMatchedJobs(bool isLoading, {int page = 1}) async {
-  //   _isLoadingBestMatchedJobs = isLoading;
-  //   notifyListeners();
-  //
-  //   try {
-  //     final response = await ApiService.get('/jobs/best-matches/?page=$page');
-  //     if (response.statusCode >= 200 && response.statusCode < 300) {
-  //       final Map<String, dynamic> data = json.decode(response.body);
-  //       if (data.containsKey('results') && data['results'] is List) {
-  //         final newJobs = data['results'];
-  //         if (page == 1) {
-  //           _bestMatchedJobs =
-  //               newJobs.where((job) => job['type'] == 'job').toList();
-  //         } else {
-  //           _bestMatchedJobs
-  //               .addAll(newJobs.where((job) => job['type'] == 'job').toList());
-  //         }
-  //
-  //         if (data.containsKey('total_pages')) {
-  //           totalBestMatchedPages = data['total_pages'];
-  //         }
-  //       } else {
-  //         print('Invalid response structure: ${response.body}');
-  //       }
-  //     } else {
-  //       print('Error: ${response.statusCode} - ${response.body}');
-  //     }
-  //   } catch (e) {
-  //     print('Exception: $e');
-  //     _bestMatchedJobs = [];
-  //   } finally {
-  //     _isLoadingBestMatchedJobs = false;
-  //     notifyListeners();
-  //   }
-  // }
-
   //fetch partner jobs
 
   // New variables for partner jobs
@@ -183,32 +162,6 @@ class JobProvider extends ChangeNotifier {
   Future<void> getPartnerJobs(bool isLoading, {int page = 1}) async {
     _isLoadingPartnerJobs = isLoading;
     notifyListeners();
-
-    // try {
-    //   final response = await ApiService.get('/jobs/search/?page=$page');
-    //   if (response.statusCode >= 200 && response.statusCode < 300) {
-    //     final Map<String, dynamic> data = json.decode(response.body);
-    //     if (data.containsKey('results') && data['results'] is List) {
-    //       final newJobs = data['results'];
-    //       if (page == 1) {
-    //         // Reset the list if it's the first page
-    //         _jobs = newJobs;
-    //       } else {
-    //         // Append new jobs to the existing list
-    //         _jobs.addAll(newJobs);
-    //       }
-    //       // Update total pages
-    //       if (data.containsKey('total_pages')) {
-    //         totalPages = data['total_pages'];
-    //       }
-    //     } else {
-    //       print('Invalid response structure: ${response.body}');
-    //     }
-    //   } else {
-    //     print('Error: ${response.statusCode} - ${response.body}');
-    //   }
-    // }
-
     try {
       final response = await ApiService.get('/jobs/search/?page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
