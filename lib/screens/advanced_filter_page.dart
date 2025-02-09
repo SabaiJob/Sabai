@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,8 @@ import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
@@ -16,6 +19,35 @@ class AdvancedFilterPage extends StatefulWidget {
 }
 
 class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
+  // get job categories
+  List<Map<String, dynamic>> _jobCategories = [];
+  Future<void> getJobCategory() async {
+    try {
+      final response = await ApiService.get('/jobs/categories/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final List<dynamic> data = json.decode(response.body);
+        final List<Map<String, dynamic>> jobCategories = data.map((job) {
+          String name = job['name'];
+          String imageLink = job['image'];
+          int id = job['id'];
+          return {
+            'name': name ?? 'Unknown',
+            'image': imageLink ?? '',
+            'selected': false,
+            'id': id,
+          };
+        }).toList();
+        setState(() {
+          _jobCategories = jobCategories;
+        });
+      } else {
+        print('error: ${response.body} , ststusCode: ${response.statusCode} ');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   SabaiAppData sabaiAppData = SabaiAppData();
   // Variables to store selected filter values
   List<dynamic> selectedJobNames = [];
@@ -31,7 +63,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     return {
       'jobNames': selectedJobNames,
       'jobCategories': selectedJobCategoryIndices
-          .map((index) => sabaiAppData.jobCategoryInEng[index]['name'])
+          .map((index) => _jobCategories[index]['id'])
           .toList(),
       'jobLocations': selectedJobLocations,
       'jobTypes': selectedJobTypeIndices
@@ -62,17 +94,23 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       selectedVerificationOption = null; // Reset to null
       currentValue = 1000.00;
     });
+    Provider.of<JobFilterProvider>(context, listen: false).setFilter(false);
     // Clear filters in the provider
     Provider.of<JobFilterProvider>(context, listen: false)
         .updateFilterValues(null);
 
     // Navigate back to the JobListingPage
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const NavigationHomepage()),
+      (route) => false,
+    );
   }
 
   @override
   void initState() {
     super.initState();
+    getJobCategory();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final filterProvider =
           Provider.of<JobFilterProvider>(context, listen: false);
@@ -84,9 +122,9 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
           selectedJobCategoryIndices = existingFilters['jobCategories'] != null
               ? List.generate(
                   existingFilters['jobCategories'].length,
-                  (index) => sabaiAppData.jobCategoryInEng.indexWhere(
+                  (index) => _jobCategories.indexWhere(
                     (cat) =>
-                        cat['name'] == existingFilters['jobCategories'][index],
+                        cat['id'] == existingFilters['jobCategories'][index],
                   ),
                 ).where((index) => index != -1).toList()
               : [];
@@ -129,6 +167,16 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     var jobLocation = sabaiAppData.provinceItemsInEng
         .map((province) => DropdownItem(label: province, value: province))
         .toList();
+    if (_jobCategories == []) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F7F7),
@@ -243,9 +291,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                 crossAxisAlignment: WrapCrossAlignment.start,
                 spacing: 10.0,
                 runSpacing: 1.5,
-                children: List.generate(sabaiAppData.jobCategoryInEng.length,
-                    (index) {
-                  final jobCategory = sabaiAppData.jobCategoryInEng[index];
+                children: List.generate(_jobCategories.length, (index) {
+                  final jobCategory = _jobCategories[index];
                   return ChoiceChip(
                     showCheckmark: false,
                     label: Row(
@@ -255,10 +302,11 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                           jobCategory['name'],
                           style: choiceChipItemStyle,
                         ),
-                        Text(
-                          jobCategory['emoji'],
-                          style: choiceChipItemStyle,
-                        )
+                        Image.network(
+                          jobCategory['image'],
+                          width: 15,
+                          height: 15,
+                        ),
                       ],
                     ),
                     selected: selectedJobCategoryIndices.contains(index),
@@ -519,13 +567,20 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   // Collect and use filter values
                   final filterValues = collectFilterValues();
                   print(filterValues); // Or pass to another screen/function
-
+                  print(filterValues['jobCategories'].join(','));
                   // Use Provider to update filter values
                   Provider.of<JobFilterProvider>(context, listen: false)
                       .updateFilterValues(filterValues);
-
+                  Provider.of<JobFilterProvider>(context, listen: false)
+                      .setFilter(true);
+                  Provider.of<JobFilterProvider>(context, listen: false)
+                      .setCategory(
+                          '${filterValues['jobCategories'].join(',')}');
                   // Navigate back
-                  Navigator.pop(context, filterValues);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NavigationHomepage()));
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),

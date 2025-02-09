@@ -21,6 +21,8 @@ class WorkCard extends StatelessWidget {
   final bool isPartner;
   final int jobId;
   final String closingAt;
+  final String safetyLevel;
+  final int viewCount;
   const WorkCard(
       {required this.jobTitle,
       required this.isPartner,
@@ -31,6 +33,8 @@ class WorkCard extends StatelessWidget {
       required this.currency,
       required this.jobId,
       required this.closingAt,
+      required this.safetyLevel,
+      required this.viewCount,
       super.key});
 
   @override
@@ -54,8 +58,12 @@ class WorkCard extends StatelessWidget {
             },
           );
         } else {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const JobDetailsPage()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => JobDetailsPage(
+                        jobId: jobId,
+                      )));
           print(timeDifference);
         }
       },
@@ -294,7 +302,7 @@ class WorkCard extends StatelessWidget {
                                     ),
                                   ),
                             SizedBox(
-                              width: language.lan == 'English' ? 68 : 60,
+                              width: language.lan == 'English' ? 63 : 60,
                             ),
                             language.lan == 'English'
                                 ? const Text(
@@ -349,9 +357,12 @@ class WorkCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            width: 50,
+                            width: 55,
                           ),
-                          JobLevelCard(language: language),
+                          JobLevelCard(
+                            language: language,
+                            level: safetyLevel,
+                          ),
                         ],
                       )
                     ],
@@ -381,23 +392,23 @@ class WorkCard extends StatelessWidget {
                             ),
                             language.lan == 'English'
                                 ? RichText(
-                                    text: const TextSpan(
+                                    text: TextSpan(
                                       text: 'viewed by  ',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12.5,
                                         fontFamily: 'Bricolage-R',
                                         color: Color(0xff6C757D),
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: '20',
-                                          style: TextStyle(
+                                          text: '$viewCount',
+                                          style: const TextStyle(
                                             fontSize: 12.5,
                                             fontFamily: 'Bricolage-B',
                                             color: Color(0xff6C757D),
                                           ),
                                         ),
-                                        TextSpan(text: '  job hunters'),
+                                        const TextSpan(text: '  job hunters'),
                                       ],
                                     ),
                                   )
@@ -425,7 +436,7 @@ class WorkCard extends StatelessWidget {
                             ),
                             language.lan == 'English'
                                 ? const Text(
-                                    '56',
+                                    '0',
                                     style: TextStyle(
                                       fontSize: 12.5,
                                       fontFamily: 'Bricolage-B',
@@ -548,12 +559,10 @@ class WorkCard extends StatelessWidget {
 }
 
 class JobLevelCard extends StatelessWidget {
-  const JobLevelCard({
-    super.key,
-    required this.language,
-  });
+  const JobLevelCard({super.key, required this.language, required this.level});
 
   final LanguageProvider language;
+  final String level;
 
   @override
   Widget build(BuildContext context) {
@@ -587,9 +596,9 @@ class JobLevelCard extends StatelessWidget {
                 width: 3,
               ),
               language.lan == 'English'
-                  ? const Text(
-                      'Level-3',
-                      style: TextStyle(
+                  ? Text(
+                      'Level-$level',
+                      style: const TextStyle(
                         fontFamily: 'Bricolage-R',
                         fontSize: 10,
                         color: Colors.black,

@@ -93,6 +93,8 @@ class _PartnershipsState extends State<Partnerships> {
                       jobId: jobInfo['id'],
                       isPartner: jobInfo['is_partner'],
                       closingAt: jobInfo['closing_at'],
+                      safetyLevel: jobInfo['safety_level'],
+                      viewCount: jobInfo['views_count'],
                     );
                   } else {
                     final adInfo = job['info'] as Map<String, dynamic>;

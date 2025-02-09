@@ -368,6 +368,8 @@ class _JobListingPageState extends State<JobListingPage>
                         currency: jobInfo['currency'],
                         jobId: jobInfo['id'],
                         closingAt: jobInfo['closing_at'],
+                        safetyLevel: jobInfo['safety_level'],
+                        viewCount: jobInfo['views_count'],
                       );
                     }),
               ),
