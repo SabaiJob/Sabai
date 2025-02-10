@@ -323,10 +323,13 @@ class _JobListingPageState extends State<JobListingPage>
                     color: const Color(0xffFF3997),
                     onPressed: () async {
                       final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const AdvancedFilterPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AdvancedFilterPage(),
+                        ),
+                      );
+                      filterProvider.clearAllFilters();
+                      filterProvider.clearFilters();
                       if (result != null) {
                         filterProvider.updateFilterValues(result);
                       }

@@ -92,6 +92,7 @@ class JobFilterProvider with ChangeNotifier {
           final newJobs = data['results'];
           if (page == 1) {
             _jobs = newJobs;
+            print(url);
           } else {
             _jobs.addAll(newJobs);
           }
@@ -112,6 +113,32 @@ class JobFilterProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearAllFilters() {
+    title = '';
+    category = '';
+    location = '';
+    jobType = '';
+    thaiLanguageRequired = null;
+    salaryMin = 1000;
+    salaryMax = null;
+    isVerified = null;
+
+    notifyListeners();
+  }
+
+  void clearFilters() {
+    _filterValues = {
+      'jobNames': [],
+      'jobCategories': [],
+      'jobLocations': [],
+      'jobTypes': [],
+      'thaiLanguageRequired': null,
+      'verificationRequired': null,
+      'salaryRange': 1000.0,
+    };
+    notifyListeners(); // Ensure UI updates
   }
 
   Map<String, dynamic>? _filterValues;

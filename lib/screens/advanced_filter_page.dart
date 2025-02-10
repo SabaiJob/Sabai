@@ -129,6 +129,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       // filterProvider.updateFilterValues(null);
       //filterProvider.updateFilterJobName();
       filterProvider.setFilter(false);
+      filterProvider.clearAllFilters();
+      filterProvider.clearFilters();
       //
       final existingFilters = filterProvider.filterValues;
       //
@@ -633,7 +635,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                     print('the above is worked 2!');
                     if (selectedJobCategoryIndices.isNotEmpty) {
                       Provider.of<JobFilterProvider>(context, listen: false)
-                          .setCategory(selectedJobCategoryIndices.join(','));
+                          .setCategory(filterValues['jobCategories'].join(','));
+                      print(filterValues['jobCategories'].join(','));
                     }
                     print('the above is worked 3!');
                     print(selectedJobNames.length);
