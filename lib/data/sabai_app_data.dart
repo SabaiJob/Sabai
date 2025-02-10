@@ -79,7 +79,7 @@ class SabaiAppData {
     {'name': 'သင်ကြားရေး', 'emoji': '👩‍🏫', 'selected': false},
   ];
 
-  final List<String> _jobType = ['Remote', 'Full Time', 'Hybrid', 'On Site'];
+  final List<String> _jobType = ['Remote', 'Full-time', 'Hybrid', 'On-site'];
 
   String get fixedPinNumber => _fixedPinNumber;
 

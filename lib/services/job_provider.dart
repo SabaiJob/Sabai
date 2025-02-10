@@ -100,6 +100,7 @@ class JobProvider extends ChangeNotifier {
       }
       page++;
     }
+    print("Confirm  jobs length: ${_jobs.length}");
     notifyListeners(); // ✅ Ensure UI updates after all jobs are loaded
   }
 

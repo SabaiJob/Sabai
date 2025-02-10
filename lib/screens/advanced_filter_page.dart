@@ -10,7 +10,6 @@ import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
-
 import '../services/job_provider.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
@@ -57,6 +56,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   List<dynamic> selectedJobLocations = [];
   List<int> selectedJobTypeIndices = [];
   String? selectedLanguageOption;
+  String? Value;
   String? selectedVerificationOption;
   double currentValue = 1000.00;
 
@@ -112,10 +112,24 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   @override
   void initState() {
     super.initState();
+    selectedJobNames.clear();
+    selectedJobCategoryIndices.clear();
+    selectedJobLocations.clear();
+    selectedJobTypeIndices.clear();
+    selectedLanguageOption = null; // Reset to null
+    selectedVerificationOption = null; // Reset to null
+    currentValue = 1000.00;
+    print('name : $selectedJobNames');
     getJobCategory();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final filterProvider =
           Provider.of<JobFilterProvider>(context, listen: false);
+      //
+      // filterProvider.filterValues?.clear();
+      // filterProvider.updateFilterValues(null);
+      //filterProvider.updateFilterJobName();
+      filterProvider.setFilter(false);
+      //
       final existingFilters = filterProvider.filterValues;
       //
       final jobProvider = Provider.of<JobProvider>(context, listen: false);
@@ -357,6 +371,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               SizedBox(
                 width: 343,
                 child: MultiDropdown(
+                  singleSelect: true,
                   onSelectionChange: (selectedItems) {
                     setState(() {
                       selectedJobLocations = selectedItems;
@@ -505,6 +520,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       rButtonChoosen: (value) {
                         setState(() {
                           selectedLanguageOption = value;
+                          print(selectedLanguageOption);
                         });
                       },
                       rButtonName: 'No'),
@@ -579,22 +595,86 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   // Collect and use filter values
                   final filterValues = collectFilterValues();
                   print(filterValues); // Or pass to another screen/function
-                  print(filterValues['jobCategories'].join(','));
-                  print(allJobs);
-                  print(jobNameItems.length);
-                  // Use Provider to update filter values
-                  Provider.of<JobFilterProvider>(context, listen: false)
-                      .updateFilterValues(filterValues);
-                  Provider.of<JobFilterProvider>(context, listen: false)
-                      .setFilter(true);
-                  Provider.of<JobFilterProvider>(context, listen: false)
-                      .setCategory(
-                          '${filterValues['jobCategories'].join(',')}');
-                  // Navigate back
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NavigationHomepage()));
+                  print(selectedJobLocations);
+
+                  if (filterValues.isEmpty) {
+                    Provider.of<JobFilterProvider>(context, listen: false)
+                        .setFilter(false);
+                    // Navigate back
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NavigationHomepage()));
+                  } else if (selectedJobNames.isEmpty &&
+                      selectedJobCategoryIndices.isEmpty &&
+                      selectedJobLocations.isEmpty &&
+                      selectedJobTypeIndices.isEmpty &&
+                      selectedLanguageOption != 'Yes' &&
+                      selectedVerificationOption != 'Yes') {
+                    Provider.of<JobFilterProvider>(context, listen: false)
+                        .setFilter(false);
+                    // Navigate back
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NavigationHomepage()));
+                  } else {
+                    final jobFilterProvider =
+                        Provider.of<JobFilterProvider>(context, listen: false);
+                    jobFilterProvider.updateFilterValues(filterValues);
+                    print('it works');
+
+                    // Use Provider to update filter values
+                    Provider.of<JobFilterProvider>(context, listen: false)
+                        .updateFilterValues(filterValues);
+                    print('the above is worked 1!');
+                    Provider.of<JobFilterProvider>(context, listen: false)
+                        .setFilter(true);
+                    print('the above is worked 2!');
+                    if (selectedJobCategoryIndices.isNotEmpty) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setCategory(selectedJobCategoryIndices.join(','));
+                    }
+                    print('the above is worked 3!');
+                    print(selectedJobNames.length);
+                    if (selectedJobNames.isNotEmpty) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setTitle('${selectedJobNames[0]}');
+                    }
+                    print('the above is worked 4!');
+                    if (selectedJobLocations.isNotEmpty) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setLocation('${filterValues['jobLocations'][0]}');
+                    }
+                    print('the above is worked 5!');
+                    if (selectedJobTypeIndices.isNotEmpty) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setType('${filterValues['jobTypes'][0]}');
+                      // print(filterValues['jobTypes'][0]);
+                    }
+                    print('the above is worked 6!');
+                    if (selectedLanguageOption != null) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setThaiReq(filterValues['thaiLanguageRequired']);
+                    }
+                    print('the above is worked 7!');
+                    // Provider.of<JobFilterProvider>(context, listen: false)
+                    //     .setMinSalary(1000);
+                    if (currentValue != 1000) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setMAxSalary(currentValue.toInt());
+                    }
+
+                    if (selectedVerificationOption != null) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setVerified(filterValues['verificationRequired']);
+                    }
+                    // Navigate back
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NavigationHomepage()));
+                  }
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFF3997),

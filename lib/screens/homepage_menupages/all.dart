@@ -20,7 +20,8 @@ class _AllState extends State<All> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => fetchJobs());
+    //Future.microtask(() => fetchJobs());
+    Future.microtask(() => fetchAllJobs());
     Future.microtask(() => fetchFilterJobs());
     _scrollController.addListener(_onScroll);
   }
@@ -44,11 +45,11 @@ class _AllState extends State<All> {
           _currentPage++;
           fetchFilterJobs();
         }
-      } else {
-        if (_currentPage < jobProvider.totalPages) {
-          _currentPage++;
-          fetchJobs();
-        }
+        // } else {
+        //   if (_currentPage < jobProvider.totalPages) {
+        //     _currentPage++;
+        //     fetchJobs();
+        //   }
       }
     }
   }
@@ -56,6 +57,12 @@ class _AllState extends State<All> {
   void fetchJobs() async {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     await jobProvider.getJobs(_currentPage == 1, page: _currentPage);
+  }
+
+  void fetchAllJobs() async {
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    if (jobProvider.isLoading) return;
+    await jobProvider.getAllJobs();
   }
 
   void fetchFilterJobs() async {
@@ -138,7 +145,7 @@ class _AllState extends State<All> {
               onRefresh: () async {
                 // Reset to the first page on refresh
                 _currentPage = 1;
-                await jobProvider.getJobs(false, page: _currentPage);
+                await jobProvider.getAllJobs();
               },
               child: jobProvider.isLoading && _currentPage == 1
                   ? const Center(
@@ -147,8 +154,8 @@ class _AllState extends State<All> {
                       ),
                     )
                   : ListView.builder(
-                      controller: _scrollController,
-                      itemCount: jobProvider.allTypeJobs.length + 1,
+                      //controller: _scrollController,
+                      itemCount: jobProvider.allTypeJobs.length,
                       itemBuilder: (context, index) {
                         if (index == jobProvider.allTypeJobs.length) {
                           // Show a loading indicator at the bottom if there are more pages to load

@@ -21,30 +21,9 @@ class JobFilterProvider with ChangeNotifier {
   String location = '';
   String jobType = '';
   bool? thaiLanguageRequired;
-  int? salaryMin;
+  int salaryMin = 1000;
   int? salaryMax;
   bool? isVerified;
-
-  // void setFiler({
-  //   String? title,
-  //   String? category,
-  //   String? location,
-  //   String? jobType,
-  //   bool? thaiLanguageRequired,
-  //   int? salaryMin,
-  //   int? salaryMax,
-  //   bool? isVerified,
-  // }) {
-  //   this.title = title!;
-  //   this.category = category!;
-  //   this.location = location!;
-  //   this.jobType = jobType!;
-  //   this.thaiLanguageRequired = thaiLanguageRequired!;
-  //   this.salaryMax = salaryMax!;
-  //   this.salaryMin = salaryMin!;
-  //   this.isVerified = isVerified!;
-  //   notifyListeners();
-  // }
 
   void setCategory(String value) {
     category = value;
@@ -53,6 +32,31 @@ class JobFilterProvider with ChangeNotifier {
 
   void setTitle(String value) {
     title = value;
+    notifyListeners();
+  }
+
+  void setType(String value) {
+    jobType = value;
+    notifyListeners();
+  }
+
+  void setLocation(String value) {
+    location = value;
+    notifyListeners();
+  }
+
+  void setThaiReq(bool value) {
+    thaiLanguageRequired = value;
+    notifyListeners();
+  }
+
+  void setVerified(bool value) {
+    isVerified = value;
+    notifyListeners();
+  }
+
+  void setMAxSalary(int value) {
+    salaryMax = value;
     notifyListeners();
   }
 
@@ -116,6 +120,13 @@ class JobFilterProvider with ChangeNotifier {
 
   void updateFilterValues(Map<String, dynamic>? values) {
     _filterValues = values;
+    notifyListeners();
+  }
+
+  void updateFilterJobName() {
+    if ((_filterValues!['jobNames'] as List?) != null) {
+      (_filterValues!['jobNames'] as List?)?.clear();
+    }
     notifyListeners();
   }
 
