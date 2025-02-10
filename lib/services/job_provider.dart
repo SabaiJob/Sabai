@@ -225,6 +225,25 @@ class JobProvider extends ChangeNotifier {
     return _savedJobs.contains(jobId);
   }
 
+  List<dynamic> _premiumJobs = [];
+  List<dynamic> get premiumJobs => _premiumJobs;
+  Future<void> fetchPremiumJobs() async {
+    try {
+      final response = await ApiService.get('/jobs/new-jobs/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = json.decode(response.body);
+        _premiumJobs = data['results'];
+        print(_premiumJobs);
+      } else {
+        print('error ${response.body}');
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      notifyListeners();
+    }
+  }
+
   List<dynamic> _savedJobList = [];
   List<dynamic> get savedJobList => _savedJobList;
 

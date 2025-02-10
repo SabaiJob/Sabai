@@ -649,30 +649,50 @@ class _ProfileState extends State<Profile> {
                               alignment: Alignment.center,
                               width: 5,
                               height: 5,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF28A745),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
+                              decoration: BoxDecoration(
+                                color:
+                                    paymentProvider.userData!['is_premium'] ==
+                                            true
+                                        ? const Color(0xfff7d801)
+                                        : const Color(0xFF28A745),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
                               ),
                             ),
                             const SizedBox(
                               width: 2,
                             ),
-                            Text(
-                              textAlign: TextAlign.center,
-                              languageProvider.lan == 'English'
-                                  ? 'Free'
-                                  : 'အခမဲ့',
-                              style: languageProvider.lan == 'English'
-                                  ? const TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 9,
-                                    )
-                                  : const TextStyle(
-                                      fontFamily: 'Walone-B',
-                                      fontSize: 10,
-                                    ),
-                            )
+                            paymentProvider.userData!['is_premium'] == true
+                                ? Text(
+                                    textAlign: TextAlign.center,
+                                    languageProvider.lan == 'English'
+                                        ? 'Premium'
+                                        : 'အခမဲ့',
+                                    style: languageProvider.lan == 'English'
+                                        ? const TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 5,
+                                          )
+                                        : const TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 10,
+                                          ),
+                                  )
+                                : Text(
+                                    textAlign: TextAlign.center,
+                                    languageProvider.lan == 'English'
+                                        ? 'Free'
+                                        : 'အခမဲ့',
+                                    style: languageProvider.lan == 'English'
+                                        ? const TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 9,
+                                          )
+                                        : const TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 10,
+                                          ),
+                                  )
                           ],
                         ),
                       ),
