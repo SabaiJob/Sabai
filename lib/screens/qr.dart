@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
@@ -38,6 +39,8 @@ class _QrState extends State<Qr> {
   FileImage? _selectedImage;
   Map<String, dynamic>? Kbz;
   Map<String, dynamic>? prompt;
+
+  DateTime date = DateTime.now();
 
   void _clearImage() {
     setState(() {
@@ -119,6 +122,7 @@ class _QrState extends State<Qr> {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+    String purchaseDate = DateFormat("d MMM y").format(date);
     if (Kbz == null && prompt == null) {
       return const Scaffold(
         backgroundColor: backgroundColor,
@@ -410,11 +414,7 @@ class _QrState extends State<Qr> {
           child: TextButton(
             onPressed: _selectedImage != null
                 ? () {
-                    // uploadPayment(
-                    //   paymentMethodId: paymentProvider.paymentMethodId,
-                    //   pricingPlanId: paymentProvider.pricingPlanId,
-                    //   fileImage: _selectedImage!.file,
-                    // );
+                    paymentProvider.setPurchaseDate(purchaseDate);
                     uploadPayment(
                       pricingPlanId: paymentProvider.pricingPlanId,
                       paymentMethodId: paymentProvider.paymentMethodId,

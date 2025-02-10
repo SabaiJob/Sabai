@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
-
+import 'package:sabai_app/services/payment_provider.dart';
 import '../constants.dart';
 
 class OnPremiumPackage extends StatelessWidget {
-  const OnPremiumPackage({super.key});
+  const OnPremiumPackage({super.key, required this.datetime});
+
+  final String datetime;
 
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
+    DateTime parsedDate = DateTime.parse(datetime);
+    String formattedDate = DateFormat("d MMM y").format(parsedDate);
+    if (datetime.isEmpty) {
+      return const Scaffold(
+        backgroundColor: backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -52,20 +68,28 @@ class OnPremiumPackage extends StatelessWidget {
               height: 10,
             ),
             // Current Package Name
-            const Text(
-              '3 Months Package',
-              style: TextStyle(
-                  fontFamily: 'Bricolage-M',
-                  fontSize: 15.6,
-                  color: Color(0xFF161719)),
-            ),
+            paymentProvider.paymentMethodId == 0
+                ? const Text(
+                    '1 Month Package',
+                    style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.6,
+                        color: Color(0xFF161719)),
+                  )
+                : const Text(
+                    '3 Months Package',
+                    style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 15.6,
+                        color: Color(0xFF161719)),
+                  ),
             const SizedBox(
               height: 10,
             ),
             // Package Valid Date
             RichText(
-              text: const TextSpan(children: [
-                TextSpan(
+              text: TextSpan(children: [
+                const TextSpan(
                   text: 'Expired Date : ',
                   style: TextStyle(
                     fontFamily: 'Bricolage-R',
@@ -74,8 +98,8 @@ class OnPremiumPackage extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: '12 February, 2025',
-                  style: TextStyle(
+                  text: formattedDate,
+                  style: const TextStyle(
                     fontFamily: 'Bricolage-R',
                     fontSize: 12.5,
                     color: Color(0xFF616971),
@@ -86,13 +110,14 @@ class OnPremiumPackage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const Card(
+            Card(
               color: Colors.white,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: Column(
                   children: [
-                    ListTile(
+                    const ListTile(
                       minTileHeight: 45,
                       leading: Text(
                         'Amount Paid',
@@ -109,13 +134,13 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       child: Divider(
                         thickness: 1,
                         color: Color(0xFFD3D6D8),
                       ),
                     ),
-                    ListTile(
+                    const ListTile(
                       minTileHeight: 45,
                       leading: Text(
                         'Package',
@@ -132,7 +157,7 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       child: Divider(
                         thickness: 1,
                         color: Color(0xFFD3D6D8),
@@ -140,7 +165,7 @@ class OnPremiumPackage extends StatelessWidget {
                     ),
                     ListTile(
                       minTileHeight: 45,
-                      leading: Text(
+                      leading: const Text(
                         'Purchased on',
                         style: TextStyle(
                             fontFamily: 'Bricolage-R',
@@ -148,14 +173,14 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                       trailing: Text(
-                        '12 Dec 2024',
-                        style: TextStyle(
+                        paymentProvider.purchaseDate,
+                        style: const TextStyle(
                             fontFamily: 'Bricolage-M',
                             fontSize: 10,
                             color: Color(0xFF41464B)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       child: Divider(
                         thickness: 1,
                         color: Color(0xFFD3D6D8),
@@ -163,7 +188,7 @@ class OnPremiumPackage extends StatelessWidget {
                     ),
                     ListTile(
                       minTileHeight: 45,
-                      leading: Text(
+                      leading: const Text(
                         'Expired Date',
                         style: TextStyle(
                             fontFamily: 'Bricolage-R',
@@ -171,8 +196,8 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                       trailing: Text(
-                        '12 Feb 2024',
-                        style: TextStyle(
+                        formattedDate,
+                        style: const TextStyle(
                             fontFamily: 'Bricolage-M',
                             fontSize: 10,
                             color: Color(0xFF41464B)),

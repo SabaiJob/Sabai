@@ -5,11 +5,18 @@ import 'package:flutter/foundation.dart';
 import '../screens/registration_&_login_pages/api_service.dart';
 
 class PaymentProvider extends ChangeNotifier {
+  String _purchaseDate = '';
   int _pricingPlanId = 0;
   int _paymentMethodId = 0;
 
   int get pricingPlanId => _pricingPlanId;
   int get paymentMethodId => _paymentMethodId;
+  String get purchaseDate => _purchaseDate;
+
+  void setPurchaseDate(String value) {
+    _purchaseDate = value;
+    notifyListeners();
+  }
 
   void setPricingPlanId(int pricingPlanId) {
     _pricingPlanId = pricingPlanId;

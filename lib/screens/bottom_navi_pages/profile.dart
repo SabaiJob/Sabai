@@ -701,8 +701,12 @@ class _ProfileState extends State<Profile> {
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const OnPremiumPackage()))
+                                  builder: (context) => OnPremiumPackage(
+                                    datetime: paymentProvider
+                                        .userData!['subscription_ends_on'],
+                                  ),
+                                ),
+                              )
                             : Navigator.push(
                                 context,
                                 MaterialPageRoute(
