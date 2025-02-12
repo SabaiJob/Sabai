@@ -1,7 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
-import 'package:sabai_app/screens/pricing_plan.dart';
 
 class PaymentVerifying extends StatefulWidget {
   const PaymentVerifying({super.key});

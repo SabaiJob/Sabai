@@ -16,7 +16,6 @@ import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'dart:typed_data';
 import 'package:sabai_app/services/payment_provider.dart';
-import 'package:dio/dio.dart';
 
 class Qr extends StatefulWidget {
   const Qr({

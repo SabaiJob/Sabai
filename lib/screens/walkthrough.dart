@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/change_language_dropdown_button.dart';
 import 'package:sabai_app/constants.dart';
@@ -9,6 +8,7 @@ import 'package:sabai_app/screens/registration_&_login_pages/registration_pages_
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../components/walkthrough_button.dart';
 import '../services/language_provider.dart';
+import 'dart:async';
 
 class Walkthrough extends StatefulWidget {
   const Walkthrough({super.key});
@@ -17,9 +17,39 @@ class Walkthrough extends StatefulWidget {
   State<Walkthrough> createState() => _WalkthroughState();
 }
 
-final _controller = PageController();
 
 class _WalkthroughState extends State<Walkthrough> {
+  final PageController _controller = PageController();
+  Timer? _timer;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+
+  void _startAutoScroll(){
+   _timer = Timer.periodic(const Duration(seconds: 3), (timer){
+    if(_currentPage < 3){
+      _currentPage ++;
+    }else{
+      _currentPage = 0;
+    }
+    _controller.animateToPage(_currentPage, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+
+   });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer?.cancel();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -68,7 +98,7 @@ class _WalkthroughState extends State<Walkthrough> {
                                 style: walkthroughTitleStyleEng,
                               )
                             : const Text(
-                                'Sabai Jobs',
+                                'Sabai Job',
                                 style: sabaiJobStyle,
                               ),
                         //SizedBox
@@ -77,7 +107,7 @@ class _WalkthroughState extends State<Walkthrough> {
                         ),
                         languageProvider.lan == 'English'
                             ? const Text(
-                                'Sabai Jobs',
+                                'Sabai Job',
                                 style: sabaiJobStyle,
                               )
                             : const Text(
@@ -94,69 +124,46 @@ class _WalkthroughState extends State<Walkthrough> {
                         children: [
                           Center(
                             child: languageProvider.lan == 'English'
-                                ? Text(
+                                ? const Text(
                                     'Finding a Job Made Easy',
-                                    style: GoogleFonts.bricolageGrotesque(
-                                      textStyle:
-                                          const TextStyle(fontSize: 15.6),
-                                    ),
+                                    style: walkthroughIndicatorTextEng,
                                   )
                                 : const Text(
                                     'အလုပ်အကိုင်ရှာဖွေမှုကို လွယ်ကူစေတယ်',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 14,
-                                    ),
+                                    style: walkthroughIndicatorTextMm,
                                   ),
                           ),
                           Center(
                             child: languageProvider.lan == 'English'
-                                ? Text(
+                                ? const Text(
                                     'Offering Safe, Hassle-Free Jobs',
-                                    style: GoogleFonts.bricolageGrotesque(
-                                      textStyle:
-                                          const TextStyle(fontSize: 15.6),
-                                    ),
+                                    style: walkthroughIndicatorTextEng,
                                   )
                                 : const Text(
                                     'လုံခြုံ အဆင်ပြေတဲ့ အလုပ်အကိုင်တွေရှိတယ်',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 14,
-                                    ),
+                                    style: walkthroughIndicatorTextMm,
                                   ),
                           ),
                           Center(
                             child: languageProvider.lan == 'English'
-                                ? Text(
+                                ? const Text(
                                     'Shielding You from Scammers',
-                                    style: GoogleFonts.bricolageGrotesque(
-                                      textStyle:
-                                          const TextStyle(fontSize: 15.6),
-                                    ),
+                                    style: walkthroughIndicatorTextEng,
                                   )
                                 : const Text(
                                     'အလိမ်အညာအလုပ်များကို သေချာစီစစ်ထားတယ်',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 14,
-                                    ),
+                                    style: walkthroughIndicatorTextMm,
                                   ),
                           ),
                           Center(
                             child: languageProvider.lan == 'English'
-                                ? Text(
+                                ? const Text(
                                     'Enjoy Job Hunting with Us',
-                                    style: GoogleFonts.bricolageGrotesque(
-                                      textStyle: const TextStyle(fontSize: 14),
-                                    ),
+                                    style: walkthroughIndicatorTextEng,
                                   )
                                 : const Text(
                                     'အလုပ်အကိုင််ရှာဖွေမှုကို Sabai job နဲ့ပျော်ရွှင်စွာ ပြုလုပ်လိုက်ပါ',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 14,
-                                    ),
+                                    style: walkthroughIndicatorTextMm,
                                   ),
                           ),
                         ],

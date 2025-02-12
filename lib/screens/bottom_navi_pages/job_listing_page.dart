@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,36 @@ class JobListingPage extends StatefulWidget {
 
 class _JobListingPageState extends State<JobListingPage>
     with TickerProviderStateMixin {
+  final PageController _motivationalTextController = PageController();
+  Timer? _timer;
+  int _currentText = 0;
+  final List<Map<String, String>> _motivationalSlides = [
+    {
+      'image': 'images/motivation1.png',
+      'text':
+          '"Hard work pays off. Keep striving, and the right job will come.”'
+    },
+    {
+      'image': 'images/motivation2.png',
+      'text': '“Stay dedicated; the right job is on its way.”',
+    },
+    {
+      'image': 'images/motivation3.png',
+      'text': '"Every job is a step forward. Keep going!"'
+    }
+  ];
+  void _autoScrollText() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_currentText < 2) {
+        _currentText++;
+      } else {
+        _currentText = 0;
+      }
+      _motivationalTextController.animateToPage(_currentText,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    });
+  }
+
   final List<Widget> _pages = [
     const All(),
     const BestMatches(),
@@ -54,6 +85,7 @@ class _JobListingPageState extends State<JobListingPage>
   @override
   void initState() {
     super.initState();
+    _autoScrollText();
     // Show the bottom sheet automatically after the screen loads
     if (widget.showBottomSheet) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -111,11 +143,12 @@ class _JobListingPageState extends State<JobListingPage>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     for (var controller in _menuItemAnimations) {
       controller.dispose();
     }
+    _motivationalTextController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -138,13 +171,6 @@ class _JobListingPageState extends State<JobListingPage>
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
     var filterProvider = Provider.of<JobFilterProvider>(context);
-    // final combineJobs = jobProvider.combineJobs;
-    //
-    // final filterJobs = combineJobs.where((job) {
-    //   bool matchQuery =
-    //       job['jobTitle'].toLowerCase().contains(searchQuery.toLowerCase());
-    //   return matchQuery;
-    // }).toList();
     final jobs =
         jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
     final filterJobs = jobs.where((job) {
@@ -204,29 +230,38 @@ class _JobListingPageState extends State<JobListingPage>
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
         child: Column(
           children: [
-            Row(
-              children: [
-                Image.asset(
-                  'images/motivation.png',
-                  width: 28,
-                  height: 28,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Expanded(
-                  child: Text(
-                    '"Hard work pays off. Keep striving, and the right job will come."',
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-M',
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 35,
+              child: PageView.builder(
+                scrollDirection: Axis.vertical,
+                controller: _motivationalTextController,
+                itemCount: _motivationalSlides.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Image.asset(
+                        _motivationalSlides[index]['image']!,
+                        width: 28,
+                        height: 28,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: Text(
+                        _motivationalSlides[index]['text']!,
+                        style: const TextStyle(
+                          fontFamily: 'Bricolage-M',
+                          fontSize: 12,
+                        ),
+                      ))
+                    ],
+                  );
+                },
+              ),
             ),
             const SizedBox(
               height: 10,

@@ -71,6 +71,17 @@ const sabaiJobStyle = TextStyle(
   color: Color(0xffFF3997),
 );
 
+const walkthroughIndicatorTextEng = TextStyle(
+  fontFamily: 'Bricolage-R',
+  fontSize: 15.63,
+  color: Color(0xFF41464B),
+);
+
+const walkthroughIndicatorTextMm = TextStyle(
+  fontFamily: 'Walone-R',
+  fontSize: 14,
+);
+
 const walkthroughDescriptionEng = TextStyle(
   fontSize: 12.5,
   color: Color(0xff4C5258),
@@ -93,6 +104,26 @@ const walkthroughDescriptionBoldMm = TextStyle(
   fontWeight: FontWeight.bold,
   color: Color(0xff4C5258),
   fontFamily: 'Walone-R',
+);
+
+const successPageTitleEng = TextStyle(
+  fontFamily: 'Bricolage-M',
+  fontSize: 30.52,
+);
+
+const successPageTitleMm = TextStyle(
+  fontFamily: 'Walone-B',
+  fontSize: 30.52,
+);
+
+const successPageSubTitleEng = TextStyle(
+  fontFamily: 'Bricolage-R',
+  fontSize: 15.63,
+);
+
+const successPageSubTitleMm = TextStyle(
+  fontFamily: 'Walone-B',
+  fontSize: 14,
 );
 
 const textfieldTextStyleEng = TextStyle(
@@ -129,12 +160,11 @@ const enabledErrorBorder = OutlineInputBorder(
 );
 
 const enabledNormalBorder = OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00ffffff),
-                                width: 0,
-                              ),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)));
+    borderSide: BorderSide(
+      color: Color(0x00ffffff),
+      width: 0,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(8)));
 
 const textfieldHintTextStyleEng = TextStyle(
   fontFamily: 'Bricolage-R',
@@ -172,20 +202,19 @@ const errorTextStyleEng =
 const errorTextStyleMm =
     TextStyle(color: Colors.red, fontSize: 10, fontFamily: 'Walone-R');
 
-
 const textButtonTextStyleEng = TextStyle(
-                                  fontFamily: 'Bricolage-B',
-                                  fontSize: 15.63,
-                                  color: Colors.white,
-                                );
+  fontFamily: 'Bricolage-B',
+  fontSize: 15.63,
+  color: Colors.white,
+);
 
 const textButtonTextStyleMm = TextStyle(
-                                  fontFamily: 'Walone-B',
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                );
+  fontFamily: 'Walone-B',
+  fontSize: 14,
+  color: Colors.white,
+);
 
-const rightArrowIcon =  Icon(
-                          CupertinoIcons.arrow_right,
-                          color: Colors.white,
-                        );
+const rightArrowIcon = Icon(
+  CupertinoIcons.arrow_right,
+  color: Colors.white,
+);

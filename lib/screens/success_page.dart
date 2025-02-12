@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
@@ -15,8 +16,10 @@ class SuccessPage extends StatefulWidget {
 class _SuccessPageState extends State<SuccessPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    loading();
+  }
+  void loading(){
     Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
       Navigator.pushReplacement(
@@ -29,7 +32,6 @@ class _SuccessPageState extends State<SuccessPage> {
       );
     });
   }
-
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -67,17 +69,11 @@ class _SuccessPageState extends State<SuccessPage> {
               languageProvider.lan == 'English'
                   ? const Text(
                       'Take a bow',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 30.52,
-                      ),
+                      style: successPageTitleEng,
                     )
                   : const Text(
                       'အလုပ်ကိုင်တွေရှာကြစို့',
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 30.52,
-                      ),
+                      style: successPageTitleMm,
                     ),
               const SizedBox(
                 height: 10,
@@ -85,17 +81,11 @@ class _SuccessPageState extends State<SuccessPage> {
               languageProvider.lan == 'English'
                   ? const Text(
                       'Congratulations! Your profile is all set up.',
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-R',
-                        fontSize: 15.63,
-                      ),
+                      style: successPageSubTitleEng,
                     )
                   : const Text(
                       'သင့်ပရိုဖိုင်ကို ပြင်ဆင်ပြီးပါပြီ.',
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 14,
-                      ),
+                      style: successPageSubTitleMm,
                     ),
             ],
           ),

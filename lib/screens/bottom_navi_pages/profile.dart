@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -29,25 +27,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
-  //Map<String, dynamic>? userData; // Change late to nullable
-
-  // Future<void> getProfileData() async {
-  //   try {
-  //     final response = await ApiService.get('/auth/token/verify/');
-  //     if (response.statusCode >= 200 && response.statusCode < 300) {
-  //       final Map<String, dynamic> data = jsonDecode(response.body);
-  //       setState(() {
-  //         userData = data;
-  //       });
-  //       print(userData);
-  //     } else {
-  //       print(response.body);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
@@ -968,6 +947,7 @@ class _ProfileState extends State<Profile> {
                       context: context,
                       builder: (context) {
                         return Dialog(
+                          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
                           backgroundColor: Colors.white,
                           child: SizedBox(
                             width: 320,
