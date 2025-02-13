@@ -17,11 +17,11 @@ class Walkthrough extends StatefulWidget {
   State<Walkthrough> createState() => _WalkthroughState();
 }
 
-
 class _WalkthroughState extends State<Walkthrough> {
   final PageController _controller = PageController();
   Timer? _timer;
-  int _currentPage = 0;
+  int _currentText = 0;
+  bool _forward = true;
 
   @override
   void initState() {
@@ -29,17 +29,29 @@ class _WalkthroughState extends State<Walkthrough> {
     _startAutoScroll();
   }
 
+  void _startAutoScroll() {
+   _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    setState(() {
+      if (_forward) {
+        if (_currentText < 3) {
+          _currentText++;
+        } else {
+          _forward = false; // Start moving backward
+          _currentText--;
+        }
+      } else {
+        if (_currentText > 0) {
+          _currentText--;
+        } else {
+          _forward = true; // Start moving forward again
+          _currentText++;
+        }
+      }
+    });
 
-  void _startAutoScroll(){
-   _timer = Timer.periodic(const Duration(seconds: 3), (timer){
-    if(_currentPage < 3){
-      _currentPage ++;
-    }else{
-      _currentPage = 0;
-    }
-    _controller.animateToPage(_currentPage, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-
-   });
+      _controller.animateToPage(_currentText,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    });
   }
 
   @override
@@ -48,7 +60,6 @@ class _WalkthroughState extends State<Walkthrough> {
     _timer?.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

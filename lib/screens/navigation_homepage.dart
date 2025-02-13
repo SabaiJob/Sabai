@@ -42,7 +42,6 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     widgetList = [
       const Community(),
@@ -246,95 +245,98 @@ class CameraPreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
         backgroundColor: Colors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Stack(
-            children: [
-              // Adjust the CameraPreview to fit screen
-              Center(
-                child: AspectRatio(
-                  aspectRatio: 9 / 16,
-                  child: CameraPreview(cameraController),
-                ),
-              ),
-
-              // Capture Button and Gradient Overlay
-              Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+        body: FutureBuilder<void>(
+            future: cameraController.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // Get aspect ratio to prevent distortion
+                final screenSize = MediaQuery.of(context).size;
+                final previewSize = cameraController.value.previewSize!;
+                final bool isPortrait = screenSize.height > screenSize.width;
+                // Swap width/height in portrait mode
+                final double previewAspectRatio = isPortrait
+                    ? (previewSize.height / previewSize.width)
+                    : (previewSize.width / previewSize.height);
+                return Stack(
                   children: [
-                    GestureDetector(
-                      onTap: () async {
-                        try {
-                          final XFile photo =
-                              await cameraController.takePicture();
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Posting(
-                                  url: photo.path,
-                                ),
+                    // Full-screen Camera Preview
+                    Center(
+                      child: AspectRatio(
+                        aspectRatio: previewAspectRatio,
+                        child: CameraPreview(cameraController),
+                      ),
+                    ),
+                    // Top App Bar with Back Button
+                    Positioned(
+                      top: 40,
+                      left: 16,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    // Camera Controls (Capture + Switch Camera)
+                    Positioned(
+                      bottom: 40,
+                      left: 0,
+                      right: 0,
+                      child: Column(
+                        children: [
+                          // Capture Button
+                          GestureDetector(
+                            onTap: () async {
+                              try {
+                                final XFile photo =
+                                    await cameraController.takePicture();
+                                if (context.mounted) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Posting(url: photo.path),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                print('Error taking picture: $e');
+                              }
+                            },
+                            child: Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 4),
+                                color: Colors.white.withOpacity(0.2),
                               ),
-                            );
-                          }
-                        } catch (e) {
-                          print('Error taking picture: $e');
-                        }
-                      },
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 4,
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 36,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          size: 36,
-                          color: Colors.black,
-                        ),
+                          const SizedBox(height: 16),
+
+                          // Switch Camera Button
+                          // IconButton(
+                          //   icon: const Icon(Icons.cameraswitch,
+                          //       color: Colors.white),
+                          //   iconSize: 32,
+                          //   onPressed: () {
+                          //     // Logic to switch cameras
+                          //   },
+                          // ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-              ),
-              // Positioned.fill(
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       gradient: LinearGradient(
-              //         colors: [
-              //           Colors.black.withOpacity(0.6),
-              //           Colors.transparent,
-              //           Colors.black.withOpacity(0.6),
-              //         ],
-              //         begin: Alignment.topCenter,
-              //         end: Alignment.bottomCenter,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-          );
-        },
-      ),
-    );
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 }

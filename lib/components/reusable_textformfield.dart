@@ -32,6 +32,9 @@ class ReusableTextformfield extends StatelessWidget {
           keyboardType: keyboardType,
           controller: textEditingController,
           validator: validating,
+          onEditingComplete: (){
+            FocusScope.of(context).unfocus();
+          },
           style: languageProvider.lan == 'English'
               ? const TextStyle(
                   fontFamily: 'Bricolage-R',

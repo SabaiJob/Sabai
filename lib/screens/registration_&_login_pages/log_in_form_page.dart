@@ -27,94 +27,100 @@ class LogInFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
-    return SingleChildScrollView(
-      child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              // Title
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ReusableTitleHolder(
-                    title: languageProvider.lan == 'English'
-                        ? 'User Registration'
-                        : 'အကောင့်က၀င်ရောက်ရန်',
+    return GestureDetector(
+      onTap: (){
+         FocusScope.of(context).unfocus(); 
+      },
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                // Title
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: ReusableTitleHolder(
+                      title: languageProvider.lan == 'English'
+                          ? 'User Registration'
+                          : 'အကောင့်က၀င်ရောက်ရန်',
+                    ),
                   ),
                 ),
-              ),
-
-              // Subtitle
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ReusableContentHolder(
-                      content: languageProvider.lan == 'English'
-                          ? 'Lorem ipsum dolor sit amet consectetur. Ut vel nvitae sed quam maecenas cursus pharetra.'
-                          : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
+      
+                // Subtitle
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: ReusableContentHolder(
+                        content: languageProvider.lan == 'English'
+                            ? 'Lorem ipsum dolor sit amet consectetur. Ut vel nvitae sed quam maecenas cursus pharetra.'
+                            : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
+                  ),
                 ),
-              ),
-
-              // Full Name
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: ReusableLabelHolder(
-                  labelName:
-                      languageProvider.lan == 'English' ? 'Full Name' : 'အမည်',
-                  textStyle: languageProvider.lan == 'English'
-                      ? labelStyleEng
-                      : labelStyleMm,
-                  isStarred: true,
+      
+                // Full Name
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ReusableLabelHolder(
+                    labelName:
+                        languageProvider.lan == 'English' ? 'Full Name' : 'အမည်',
+                    textStyle: languageProvider.lan == 'English'
+                        ? labelStyleEng
+                        : labelStyleMm,
+                    isStarred: true,
+                  ),
                 ),
-              ),
-              // Full Name TextFormField
-              ReusableTextformfield(
-                  keyboardType: TextInputType.name,
-                  textEditingController: fullNameController,
+                // Full Name TextFormField
+                ReusableTextformfield(
+                    keyboardType: TextInputType.name,
+                    textEditingController: fullNameController,
+                    validating: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageProvider.lan == 'English'
+                            ? "Full Name is required"
+                            : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                      }
+                      return null;
+                    },
+                    hint: languageProvider.lan == 'English'
+                        ? 'Enter your full name'
+                        : 'သင့်အမည် ထည့်ပါ'),
+      
+                // Phone Number
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ReusableLabelHolder(
+                    labelName: languageProvider.lan == 'English'
+                        ? 'Phone Number'
+                        : 'ဖုန်းနံပါတ်',
+                    textStyle: languageProvider.lan == 'English'
+                        ? labelStyleEng
+                        : labelStyleMm,
+                    isStarred: true,
+                  ),
+                ),
+                // Phone Number TextFormField
+                ReusableTextformfield(
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.phone,
+                  textEditingController: phoneNumberController,
                   validating: (value) {
                     if (value == null || value.isEmpty) {
                       return languageProvider.lan == 'English'
-                          ? "Full Name is required"
-                          : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                          ? "Phone Number is required"
+                          : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
                     }
                     return null;
                   },
-                  hint: languageProvider.lan == 'English'
-                      ? 'Enter your full name'
-                      : 'သင့်အမည် ထည့်ပါ'),
-
-              // Phone Number
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: ReusableLabelHolder(
-                  labelName: languageProvider.lan == 'English'
-                      ? 'Phone Number'
-                      : 'ဖုန်းနံပါတ်',
-                  textStyle: languageProvider.lan == 'English'
-                      ? labelStyleEng
-                      : labelStyleMm,
-                  isStarred: true,
+                  hint: '+66 2134567',
                 ),
-              ),
-              // Phone Number TextFormField
-              ReusableTextformfield(
-                formatter: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.phone,
-                textEditingController: phoneNumberController,
-                validating: (value) {
-                  if (value == null || value.isEmpty) {
-                    return languageProvider.lan == 'English'
-                        ? "Phone Number is required"
-                        : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
-                  }
-                  return null;
-                },
-                hint: '+66 2134567',
-              ),
-            ],
-          )),
+              ],
+            )),
+      ),
     );
   }
 }

@@ -32,6 +32,7 @@ class _JobListingPageState extends State<JobListingPage>
   final PageController _motivationalTextController = PageController();
   Timer? _timer;
   int _currentText = 0;
+  bool _forward = true; // Flag to track direction
   final List<Map<String, String>> _motivationalSlides = [
     {
       'image': 'images/motivation1.png',
@@ -48,16 +49,30 @@ class _JobListingPageState extends State<JobListingPage>
     }
   ];
   void _autoScrollText() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+  _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    if (_forward) {
       if (_currentText < 2) {
         _currentText++;
       } else {
-        _currentText = 0;
+        _forward = false;
+        _currentText--; // Start moving back
       }
-      _motivationalTextController.animateToPage(_currentText,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    });
-  }
+    } else {
+      if (_currentText > 0) {
+        _currentText--;
+      } else {
+        _forward = true;
+        _currentText++; // Start moving forward
+      }
+    }
+
+    _motivationalTextController.animateToPage(
+      _currentText,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  });
+}
 
   final List<Widget> _pages = [
     const All(),
@@ -236,6 +251,7 @@ class _JobListingPageState extends State<JobListingPage>
             SizedBox(
               height: 35,
               child: PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 controller: _motivationalTextController,
                 itemCount: _motivationalSlides.length,
