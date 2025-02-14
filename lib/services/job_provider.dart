@@ -149,8 +149,6 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
-  //fetch partner jobs
-
   // New variables for partner jobs
   List<dynamic> _partnerJobs = [];
   bool _isLoadingPartnerJobs = false;
@@ -164,19 +162,16 @@ class JobProvider extends ChangeNotifier {
     _isLoadingPartnerJobs = isLoading;
     notifyListeners();
     try {
-      final response = await ApiService.get('/jobs/search/?page=$page');
+      final response =
+          await ApiService.get('/jobs/search/?page=$page&is_partner=true');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
           final newJobs = data['results'];
           if (page == 1) {
-            _partnerJobs = newJobs
-                .where((job) => job['info']['is_partner'] == true)
-                .toList();
+            _partnerJobs = newJobs;
           } else {
-            _partnerJobs.addAll(newJobs
-                .where((job) => job['info']['is_partner'] == true)
-                .toList());
+            _partnerJobs.addAll(newJobs);
           }
 
           if (data.containsKey('total_pages')) {
@@ -225,6 +220,7 @@ class JobProvider extends ChangeNotifier {
     return _savedJobs.contains(jobId);
   }
 
+  //premium jobs
   List<dynamic> _premiumJobs = [];
   List<dynamic> get premiumJobs => _premiumJobs;
   Future<void> fetchPremiumJobs() async {

@@ -89,7 +89,68 @@ class _AllState extends State<All> {
     var jobProvider = Provider.of<JobProvider>(context);
     var jobFetchedProvider = Provider.of<JobFilterProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
-    if (paymentProvider.userData == null) {
+    if (jobProvider.isGuest == true) {
+      return Container(
+        color: const Color(0xffF7F7F7),
+        child: RefreshIndicator(
+          color: primaryPinkColor,
+          backgroundColor: const Color(0xffFFEBF6),
+          onRefresh: () async {
+            // Reset to the first page on refresh
+            _currentPage = 1;
+            await jobProvider.getAllJobs();
+          },
+          child: jobProvider.isLoading && _currentPage == 1
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: primaryPinkColor,
+                  ),
+                )
+              : ListView.builder(
+                  //controller: _scrollController,
+                  itemCount: jobProvider.allTypeJobs.length,
+                  itemBuilder: (context, index) {
+                    if (index == jobProvider.allTypeJobs.length) {
+                      // Show a loading indicator at the bottom if there are more pages to load
+                      if (_currentPage < jobProvider.totalPages) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryPinkColor,
+                          ),
+                        );
+                      } else {
+                        // No more pages to load
+                        return Container();
+                      }
+                    }
+                    final job = jobProvider.allTypeJobs[index];
+                    if (job['type'] == 'job') {
+                      final jobInfo = job['info'] as Map<String, dynamic>;
+                      return WorkCard(
+                        jobTitle: jobInfo['title'] ?? 'none',
+                        companyName: jobInfo['company_name'] ?? 'none',
+                        location: jobInfo['location'] ?? 'none',
+                        minSalary: jobInfo['salary_min'] ?? 'none',
+                        maxSalary: jobInfo['salary_max'] ?? 'none',
+                        currency: jobInfo['currency'] ?? 'none',
+                        jobId: jobInfo['id'] ?? 'none',
+                        isPartner: jobInfo['is_partner'] ?? false,
+                        closingAt: jobInfo['closing_at'] ?? '',
+                        safetyLevel: jobInfo['safety_level'],
+                        viewCount: jobInfo['views_count'],
+                      );
+                    } else {
+                      final adInfo = job['info'] as Map<String, dynamic>;
+                      return AdCard(
+                        url: adInfo['link'],
+                        imageUrl: adInfo['poster'],
+                      );
+                    }
+                  },
+                ),
+        ),
+      );
+    } else if (paymentProvider.userData == null) {
       return const Scaffold(
         backgroundColor: backgroundColor,
         body: Center(
