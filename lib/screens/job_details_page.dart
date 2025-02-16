@@ -28,6 +28,7 @@ class JobDetailsPage extends StatefulWidget {
 
 class _JobDetailsPageState extends State<JobDetailsPage> {
   late Map<String, dynamic> jobDetail;
+  late List<dynamic> interestedUser;
   bool isLoading = true;
   Future<void> fetchJobDetail() async {
     try {
@@ -37,6 +38,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         setState(() {
           jobDetail = data['job'];
           isLoading = false;
+          interestedUser = data['job']['interested_by']['users'];
+          print(interestedUser[0]);
         });
       } else {
         print('Fetching error: ${response.body}');
@@ -609,39 +612,97 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     ),
                             ],
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 24,
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
                                 Positioned(
-                                    left: 0,
-                                    child: Image(
-                                      image: AssetImage('images/avatar1.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
+                                  left: 0,
+                                  child: CircleAvatar(
+                                    radius: 10,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        '${interestedUser[0]['photo']}',
+                                        width: 24,
+                                        height: 24,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // const Positioned(
+                                //   left: 12,
+                                //   child: Image(
+                                //     image: AssetImage('images/avatar2.png'),
+                                //     width: 24,
+                                //     height: 24,
+                                //   ),
+                                // ),
+                                if (interestedUser.length > 1)
+                                  Positioned(
                                     left: 12,
-                                    child: Image(
-                                      image: AssetImage('images/avatar2.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
+                                    child: CircleAvatar(
+                                      radius: 10,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          '${interestedUser[1]['photo']}',
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                // const Positioned(
+                                //   left: 24,
+                                //   child: Image(
+                                //     image: AssetImage('images/avatar3.png'),
+                                //     width: 24,
+                                //     height: 24,
+                                //   ),
+                                // ),
+                                if (interestedUser.length > 2)
+                                  Positioned(
                                     left: 24,
-                                    child: Image(
-                                      image: AssetImage('images/avatar3.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
-                                    left: 36,
-                                    child: Image(
-                                      image: AssetImage('images/avatar4.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
+                                    child: CircleAvatar(
+                                      radius: 10,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          '${interestedUser[2]['photo']}',
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                // const Positioned(
+                                //   left: 36,
+                                //   child: Image(
+                                //     image: AssetImage('images/avatar4.png'),
+                                //     width: 24,
+                                //     height: 24,
+                                //   ),
+                                // ),
+                                if (interestedUser.length > 3)
+                                  Positioned(
+                                    left: 24,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.white,
+                                      radius: 10,
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        '+${interestedUser.length - 3}',
+                                        style: const TextStyle(
+                                          fontFamily: 'Bricolage-M',
+                                          fontSize: 10,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           )

@@ -123,11 +123,13 @@ class _ProfileState extends State<Profile> {
                       : CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.grey[400],
-                          child: Icon(
-                            Icons.person,
-                            size: 50.0,
-                            color: Colors.grey[200],
-                            blendMode: BlendMode.luminosity,
+                          child: ClipOval(
+                            child: Image.network(
+                              '${paymentProvider.userData?['photo']}',
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                   Positioned(
@@ -947,7 +949,8 @@ class _ProfileState extends State<Profile> {
                       context: context,
                       builder: (context) {
                         return Dialog(
-                          insetPadding: const EdgeInsets.symmetric(horizontal: 15),
+                          insetPadding:
+                              const EdgeInsets.symmetric(horizontal: 15),
                           backgroundColor: Colors.white,
                           child: SizedBox(
                             width: 320,
