@@ -68,7 +68,7 @@ class OnPremiumPackage extends StatelessWidget {
               height: 10,
             ),
             // Current Package Name
-            paymentProvider.paymentMethodId == 0
+            paymentProvider.pricingPlanId == 2
                 ? const Text(
                     '1 Month Package',
                     style: TextStyle(
@@ -117,9 +117,9 @@ class OnPremiumPackage extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: Column(
                   children: [
-                    const ListTile(
+                    ListTile(
                       minTileHeight: 45,
-                      leading: Text(
+                      leading: const Text(
                         'Amount Paid',
                         style: TextStyle(
                             fontFamily: 'Bricolage-R',
@@ -127,8 +127,10 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                       trailing: Text(
-                        '500 THB',
-                        style: TextStyle(
+                        paymentProvider.pricingPlanId == 1
+                            ? '500 THB'
+                            : "250 THB",
+                        style: const TextStyle(
                             fontFamily: 'Bricolage-M',
                             fontSize: 10,
                             color: Color(0xFF41464B)),
@@ -140,9 +142,9 @@ class OnPremiumPackage extends StatelessWidget {
                         color: Color(0xFFD3D6D8),
                       ),
                     ),
-                    const ListTile(
+                    ListTile(
                       minTileHeight: 45,
-                      leading: Text(
+                      leading: const Text(
                         'Package',
                         style: TextStyle(
                             fontFamily: 'Bricolage-R',
@@ -150,8 +152,10 @@ class OnPremiumPackage extends StatelessWidget {
                             color: Color(0xFF41464B)),
                       ),
                       trailing: Text(
-                        '500 THB(3 Months)',
-                        style: TextStyle(
+                        paymentProvider.pricingPlanId == 1
+                            ? '500 THB(3 Months)'
+                            : '250 THB (1 Month)',
+                        style: const TextStyle(
                             fontFamily: 'Bricolage-M',
                             fontSize: 10,
                             color: Color(0xFF41464B)),

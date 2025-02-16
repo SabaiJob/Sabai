@@ -92,7 +92,7 @@ class JobFilterProvider with ChangeNotifier {
           final newJobs = data['results'];
           if (page == 1) {
             _jobs = newJobs;
-            print(url);
+            print('this is from jobfilter provider : $url');
           } else {
             _jobs.addAll(newJobs);
           }

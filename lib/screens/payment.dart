@@ -1,16 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/qr.dart';
+import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 
 class Payment extends StatefulWidget {
-  final int? plan;
+  late int? plan;
 
-  const Payment({
+  Payment({
     required this.plan,
     super.key,
   });
@@ -31,6 +34,7 @@ class _PaymentState extends State<Payment> {
   @override
   void initState() {
     super.initState();
+    fetchReviews();
     fetchUserData();
     selectedPlan = widget.plan; // Initialize with the widget's plan
   }
@@ -49,6 +53,24 @@ class _PaymentState extends State<Payment> {
   late bool isKBZ = false;
 
   late Color color = Colors.transparent;
+
+  //fetching reviews
+  List<dynamic> reviews = [];
+  Future<void> fetchReviews() async {
+    try {
+      final response = await ApiService.get('/sales/reviews/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = json.decode(response.body);
+        setState(() {
+          reviews = data;
+        });
+      } else {
+        print('error response code is not 200 ${response.body}');
+      }
+    } catch (e) {
+      print('Error fetching $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +210,7 @@ class _PaymentState extends State<Payment> {
                     onTap: () {
                       setState(() {
                         selectedPlan = 0;
+                        widget.plan = 0;
                       });
                     },
                     child: Container(
@@ -268,6 +291,7 @@ class _PaymentState extends State<Payment> {
                     onTap: () {
                       setState(() {
                         selectedPlan = 2;
+                        widget.plan = 2;
                       });
                     },
                     child: Container(
@@ -437,14 +461,22 @@ class _PaymentState extends State<Payment> {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     height: 200,
-                    child: PageView(
-                      controller: _pageController,
-                      children: const [
-                        ReviewCard(),
-                        ReviewCard(),
-                        ReviewCard(),
-                      ],
-                    ),
+                    // child: PageView(
+                    //   controller: _pageController,
+                    //   children: const [
+                    //     ReviewCard(),
+                    //     ReviewCard(),
+                    //     ReviewCard(),
+                    //   ],
+                    // ),
+                    child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: reviews.length,
+                        itemBuilder: (context, index) {
+                          return ReviewCard(
+                            review: reviews[index],
+                          );
+                        }),
                   ),
                 ),
               ],
@@ -467,6 +499,9 @@ class _PaymentState extends State<Payment> {
                   isKBZ == true
                       ? paymentProvider.setPaymentMethodId(1)
                       : paymentProvider.setPaymentMethodId(2);
+                  widget.plan == 0
+                      ? paymentProvider.setPricingPlanId(2)
+                      : paymentProvider.setPricingPlanId(1);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -534,26 +569,34 @@ class _PaymentState extends State<Payment> {
 class ReviewCard extends StatelessWidget {
   const ReviewCard({
     super.key,
+    this.review,
   });
 
+  final dynamic review;
   @override
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
               'images/quotation.png',
               width: 10,
               height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
-                'I was struggling to find steady work, but this package changed everything. The tips and tools helped me update my resume and apply to more jobs. Within a few weeks, I had several interviews lined up and now have a great job in construction!',
+                review['text'],
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Bricolage-M',
+                  color: Color(0xff363B3F),
+                ),
               ),
             ),
             Row(
@@ -566,9 +609,9 @@ class ReviewCard extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                const Text(
-                  'Jessica Felicio',
-                  style: TextStyle(
+                Text(
+                  review['user_username'],
+                  style: const TextStyle(
                     fontSize: 12.5,
                     fontFamily: 'Bricolage-R',
                     color: Color(0xff363B3F),
