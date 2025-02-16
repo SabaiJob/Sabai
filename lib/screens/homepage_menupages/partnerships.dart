@@ -49,7 +49,22 @@ class _PartnershipsState extends State<Partnerships> {
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
-
+    if (jobProvider.isGuest == true) {
+      return Container(
+        color: const Color(0xffF7F7F7),
+        child: const Center(
+          child: Text(
+            textAlign: TextAlign.center,
+            'You are in the guest mode. Please Log in to see the jobs '
+            'that matches your preferences',
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Bricolage-M',
+            ),
+          ),
+        ),
+      );
+    }
     return Container(
       color: const Color(0xffF7F7F7),
       child: RefreshIndicator(

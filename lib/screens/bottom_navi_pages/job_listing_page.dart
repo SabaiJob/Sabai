@@ -17,6 +17,10 @@ import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../components/walkthrough_button.dart';
+import '../registration_&_login_pages/log_in_controller_page.dart';
+import '../registration_&_login_pages/registration_pages_controller.dart';
+
 class JobListingPage extends StatefulWidget {
   final bool showBottomSheet;
   const JobListingPage({
@@ -289,131 +293,135 @@ class _JobListingPageState extends State<JobListingPage>
                 height: 10,
               ),
               // Row Contains Search Bar and Advanced Filter Button
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      width: 295,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: languageProvider.lan == 'English'
-                              ? 'Search for job'
-                              : 'အလုပ်များရှာမယ်',
-                          hintStyle: languageProvider.lan == 'English'
-                              ? GoogleFonts.dmSans(
-                                  textStyle: const TextStyle(
+              if (jobProvider.isGuest == false)
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: 295,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: languageProvider.lan == 'English'
+                                ? 'Search for job'
+                                : 'အလုပ်များရှာမယ်',
+                            hintStyle: languageProvider.lan == 'English'
+                                ? GoogleFonts.dmSans(
+                                    textStyle: const TextStyle(
+                                      color: Color(0xff989EA4),
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                : const TextStyle(
+                                    fontFamily: 'Walone-R',
                                     color: Color(0xff989EA4),
                                     fontSize: 14,
                                   ),
-                                )
-                              : const TextStyle(
-                                  fontFamily: 'Walone-R',
-                                  color: Color(0xff989EA4),
-                                  fontSize: 14,
-                                ),
-                          prefixIcon: IconButton(
-                            icon: Icon(
-                              // searchQuery.isEmpty &&
-                              isSearching ? Icons.clear : Icons.search,
-                              color: const Color(0xffFF3997),
+                            prefixIcon: IconButton(
+                              icon: Icon(
+                                // searchQuery.isEmpty &&
+                                isSearching ? Icons.clear : Icons.search,
+                                color: const Color(0xffFF3997),
+                              ),
+                              onPressed: () {
+                                if (isSearching) {
+                                  FocusScope.of(context).unfocus();
+                                  // Clear the search query and reset search state
+                                  _searchController.clear();
+                                  setState(() {
+                                    searchQuery = ""; // Clear search query
+                                    isSearching =
+                                        false; // Switch back to search icon
+                                  });
+                                }
+                              },
                             ),
-                            onPressed: () {
-                              if (isSearching) {
-                                FocusScope.of(context).unfocus();
-                                // Clear the search query and reset search state
-                                _searchController.clear();
-                                setState(() {
-                                  searchQuery = ""; // Clear search query
-                                  isSearching =
-                                      false; // Switch back to search icon
-                                });
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Color(0xffF0F1F2),
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Color(
+                                    0xffFF3997), // Border color when not focused
+                                width: 1,
+                              ),
+                            ),
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 17),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              isSearching = true; // Activate search mode
+                            });
+                          },
+                          onChanged: (val) {
+                            setState(() {
+                              searchQuery = val; // Update the search query
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Badge(
+                      textColor: primaryPinkColor,
+                      backgroundColor: const Color(0xFFFED7EA),
+                      label: Text(
+                          filterProvider.calculateFilterCount().toString()),
+                      child: IconButton(
+                        color: const Color(0xffFF3997),
+                        onPressed: jobProvider.isGuest == false
+                            ? () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AdvancedFilterPage(),
+                                  ),
+                                );
+                                filterProvider.clearAllFilters();
+                                filterProvider.clearFilters();
+                                if (result != null) {
+                                  filterProvider.updateFilterValues(result);
+                                }
                               }
-                            },
-                          ),
-                          border: OutlineInputBorder(
+                            : null,
+                        icon: const Icon(
+                          CupertinoIcons.slider_horizontal_3,
+                        ),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
+                            side: const BorderSide(
                               color: Color(0xffF0F1F2),
                               width: 2,
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                              color: Color(
-                                  0xffFF3997), // Border color when not focused
-                              width: 1,
-                            ),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 17),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            isSearching = true; // Activate search mode
-                          });
-                        },
-                        onChanged: (val) {
-                          setState(() {
-                            searchQuery = val; // Update the search query
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Badge(
-                    textColor: primaryPinkColor,
-                    backgroundColor: const Color(0xFFFED7EA),
-                    label:
-                        Text(filterProvider.calculateFilterCount().toString()),
-                    child: IconButton(
-                      color: const Color(0xffFF3997),
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AdvancedFilterPage(),
-                          ),
-                        );
-                        filterProvider.clearAllFilters();
-                        filterProvider.clearFilters();
-                        if (result != null) {
-                          filterProvider.updateFilterValues(result);
-                        }
-                      },
-                      icon: const Icon(
-                        CupertinoIcons.slider_horizontal_3,
-                      ),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: const BorderSide(
-                            color: Color(0xffF0F1F2),
-                            width: 2,
-                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               const SizedBox(
                 height: 15,
               ),
-               if (isSearching) ...[
+              if (isSearching) ...[
                 Expanded(
                   child: ListView.builder(
                       itemCount: filterJobs.length,
@@ -437,32 +445,32 @@ class _JobListingPageState extends State<JobListingPage>
                 ),
               ] else ...[
                 Container(
-                height: 33,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0F1F2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TabBar(
-                  tabAlignment: TabAlignment.center,
-                  automaticIndicatorColorAdjustment: true,
-                  isScrollable: true,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                    color: Colors.white,
+                  height: 33,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF0F1F2),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  labelColor: Colors.pink,
-                  unselectedLabelColor: Colors.pink.shade300,
-                  dividerColor: Colors.transparent,
-                  labelStyle: const TextStyle(
-                      fontSize: 12.5,
-                      color: Color(0xffFF3997),
-                      fontFamily: 'Bricolage-R'),
-                  tabs: [
-                    const Tab(text: "All"),
-                     Tab(
+                  child: TabBar(
+                    tabAlignment: TabAlignment.center,
+                    automaticIndicatorColorAdjustment: true,
+                    isScrollable: true,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicator: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    labelColor: Colors.pink,
+                    unselectedLabelColor: Colors.pink.shade300,
+                    dividerColor: Colors.transparent,
+                    labelStyle: const TextStyle(
+                        fontSize: 12.5,
+                        color: Color(0xffFF3997),
+                        fontFamily: 'Bricolage-R'),
+                    tabs: [
+                      const Tab(text: "All"),
+                      Tab(
                         child: Shimmer.fromColors(
                           baseColor: const Color(0xffFF3997),
                           highlightColor: Colors.white,
@@ -471,19 +479,19 @@ class _JobListingPageState extends State<JobListingPage>
                           ),
                         ),
                       ),
-                    const Tab(text: "Sabai Job Partner"),
-                  ],
+                      const Tab(text: "Sabai Job Partner"),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Expanded(
-                child: TabBarView(
-                    children: [All(), BestMatches(), Partnerships()]),
-              ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Expanded(
+                  child: TabBarView(
+                      children: [All(), BestMatches(), Partnerships()]),
+                ),
               ]
-              
+
               // original code
               // if (isSearching) ...[
               //   Expanded(

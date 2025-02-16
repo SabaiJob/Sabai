@@ -21,8 +21,8 @@ class _AllState extends State<All> {
   @override
   void initState() {
     super.initState();
-    //Future.microtask(() => fetchJobs());
-    Future.microtask(() => fetchAllJobs());
+    Future.microtask(() => fetchJobs());
+    //Future.microtask(() => fetchAllJobs());
     Future.microtask(() => fetchFilterJobs());
     Future.microtask(() => fetchPremiumJobs());
     Future.microtask(() => fetchUserData());
@@ -48,11 +48,11 @@ class _AllState extends State<All> {
           _currentPage++;
           fetchFilterJobs();
         }
-        // } else {
-        //   if (_currentPage < jobProvider.totalPages) {
-        //     _currentPage++;
-        //     fetchJobs();
-        //   }
+      } else {
+        if (_currentPage < jobProvider.totalPages) {
+          _currentPage++;
+          fetchJobs();
+        }
       }
     }
   }
@@ -107,8 +107,8 @@ class _AllState extends State<All> {
                   ),
                 )
               : ListView.builder(
-                  //controller: _scrollController,
-                  itemCount: jobProvider.allTypeJobs.length,
+                  controller: _scrollController,
+                  itemCount: jobProvider.allTypeJobs.length + 1,
                   itemBuilder: (context, index) {
                     if (index == jobProvider.allTypeJobs.length) {
                       // Show a loading indicator at the bottom if there are more pages to load
@@ -291,8 +291,8 @@ class _AllState extends State<All> {
                           ),
                         )
                       : ListView.builder(
-                          //controller: _scrollController,
-                          itemCount: jobProvider.allTypeJobs.length,
+                          controller: _scrollController,
+                          itemCount: jobProvider.allTypeJobs.length + 1,
                           itemBuilder: (context, index) {
                             if (index == jobProvider.allTypeJobs.length) {
                               // Show a loading indicator at the bottom if there are more pages to load
