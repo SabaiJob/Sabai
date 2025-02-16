@@ -687,7 +687,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                 // ),
                                 if (interestedUser.length > 3)
                                   Positioned(
-                                    left: 24,
+                                    left: 36,
                                     child: CircleAvatar(
                                       backgroundColor: Colors.white,
                                       foregroundColor: Colors.white,
