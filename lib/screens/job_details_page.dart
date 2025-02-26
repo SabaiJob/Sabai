@@ -11,15 +11,6 @@ import 'package:sabai_app/services/language_provider.dart';
 
 class JobDetailsPage extends StatefulWidget {
   const JobDetailsPage({super.key, required this.jobId});
-
-  // final String title;
-  // final String company;
-  // final int minSalary;
-  // final int maxSalary;
-  // final String location;
-  // final String currency;
-  // final bool isPartner;
-  // final String summary;
   final int jobId;
 
   @override
@@ -37,9 +28,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         final Map<String, dynamic> data = json.decode(response.body);
         setState(() {
           jobDetail = data['job'];
-          isLoading = false;
           interestedUser = data['job']['interested_by']['users'];
-          print(interestedUser[0]);
+          isLoading = false;
+          //print(interestedUser[0]);
         });
       } else {
         print('Fetching error: ${response.body}');
@@ -612,41 +603,19 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     ),
                             ],
                           ),
-                          SizedBox(
-                            height: 24,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  child: CircleAvatar(
-                                    radius: 10,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        '${interestedUser[0]['photo']}',
-                                        width: 24,
-                                        height: 24,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // const Positioned(
-                                //   left: 12,
-                                //   child: Image(
-                                //     image: AssetImage('images/avatar2.png'),
-                                //     width: 24,
-                                //     height: 24,
-                                //   ),
-                                // ),
-                                if (interestedUser.length > 1)
+                          if (interestedUser.isNotEmpty)
+                            SizedBox(
+                              height: 24,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
                                   Positioned(
-                                    left: 12,
+                                    left: 0,
                                     child: CircleAvatar(
                                       radius: 10,
                                       child: ClipOval(
                                         child: Image.network(
-                                          '${interestedUser[1]['photo']}',
+                                          '${interestedUser[0]['photo']}',
                                           width: 24,
                                           height: 24,
                                           fit: BoxFit.cover,
@@ -654,58 +623,81 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       ),
                                     ),
                                   ),
-                                // const Positioned(
-                                //   left: 24,
-                                //   child: Image(
-                                //     image: AssetImage('images/avatar3.png'),
-                                //     width: 24,
-                                //     height: 24,
-                                //   ),
-                                // ),
-                                if (interestedUser.length > 2)
-                                  Positioned(
-                                    left: 24,
-                                    child: CircleAvatar(
-                                      radius: 10,
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          '${interestedUser[2]['photo']}',
-                                          width: 24,
-                                          height: 24,
-                                          fit: BoxFit.cover,
+                                  // const Positioned(
+                                  //   left: 12,
+                                  //   child: Image(
+                                  //     image: AssetImage('images/avatar2.png'),
+                                  //     width: 24,
+                                  //     height: 24,
+                                  //   ),
+                                  // ),
+                                  if (interestedUser.length > 1)
+                                    Positioned(
+                                      left: 12,
+                                      child: CircleAvatar(
+                                        radius: 10,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            '${interestedUser[1]['photo']}',
+                                            width: 24,
+                                            height: 24,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                // const Positioned(
-                                //   left: 36,
-                                //   child: Image(
-                                //     image: AssetImage('images/avatar4.png'),
-                                //     width: 24,
-                                //     height: 24,
-                                //   ),
-                                // ),
-                                if (interestedUser.length > 3)
-                                  Positioned(
-                                    left: 36,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: Colors.white,
-                                      radius: 10,
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        '+${interestedUser.length - 3}',
-                                        style: const TextStyle(
-                                          fontFamily: 'Bricolage-M',
-                                          fontSize: 10,
-                                          color: Colors.black,
+                                  // const Positioned(
+                                  //   left: 24,
+                                  //   child: Image(
+                                  //     image: AssetImage('images/avatar3.png'),
+                                  //     width: 24,
+                                  //     height: 24,
+                                  //   ),
+                                  // ),
+                                  if (interestedUser.length > 2)
+                                    Positioned(
+                                      left: 24,
+                                      child: CircleAvatar(
+                                        radius: 10,
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            '${interestedUser[2]['photo']}',
+                                            width: 24,
+                                            height: 24,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                              ],
-                            ),
-                          )
+                                  // const Positioned(
+                                  //   left: 36,
+                                  //   child: Image(
+                                  //     image: AssetImage('images/avatar4.png'),
+                                  //     width: 24,
+                                  //     height: 24,
+                                  //   ),
+                                  // ),
+                                  if (interestedUser.length > 3)
+                                    Positioned(
+                                      left: 36,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.white,
+                                        radius: 10,
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          '+${interestedUser.length - 3}',
+                                          style: const TextStyle(
+                                            fontFamily: 'Bricolage-M',
+                                            fontSize: 10,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            )
                         ],
                       ),
                     )

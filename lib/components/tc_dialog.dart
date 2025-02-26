@@ -15,23 +15,20 @@ class TAndCDialog extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Container(
+        width: double.infinity,
+        height: 600,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        width: 309,
-        height: 530,
-        decoration: const BoxDecoration(
-          color: Color(0xFFF0F1F2),
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Container(
-          width: 293,
-          height: 514,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: Colors.white,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color(0xfff0f1f2),
+            width: 10,
           ),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          color: Colors.white,
+        ),
+        child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 'images/t&c.png',
@@ -101,41 +98,38 @@ class TAndCDialog extends StatelessWidget {
                     color: Color(0xFF41464B)),
               ),
               const SizedBox(
-                height: 10,
+                height: 50,
               ),
-              SizedBox(
-                width: 277,
-                height: 34,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: TextButton.styleFrom(
-                    side: const BorderSide(color: Color(0xffFF3997)),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(8), // Set the border radius
-                    ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(277, 34),
+                  side: const BorderSide(color: Color(0xffFF3997)),
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8), // Set the border radius
                   ),
-                  child: languageProvider.lan == 'English'
-                      ? const Text(
-                          'I accept',
-                          style: TextStyle(
-                            color: Color(0xffFF3997),
-                            fontFamily: 'Bricolage-B',
-                            fontSize: 15.63,
-                          ),
-                        )
-                      : const Text(
-                          'လက်ခံပါသည်',
-                          style: TextStyle(
-                            color: Color(0xffFF3997),
-                            fontFamily: 'Walone-B',
-                            fontSize: 14,
-                          ),
-                        ),
                 ),
+                child: languageProvider.lan == 'English'
+                    ? const Text(
+                        'I accept',
+                        style: TextStyle(
+                          color: Color(0xffFF3997),
+                          fontFamily: 'Bricolage-B',
+                          fontSize: 15.63,
+                        ),
+                      )
+                    : const Text(
+                        'လက်ခံပါသည်',
+                        style: TextStyle(
+                          color: Color(0xffFF3997),
+                          fontFamily: 'Walone-B',
+                          fontSize: 14,
+                        ),
+                      ),
               ),
             ],
           ),
