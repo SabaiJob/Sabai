@@ -98,7 +98,8 @@ class _AllState extends State<All> {
           onRefresh: () async {
             // Reset to the first page on refresh
             _currentPage = 1;
-            await jobProvider.getAllJobs();
+            //await jobProvider.getAllJobs();
+            await jobProvider.getJobs(_currentPage == 1, page: _currentPage);
           },
           child: jobProvider.isLoading && _currentPage == 1
               ? const Center(

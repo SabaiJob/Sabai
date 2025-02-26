@@ -102,6 +102,7 @@ class _JobListingPageState extends State<JobListingPage>
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = "";
   bool isSearching = false;
+  bool isSwitch = false;
   @override
   void initState() {
     super.initState();
@@ -207,22 +208,53 @@ class _JobListingPageState extends State<JobListingPage>
       child: Scaffold(
         backgroundColor: const Color(0xffF7F7F7),
         appBar: AppBar(
-          title: languageProvider.lan == 'English'
-              ? const Text(
-                  "Jobs",
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-M',
-                    fontSize: 19.53,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Transform.scale(
+                    scale: 0.7,
+                    child: CupertinoSwitch(
+                      activeColor: primaryPinkColor,
+                      value: isSwitch,
+                      onChanged: (value) {
+                        setState(() {
+                          isSwitch = value;
+                        });
+                      },
+                    ),
                   ),
-                )
-              : const Text(
-                  "အလုပ်များ",
-                  style: TextStyle(
-                    fontFamily: 'Walone-B',
-                    fontSize: 19.53,
+                  const Text(
+                    'Local Jobs',
+                    style: TextStyle(fontFamily: 'Bricolage-M', fontSize: 10),
                   ),
-                ),
-          centerTitle: true,
+                ],
+              ),
+              const Spacer(),
+              // Center title
+              languageProvider.lan == 'English'
+                  ? const Text(
+                      "Jobs",
+                      style: TextStyle(
+                        fontFamily: 'Bricolage-M',
+                        fontSize: 19.53,
+                      ),
+                    )
+                  : const Text(
+                      "အလုပ်များ",
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 19.53,
+                      ),
+                    ),
+              const Spacer(
+                flex: 2,
+              ),
+            ],
+          ),
+          centerTitle: false,
           actions: [
             IconButton(
               onPressed: () {
