@@ -35,6 +35,17 @@ class ApiService {
     return response;
   }
 
+  static Future<http.Response> put(String endPoint, dynamic body) async {
+    final headers = await getHeaders();
+    final response = await http.put(
+      Uri.parse(
+          'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      headers: headers,
+      body: json.encode(body),
+    );
+    return response;
+  }
+
   static Future<void> logout(BuildContext context) async {
     await TokenService.deleteToken(); // Ensure token is removed
 
@@ -53,20 +64,3 @@ class ApiService {
     );
   }
 }
-
-// // New method for file uploads using dio
-// static Future<Response> uploadFile(String endPoint, FormData formData) async {
-// final dio = Dio(
-//   BaseOptions(
-//     baseUrl: 'https://sabai-job-backend-k9wda.ondigitalocean.app/api',
-//   ),
-// );
-//
-// final token = await TokenService.getToken();
-// if (token != null) {
-// dio.options.headers['Authorization'] = 'Bearer $token';
-// }
-//
-// final response = await dio.post(endPoint, data: formData);
-// return response;
-// }
