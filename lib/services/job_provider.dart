@@ -51,6 +51,11 @@ class JobProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get type => _type;
 
+  void clearJobs() {
+    allTypeJobs.clear();
+    notifyListeners();
+  }
+
   Future<void> getJobs(bool isLoading, {int page = 1}) async {
     _isLoading = isLoading;
     notifyListeners();
