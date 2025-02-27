@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:sabai_app/components/divider_line.dart';
+import 'package:sabai_app/components/listtile_button.dart';
+import 'package:sabai_app/components/right_chev_button.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
+import 'package:sabai_app/screens/coming_soon.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
 import 'package:sabai_app/screens/on_premium_page.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
@@ -307,76 +311,86 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'images/give_heart.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                languageProvider.lan == 'English'
-                                    ? 'My Contributions'
-                                    : 'ကျွန်တော့်ကူညီမှုများ',
-                                style: languageProvider.lan == 'English'
-                                    ? const TextStyle(
-                                        color: Color(0xFF565E64),
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
-                                      )
-                                    : const TextStyle(
-                                        color: Color(0xFF565E64),
-                                        fontFamily: 'Walone-B',
-                                        fontSize: 10,
-                                      ),
-                              ),
-                              Text(
-                                languageProvider.lan == 'English'
-                                    ? '8 Posts'
-                                    : '၈ ပိုစ့်',
-                                style: languageProvider.lan == 'English'
-                                    ? const TextStyle(
-                                        color: Color(0xFF2B2F32),
-                                        fontFamily: 'Bricolage-B',
-                                        fontSize: 10,
-                                      )
-                                    : const TextStyle(
-                                        color: Color(0xFF2B2F32),
-                                        fontFamily: 'Walone-B',
-                                        fontSize: 10,
-                                      ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    //My Contributions
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ComingSoonPage(appBarTitle: Text('My Contributions', style: appBarTitleStyleEng,),))),
+                      child: SizedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'images/give_heart.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  languageProvider.lan == 'English'
+                                      ? 'My Contributions'
+                                      : 'ကျွန်တော့်ကူညီမှုများ',
+                                  style: languageProvider.lan == 'English'
+                                      ? const TextStyle(
+                                          color: Color(0xFF565E64),
+                                          fontFamily: 'Bricolage-R',
+                                          fontSize: 10,
+                                        )
+                                      : const TextStyle(
+                                          color: Color(0xFF565E64),
+                                          fontFamily: 'Walone-B',
+                                          fontSize: 10,
+                                        ),
+                                ),
+                                Text(
+                                  languageProvider.lan == 'English'
+                                      ? '8 Posts'
+                                      : '၈ ပိုစ့်',
+                                  style: languageProvider.lan == 'English'
+                                      ? const TextStyle(
+                                          color: Color(0xFF2B2F32),
+                                          fontFamily: 'Bricolage-B',
+                                          fontSize: 10,
+                                        )
+                                      : const TextStyle(
+                                          color: Color(0xFF2B2F32),
+                                          fontFamily: 'Walone-B',
+                                          fontSize: 10,
+                                        ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                    //Striaght Line
                     Container(
                       width: 1,
                       height: 43,
                       color: const Color(0xFFE2E3E5),
                     ),
                     // Rose Counts
-
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RoseCountPage()));
+                          context,
+                          MaterialPageRoute(
+                            //RoseCountPage()
+                            builder: (context) => const ComingSoonPage(appBarTitle: Text('Rose Count', style: appBarTitleStyleEng,),),
+                          ),
+                        );
                       },
                       child: SizedBox(
                         child: Column(
@@ -490,15 +504,11 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     // saved jobs
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
+                    ListTileButton(ltLeading: const Icon(
                         CupertinoIcons.heart,
                         size: 23,
                         color: Color(0xFFFF3997),
-                      ),
-                      title: Text(
+                      ), ltTitle: Text(
                         languageProvider.lan == 'English'
                             ? 'Saved Jobs'
                             : 'သိမ်းထားသည့်အလုပ်များ',
@@ -513,32 +523,21 @@ class _ProfileState extends State<Profile> {
                                 fontSize: 10,
                                 color: Color(0xFF2B2F32),
                               ),
-                      ),
-                      trailing: const Icon(CupertinoIcons.right_chevron,
-                          size: 23, color: Color(0xFFFF3997)),
-                      onTap: () {
+                      ), ltTrailing: RightChevronButton(), navTo: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const SaveJobs()));
-                      },
-                    ),
-                    const SizedBox(
-                      width: 311,
-                      child: Divider(
-                        color: Color(0xFFE2E3E5),
-                      ),
-                    ),
+                      },),
+                    const DividerLine(),
                     // Rewards
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
+                    ListTileButton(
+                      ltLeading: const Icon(
                         CupertinoIcons.gift,
                         size: 23,
                         color: Color(0xFFFF3997),
                       ),
-                      title: Text(
+                      ltTitle: Text(
                         languageProvider.lan == 'English'
                             ? 'Rewards'
                             : 'ဆုများ',
@@ -554,8 +553,11 @@ class _ProfileState extends State<Profile> {
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
-                      trailing: const Icon(CupertinoIcons.right_chevron,
-                          size: 23, color: Color(0xFFFF3997)),
+                      ltTrailing: const RightChevronButton(),
+                      navTo: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ComingSoonPage(appBarTitle: Text('Rewards', style: appBarTitleStyleEng,),))),
                     ),
                   ],
                 ),
@@ -574,15 +576,13 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Pricing Plan
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
+                    ListTileButton(
+                      ltLeading: const Icon(
                         CupertinoIcons.money_dollar_circle,
                         size: 23,
                         color: Color(0xFFFF3997),
                       ),
-                      title: Text(
+                      ltTitle: Text(
                         languageProvider.lan == 'English'
                             ? 'Pricing Plan'
                             : 'အကောင့်အမျိုးစား',
@@ -598,7 +598,7 @@ class _ProfileState extends State<Profile> {
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
-                      trailing: Container(
+                      ltTrailing: Container(
                         width: 45,
                         height: 15,
                         decoration: const BoxDecoration(
@@ -677,7 +677,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                       ),
-                      onTap: () {
+                      navTo: () {
                         paymentProvider.userData!['is_premium'] == true
                             ? Navigator.push(
                                 context,
@@ -694,22 +694,15 @@ class _ProfileState extends State<Profile> {
                                     builder: (context) => const PricingPlan()));
                       },
                     ),
-                    const SizedBox(
-                      width: 311,
-                      child: Divider(
-                        color: Color(0xFFE2E3E5),
-                      ),
-                    ),
+                    const DividerLine(),
                     // Language
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
+                    ListTileButton(
+                      ltLeading: const Icon(
                         CupertinoIcons.globe,
                         size: 23,
                         color: Color(0xFFFF3997),
                       ),
-                      title: Text(
+                      ltTitle: Text(
                         languageProvider.lan == 'English'
                             ? 'Language'
                             : 'ဘာသာစကား',
@@ -725,7 +718,7 @@ class _ProfileState extends State<Profile> {
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
-                      trailing: ToggleButtons(
+                      ltTrailing: ToggleButtons(
                         constraints: const BoxConstraints(
                           maxWidth: double.infinity,
                           minWidth: 25,
@@ -771,15 +764,13 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Help & Support
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
-                        CupertinoIcons.question_circle,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      title: Text(
+                    ListTileButton(
+                        ltLeading: const Icon(
+                          CupertinoIcons.question_circle,
+                          size: 23,
+                          color: Color(0xFFFF3997),
+                        ),
+                        ltTitle: Text(
                           languageProvider.lan == 'English'
                               ? 'Help & Support'
                               : 'အကူညီ',
@@ -793,59 +784,50 @@ class _ProfileState extends State<Profile> {
                                   fontFamily: 'Walone-B',
                                   fontSize: 10,
                                   color: Color(0xFF2B2F32),
-                                )),
-                      trailing: const Icon(CupertinoIcons.right_chevron,
-                          size: 23, color: Color(0xFFFF3997)),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HelpAndSupport()));
-                      },
-                    ),
+                                ),
+                        ),
+                        ltTrailing: const RightChevronButton(),
+                        navTo: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const HelpAndSupport()));
+                        }),
 
-                    const SizedBox(
-                      width: 311,
-                      child: Divider(
-                        color: Color(0xFFE2E3E5),
-                      ),
-                    ),
+                    const DividerLine(),
 
                     // Terms and Conditions
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
-                        CupertinoIcons.doc_text,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      title: Text(
-                        languageProvider.lan == 'English'
-                            ? 'Terms and Conditions'
-                            : 'ထုတ်ပြန်ချက်နှင့် ရေးရာမူဝါဒ',
-                        style: languageProvider.lan == 'English'
-                            ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              )
-                            : const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              ),
-                      ),
-                      trailing: const Icon(CupertinoIcons.right_chevron,
-                          size: 23, color: Color(0xFFFF3997)),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const TermsAndConditionsPage()));
-                      },
-                    ),
+                    ListTileButton(
+                        ltLeading: const Icon(
+                          CupertinoIcons.doc_text,
+                          size: 23,
+                          color: Color(0xFFFF3997),
+                        ),
+                        ltTitle: Text(
+                          languageProvider.lan == 'English'
+                              ? 'Terms and Conditions'
+                              : 'ထုတ်ပြန်ချက်နှင့် ရေးရာမူဝါဒ',
+                          style: languageProvider.lan == 'English'
+                              ? const TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                )
+                              : const TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                ),
+                        ),
+                        ltTrailing: const RightChevronButton(),
+                        navTo: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const TermsAndConditionsPage()));
+                        }),
 
                     const SizedBox(
                       width: 311,
@@ -855,88 +837,73 @@ class _ProfileState extends State<Profile> {
                     ),
 
                     // Privacy Policy
-                    ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
-                        CupertinoIcons.checkmark_shield,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      title: Text(
-                        languageProvider.lan == 'English'
-                            ? 'Privacy Policy'
-                            : 'ကိုယ်ရေးအချက်အလက် မူဝါဒ',
-                        style: languageProvider.lan == 'English'
-                            ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              )
-                            : const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              ),
-                      ),
-                      trailing: const Icon(
-                        CupertinoIcons.right_chevron,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PrivacyPolicy(),
-                          ),
-                        );
-                      },
-                    ),
+                    ListTileButton(
+                        ltLeading: const Icon(
+                          CupertinoIcons.checkmark_shield,
+                          size: 23,
+                          color: Color(0xFFFF3997),
+                        ),
+                        ltTitle: Text(
+                          languageProvider.lan == 'English'
+                              ? 'Privacy Policy'
+                              : 'ကိုယ်ရေးအချက်အလက် မူဝါဒ',
+                          style: languageProvider.lan == 'English'
+                              ? const TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                )
+                              : const TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                ),
+                        ),
+                        ltTrailing: const RightChevronButton(),
+                        navTo: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrivacyPolicy(),
+                            ),
+                          );
+                        }),
 
-                    const SizedBox(
-                      width: 311,
-                      child: Divider(
-                        color: Color(0xFFE2E3E5),
-                      ),
-                    ),
+                    const DividerLine(),
 
                     // about sabai jobs
-                    ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const About(),
-                          ),
-                        );
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 15),
-                      leading: const Icon(
-                        CupertinoIcons.info,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      title: Text(
-                        languageProvider.lan == 'English'
-                            ? 'About Sabai Jobs'
-                            : 'Sabai Jobs အကြောင်း',
-                        style: languageProvider.lan == 'English'
-                            ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              )
-                            : const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              ),
-                      ),
-                      trailing: const Icon(CupertinoIcons.right_chevron,
-                          size: 23, color: Color(0xFFFF3997)),
-                    ),
+                    ListTileButton(
+                        ltLeading: const Icon(
+                          CupertinoIcons.info,
+                          size: 23,
+                          color: Color(0xFFFF3997),
+                        ),
+                        ltTitle: Text(
+                          languageProvider.lan == 'English'
+                              ? 'About Sabai Jobs'
+                              : 'Sabai Jobs အကြောင်း',
+                          style: languageProvider.lan == 'English'
+                              ? const TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                )
+                              : const TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 10,
+                                  color: Color(0xFF2B2F32),
+                                ),
+                        ),
+                        ltTrailing: const Icon(CupertinoIcons.right_chevron,
+                            size: 23, color: Color(0xFFFF3997)),
+                        navTo: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const About(),
+                            ),
+                          );
+                        })
                   ],
                 ),
               ),
@@ -1153,3 +1120,9 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+
+
+
+
+
