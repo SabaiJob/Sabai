@@ -561,7 +561,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                           const Row(
                             children: [
                               Image(
-                                image: AssetImage('images/Lili.png'),
+                                image: AssetImage('images/status.png'),
                                 width: 24,
                                 height: 24,
                               ),
@@ -569,7 +569,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                 width: 10,
                               ),
                               Text(
-                                'LiLi',
+                                'Sabai',
                                 style: TextStyle(
                                   fontSize: 12.5,
                                   fontFamily: 'Bricolage-R',
