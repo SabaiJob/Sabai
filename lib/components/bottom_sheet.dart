@@ -96,58 +96,60 @@ class Bottomsheet extends StatelessWidget {
                   padding: languageProvide.lan == 'Englis'
                       ? const EdgeInsets.only(top: 20)
                       : const EdgeInsets.only(top: 15),
-                  child: Column(
-                    children: [
-                      languageProvide.lan == 'English'
-                          ? const BottomSheetContent(
-                              level: 'Level - 1',
-                              text1: 'Be Cautions',
-                              text2: 'New or unverified jobs.',
-                              text3: 'Use extra caution',
-                            )
-                          : const BottomSheetContent(
-                              level: 'အဆင့် - ၁',
-                              text1: 'သတိထားပါ',
-                              text2:
-                                  'အသစ်ရောက်ရှိသောအလုပ်များ (သို့)\nအတည််မပြုရသေးသောအလုပ်များ',
-                              text3: 'အထူးသတိထားပါ',
-                            ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      languageProvide.lan == 'English'
-                          ? const BottomSheetContent(
-                              level: 'Level - 2',
-                              text1: 'Safe but Verify',
-                              text2: 'Generally save',
-                              text3: 'Confirm details with the employer.',
-                            )
-                          : const BottomSheetContent(
-                              level: 'အဆင့် - ၂',
-                              text1: 'ယုံကြည်ရသော်လည်း အတည်ပြုပါ',
-                              text2: 'အများအားဖြင့် ယုံကြည်ရတယ်',
-                              text3:
-                                  'အလုပ်ရှင်များနှင့် အသေးစိတ် ကိုပြန်စစ်ဆေးပါ',
-                            ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      languageProvide.lan == 'English'
-                          ? const BottomSheetContent(
-                              level: 'Level - 3',
-                              text1: 'Totally Safe',
-                              text2:
-                                  'From partnered companies or reliable\nsources.',
-                              text3: 'Apply with confidence.',
-                            )
-                          : const BottomSheetContent(
-                              level: 'အဆင့် - ၃',
-                              text1: 'လုံးဝယုံကြည်ရတယ်',
-                              text2:
-                                  'မိတ်ဖက်ကုမ္ပဏီများ (သို့)\nယုံကြည်စိတ်ချရသောအရင်းအမြစ်များမှ ဖြစ်တယ',
-                              text3: 'စိတ်ချလက်ချ လျှောက်ထားနိုင်တယ်',
-                            ),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        languageProvide.lan == 'English'
+                            ? const BottomSheetContent(
+                                level: 'Level - 1',
+                                text1: 'Be Cautions',
+                                text2: 'New or unverified jobs.',
+                                text3: 'Use extra caution',
+                              )
+                            : const BottomSheetContent(
+                                level: 'အဆင့် - ၁',
+                                text1: 'သတိထားပါ',
+                                text2:
+                                    'အသစ်ရောက်ရှိသောအလုပ်များ (သို့)\nအတည််မပြုရသေးသောအလုပ်များ',
+                                text3: 'အထူးသတိထားပါ',
+                              ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        languageProvide.lan == 'English'
+                            ? const BottomSheetContent(
+                                level: 'Level - 2',
+                                text1: 'Safe but Verify',
+                                text2: 'Generally save',
+                                text3: 'Confirm details with the employer.',
+                              )
+                            : const BottomSheetContent(
+                                level: 'အဆင့် - ၂',
+                                text1: 'ယုံကြည်ရသော်လည်း အတည်ပြုပါ',
+                                text2: 'အများအားဖြင့် ယုံကြည်ရတယ်',
+                                text3:
+                                    'အလုပ်ရှင်များနှင့် အသေးစိတ် ကိုပြန်စစ်ဆေးပါ',
+                              ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        languageProvide.lan == 'English'
+                            ? const BottomSheetContent(
+                                level: 'Level - 3',
+                                text1: 'Totally Safe',
+                                text2:
+                                    'From partnered companies or reliable sources.',
+                                text3: 'Apply with confidence.',
+                              )
+                            : const BottomSheetContent(
+                                level: 'အဆင့် - ၃',
+                                text1: 'လုံးဝယုံကြည်ရတယ်',
+                                text2:
+                                    'မိတ်ဖက်ကုမ္ပဏီများ (သို့)\nယုံကြည်စိတ်ချရသောအရင်းအမြစ်များမှ ဖြစ်တယ',
+                                text3: 'စိတ်ချလက်ချ လျှောက်ထားနိုင်တယ်',
+                              ),
+                      ],
+                    ),
                   ),
                 ),
               ),
