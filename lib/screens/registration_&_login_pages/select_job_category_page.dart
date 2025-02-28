@@ -59,7 +59,8 @@ class SelectJobCategoryPage extends StatelessWidget {
                   child: CheckboxListTile(
                     checkboxScaleFactor: 0.75,
                     title: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             jobCategoryList![index]['name'],
@@ -68,10 +69,29 @@ class SelectJobCategoryPage extends StatelessWidget {
                               fontSize: 15.62,
                             ),
                           ),
-                          Image.network(
-                            jobCategoryList![index]['image'],
-                            scale: 55,
+                          const SizedBox(
+                            width: 5,
                           ),
+                          SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              jobCategoryList![index]['image'],
+                              
+                              fit: BoxFit.cover,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.error, size: 64, color: Colors.red),
+                            ),
+                          ),
+                        ),
                         ]),
                     activeColor: Colors.pink,
                     value: jobCategoryList![index]['selected'],

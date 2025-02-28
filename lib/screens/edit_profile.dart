@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 
 class EditProfile extends StatefulWidget {
@@ -102,9 +103,22 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        backgroundColor: Colors.white,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey.shade300,
+              height: 1.0,
+            )),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF3997),
+        ),
+        title: const Text('Edit Profile', style: appBarTitleStyleEng,),
         elevation: 2,
       ),
       body: SingleChildScrollView(
@@ -192,6 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                 ElevatedButton(
                   onPressed: saveProfile,
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF3997),
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -208,7 +223,7 @@ class _EditProfileState extends State<EditProfile> {
                         )
                       : const Text(
                           'Save Changes',
-                          style: TextStyle(fontSize: 16),
+                          style: textButtonTextStyleEng,
                         ),
                 ),
                 const SizedBox(height: 20),
