@@ -60,6 +60,12 @@ class JobFilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String locationType = "local";
+  void setLocationType(String value) {
+    locationType = value;
+    notifyListeners();
+  }
+
   List<dynamic> get allTypeJobs => _jobs;
   bool get isLoading => _isLoading;
 
@@ -71,7 +77,7 @@ class JobFilterProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      String url = '/jobs/search/?page=$page';
+      String url = '/jobs/search/?location_type=$locationType&page=$page';
 
       // Append filters to URL if provided
       if (title.isNotEmpty) url += '&title=$title';
@@ -81,7 +87,7 @@ class JobFilterProvider with ChangeNotifier {
       if (thaiLanguageRequired != null) {
         url += '&thai_language_required=$thaiLanguageRequired';
       }
-      if (salaryMin != null) url += '&salary_min=$salaryMin';
+      url += '&salary_min=$salaryMin';
       if (salaryMax != null) url += '&salary_max=$salaryMax';
       if (isVerified != null) url += '&is_verified=$isVerified';
 

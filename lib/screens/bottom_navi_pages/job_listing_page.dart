@@ -17,10 +17,6 @@ import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../components/walkthrough_button.dart';
-import '../registration_&_login_pages/log_in_controller_page.dart';
-import '../registration_&_login_pages/registration_pages_controller.dart';
-
 class JobListingPage extends StatefulWidget {
   final bool showBottomSheet;
   const JobListingPage({
@@ -105,6 +101,14 @@ class _JobListingPageState extends State<JobListingPage>
   bool isSwitch = false;
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final jobProvider = Provider.of<JobProvider>(context, listen: false);
+      jobProvider.setLocatiobType('local');
+      final filterProvider =
+          Provider.of<JobFilterProvider>(context, listen: false);
+      filterProvider.setLocationType('local');
+    });
+
     super.initState();
     _autoScrollText();
     // Show the bottom sheet automatically after the screen loads
@@ -219,16 +223,29 @@ class _JobListingPageState extends State<JobListingPage>
                     child: CupertinoSwitch(
                       activeColor: primaryPinkColor,
                       value: isSwitch,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           isSwitch = value;
+                          if (isSwitch == true) {
+                            jobProvider.setLocatiobType('global');
+                            filterProvider.setLocationType('global');
+                          } else {
+                            jobProvider.setLocatiobType('local');
+                            filterProvider.setLocationType('local');
+                          }
                         });
+                        await jobProvider.getJobs(true);
+                        await jobProvider.getBestMatchedJobs(true);
+                        await jobProvider.getPartnerJobs(true);
+                        await jobProvider.fetchPremiumJobs(true);
+                        await filterProvider.getFilterJobs(true);
                       },
                     ),
                   ),
-                  const Text(
-                    'Local Jobs',
-                    style: TextStyle(fontFamily: 'Bricolage-M', fontSize: 10),
+                  Text(
+                    isSwitch == false ? 'Local Jobs' : 'Global Jobs',
+                    style: const TextStyle(
+                        fontFamily: 'Bricolage-M', fontSize: 10),
                   ),
                 ],
               ),

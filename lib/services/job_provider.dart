@@ -38,7 +38,6 @@ class JobProvider extends ChangeNotifier {
 
   //api integration All jobs page
 
-  String _type = '';
   List<Map<String, dynamic>> _jobInfo = [];
   List<Map<String, dynamic>> _adInfo = [];
   List<dynamic> _jobs = [];
@@ -49,10 +48,15 @@ class JobProvider extends ChangeNotifier {
   List<Map<String, dynamic>> get adInfo => _adInfo;
   List<dynamic> get allTypeJobs => _jobs;
   bool get isLoading => _isLoading;
-  String get type => _type;
 
   void clearJobs() {
     allTypeJobs.clear();
+    notifyListeners();
+  }
+
+  String locationType = 'local';
+  void setLocatiobType(String value) {
+    locationType = value;
     notifyListeners();
   }
 
@@ -61,7 +65,8 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.get('/jobs/search/?page=$page');
+      final response = await ApiService.get(
+          '/jobs/search/?location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -123,7 +128,8 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.get('/jobs/best-matches/?page=$page');
+      final response = await ApiService.get(
+          '/jobs/best-matches/?location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -167,8 +173,8 @@ class JobProvider extends ChangeNotifier {
     _isLoadingPartnerJobs = isLoading;
     notifyListeners();
     try {
-      final response =
-          await ApiService.get('/jobs/search/?page=$page&is_partner=true');
+      final response = await ApiService.get(
+          '/jobs/search/?location_type=$locationType&page=$page&is_partner=true');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -228,9 +234,13 @@ class JobProvider extends ChangeNotifier {
   //premium jobs
   List<dynamic> _premiumJobs = [];
   List<dynamic> get premiumJobs => _premiumJobs;
-  Future<void> fetchPremiumJobs() async {
+  bool isPremiumLoading = false;
+  Future<void> fetchPremiumJobs(bool isLoading) async {
+    isPremiumLoading = isLoading;
+    notifyListeners();
     try {
-      final response = await ApiService.get('/jobs/new-jobs/');
+      final response =
+          await ApiService.get('/jobs/new-jobs/?location_type=$locationType');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final data = json.decode(response.body);
         _premiumJobs = data['results'];
@@ -241,6 +251,7 @@ class JobProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
     } finally {
+      isPremiumLoading = false;
       notifyListeners();
     }
   }

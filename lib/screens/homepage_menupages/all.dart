@@ -64,7 +64,7 @@ class _AllState extends State<All> {
 
   void fetchPremiumJobs() async {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
-    await jobProvider.fetchPremiumJobs();
+    await jobProvider.fetchPremiumJobs(true);
   }
 
   void fetchUserData() async {
@@ -232,9 +232,9 @@ class _AllState extends State<All> {
                   onRefresh: () async {
                     // Reset to the first page on refresh
                     //_currentPage = 1;
-                    await jobProvider.fetchPremiumJobs();
+                    await jobProvider.fetchPremiumJobs(true);
                   },
-                  child: jobProvider.premiumJobs.isEmpty
+                  child: jobProvider.isPremiumLoading == true 
                       ? const Center(
                           child: CircularProgressIndicator(
                             color: primaryPinkColor,
