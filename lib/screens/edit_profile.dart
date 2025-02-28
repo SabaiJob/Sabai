@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
 import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  final String initialName;
+  final String initialEmail;
+  const EditProfile({super.key, required this.initialName, required this.initialEmail});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -11,9 +12,19 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
+  late TextEditingController nameController;
+  late TextEditingController emailController;
   bool isLoading = false;
+  bool isEdited = false;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.initialName);
+    emailController = TextEditingController(text: widget.initialEmail);
+    nameController.addListener(trackChanges);
+    emailController.addListener(trackChanges);
+  }
 
   @override
   void dispose() {
@@ -22,56 +33,71 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  Future<void> editProfile() async {
-    if (!formKey.currentState!.validate()) return;
+  void trackChanges(){
+    setState(() {
+      isEdited = nameController.text != widget.initialName || emailController.text != widget.initialEmail;
+    });
+  }
 
-    setState(() => isLoading = true);
-    try {
-      final response = await ApiService.put(
-        '/auth/profile-update/',
-        {
-          'username': nameController.text,
-          'email': emailController.text,
-        },
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        _showSuccessSnackBar('Profile updated successfully');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Profile(),
-          ),
-        ); // Return true to indicate successful update
-      } else {
-        _showErrorSnackBar('Error: ${response.body}');
-      }
-    } catch (e) {
-      _showErrorSnackBar('Failed to update profile');
-    } finally {
-      setState(() => isLoading = false);
+  Future<void>  saveProfile()async{
+    if(!isEdited){
+      Navigator.pop(context);
+      return;
     }
+    
+    String updatedName = nameController.text;
+    String updatedEmail = emailController.text;
+    if (updatedName.isEmpty || updatedEmail.isEmpty) {
+    showCustomSnackBar(
+      message: "Name and email cannot be empty!",
+      isError: true,
+    );
+    return;
   }
 
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-      ),
+   try{
+    final response = await ApiService.put('/auth/profile-update/', {
+      "username": updatedName, "email" : updatedEmail
+    });
+    if(response.statusCode >= 200 && response.statusCode < 300){
+      showCustomSnackBar(
+        message: "Profile updated successfully!",
+        isError: false,
+      );
+      Navigator.pop(context, {"username": updatedName, "email": updatedEmail});
+    }
+    else{
+      showCustomSnackBar(
+        message: "Failed to update profile. Please try again.",
+        isError: true,
+      );
+    }
+   }catch(e){
+    showCustomSnackBar(
+      message: "An error occurred: $e",
+      isError: true,
     );
+   }
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
+  void showCustomSnackBar({required String message, required bool isError}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
-    );
-  }
+      //backgroundColor: isError ? Colors.redAccent : Colors.green,
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(16),
+      action: SnackBarAction(
+        label: "Dismiss",
+        textColor: Colors.white,
+        onPressed: () {},
+      ),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +190,7 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(height: 40),
                 // Submit button
                 ElevatedButton(
-                  onPressed: isLoading ? null : editProfile,
+                  onPressed: saveProfile,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(

@@ -44,6 +44,24 @@ class _ProfileState extends State<Profile> {
     fetchUserData();
   }
 
+  Future<void> navToEditProfile(PaymentProvider paymentProvider) async {
+    final updatedData = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfile(
+          initialName: paymentProvider.userData!['username'],
+          initialEmail: paymentProvider.userData!['email'],
+        ),
+      ),
+    );
+    if(updatedData != null){
+       setState(() {
+      paymentProvider.userData!['username'] = updatedData["username"];
+      paymentProvider.userData!['email'] = updatedData["email"];
+    });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
@@ -184,13 +202,18 @@ class _ProfileState extends State<Profile> {
                           //     ],
                           //   ),
                           // );
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EditProfile(),
-                            ),
-                          );
+                          navToEditProfile(paymentProvider);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => EditProfile(
+                          //       initialName:
+                          //           paymentProvider.userData!['username'],
+                          //       initialEmail:
+                          //           paymentProvider.userData!['email'],
+                          //     ),
+                          //   ),
+                          // );
                         }
                         if (Platform.isAndroid) {
                           // showModalBottomSheet(
@@ -259,12 +282,18 @@ class _ProfileState extends State<Profile> {
                           //     ),
                           //   ),
                           // );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EditProfile(),
-                            ),
-                          );
+                          navToEditProfile(paymentProvider);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => EditProfile(
+                          //       initialName:
+                          //           paymentProvider.userData!['username'],
+                          //       initialEmail:
+                          //           paymentProvider.userData!['email'],
+                          //     ),
+                          //   ),
+                          // );
                         }
                       },
                       child: Container(

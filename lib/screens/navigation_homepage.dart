@@ -2,7 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/community.dart';
+import 'package:sabai_app/screens/coming_soon.dart';
 import 'package:sabai_app/screens/contribution_pages/contribute_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/job_listing_page.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
@@ -75,64 +77,65 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   }
 
   Future<void> onTabChange(index, JobProvider jobProvider) async {
-    if (index == 1) {
-      if (jobProvider.isDraft == true) {
-        String? url = await getUrl();
-        String? location = await getLocation();
-        String? draftText = await getDraftText();
-        bool? isLocated = await getIsLocated();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Posting(
-              url: url,
-              location: location,
-              isLocated: isLocated,
-              draftText: draftText,
-            ),
-          ),
-        );
-      } else {
-        showModalBottomSheet(
-          backgroundColor: Colors.transparent,
-          context: context,
-          isScrollControlled:
-              true, // Ensures the bottom sheet adjusts to keyboard
-          builder: (context) {
-            return DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              maxChildSize: 0.9,
-              builder: (context, scrollController) {
-                return Container(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context)
-                        .viewInsets
-                        .bottom, // Adjust padding
-                  ),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      ContributePage(
-                        whenUploadPhotoOnTap: whenUploadPhotoOnTap,
-                      ),
-                      UploadPhotoPage(
-                        whenCameraIsCalled: _initCamera,
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-        );
-      }
+    if (index == 1 || index == 0) {
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ComingSoonPage(appBarTitle: Text('Contribution', style: appBarTitleStyleEng,))));
+      // if (jobProvider.isDraft == true) {
+      //   String? url = await getUrl();
+      //   String? location = await getLocation();
+      //   String? draftText = await getDraftText();
+      //   bool? isLocated = await getIsLocated();
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => Posting(
+      //         url: url,
+      //         location: location,
+      //         isLocated: isLocated,
+      //         draftText: draftText,
+      //       ),
+      //     ),
+      //   );
+      // } else {
+      //   showModalBottomSheet(
+      //     backgroundColor: Colors.transparent,
+      //     context: context,
+      //     isScrollControlled:
+      //         true, // Ensures the bottom sheet adjusts to keyboard
+      //     builder: (context) {
+      //       return DraggableScrollableSheet(
+      //         initialChildSize: 0.8,
+      //         maxChildSize: 0.9,
+      //         builder: (context, scrollController) {
+      //           return Container(
+      //             padding: EdgeInsets.only(
+      //               bottom: MediaQuery.of(context)
+      //                   .viewInsets
+      //                   .bottom, // Adjust padding
+      //             ),
+      //             decoration: const BoxDecoration(
+      //               color: Colors.white,
+      //               borderRadius: BorderRadius.vertical(
+      //                 top: Radius.circular(20),
+      //               ),
+      //             ),
+      //             child: PageView(
+      //               controller: _pageController,
+      //               physics: const NeverScrollableScrollPhysics(),
+      //               children: [
+      //                 ContributePage(
+      //                   whenUploadPhotoOnTap: whenUploadPhotoOnTap,
+      //                 ),
+      //                 UploadPhotoPage(
+      //                   whenCameraIsCalled: _initCamera,
+      //                 ),
+      //               ],
+      //             ),
+      //           );
+      //         },
+      //       );
+      //     },
+      //   );
+      // }
     } else {
       setState(() {
         currentIndex = index;
