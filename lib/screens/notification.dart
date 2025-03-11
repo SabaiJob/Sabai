@@ -117,22 +117,25 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
               ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const NavigationHomepage(
-                  showButtonSheet: false,
-                ),
-              ),
-            );
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xffFF3997),
-          ),
+        iconTheme: const IconThemeData(
+          color: primaryPinkColor,
         ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => const NavigationHomepage(
+        //           showButtonSheet: false,
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   icon: const Icon(
+        //     Icons.arrow_back,
+        //     color: Color(0xffFF3997),
+        //   ),
+        // ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Container(

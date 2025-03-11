@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -95,8 +96,6 @@ class _JobListingPageState extends State<JobListingPage>
   // late List<AnimationController> _menuItemAnimations;
   // late List<Animation<double>> _menuItemScaleAnimations;
 
-  final TextEditingController _searchController = TextEditingController();
-  String searchQuery = "";
   bool isSearching = false;
   bool isSwitch = false;
   @override
@@ -191,20 +190,19 @@ class _JobListingPageState extends State<JobListingPage>
   //   }
   // }
 
+  //for new appbar
+  final List<String> menuItemsList = [
+    'Jobs for you',
+    'Best Matched Jobs',
+    'Local Jobs',
+    'Global Jobs'
+  ];
+  String selectedValue = 'Jobs for you';
+
   @override
   Widget build(BuildContext context) {
-    var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    var filterProvider = Provider.of<JobFilterProvider>(context);
-    final jobs =
-        jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
-    final filterJobs = jobs.where((job) {
-      final jobInfo = job['info'] as Map<String, dynamic>;
-      final jobTitle = jobInfo['title'] as String;
-      bool matchesQuery =
-          jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
-      return matchesQuery;
-    }).toList();
+    //var filterProvider = Provider.of<JobFilterProvider>(context);
 
     return DefaultTabController(
       length: 3,
@@ -212,423 +210,492 @@ class _JobListingPageState extends State<JobListingPage>
       child: Scaffold(
         backgroundColor: const Color(0xffF7F7F7),
         appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Transform.scale(
-                    scale: 0.7,
-                    child: CupertinoSwitch(
-                      activeColor: primaryPinkColor,
-                      value: isSwitch,
-                      onChanged: (value) async {
-                        setState(() {
-                          isSwitch = value;
-                          if (isSwitch == true) {
-                            jobProvider.setLocatiobType('global');
-                            filterProvider.setLocationType('global');
-                          } else {
-                            jobProvider.setLocatiobType('local');
-                            filterProvider.setLocationType('local');
-                          }
-                        });
-                        await jobProvider.getJobs(true);
-                        await jobProvider.getBestMatchedJobs(true);
-                        await jobProvider.getPartnerJobs(true);
-                        await jobProvider.fetchPremiumJobs(true);
-                        await filterProvider.getFilterJobs(true);
-                      },
-                    ),
-                  ),
-                  Text(
-                    isSwitch == false ? 'Local Jobs' : 'Global Jobs',
-                    style: const TextStyle(
-                        fontFamily: 'Bricolage-M', fontSize: 10),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              // Center title
-              languageProvider.lan == 'English'
-                  ? const Text(
-                      "Jobs",
-                      style: TextStyle(
-                        fontFamily: 'Bricolage-M',
-                        fontSize: 19.53,
-                      ),
-                    )
-                  : const Text(
-                      "အလုပ်များ",
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 19.53,
-                      ),
-                    ),
-              const Spacer(
-                flex: 2,
-              ),
-            ],
-          ),
-          centerTitle: false,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationPage(),
-                  ),
-                );
-              },
-              icon: const Icon(
-                CupertinoIcons.bell,
-                color: Color(0xffFF3997),
-              ),
-            ),
-          ],
-          bottom: PreferredSize(
-            preferredSize:
-                const Size.fromHeight(1.0), // Height of the bottom border
-            child: Container(
-              color: Colors.grey.shade300, // Border color
-              height: 1.0, // Border thickness
-            ),
-          ),
-          backgroundColor: const Color(0xffF0F1F2),
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
           automaticallyImplyLeading: false,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-          child: Column(
-            children: [
-              // Motivational Quotes
-              SizedBox(
-                height: 35,
-                child: PageView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  controller: _motivationalTextController,
-                  itemCount: _motivationalSlides.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Image.asset(
-                          _motivationalSlides[index]['image']!,
-                          width: 28,
-                          height: 28,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: Text(
-                          _motivationalSlides[index]['text']!,
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-M',
-                            fontSize: 12,
-                          ),
-                        ))
-                      ],
+          backgroundColor: backgroundColor,
+          centerTitle: false,
+          title: DropdownButton2(
+            value: selectedValue,
+            isExpanded: false,
+            hint: const Text('none'),
+            items: menuItemsList
+                .map(
+                  (String item) => DropdownMenuItem(
+                    value: item,
+                    child: Text(item),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedValue = value!;
+              });
+            },
+            iconStyleData: const IconStyleData(
+              icon: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 24,
+                color: primaryPinkColor,
+              ),
+            ),
+            dropdownStyleData: DropdownStyleData(
+                decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            )),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationPage(),
+                        ));
+                  },
+                  icon: const Icon(
+                    CupertinoIcons.bell,
+                    size: 24,
+                    color: primaryPinkColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdvancedFilterPage(),
+                      ),
                     );
                   },
-                ),
-              ),
-              // SizedBox for Space
-              const SizedBox(
-                height: 10,
-              ),
-              // Row Contains Search Bar and Advanced Filter Button
-              if (jobProvider.isGuest == false)
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: 295,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: languageProvider.lan == 'English'
-                                ? 'Search for job'
-                                : 'အလုပ်များရှာမယ်',
-                            hintStyle: languageProvider.lan == 'English'
-                                ? GoogleFonts.dmSans(
-                                    textStyle: const TextStyle(
-                                      color: Color(0xff989EA4),
-                                      fontSize: 14,
-                                    ),
-                                  )
-                                : const TextStyle(
-                                    fontFamily: 'Walone-R',
-                                    color: Color(0xff989EA4),
-                                    fontSize: 14,
-                                  ),
-                            prefixIcon: IconButton(
-                              icon: Icon(
-                                // searchQuery.isEmpty &&
-                                isSearching ? Icons.clear : Icons.search,
-                                color: const Color(0xffFF3997),
-                              ),
-                              onPressed: () {
-                                if (isSearching) {
-                                  FocusScope.of(context).unfocus();
-                                  // Clear the search query and reset search state
-                                  _searchController.clear();
-                                  setState(() {
-                                    searchQuery = ""; // Clear search query
-                                    isSearching =
-                                        false; // Switch back to search icon
-                                  });
-                                }
-                              },
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xffF0F1F2),
-                                width: 2,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(
-                                    0xffFF3997), // Border color when not focused
-                                width: 1,
-                              ),
-                            ),
-                            contentPadding:
-                                const EdgeInsets.symmetric(vertical: 17),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              isSearching = true; // Activate search mode
-                            });
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              searchQuery = val; // Update the search query
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Badge(
-                      textColor: primaryPinkColor,
-                      backgroundColor: const Color(0xFFFED7EA),
-                      label: Text(
-                          filterProvider.calculateFilterCount().toString()),
-                      child: IconButton(
-                        color: const Color(0xffFF3997),
-                        onPressed: jobProvider.isGuest == false
-                            ? () async {
-                                final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AdvancedFilterPage(),
-                                  ),
-                                );
-                                filterProvider.clearAllFilters();
-                                filterProvider.clearFilters();
-                                if (result != null) {
-                                  filterProvider.updateFilterValues(result);
-                                }
-                              }
-                            : null,
-                        icon: const Icon(
-                          CupertinoIcons.slider_horizontal_3,
-                        ),
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: const BorderSide(
-                              color: Color(0xffF0F1F2),
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              const SizedBox(
-                height: 15,
-              ),
-              if (isSearching) ...[
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: filterJobs.length,
-                      itemBuilder: (context, index) {
-                        var job = filterJobs[index];
-                        var jobInfo = job['info'] as Map<String, dynamic>;
-                        return WorkCard(
-                          jobTitle: jobInfo['title'],
-                          isPartner: jobInfo['is_partner'],
-                          companyName: jobInfo['company_name'],
-                          location: jobInfo['location'],
-                          maxSalary: jobInfo['salary_max'],
-                          minSalary: jobInfo['salary_min'],
-                          currency: jobInfo['currency'],
-                          jobId: jobInfo['id'],
-                          closingAt: jobInfo['closing_at'],
-                          safetyLevel: jobInfo['safety_level'],
-                          viewCount: jobInfo['views_count'],
-                        );
-                      }),
-                ),
-              ] else ...[
-                Container(
-                  height: 33,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF0F1F2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TabBar(
-                    tabAlignment: TabAlignment.center,
-                    automaticIndicatorColorAdjustment: true,
-                    isScrollable: true,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicator: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    labelColor: Colors.pink,
-                    unselectedLabelColor: Colors.pink.shade300,
-                    dividerColor: Colors.transparent,
-                    labelStyle: const TextStyle(
-                        fontSize: 12.5,
-                        color: Color(0xffFF3997),
-                        fontFamily: 'Bricolage-R'),
-                    tabs: [
-                      const Tab(text: "All"),
-                      Tab(
-                        child: Shimmer.fromColors(
-                          baseColor: const Color(0xffFF3997),
-                          highlightColor: Colors.white,
-                          child: const Text(
-                            "Best Matches",
-                          ),
-                        ),
-                      ),
-                      const Tab(text: "Sabai Job Partner"),
-                    ],
+                  icon: const Icon(
+                    Icons.search,
+                    color: primaryPinkColor,
+                    size: 24,
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Expanded(
-                  child: TabBarView(
-                      children: [All(), BestMatches(), Partnerships()]),
-                ),
-              ]
-
-              // original code
-              // if (isSearching) ...[
-              //   Expanded(
-              //     child: ListView.builder(
-              //         itemCount: filterJobs.length,
-              //         itemBuilder: (context, index) {
-              //           var job = filterJobs[index];
-              //           var jobInfo = job['info'] as Map<String, dynamic>;
-              //           return WorkCard(
-              //             jobTitle: jobInfo['title'],
-              //             isPartner: jobInfo['is_partner'],
-              //             companyName: jobInfo['company_name'],
-              //             location: jobInfo['location'],
-              //             maxSalary: jobInfo['salary_max'],
-              //             minSalary: jobInfo['salary_min'],
-              //             currency: jobInfo['currency'],
-              //             jobId: jobInfo['id'],
-              //             closingAt: jobInfo['closing_at'],
-              //             safetyLevel: jobInfo['safety_level'],
-              //             viewCount: jobInfo['views_count'],
-              //           );
-              //         }),
-              //   ),
-              // ]
-              // else ...[
-              //   Container(
-              //     decoration: BoxDecoration(
-              //       color: const Color(0xffF0F1F2),
-              //       borderRadius: BorderRadius.circular(8),
-              //     ),
-              //     height: 50,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //       children: List.generate(
-              //         getNavItems(languageProvider).length,
-              //         (index) => GestureDetector(
-              //           onTapDown: (_) {
-              //             // Animate scale down when tapped
-              //             _menuItemAnimations[index].forward();
-              //           },
-              //           onTapUp: (_) {
-              //             // Animate scale back and navigate
-              //             _menuItemAnimations[index].reverse();
-              //             _navigateToPage(index);
-              //           },
-              //           onTapCancel: () {
-              //             // Animate scale back if tap is cancelled
-              //             _menuItemAnimations[index].reverse();
-              //           },
-              //           child: ScaleTransition(
-              //             scale: _menuItemScaleAnimations[index],
-              //             child: Container(
-              //               padding: const EdgeInsets.symmetric(
-              //                   horizontal: 10, vertical: 8),
-              //               decoration: BoxDecoration(
-              //                 color: _selectedIndex == index
-              //                     ? Colors.white
-              //                     : Colors.transparent,
-              //                 borderRadius: BorderRadius.circular(8),
-              //               ),
-              //               child: Text(
-              //                 getNavItems(languageProvider)[index],
-              //                 style: const TextStyle(
-              //                   color: Color(0xffFF3997),
-              //                   fontFamily: 'Bricolage-R',
-              //                   fontSize: 12.5,
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              //   const SizedBox(
-              //     height: 15,
-              //   ),
-              //   Expanded(
-              //     child: SlideTransition(
-              //       position: _offsetAnimation,
-              //       child: _pages[_selectedIndex],
-              //     ),
-              //   ),
-              // ],
-            ],
+              ],
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 12,
           ),
+          child: selectedValue == 'Best Matched Jobs'
+              ? const BestMatches()
+              : //const All(),
+              Center(
+                  child: const SizedBox(
+                    child: Text('No Data Available'),
+                  ),
+                ),
         ),
       ),
     );
   }
 }
+
+
+// body: Padding(
+//           padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+//           child: Column(
+//             children: [
+//               // SizedBox for Space
+//               const SizedBox(
+//                 height: 10,
+//               ),
+//               // Row Contains Search Bar and Advanced Filter Button
+//               if (jobProvider.isGuest == false)
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: Container(
+//                         width: 295,
+//                         height: 40,
+//                         decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             borderRadius: BorderRadius.circular(8)),
+//                         child: TextField(
+//                           controller: _searchController,
+//                           decoration: InputDecoration(
+//                             hintText: languageProvider.lan == 'English'
+//                                 ? 'Search for job'
+//                                 : 'အလုပ်များရှာမယ်',
+//                             hintStyle: languageProvider.lan == 'English'
+//                                 ? GoogleFonts.dmSans(
+//                                     textStyle: const TextStyle(
+//                                       color: Color(0xff989EA4),
+//                                       fontSize: 14,
+//                                     ),
+//                                   )
+//                                 : const TextStyle(
+//                                     fontFamily: 'Walone-R',
+//                                     color: Color(0xff989EA4),
+//                                     fontSize: 14,
+//                                   ),
+//                             prefixIcon: IconButton(
+//                               icon: Icon(
+//                                 // searchQuery.isEmpty &&
+//                                 isSearching ? Icons.clear : Icons.search,
+//                                 color: const Color(0xffFF3997),
+//                               ),
+//                               onPressed: () {
+//                                 if (isSearching) {
+//                                   FocusScope.of(context).unfocus();
+//                                   // Clear the search query and reset search state
+//                                   _searchController.clear();
+//                                   setState(() {
+//                                     searchQuery = ""; // Clear search query
+//                                     isSearching =
+//                                         false; // Switch back to search icon
+//                                   });
+//                                 }
+//                               },
+//                             ),
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(8),
+//                               borderSide: BorderSide.none,
+//                             ),
+//                             enabledBorder: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(8),
+//                               borderSide: const BorderSide(
+//                                 color: Color(0xffF0F1F2),
+//                                 width: 2,
+//                               ),
+//                             ),
+//                             focusedBorder: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(8),
+//                               borderSide: const BorderSide(
+//                                 color: Color(
+//                                     0xffFF3997), // Border color when not focused
+//                                 width: 1,
+//                               ),
+//                             ),
+//                             contentPadding:
+//                                 const EdgeInsets.symmetric(vertical: 17),
+//                           ),
+//                           onTap: () {
+//                             setState(() {
+//                               isSearching = true; // Activate search mode
+//                             });
+//                           },
+//                           onChanged: (val) {
+//                             setState(() {
+//                               searchQuery = val; // Update the search query
+//                             });
+//                           },
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       width: 20,
+//                     ),
+//                     Badge(
+//                       textColor: primaryPinkColor,
+//                       backgroundColor: const Color(0xFFFED7EA),
+//                       label: Text(
+//                           filterProvider.calculateFilterCount().toString()),
+//                       child: IconButton(
+//                         color: const Color(0xffFF3997),
+//                         onPressed: jobProvider.isGuest == false
+//                             ? () async {
+//                                 final result = await Navigator.push(
+//                                   context,
+//                                   MaterialPageRoute(
+//                                     builder: (context) =>
+//                                         const AdvancedFilterPage(),
+//                                   ),
+//                                 );
+//                                 filterProvider.clearAllFilters();
+//                                 filterProvider.clearFilters();
+//                                 if (result != null) {
+//                                   filterProvider.updateFilterValues(result);
+//                                 }
+//                               }
+//                             : null,
+//                         icon: const Icon(
+//                           CupertinoIcons.slider_horizontal_3,
+//                         ),
+//                         style: IconButton.styleFrom(
+//                           backgroundColor: Colors.white,
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(8),
+//                             side: const BorderSide(
+//                               color: Color(0xffF0F1F2),
+//                               width: 2,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               const SizedBox(
+//                 height: 15,
+//               ),
+// else ...[
+//               //   Container(
+//               //     height: 33,
+//               //     decoration: BoxDecoration(
+//               //       color: const Color(0xFFF0F1F2),
+//               //       borderRadius: BorderRadius.circular(8),
+//               //     ),
+//               //     child: TabBar(
+//               //       tabAlignment: TabAlignment.center,
+//               //       automaticIndicatorColorAdjustment: true,
+//               //       isScrollable: true,
+//               //       padding:
+//               //           const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+//               //       indicatorSize: TabBarIndicatorSize.tab,
+//               //       indicator: BoxDecoration(
+//               //         color: Colors.white,
+//               //         borderRadius: BorderRadius.circular(8),
+//               //       ),
+//               //       labelColor: Colors.pink,
+//               //       unselectedLabelColor: Colors.pink.shade300,
+//               //       dividerColor: Colors.transparent,
+//               //       labelStyle: const TextStyle(
+//               //           fontSize: 12.5,
+//               //           color: Color(0xffFF3997),
+//               //           fontFamily: 'Bricolage-R'),
+//               //       tabs: [
+//               //         const Tab(text: "All"),
+//               //         Tab(
+//               //           child: Shimmer.fromColors(
+//               //             baseColor: const Color(0xffFF3997),
+//               //             highlightColor: Colors.white,
+//               //             child: const Text(
+//               //               "Best Matches",
+//               //             ),
+//               //           ),
+//               //         ),
+//               //         const Tab(text: "Sabai Job Partner"),
+//               //       ],
+//               //     ),
+//               //   ),
+//               //   const SizedBox(
+//               //     height: 15,
+//               //   ),
+//               //   const Expanded(
+//               //     child: TabBarView(
+//               //         children: [All(), BestMatches(), Partnerships()]),
+//               //   ),
+//               // ]
+
+// //old app bar
+// // appBar: AppBar(
+// //           title: Row(
+// //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// //             children: [
+// //               Row(
+// //                 mainAxisSize: MainAxisSize.min,
+// //                 children: [
+// //                   Transform.scale(
+// //                     scale: 0.7,
+// //                     child: CupertinoSwitch(
+// //                       activeTrackColor: primaryPinkColor,
+// //                       value: isSwitch,
+// //                       onChanged: (value) async {
+// //                         setState(() {
+// //                           isSwitch = value;
+// //                           if (isSwitch == true) {
+// //                             jobProvider.setLocatiobType('global');
+// //                             filterProvider.setLocationType('global');
+// //                           } else {
+// //                             jobProvider.setLocatiobType('local');
+// //                             filterProvider.setLocationType('local');
+// //                           }
+// //                         });
+// //                         await jobProvider.getJobs(true);
+// //                         await jobProvider.getBestMatchedJobs(true);
+// //                         await jobProvider.getPartnerJobs(true);
+// //                         await jobProvider.fetchPremiumJobs(true);
+// //                         await filterProvider.getFilterJobs(true);
+// //                       },
+// //                     ),
+// //                   ),
+// //                   Text(
+// //                     isSwitch == false ? 'Local Jobs' : 'Global Jobs',
+// //                     style: const TextStyle(
+// //                         fontFamily: 'Bricolage-M', fontSize: 10),
+// //                   ),
+// //                 ],
+// //               ),
+// //               const Spacer(),
+// //               // Center title
+// //               languageProvider.lan == 'English'
+// //                   ? const Text(
+// //                       "Jobs",
+// //                       style: TextStyle(
+// //                         fontFamily: 'Bricolage-M',
+// //                         fontSize: 19.53,
+// //                       ),
+// //                     )
+// //                   : const Text(
+// //                       "အလုပ်များ",
+// //                       style: TextStyle(
+// //                         fontFamily: 'Walone-B',
+// //                         fontSize: 19.53,
+// //                       ),
+// //                     ),
+// //               const Spacer(
+// //                 flex: 2,
+// //               ),
+// //             ],
+// //           ),
+// //           centerTitle: false,
+// //           actions: [
+// //             IconButton(
+// //               onPressed: () {
+// //                 Navigator.pushReplacement(
+// //                   context,
+// //                   MaterialPageRoute(
+// //                     builder: (context) => const NotificationPage(),
+// //                   ),
+// //                 );
+// //               },
+// //               icon: const Icon(
+// //                 CupertinoIcons.bell,
+// //                 color: Color(0xffFF3997),
+// //               ),
+// //             ),
+// //           ],
+// //           bottom: PreferredSize(
+// //             preferredSize:
+// //                 const Size.fromHeight(1.0), // Height of the bottom border
+// //             child: Container(
+// //               color: Colors.grey.shade300, // Border color
+// //               height: 1.0, // Border thickness
+// //             ),
+// //           ),
+// //           backgroundColor: const Color(0xffF0F1F2),
+// //           surfaceTintColor: Colors.transparent,
+// //           shadowColor: Colors.transparent,
+// //           automaticallyImplyLeading: false,
+// //         ),
+
+//               // // Motivational Quotes
+//               // SizedBox(
+//               //   height: 35,
+//               //   child: PageView.builder(
+//               //     physics: const NeverScrollableScrollPhysics(),
+//               //     scrollDirection: Axis.vertical,
+//               //     controller: _motivationalTextController,
+//               //     itemCount: _motivationalSlides.length,
+//               //     itemBuilder: (context, index) {
+//               //       return Row(
+//               //         children: [
+//               //           Image.asset(
+//               //             _motivationalSlides[index]['image']!,
+//               //             width: 28,
+//               //             height: 28,
+//               //           ),
+//               //           const SizedBox(
+//               //             width: 10,
+//               //           ),
+//               //           Expanded(
+//               //               child: Text(
+//               //             _motivationalSlides[index]['text']!,
+//               //             style: const TextStyle(
+//               //               fontFamily: 'Bricolage-M',
+//               //               fontSize: 12,
+//               //             ),
+//               //           ))
+//               //         ],
+//               //       );
+//               //     },
+//               //   ),
+//               // ),
+
+//               // original code
+//               // if (isSearching) ...[
+//               //   Expanded(
+//               //     child: ListView.builder(
+//               //         itemCount: filterJobs.length,
+//               //         itemBuilder: (context, index) {
+//               //           var job = filterJobs[index];
+//               //           var jobInfo = job['info'] as Map<String, dynamic>;
+//               //           return WorkCard(
+//               //             jobTitle: jobInfo['title'],
+//               //             isPartner: jobInfo['is_partner'],
+//               //             companyName: jobInfo['company_name'],
+//               //             location: jobInfo['location'],
+//               //             maxSalary: jobInfo['salary_max'],
+//               //             minSalary: jobInfo['salary_min'],
+//               //             currency: jobInfo['currency'],
+//               //             jobId: jobInfo['id'],
+//               //             closingAt: jobInfo['closing_at'],
+//               //             safetyLevel: jobInfo['safety_level'],
+//               //             viewCount: jobInfo['views_count'],
+//               //           );
+//               //         }),
+//               //   ),
+//               // ]
+//               // else ...[
+//               //   Container(
+//               //     decoration: BoxDecoration(
+//               //       color: const Color(0xffF0F1F2),
+//               //       borderRadius: BorderRadius.circular(8),
+//               //     ),
+//               //     height: 50,
+//               //     child: Row(
+//               //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+//               //       children: List.generate(
+//               //         getNavItems(languageProvider).length,
+//               //         (index) => GestureDetector(
+//               //           onTapDown: (_) {
+//               //             // Animate scale down when tapped
+//               //             _menuItemAnimations[index].forward();
+//               //           },
+//               //           onTapUp: (_) {
+//               //             // Animate scale back and navigate
+//               //             _menuItemAnimations[index].reverse();
+//               //             _navigateToPage(index);
+//               //           },
+//               //           onTapCancel: () {
+//               //             // Animate scale back if tap is cancelled
+//               //             _menuItemAnimations[index].reverse();
+//               //           },
+//               //           child: ScaleTransition(
+//               //             scale: _menuItemScaleAnimations[index],
+//               //             child: Container(
+//               //               padding: const EdgeInsets.symmetric(
+//               //                   horizontal: 10, vertical: 8),
+//               //               decoration: BoxDecoration(
+//               //                 color: _selectedIndex == index
+//               //                     ? Colors.white
+//               //                     : Colors.transparent,
+//               //                 borderRadius: BorderRadius.circular(8),
+//               //               ),
+//               //               child: Text(
+//               //                 getNavItems(languageProvider)[index],
+//               //                 style: const TextStyle(
+//               //                   color: Color(0xffFF3997),
+//               //                   fontFamily: 'Bricolage-R',
+//               //                   fontSize: 12.5,
+//               //                 ),
+//               //               ),
+//               //             ),
+//               //           ),
+//               //         ),
+//               //       ),
+//               //     ),
+//               //   ),
+//               //   const SizedBox(
+//               //     height: 15,
+//               //   ),
+//               //   Expanded(
+//               //     child: SlideTransition(
+//               //       position: _offsetAnimation,
+//               //       child: _pages[_selectedIndex],
+//               //     ),
+//               //   ),
+//               // ],
+//             ],
+//           ),
+//         ),
