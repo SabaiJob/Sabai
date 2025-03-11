@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sabai_app/screens/payment.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

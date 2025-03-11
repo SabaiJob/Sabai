@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/qr.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 

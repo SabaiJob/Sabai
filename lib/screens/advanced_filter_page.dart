@@ -8,7 +8,7 @@ import 'package:sabai_app/components/reusable_slider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 import '../services/job_provider.dart';
 

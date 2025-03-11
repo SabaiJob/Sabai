@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
+import 'package:sabai_app/screens/auth_pages/token_service.dart';
 import 'package:sabai_app/screens/walkthrough.dart';
 
 class ApiService {

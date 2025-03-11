@@ -37,7 +37,7 @@ class SabaiAppData {
     'ပက်ချဘွန်း',
   ];
 
-  final List<String> _genderItemsInEng = ['Male', 'Female', 'Other'];
+  final List<String> _genderItemsInEng = ['Male', 'Female', 'Rather not to tell'];
 
   final List<String> _genderItemsInMm = ['ကျား', 'မ', 'အခြား'];
 

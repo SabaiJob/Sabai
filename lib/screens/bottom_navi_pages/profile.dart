@@ -13,7 +13,7 @@ import 'package:sabai_app/screens/on_premium_page.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/privacy_policy.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/screens/terms_and_conditions_page.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';

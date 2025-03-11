@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
+import 'package:sabai_app/screens/auth_pages/token_service.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';

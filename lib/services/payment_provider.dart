@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import '../screens/registration_&_login_pages/api_service.dart';
+import '../screens/auth_pages/api_service.dart';
 
 class PaymentProvider extends ChangeNotifier {
   String _purchaseDate = '';

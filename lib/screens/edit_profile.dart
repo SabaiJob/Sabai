@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 
 class EditProfile extends StatefulWidget {
   final String initialName;

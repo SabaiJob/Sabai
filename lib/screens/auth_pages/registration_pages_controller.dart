@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/api_service.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/otp_code_verification_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/complete_user_registration_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/initial_registration_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/select_job_category_page.dart';
-import 'package:sabai_app/screens/registration_&_login_pages/token_service.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/auth_controller.dart';
+import 'package:sabai_app/screens/auth_pages/otp_code_verification_page.dart';
+import 'package:sabai_app/screens/auth_pages/complete_user_registration_page.dart';
+import 'package:sabai_app/screens/auth_pages/initial_registration_page.dart';
+import 'package:sabai_app/screens/auth_pages/select_job_category_page.dart';
+import 'package:sabai_app/screens/auth_pages/token_service.dart';
 import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
@@ -35,61 +35,88 @@ class _RegistrationPagesControllerState
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _yearsController = TextEditingController();
-  final TextEditingController _passportController = TextEditingController();
   final TextEditingController _pinCodeController = TextEditingController();
 
-  List<Map<String, dynamic>> _jobCategories = [];
-  //register user
-  Future<void> registerUser() async {
-    const String url =
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/register/';
+  int _currentPage = 0;
 
-    String selectedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+  // Gender
+  String? _selectedGender;
+  bool _isGenderError = false;
+  String _genderErrorMessage = '';
 
-    final Map<String, dynamic> requestBody = {
-      "phone": _phoneNumberController.text,
-      "full_name": _fullNameController.text,
-      "email": _emailController.text,
-      "date_of_birth": selectedDate,
-      "gender": _selectedGender,
-    };
+  //Age
+  String? selectedAge;
+  bool _isAgeError = false;
+  String _ageErrorMessage = '';
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(requestBody),
-      );
+  // Thai Language Level
+  String? _selectedLanguageLevel;
+  bool _isLanguageLevelError = false;
+  String? _languageLevelErrorMessage = '';
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        //OTP request
-        requestOTP();
-        setState(() {
-          _currentPage++;
-          _progressStep++;
-        });
-      } else {
-        // Handle errors
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Registration failed: ${response.body}'),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-          ),
-        );
-      }
+  //Status
+  String? selectedStatus;
+  bool _isStatusError = false;
+  String _statusErrorMessage = '';
+
+  //has_passport
+  bool? has_passport;
+
+  //has_work_permit
+  bool? has_work_permit;
+
+  //has_id_certificate
+  bool? has_id_certificate;
+
+  void updateStatus() {
+    // Ensure they are not null before updating (optional handling)
+    has_passport ??= false;
+    has_work_permit ??= false;
+    has_id_certificate ??= false;
+
+    // Reset all
+    has_passport = false;
+    has_work_permit = false;
+    has_id_certificate = false;
+    switch (selectedStatus) {
+      case 'Passport':
+        has_passport = true;
+        break;
+      case 'Work Permit (Pink Card)':
+        has_work_permit = true;
+        break;
+      case 'Certificate of Identification':
+        has_id_certificate = true;
+        break;
+      case 'Still Applying':
+        break;
+      default:
+        return;
     }
   }
 
+  List<Map<String, dynamic>> _jobCategories = [];
+
+  final AuthController _authController = AuthController();
+  void initialRegister() async {
+    try {
+      await _authController.initialSignIn(
+          context: context,
+          fullName: _fullNameController.text,
+          phoneNum: _phoneNumberController.text,
+          endPoint: '/auth/register/',
+          nextScreen: () {
+            requestOTP();
+            setState(() {
+              _currentPage++;
+              _progressStep++;
+            });
+          });
+    } catch (e) {
+      print(e);
+    }
+  }
+  
   //request OTP
   Future<void> requestOTP() async {
     const String url =
@@ -131,135 +158,57 @@ class _RegistrationPagesControllerState
     }
   }
 
-  int _currentPage = 0;
-
-  String? _selectedGender;
-  bool _isGenderError = false;
-  String _genderErrorMessage = '';
-
-  bool _isBirthdayError = false;
-  String _birthdayErrorMessage = '';
-  DateTime? _selectedDate;
-
-  String? _selectedProvince;
-  bool _isProvinceError = false;
-  String? _provinceErrorMessage = '';
-
-  String? _selectedDurationEng = 'Years';
-  String? _selectedDurationMM = 'နှစ်';
-  bool _isDurationError = false;
-  String? _durationErrorMessage = '';
-
-  String? _selectedLanguageLevel;
-  bool _isLanguageLevelError = false;
-  String? _languageLevelErrorMessage = '';
-
-  String? _selectedOptionPp;
-  bool _isSelectedOptionPpError = false;
-  String? _pPErrorMessage = '';
-
-  String? _selectedOptionWp;
-  bool _isSelectedOptionWpError = false;
-  String? _wPErrorMessage = '';
-
-  bool? _isPassportFieldError = false;
-  String? _passportFieldErrorMessage = '';
-
   int _progressStep = 0;
-
-  void _handleDateSelected(DateTime date) {
-    setState(() {
-      _selectedDate = date;
-      _isBirthdayError = false;
-    });
-    //print('Selected Date: $date');
-  }
 
   // User Registration
   void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
     if (_currentPage == _pageController.initialPage) {
-      _isGenderError = _selectedGender == null;
-      _isBirthdayError = _selectedDate == null;
-      setState(() {
-        _genderErrorMessage = _isGenderError ? " Gender is required " : '';
-        _birthdayErrorMessage =
-            _isBirthdayError ? ' Birthday is required ' : '';
-      });
-      bool isFormValid = _formKey.currentState!.validate();
-      bool noErrors = !_isGenderError && !_isBirthdayError;
-      if (isFormValid && noErrors) {
-        print('Your Full Name: ${_fullNameController.text}');
-        print('Your Gender: ${_selectedGender}');
-        print('Your Birthday: ${_selectedDate}');
-        print('Your Phone Number: ${_phoneNumberController.text}');
-        print('Your email address: ${_emailController.text}');
-        phoneNumberProvider
-            .setPhoneNumber(_phoneNumberController.text.toString().trim());
-        // Move to the next page
-        // _pageController.nextPage(
-        //   duration: const Duration(milliseconds: 300),
-        //   curve: Curves.easeInOut,
-        // );
-        registerUser();
-      }
+      phoneNumberProvider
+          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+      initialRegister();
     }
   }
 
   // Profile Set Up (additional info)
   void _handleProfileSetUp() async {
     if (_currentPage == 2) {
-      _isProvinceError = _selectedProvince == null;
       _isLanguageLevelError = _selectedLanguageLevel == null;
-      _isDurationError = _yearsController.text.trim().isEmpty;
-      _isSelectedOptionPpError = _selectedOptionPp == null;
-      _isSelectedOptionWpError = _selectedOptionWp == null;
-      _isPassportFieldError =
-          _selectedOptionPp == 'Yes' && _passportController.text.trim().isEmpty;
-
+      _isGenderError = _selectedGender == null;
+      _isAgeError = selectedAge == null;
+      _isStatusError = selectedStatus == null;
       setState(() {
-        _provinceErrorMessage =
-            _isProvinceError ? ' Province is required ' : '';
-        _durationErrorMessage =
-            _isDurationError ? ' Timeline is required ' : '';
         _languageLevelErrorMessage =
             _isLanguageLevelError ? ' Language Level is required ' : '';
-        _pPErrorMessage =
-            _isSelectedOptionPpError ? ' You need to answer this ' : '';
-        _wPErrorMessage =
-            _isSelectedOptionWpError ? ' You need to answer this ' : '';
-        _passportFieldErrorMessage = _isPassportFieldError!
-            ? ' You need to fill your passport number '
-            : '';
+        _genderErrorMessage = _isGenderError ? ' Gender is required ' : '';
+        _ageErrorMessage = _isAgeError ? ' Age is required ' : '';
+        _statusErrorMessage = _isStatusError ? ' Status is required ' : '';
       });
-      bool noErrors = !_isProvinceError &&
-          !_isLanguageLevelError &&
-          !_isDurationError &&
-          !_isSelectedOptionPpError &&
-          !_isSelectedOptionWpError &&
-          !_isPassportFieldError!;
+      bool noErrors = !_isLanguageLevelError &
+          !_isGenderError &
+          !_isAgeError &
+          !_isStatusError;
       if (noErrors) {
-        print('Your Province : ${_selectedProvince}');
-        print(
-            'Duration in Timeline : ${_yearsController.text} $_selectedDurationEng');
+        updateStatus();
+        print('Your Gender: $_selectedGender');
+        print('Your Age: $selectedAge');
         print('Your Thai Language Proficiency : $_selectedLanguageLevel');
-        print('Do you have passport ? Y/N : $_selectedOptionPp');
-        print('Your passport number: ${_passportController.text}');
-        print('Do you have work permit ? Y/N $_selectedOptionWp');
+        print(
+            'Your status: Passport: $has_passport, WP: $has_work_permit, CI: $has_id_certificate');
+        print('Your email (if any): ${_emailController.text}');
         print(
             'Congratulations! You have completed all the required fields for the registration');
-
         //post user's info api
         try {
           final response = await ApiService.post(
             '/auth/userinfo/',
             {
-              "province": _selectedProvince,
-              "duration_in_thailand":
-                  '${_yearsController.text} $_selectedDurationEng',
+              "age": selectedAge,
+              "gender": _selectedGender,
+              "email": _emailController.text,
               "thai_proficiency": _selectedLanguageLevel,
-              "has_passport": _selectedOptionPp,
-              "passport_number": _phoneNumberController.text,
-              "has_work_permit": _selectedOptionWp,
+              "has_passport": has_passport,
+              "has_work_permit": has_work_permit,
+              "has_id_ceritificate": has_id_certificate,
             },
           );
           if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -303,33 +252,12 @@ class _RegistrationPagesControllerState
   void _handleOTPVerificationPage(
       String enteredPinCode, JobProvider jobProvider) async {
     if (_currentPage == 1) {
-      String enteredPinCode = _pinCodeController.text.trim();
-
-      //modified part
-      // if (enteredPinCode == sabaiAppData.fixedPinNumber) {
-      //   jobProvider.setGuest(false);
-      //   _pageController.nextPage(
-      //     duration: const Duration(milliseconds: 300),
-      //     curve: Curves.easeInOut,
-      //   );
-      //   setState(() {
-      //     _currentPage++;
-      //     _progressStep++;
-      //   });
-      // }
-
       const String url =
           'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
-
-      String selectedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
-
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
-        "full_name": _fullNameController.text,
-        "email": _emailController.text,
-        "date_of_birth": selectedDate,
-        "gender": _selectedGender,
+        "full_name": _fullNameController.text
       };
 
       try {
@@ -376,7 +304,7 @@ class _RegistrationPagesControllerState
     }
   }
 
-  Future<void> completeRrgristration(
+  Future<void> completeRegistration(
       List selectedJobCategories, LanguageProvider languageProvider) async {
     try {
       final response = await ApiService.post('/auth/user/job-preferences/',
@@ -432,7 +360,7 @@ class _RegistrationPagesControllerState
         print('did you choose something? Y/N ${isAnyJobCategorySelected}');
         print('Selected Categories: ${selectedJobCategories}');
 
-        completeRrgristration(selectedJobCategories, languageProvider);
+        completeRegistration(selectedJobCategories, languageProvider);
       });
     }
   }
@@ -530,88 +458,53 @@ class _RegistrationPagesControllerState
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 InitialRegistrationPage(
-                    formKey: _formKey,
-                    fullNameController: _fullNameController,
-                    phoneNumberController: _phoneNumberController,
-                    emailController: _emailController,
-                    selectedGender: _selectedGender,
-                    isGenderError: _isGenderError,
-                    genderErrorMessage: _genderErrorMessage,
-                    selectedDate: _selectedDate,
-                    isBirthdayError: _isBirthdayError,
-                    birthdayErrorMessage: _birthdayErrorMessage,
-                    handleDateSelected: _handleDateSelected,
-                    onGenderChanged: (value) {
-                      setState(() {
-                        _selectedGender = value;
-                        _isGenderError = false;
-                      });
-                    }),
+                  formKey: _formKey,
+                  fullNameController: _fullNameController,
+                  phoneNumberController: _phoneNumberController,
+                ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     }),
                 CompleteUserInfoPage(
-                    isProvinceError: _isProvinceError,
-                    selectedProvince: _selectedProvince,
-                    whenProvinceOnChanged: (value) {
-                      setState(() {
-                        _selectedProvince = value;
-                        _isProvinceError = false;
-                      });
-                    },
-                    provinceErrorMessage: _provinceErrorMessage!,
-                    yearsController: _yearsController,
-                    whenYearsOnChanged: (value) {
-                      setState(() {
-                        _isDurationError = false;
-                      });
-                    },
-                    isDurationError: _isDurationError,
-                    selectedDurationInEng: _selectedDurationEng!,
-                    selectedDurationInMm: _selectedDurationMM!,
-                    whenDurationOnChanged: (value) {
-                      setState(() {
-                        _selectedDurationEng = value;
-                      });
-                    },
-                    durationErrorMessage: _durationErrorMessage!,
-                    isLanguageLevelError: _isLanguageLevelError,
-                    selectedLanguageLevel: _selectedLanguageLevel,
-                    whenLanguageLevelOnChanged: (value) {
-                      setState(() {
-                        _selectedLanguageLevel = value;
-                        _isLanguageLevelError = false;
-                      });
-                    },
-                    languageLevelErrorMessage: _languageLevelErrorMessage!,
-                    isSelectedOptionPpError: _isSelectedOptionPpError,
-                    pPErrorMessage: _pPErrorMessage!,
-                    selectedOptionPp: _selectedOptionPp,
-                    whenPpRadioButtonOnChoosen: (value) {
-                      setState(() {
-                        _selectedOptionPp = value;
-                        _isSelectedOptionPpError = false;
-                      });
-                    },
-                    passportController: _passportController,
-                    whenPassportOnChanged: (value) {
-                      setState(() {
-                        _isPassportFieldError = false;
-                      });
-                    },
-                    isPassportFieldError: _isPassportFieldError!,
-                    passportFieldErrorMessage: _passportFieldErrorMessage!,
-                    isSelectedOptionWpError: _isSelectedOptionWpError,
-                    selectedOptionWp: _selectedOptionWp,
-                    wPErrorMessage: _wPErrorMessage!,
-                    whenWpRadioButtonOnChoosen: (value) {
-                      setState(() {
-                        _selectedOptionWp = value;
-                        _isSelectedOptionWpError = false;
-                      });
-                    }),
+                  isLanguageLevelError: _isLanguageLevelError,
+                  selectedLanguageLevel: _selectedLanguageLevel,
+                  whenLanguageLevelOnChanged: (value) {
+                    setState(() {
+                      _selectedLanguageLevel = value;
+                      _isLanguageLevelError = false;
+                    });
+                  },
+                  languageLevelErrorMessage: _languageLevelErrorMessage,
+                  selectedGender: _selectedGender,
+                  genderErrorMessage: _genderErrorMessage,
+                  isGenderError: _isGenderError,
+                  onGenderChanged: (value) {
+                    setState(() {
+                      _selectedGender = value;
+                      _isGenderError = false;
+                    });
+                  },
+                  selectedAge: selectedAge ?? '',
+                  whenAgeOnChange: (value) {
+                    setState(() {
+                      selectedAge = value!;
+                    });
+                  },
+                  selectedStatus: selectedStatus ?? '',
+                  whenStatusOnChange: (value) {
+                    setState(() {
+                      selectedStatus = value!;
+                      updateStatus();
+                    });
+                  },
+                  emailController: _emailController,
+                  isAgeError: _isAgeError,
+                  ageErrorMessage: _ageErrorMessage,
+                  isStatusError: _isStatusError,
+                  statusErrorMessage: _statusErrorMessage,
+                ),
                 SelectJobCategoryPage(
                     jobCategoryLength: _jobCategories.length,
                     jobCategoryList: _jobCategories,
@@ -620,16 +513,6 @@ class _RegistrationPagesControllerState
                         _jobCategories[index!]['selected'] = value!;
                       });
                     })
-                // SelectJobCategoryPage(
-                //   jobCategoryLength: sabaiAppData.jobCategoryInEng.length,
-                //   jobCategoryList: sabaiAppData.jobCategoryInEng,
-                //   whenOnChanged: (value, index) {
-                //     setState(() {
-                //       sabaiAppData.jobCategoryInEng[index!]['selected'] =
-                //           value!;
-                //     });
-                //   },
-                // ),
               ],
             ))
           ],
@@ -689,18 +572,3 @@ class _RegistrationPagesControllerState
     );
   }
 }
-
-//back button
-// if (_currentPage > 0)
-//   TextButton(
-//     onPressed: () {
-//       _pageController.previousPage(
-//         duration: const Duration(milliseconds: 300),
-//         curve: Curves.easeInOut,
-//       );
-//       setState(() {
-//         _currentPage--;
-//       });
-//     },
-//     child: const Text("Back"),
-//   ),
