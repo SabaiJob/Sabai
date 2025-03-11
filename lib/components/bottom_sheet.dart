@@ -250,22 +250,26 @@ class BottomSheetContent extends StatelessWidget {
                     width: 10,
                   ),
                   languageProvider.lan == 'English'
-                      ? Text(
-                          text2,
-                          style: const TextStyle(
-                            color: Color(0xff41464B),
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.63,
+                      ? Expanded(
+                        child: Text(
+                            text2,
+                            style: const TextStyle(
+                              color: Color(0xff41464B),
+                              fontFamily: 'Bricolage-R',
+                              fontSize: 15.63,
+                            ),
                           ),
-                        )
-                      : Text(
-                          text2,
-                          style: const TextStyle(
-                            color: Color(0xff41464B),
-                            fontFamily: 'Bricolage-B',
-                            fontSize: 14,
+                      )
+                      : Expanded(
+                        child: Text(
+                            text2,
+                            style: const TextStyle(
+                              color: Color(0xff41464B),
+                              fontFamily: 'Bricolage-B',
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
+                      ),
                 ],
               ),
               Row(

@@ -24,7 +24,7 @@ class _ReusableRadiobuttonListtilesState
   Widget build(BuildContext context) {
     return RadioListTile(
       contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
-      radioScaleFactor: 0.8,
+      //radioScaleFactor: 0.8,
       title: Text(
         widget.title,
         style: const TextStyle(

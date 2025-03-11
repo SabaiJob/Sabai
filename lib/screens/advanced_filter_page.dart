@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_label.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
+import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
+import 'package:sabai_app/services/language_provider.dart';
 import '../services/job_provider.dart';
 
 class AdvancedFilterPage extends StatefulWidget {
@@ -20,6 +23,11 @@ class AdvancedFilterPage extends StatefulWidget {
 }
 
 class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
+//for new search bar
+  bool isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
+  String searchQuery = "";
+
   // get job categories
   List<Map<String, dynamic>> _jobCategories = [];
   Future<void> getJobCategory() async {
@@ -182,10 +190,22 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   Widget build(BuildContext context) {
     SabaiAppData sabaiAppData = SabaiAppData();
     var jobProvider = Provider.of<JobProvider>(context);
-    final allJobs = jobProvider.allTypeJobs
-        .where((job) => job['type'] == 'job')
-        .map((job) => job['info']['title'])
-        .toList();
+    //for new searchbar
+    var languageProvider = Provider.of<LanguageProvider>(context);
+    final jobs =
+        jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
+    final filterJobs = jobs.where((job) {
+      final jobInfo = job['info'] as Map<String, dynamic>;
+      final jobTitle = jobInfo['title'] as String;
+      bool matchesQuery =
+          jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
+      return matchesQuery;
+    }).toList();
+
+    // final allJobs = jobProvider.allTypeJobs
+    //     .where((job) => job['type'] == 'job')
+    //     .map((job) => job['info']['title'])
+    //     .toList();
     var jobNameItems = jobProvider.allTypeJobs
         .where((job) => job['type'] == 'job')
         .map((job) => DropdownItem(
@@ -227,363 +247,467 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       backgroundColor: const Color(0xFFF7F7F7),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //Job Name
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Job Name',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
-              ),
-              // Job Name Dropdown with search bar
-              SizedBox(
-                width: 343,
-                child: MultiDropdown(
-                  singleSelect: true,
-                  onSelectionChange: (selectedItems) {
-                    setState(() {
-                      selectedJobNames = selectedItems;
-                    });
-                  },
-                  enabled: true,
-                  items: jobNameItems,
-                  fieldDecoration: const FieldDecoration(
-                    backgroundColor: Colors.white,
-                    hintText: 'Select Job Name',
-                    hintStyle: textfieldHintTextStyleEng,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                        color: Color(0xFFF0F1F2),
-                      ),
-                    ),
-                  ),
-                  searchEnabled: true,
-                  searchDecoration: const SearchFieldDecoration(
-                    searchIcon: Icon(
-                      Icons.search,
-                      color: primaryPinkColor,
-                    ),
-                    hintText: 'Search Job By Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                        color: Color(0xFFF0F1F2),
-                      ),
-                    ),
-                  ),
-                  chipDecoration: const ChipDecoration(
-                    wrap: true,
-                    spacing: 8,
-                    runSpacing: 10,
-                    deleteIcon: Icon(
-                      Icons.close,
-                      size: 11,
-                      color: primaryPinkColor,
-                    ),
-                    labelStyle: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontSize: 12,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  dropdownDecoration: const DropdownDecoration(
-                    marginTop: 5,
-                    maxHeight: 212,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  dropdownItemDecoration: const DropdownItemDecoration(
-                      selectedIcon: Icon(
-                    Icons.check_box,
-                    size: 20,
-                    color: primaryPinkColor,
-                  )),
-                ),
-              ),
-              // Job Category
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Job Category',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
-              ),
-              // Job Category
-              Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                spacing: 10.0,
-                runSpacing: 1.5,
-                children: List.generate(_jobCategories.length, (index) {
-                  final jobCategory = _jobCategories[index];
-                  return ChoiceChip(
-                    showCheckmark: false,
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          jobCategory['name'],
-                          style: choiceChipItemStyle,
+        child: Column(
+          children: [
+            Container(
+              width: 295,
+              height: 40,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: languageProvider.lan == 'English'
+                      ? 'Search for job'
+                      : 'အလုပ်များရှာမယ်',
+                  hintStyle: languageProvider.lan == 'English'
+                      ? GoogleFonts.dmSans(
+                          textStyle: const TextStyle(
+                            color: Color(0xff989EA4),
+                            fontSize: 14,
+                          ),
+                        )
+                      : const TextStyle(
+                          fontFamily: 'Walone-R',
+                          color: Color(0xff989EA4),
+                          fontSize: 14,
                         ),
-                        Image.network(
-                          jobCategory['image'],
-                          width: 15,
-                          height: 15,
-                        ),
-                      ],
+                  prefixIcon: IconButton(
+                    icon: Icon(
+                      // searchQuery.isEmpty &&
+                      isSearching ? Icons.clear : Icons.search,
+                      color: const Color(0xffFF3997),
                     ),
-                    selected: selectedJobCategoryIndices.contains(index),
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          selectedJobCategoryIndices.add(index);
-                        } else {
-                          selectedJobCategoryIndices.remove(index);
-                        }
-                      });
+                    onPressed: () {
+                      if (isSearching) {
+                        FocusScope.of(context).unfocus();
+                        // Clear the search query and reset search state
+                        _searchController.clear();
+                        setState(() {
+                          searchQuery = ""; // Clear search query
+                          isSearching = false; // Switch back to search icon
+                        });
+                      }
                     },
-                    selectedColor: Colors.transparent,
-                    backgroundColor: Colors.white,
-                    side: BorderSide(
-                      color: selectedJobCategoryIndices.contains(index)
-                          ? Colors.pink
-                          : Colors.transparent,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Color(0xffF0F1F2),
                       width: 2,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  );
-                }),
-              ),
-              // Job Location
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Job Location',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
-              ),
-              //Job Location dropdown
-              SizedBox(
-                width: 343,
-                child: MultiDropdown(
-                  singleSelect: true,
-                  onSelectionChange: (selectedItems) {
-                    setState(() {
-                      selectedJobLocations = selectedItems;
-                    });
-                  },
-                  enabled: true,
-                  items: jobLocation,
-                  fieldDecoration: const FieldDecoration(
-                    backgroundColor: Colors.white,
-                    hintText: 'Select Job Location',
-                    hintStyle: textfieldHintTextStyleEng,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                        color: Color(0xFFF0F1F2),
-                      ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Color(0xffFF3997), // Border color when not focused
+                      width: 1,
                     ),
                   ),
-                  searchEnabled: true,
-                  searchDecoration: const SearchFieldDecoration(
-                    searchIcon: Icon(
-                      Icons.search,
-                      color: primaryPinkColor,
-                    ),
-                    hintText: 'Search Job By Province',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                        color: Color(0xFFF0F1F2),
-                      ),
-                    ),
-                  ),
-                  chipDecoration: const ChipDecoration(
-                    wrap: true,
-                    spacing: 8,
-                    runSpacing: 10,
-                    deleteIcon: Icon(
-                      Icons.close,
-                      size: 11,
-                      color: primaryPinkColor,
-                    ),
-                    labelStyle: TextStyle(
-                      fontFamily: 'Bricolage-R',
-                      fontSize: 12,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  dropdownDecoration: const DropdownDecoration(
-                    marginTop: 5,
-                    maxHeight: 212,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  dropdownItemDecoration: const DropdownItemDecoration(
-                      selectedIcon: Icon(
-                    Icons.check_box,
-                    size: 20,
-                    color: primaryPinkColor,
-                  )),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 17),
                 ),
+                onTap: () {
+                  setState(() {
+                    isSearching = true; // Activate search mode
+                  });
+                },
+                onChanged: (val) {
+                  setState(() {
+                    searchQuery = val; // Update the search query
+                  });
+                },
               ),
-              // Job Type
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Job Type',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
+            ),
+            if (isSearching) ...[
+              Expanded(
+                child: ListView.builder(
+                    itemCount: filterJobs.length,
+                    itemBuilder: (context, index) {
+                      var job = filterJobs[index];
+                      var jobInfo = job['info'] as Map<String, dynamic>;
+                      // return WorkCard(
+                      //  jobTitle: jobInfo['title'],
+                      //        isPartner: jobInfo['is_partner'],
+                      //        companyName: jobInfo['company_name'],
+                      //        location: jobInfo['location'],
+                      //        maxSalary: jobInfo['salary_max'],
+                      //     minSalary: jobInfo['salary_min'],
+                      //      currency: jobInfo['currency'],
+                      //       jobId: jobInfo['id'],
+                      //       closingAt: jobInfo['closing_at'],
+                      //      safetyLevel: jobInfo['safety_level'],
+                      //       viewCount: jobInfo['views_count'],
+                      //     );
+                      return SizedBox();
+                    }),
               ),
-              //Job Type Radio Button
-              Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                spacing: 10.0,
-                runSpacing: 1.5,
-                children: List.generate(sabaiAppData.jobTypes.length, (index) {
-                  final jobType = sabaiAppData.jobTypes[index];
-                  return ChoiceChip(
-                    showCheckmark: false,
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          jobType,
-                          style: choiceChipItemStyle,
+            ]
+            //Job Name
+            else ...[
+              Expanded(
+                child: ListView(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Job Name',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
+                    ),
+                    // Job Name Dropdown with search bar
+                    SizedBox(
+                      width: 343,
+                      child: MultiDropdown(
+                        singleSelect: true,
+                        onSelectionChange: (selectedItems) {
+                          setState(() {
+                            selectedJobNames = selectedItems;
+                          });
+                        },
+                        enabled: true,
+                        items: jobNameItems,
+                        fieldDecoration: const FieldDecoration(
+                          backgroundColor: Colors.white,
+                          hintText: 'Select Job Name',
+                          hintStyle: textfieldHintTextStyleEng,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(
+                              color: Color(0xFFF0F1F2),
+                            ),
+                          ),
                         ),
+                        searchEnabled: true,
+                        searchDecoration: const SearchFieldDecoration(
+                          searchIcon: Icon(
+                            Icons.search,
+                            color: primaryPinkColor,
+                          ),
+                          hintText: 'Search Job By Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(
+                              color: Color(0xFFF0F1F2),
+                            ),
+                          ),
+                        ),
+                        chipDecoration: const ChipDecoration(
+                          wrap: true,
+                          spacing: 8,
+                          runSpacing: 10,
+                          deleteIcon: Icon(
+                            Icons.close,
+                            size: 11,
+                            color: primaryPinkColor,
+                          ),
+                          labelStyle: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 12,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        dropdownDecoration: const DropdownDecoration(
+                          marginTop: 5,
+                          maxHeight: 212,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        dropdownItemDecoration: const DropdownItemDecoration(
+                            selectedIcon: Icon(
+                          Icons.check_box,
+                          size: 20,
+                          color: primaryPinkColor,
+                        )),
+                      ),
+                    ),
+                    // Job Category
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Job Category',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
+                    ),
+                    // Job Category
+                    Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.start,
+                      runAlignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      spacing: 10.0,
+                      runSpacing: 1.5,
+                      children: List.generate(_jobCategories.length, (index) {
+                        final jobCategory = _jobCategories[index];
+                        return ChoiceChip(
+                          showCheckmark: false,
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                jobCategory['name'],
+                                style: choiceChipItemStyle,
+                              ),
+                              Image.network(
+                                jobCategory['image'],
+                                width: 15,
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                          selected: selectedJobCategoryIndices.contains(index),
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                selectedJobCategoryIndices.add(index);
+                              } else {
+                                selectedJobCategoryIndices.remove(index);
+                              }
+                            });
+                          },
+                          selectedColor: Colors.transparent,
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                            color: selectedJobCategoryIndices.contains(index)
+                                ? Colors.pink
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        );
+                      }),
+                    ),
+                    // Job Location
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Job Location',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
+                    ),
+                    //Job Location dropdown
+                    SizedBox(
+                      width: 343,
+                      child: MultiDropdown(
+                        singleSelect: true,
+                        onSelectionChange: (selectedItems) {
+                          setState(() {
+                            selectedJobLocations = selectedItems;
+                          });
+                        },
+                        enabled: true,
+                        items: jobLocation,
+                        fieldDecoration: const FieldDecoration(
+                          backgroundColor: Colors.white,
+                          hintText: 'Select Job Location',
+                          hintStyle: textfieldHintTextStyleEng,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(
+                              color: Color(0xFFF0F1F2),
+                            ),
+                          ),
+                        ),
+                        searchEnabled: true,
+                        searchDecoration: const SearchFieldDecoration(
+                          searchIcon: Icon(
+                            Icons.search,
+                            color: primaryPinkColor,
+                          ),
+                          hintText: 'Search Job By Province',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderSide: BorderSide(
+                              color: Color(0xFFF0F1F2),
+                            ),
+                          ),
+                        ),
+                        chipDecoration: const ChipDecoration(
+                          wrap: true,
+                          spacing: 8,
+                          runSpacing: 10,
+                          deleteIcon: Icon(
+                            Icons.close,
+                            size: 11,
+                            color: primaryPinkColor,
+                          ),
+                          labelStyle: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 12,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        dropdownDecoration: const DropdownDecoration(
+                          marginTop: 5,
+                          maxHeight: 212,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        dropdownItemDecoration: const DropdownItemDecoration(
+                            selectedIcon: Icon(
+                          Icons.check_box,
+                          size: 20,
+                          color: primaryPinkColor,
+                        )),
+                      ),
+                    ),
+                    // Job Type
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Job Type',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
+                    ),
+                    //Job Type Radio Button
+                    Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.start,
+                      runAlignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      spacing: 10.0,
+                      runSpacing: 1.5,
+                      children:
+                          List.generate(sabaiAppData.jobTypes.length, (index) {
+                        final jobType = sabaiAppData.jobTypes[index];
+                        return ChoiceChip(
+                          showCheckmark: false,
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                jobType,
+                                style: choiceChipItemStyle,
+                              ),
+                            ],
+                          ),
+                          selected: selectedJobTypeIndices.contains(index),
+                          // onSelected: (selected) {
+                          //   setState(() {
+                          //     if (selected) {
+                          //       selectedJobTypeIndices = [index];
+                          //     } else {
+                          //       selectedJobTypeIndices.clear();
+                          //     }
+                          //   });
+                          // },
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                selectedJobTypeIndices.add(index);
+                              } else {
+                                selectedJobTypeIndices.remove(index);
+                              }
+                            });
+                          },
+                          selectedColor: Colors.transparent,
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                            color: selectedJobTypeIndices.contains(index)
+                                ? Colors.pink
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        );
+                      }),
+                    ),
+                    // Thai Language Requirements
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Thai Language Requirement',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
+                    ),
+                    // Thai Language Requirements Radio Button
+                    Row(
+                      children: [
+                        ReusableRadioButton(
+                            rButtonValue: 'Yes',
+                            rButtonSelectedValue: selectedLanguageOption,
+                            rButtonChoosen: (value) {
+                              setState(() {
+                                selectedLanguageOption = value;
+                              });
+                            },
+                            rButtonName: 'Yes'),
+                        ReusableRadioButton(
+                            rButtonValue: 'No',
+                            rButtonSelectedValue: selectedLanguageOption,
+                            rButtonChoosen: (value) {
+                              setState(() {
+                                selectedLanguageOption = value;
+                                print(selectedLanguageOption);
+                              });
+                            },
+                            rButtonName: 'No'),
                       ],
                     ),
-                    selected: selectedJobTypeIndices.contains(index),
-                    // onSelected: (selected) {
-                    //   setState(() {
-                    //     if (selected) {
-                    //       selectedJobTypeIndices = [index];
-                    //     } else {
-                    //       selectedJobTypeIndices.clear();
-                    //     }
-                    //   });
-                    // },
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          selectedJobTypeIndices.add(index);
-                        } else {
-                          selectedJobTypeIndices.remove(index);
-                        }
-                      });
-                    },
-                    selectedColor: Colors.transparent,
-                    backgroundColor: Colors.white,
-                    side: BorderSide(
-                      color: selectedJobTypeIndices.contains(index)
-                          ? Colors.pink
-                          : Colors.transparent,
-                      width: 2,
+                    // Salary Range
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Salary Range',
+                          textStyle: lablelHolderEng,
+                          isStarred: false),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                    // Salary Range Slider
+                    ReusableSlider(
+                        minAmount: 1000.00,
+                        maxAmount: 9000.00,
+                        unit: 'THB',
+                        currentValue: currentValue,
+                        sliderOnChanged: (value) {
+                          setState(() {
+                            currentValue = value;
+                          });
+                        }),
+                    // Verification
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: ReusableLabelHolder(
+                          labelName: 'Verification',
+                          textStyle: TextStyle(
+                            fontFamily: 'Bricolage-M',
+                            fontSize: 15.63,
+                            color: Colors.black,
+                          ),
+                          isStarred: false),
                     ),
-                  );
-                }),
-              ),
-              // Thai Language Requirements
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Thai Language Requirement',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
-              ),
-              // Thai Language Requirements Radio Button
-              Row(
-                children: [
-                  ReusableRadioButton(
-                      rButtonValue: 'Yes',
-                      rButtonSelectedValue: selectedLanguageOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedLanguageOption = value;
-                        });
-                      },
-                      rButtonName: 'Yes'),
-                  ReusableRadioButton(
-                      rButtonValue: 'No',
-                      rButtonSelectedValue: selectedLanguageOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedLanguageOption = value;
-                          print(selectedLanguageOption);
-                        });
-                      },
-                      rButtonName: 'No'),
-                ],
-              ),
-              // Salary Range
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Salary Range',
-                    textStyle: lablelHolderEng,
-                    isStarred: false),
-              ),
-              // Salary Range Slider
-              ReusableSlider(
-                  minAmount: 1000.00,
-                  maxAmount: 9000.00,
-                  unit: 'THB',
-                  currentValue: currentValue,
-                  sliderOnChanged: (value) {
-                    setState(() {
-                      currentValue = value;
-                    });
-                  }),
-              // Verification
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: ReusableLabelHolder(
-                    labelName: 'Verification',
-                    textStyle: TextStyle(
-                      fontFamily: 'Bricolage-M',
-                      fontSize: 15.63,
-                      color: Colors.black,
+                    // Verification Radio Button
+                    Row(
+                      children: [
+                        ReusableRadioButton(
+                            rButtonValue: 'Yes',
+                            rButtonSelectedValue: selectedVerificationOption,
+                            rButtonChoosen: (value) {
+                              setState(() {
+                                selectedVerificationOption = value;
+                              });
+                            },
+                            rButtonName: 'Yes'),
+                        ReusableRadioButton(
+                            rButtonValue: 'No',
+                            rButtonSelectedValue: selectedVerificationOption,
+                            rButtonChoosen: (value) {
+                              setState(() {
+                                selectedVerificationOption = value;
+                              });
+                            },
+                            rButtonName: 'No'),
+                      ],
                     ),
-                    isStarred: false),
-              ),
-              // Verification Radio Button
-              Row(
-                children: [
-                  ReusableRadioButton(
-                      rButtonValue: 'Yes',
-                      rButtonSelectedValue: selectedVerificationOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedVerificationOption = value;
-                        });
-                      },
-                      rButtonName: 'Yes'),
-                  ReusableRadioButton(
-                      rButtonValue: 'No',
-                      rButtonSelectedValue: selectedVerificationOption,
-                      rButtonChoosen: (value) {
-                        setState(() {
-                          selectedVerificationOption = value;
-                        });
-                      },
-                      rButtonName: 'No'),
-                ],
-              ),
-            ],
-          ),
+                  ],
+                ),
+              )
+            ]
+          ],
         ),
       ),
       persistentFooterButtons: [
