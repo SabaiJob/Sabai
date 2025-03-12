@@ -68,6 +68,7 @@ class JobProvider extends ChangeNotifier {
       final response = await ApiService.get(
           '/jobs/search/?location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        print('hi this is from all jobs');
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
           final newJobs = data['results'];
@@ -129,7 +130,7 @@ class JobProvider extends ChangeNotifier {
 
     try {
       final response = await ApiService.get(
-          '/jobs/best-matches/?location_type=$locationType&page=$page');
+          '/jobs/search/?best_matches=true&location_type=$locationType');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
