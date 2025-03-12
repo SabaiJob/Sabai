@@ -109,7 +109,7 @@ class _JobListingPageState extends State<JobListingPage>
     });
 
     super.initState();
-    _autoScrollText();
+   // _autoScrollText();
     // Show the bottom sheet automatically after the screen loads
     if (widget.showBottomSheet) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -171,8 +171,8 @@ class _JobListingPageState extends State<JobListingPage>
     // for (var controller in _menuItemAnimations) {
     //   controller.dispose();
     // }
-    _motivationalTextController.dispose();
-    _timer?.cancel();
+    //_motivationalTextController.dispose();
+    //_timer?.cancel();
     super.dispose();
   }
 
