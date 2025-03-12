@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListTileButton extends StatelessWidget {
-  final Icon? ltLeading;
+  final Widget? ltLeading;
   final Widget? ltTitle;
   final Widget? ltTrailing;
   final Function()? navTo;
