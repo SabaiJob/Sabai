@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_label.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
-import 'package:sabai_app/components/work_card.dart';
+//import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';

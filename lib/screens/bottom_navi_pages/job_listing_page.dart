@@ -202,7 +202,7 @@ class _JobListingPageState extends State<JobListingPage>
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
-    //var filterProvider = Provider.of<JobFilterProvider>(context);
+    var filterProvider = Provider.of<JobFilterProvider>(context);
 
     return DefaultTabController(
       length: 3,
@@ -228,6 +228,23 @@ class _JobListingPageState extends State<JobListingPage>
             onChanged: (value) {
               setState(() {
                 selectedValue = value!;
+                if (selectedValue == 'Local Jobs' || selectedValue == 'Jobs for you' || selectedValue == 'Best Matched Jobs') {
+                  jobProvider.setLocatiobType('local');
+                  jobProvider.getJobs(true);
+                  jobProvider.getBestMatchedJobs(true);
+                  jobProvider.getPartnerJobs(true);
+                  jobProvider.fetchPremiumJobs(true);
+                  filterProvider.setLocationType('local');
+                  filterProvider.getFilterJobs(true);
+                } else if (selectedValue == 'Global Jobs') {
+                  jobProvider.setLocatiobType('global');
+                  jobProvider.getJobs(true);
+                  jobProvider.getBestMatchedJobs(true);
+                  jobProvider.getPartnerJobs(true);
+                  jobProvider.fetchPremiumJobs(true);
+                  filterProvider.setLocationType('global');
+                  filterProvider.getFilterJobs(true);
+                }
               });
             },
             iconStyleData: const IconStyleData(
@@ -261,20 +278,51 @@ class _JobListingPageState extends State<JobListingPage>
                     color: primaryPinkColor,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AdvancedFilterPage(),
+                // IconButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const AdvancedFilterPage(),
+                //       ),
+                //     );
+                //   },
+                //   icon: const Icon(
+                //     Icons.search,
+                //     color: primaryPinkColor,
+                //     size: 24,
+                //   ),
+                // ),
+                Badge(
+                    textColor: primaryPinkColor,
+                    backgroundColor: const Color(0xFFFED7EA),
+                    label:
+                        Text(filterProvider.calculateFilterCount().toString()),
+                    child: GestureDetector(
+                      onTap: jobProvider.isGuest == false
+                          ? () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AdvancedFilterPage(),
+                                ),
+                              );
+                              filterProvider.clearAllFilters();
+                              filterProvider.clearFilters();
+                              if (result != null) {
+                                filterProvider.updateFilterValues(result);
+                              }
+                            }
+                          : null,
+                      child: const Icon(
+                        CupertinoIcons.search,
+                        size: 24,
+                        color: primaryPinkColor,
                       ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.search,
-                    color: primaryPinkColor,
-                    size: 24,
-                  ),
+                    )),
+               const SizedBox(
+                  width: 20,
                 ),
               ],
             ),
@@ -288,12 +336,12 @@ class _JobListingPageState extends State<JobListingPage>
           ),
           child: selectedValue == 'Best Matched Jobs'
               ? const BestMatches()
-              : //const All(),
-              Center(
-                  child: const SizedBox(
-                    child: Text('No Data Available'),
-                  ),
-                ),
+              : const All(),
+          // Center(
+          //     child: const SizedBox(
+          //       child: Text('No Data Available'),
+          //     ),
+          //   ),
         ),
       ),
     );
