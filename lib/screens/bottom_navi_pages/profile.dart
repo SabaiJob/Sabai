@@ -16,6 +16,7 @@ import 'package:sabai_app/screens/pricing_plan.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/privacy_policy.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
+import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/screens/terms_and_conditions_page.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
@@ -442,12 +443,7 @@ class _ProfileState extends State<Profile> {
                           context,
                           MaterialPageRoute(
                             //RoseCountPage()
-                            builder: (context) => const ComingSoonPage(
-                              appBarTitle: Text(
-                                'Rose Count',
-                                style: appBarTitleStyleEng,
-                              ),
-                            ),
+                            builder: (context) => RoseCountPage(),
                           ),
                         );
                       },
