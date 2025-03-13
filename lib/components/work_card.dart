@@ -376,6 +376,7 @@ class WorkCard extends StatelessWidget {
                               )                         
                             ],
                           ),
+                          if(isClosedDay <= 3)  
                           language.lan == 'English'
                               ? Text(
                                   timeDifference.isNegative

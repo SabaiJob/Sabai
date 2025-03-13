@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_bulletpoints.dart';
@@ -30,7 +29,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           jobDetail = data['job'];
           interestedUser = data['job']['interested_by']['users'];
           isLoading = false;
-          //print(interestedUser[0]);
+          //print(jobDetail);
         });
       } else {
         print('Fetching error: ${response.body}');
@@ -40,11 +39,43 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     }
   }
 
+  List<dynamic> _jobCategories = [];
+  Future<void> fetchCategory() async {
+    try {
+      final response = await ApiService.get('/jobs/categories/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        setState(() {
+          _jobCategories = json.decode(response.body);
+          //print(_jobCategories[0]);
+        });
+      } else {
+        print('Fetching error: ${response.body}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Function to get category name by ID
+  String getCategoryNameById(int id) {
+    // Search through the list to find the matching category
+    for (final category in _jobCategories) {
+      //print('category : $category');
+      if (category['id'] == 1) {
+        return category['name'];
+      }
+    }
+
+    // Return a default value if no matching category is found
+    return "Unknown Category";
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchJobDetail();
+    fetchCategory();
   }
 
   @override
@@ -89,272 +120,322 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     Text(
                       '${jobDetail['title']}',
                       style: const TextStyle(
-                        fontSize: 19.53,
+                        fontSize: 24.41,
                         fontFamily: 'Bricolage-M',
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Center(
-                      child: Container(
-                        width: 343,
-                        height: 228,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //Sabai Job Partner Tag
-                            jobDetail['is_partner'] == true
-                                ? Container(
-                                    width: 116,
-                                    height: 21,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFFFEBF6),
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(8),
-                                          topLeft: Radius.circular(8)),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Image(
-                                          image:
-                                              AssetImage('images/status.png'),
-                                          width: 12,
-                                          height: 12,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        languageProvider.lan == 'English'
-                                            ? const Text(
-                                                'Sabai Job Partner',
-                                                style: TextStyle(
-                                                    fontFamily: 'Bricolage-R',
-                                                    fontSize: 10,
-                                                    color: Color(0xFF6C757D)),
-                                              )
-                                            : RichText(
-                                                text: const TextSpan(
-                                                  text: 'Sabai Job  ',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Bricolage-R',
-                                                    fontSize: 10,
-                                                    color: Color(0xFF6C757D),
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'မိတ်ဖက်',
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontFamily: 'Walone-B',
-                                                        color:
-                                                            Color(0xFF6C757D),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                      ],
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 10,
+                    Container(
+                      width: double.infinity,
+                      height: 380,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //Sabai Job Partner Tag
+                          jobDetail['is_partner'] == true
+                              ? Container(
+                                  width: 130,
+                                  height: 21,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFFEBF6),
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(8),
+                                        topLeft: Radius.circular(8)),
                                   ),
-
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Column(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Row(
                                     children: [
-                                      const Text(
-                                        'Offered by',
-                                        style: TextStyle(
-                                          color: Color(0xFF6C757D),
-                                          fontFamily: 'Bricolage-R',
-                                          fontSize: 10,
-                                        ),
+                                      const Image(
+                                        image: AssetImage('images/status.png'),
+                                        width: 12,
+                                        height: 12,
                                       ),
                                       const SizedBox(
-                                        height: 5,
+                                        width: 5,
                                       ),
-                                      Text(
-                                        '${jobDetail['company_name']}',
+                                      languageProvider.lan == 'English'
+                                          ? const Text(
+                                              'Sabai Job Partner',
+                                              style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFF6C757D)),
+                                            )
+                                          : RichText(
+                                              text: const TextSpan(
+                                                text: 'Sabai Job  ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 10,
+                                                  color: Color(0xFF6C757D),
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: 'မိတ်ဖက်',
+                                                    style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontFamily: 'Walone-B',
+                                                      color: Color(0xFF6C757D),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox(
+                                  height: 10,
+                                ),
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Column(
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Offered by',
+                                      style: TextStyle(
+                                        color: Color(0xFF6C757D),
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '${jobDetail['company_name']}',
+                                      style: const TextStyle(
+                                        color: Color(0xFF4C5258),
+                                        fontFamily: 'Bricolage-M',
+                                        fontSize: 15.63,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    languageProvider.lan == 'English'
+                                        ? const Text(
+                                            'Salary',
+                                            style: TextStyle(
+                                              color: Color(0xFF6C757D),
+                                              fontFamily: 'Bricolage-R',
+                                              fontSize: 12.5,
+                                            ),
+                                          )
+                                        : const Text(
+                                            'လစာ',
+                                            style: TextStyle(
+                                              fontFamily: 'Walone-R',
+                                              fontSize: 12.5,
+                                              color: Color(0xff6C757D),
+                                            ),
+                                          ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    languageProvider.lan == 'English'
+                                        ? Text(
+                                            '${jobDetail['salary_min']} ~ ${jobDetail['salary_max']} ${jobDetail['currency']}',
+                                            style: const TextStyle(
+                                              color: Color(0xFF4C5258),
+                                              fontFamily: 'Bricolage-M',
+                                              fontSize: 15.63,
+                                            ),
+                                          )
+                                        : const Text(
+                                            '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
+                                            style: TextStyle(
+                                              fontFamily: 'Walone-B',
+                                              fontSize: 15.63,
+                                              color: Color(0xff4C5258),
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    languageProvider.lan == 'English'
+                                        ? const Text(
+                                            'Safety Status',
+                                            style: TextStyle(
+                                              color: Color(0xFF6C757D),
+                                              fontFamily: 'Bricolage-R',
+                                              fontSize: 12.5,
+                                            ),
+                                          )
+                                        : const Text(
+                                            'စိတ်ချရမှု',
+                                            style: TextStyle(
+                                              fontFamily: 'Walone-R',
+                                              fontSize: 12.5,
+                                              color: Color(0xff6C757D),
+                                            ),
+                                          ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFEAF6EC),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                      ),
+                                      width: 80,
+                                      height: 21,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.info_outline,
+                                            size: 13,
+                                            color: Color(0xFF28A745),
+                                          ),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          languageProvider.lan == 'English'
+                                              ? Text(
+                                                  'Level - ${jobDetail['safety_level']}',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'အဆင့် - ၃',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Walone-B',
+                                                    fontSize: 12,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    languageProvider.lan == 'English'
+                                        ? const Text(
+                                            'Location',
+                                            style: TextStyle(
+                                              color: Color(0xFF6C757D),
+                                              fontFamily: 'Bricolage-R',
+                                              fontSize: 12.5,
+                                            ),
+                                          )
+                                        : const Text(
+                                            'တည်နေရာ',
+                                            style: TextStyle(
+                                              fontFamily: 'Walone-R',
+                                              fontSize: 12.5,
+                                              color: Color(0xff6C757D),
+                                            ),
+                                          ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text('${jobDetail['location']}',
                                         style: const TextStyle(
                                           color: Color(0xFF4C5258),
                                           fontFamily: 'Bricolage-M',
-                                          fontSize: 12.5,
-                                        ),
+                                          fontSize: 15.63,
+                                        )),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Job Category',
+                                      style: TextStyle(
+                                        color: Color(0xFF6C757D),
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      languageProvider.lan == 'English'
-                                          ? const Text(
-                                              'Salary',
-                                              style: TextStyle(
-                                                color: Color(0xFF6C757D),
-                                                fontFamily: 'Bricolage-R',
-                                                fontSize: 10,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'လစာ',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-R',
-                                                fontSize: 10,
-                                                color: Color(0xff6C757D),
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 5,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      //'${jobDetail['category']}',
+                                      getCategoryNameById(
+                                          jobDetail['category']),
+                                      style: const TextStyle(
+                                        color: Color(0xFF4C5258),
+                                        fontFamily: 'Bricolage-M',
+                                        fontSize: 15.63,
                                       ),
-                                      languageProvider.lan == 'English'
-                                          ? Text(
-                                              '${jobDetail['salary_min']} ~ ${jobDetail['salary_max']} ${jobDetail['currency']}',
-                                              style: const TextStyle(
-                                                color: Color(0xFF4C5258),
-                                                fontFamily: 'Bricolage-M',
-                                                fontSize: 12.5,
-                                              ),
-                                            )
-                                          : const Text(
-                                              '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-B',
-                                                fontSize: 11,
-                                                color: Color(0xff4C5258),
-                                              ),
-                                            ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      languageProvider.lan == 'English'
-                                          ? const Text(
-                                              'Safety',
-                                              style: TextStyle(
-                                                color: Color(0xFF6C757D),
-                                                fontFamily: 'Bricolage-R',
-                                                fontSize: 10,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'စိတ်ချရမှု',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-R',
-                                                fontSize: 10,
-                                                color: Color(0xff6C757D),
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 5,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Job Type',
+                                      style: TextStyle(
+                                        color: Color(0xFF6C757D),
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
                                       ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          color: Color(0xFFEAF6EC),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4)),
-                                        ),
-                                        width: 65,
-                                        height: 21,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.info_outline,
-                                              size: 13,
-                                              color: Color(0xFF28A745),
-                                            ),
-                                            const SizedBox(
-                                              width: 2,
-                                            ),
-                                            languageProvider.lan == 'English'
-                                                ? Text(
-                                                    'Level - ${jobDetail['safety_level']}',
-                                                    style: const TextStyle(
-                                                      fontSize: 10,
-                                                    ),
-                                                  )
-                                                : const Text(
-                                                    'အဆင့် - ၃',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Walone-B',
-                                                      fontSize: 10,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                          ],
-                                        ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '${jobDetail['job_type']}',
+                                      style: const TextStyle(
+                                        color: Color(0xFF4C5258),
+                                        fontFamily: 'Bricolage-M',
+                                        fontSize: 15.63,
                                       ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      languageProvider.lan == 'English'
-                                          ? const Text(
-                                              'Location',
-                                              style: TextStyle(
-                                                color: Color(0xFF6C757D),
-                                                fontFamily: 'Bricolage-R',
-                                                fontSize: 10,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'တည်နေရာ',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-R',
-                                                fontSize: 10,
-                                                color: Color(0xff6C757D),
-                                              ),
-                                            ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text('${jobDetail['location']}',
-                                          style: const TextStyle(
-                                            color: Color(0xFF4C5258),
-                                            fontFamily: 'Bricolage-M',
-                                            fontSize: 12.5,
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     const SizedBox(
@@ -380,21 +461,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     const SizedBox(
                       height: 12,
                     ),
-                    languageProvider.lan == 'English'
-                        ? Text(
+                         Text(
                             '${jobDetail['job_summary']}',
                             style: const TextStyle(
                               fontFamily: 'Bricolage-R',
                               color: Color(0xFF4C5258),
-                              fontSize: 12.5,
-                            ),
-                          )
-                        : const Text(
-                            'ဘရစ်စတာသည် ကော်ဖီနှင့် လက်ဖက်ရည်အမျိုးမျိုးကို ပြင်ဆင်၍ ဝယ်ယူသူများအား ဝန်ဆောင်မှုအရည်အသွေးမြင့်မားမှုကို အာမခံပေးပြီး၊ အလုပ်ခွင်ကို သန့်ရှင်းပြီး စီမံခန့်ခွဲထားသောနေရာတစ်ခုအဖြစ် ထိန်းသိမ်းရမည်။',
-                            style: TextStyle(
-                              fontFamily: 'Walone-B',
-                              color: Color(0xFF4C5258),
-                              fontSize: 11,
+                              fontSize: 15.63,
                             ),
                           ),
                     const SizedBox(
@@ -467,9 +539,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 15),
-                      width: 343,
-                      height: 142,
+                          vertical: 5, horizontal: 15),
+                      width: double.infinity,
+                      height: 170,
                       decoration: const BoxDecoration(
                         border: Border(
                           top: BorderSide(
@@ -503,7 +575,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       style: TextStyle(
                                         color: Color(0xFF6C757D),
                                         fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
+                                        fontSize: 13,
                                       ),
                                     )
                                   : const Text(
@@ -523,9 +595,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(4)),
                                 ),
-                                width: languageProvider.lan == 'English'
-                                    ? 78
-                                    : 100,
+                                width: 100,
                                 height: 25,
                                 child: Row(
                                   mainAxisAlignment:
@@ -571,7 +641,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                               Text(
                                 'Sabai',
                                 style: TextStyle(
-                                  fontSize: 12.5,
+                                  fontSize: 14,
                                   fontFamily: 'Bricolage-R',
                                   color: Color(0xFF6C757D),
                                 ),
@@ -579,8 +649,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                             ],
                           ),
                           const SizedBox(
-                            width: 311,
-                            child: Divider(),
+                            width: double.infinity,
+                            child: Divider(
+                            ),
                           ),
                           Row(
                             children: [
@@ -590,7 +661,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       style: TextStyle(
                                         color: Color(0xFF6C757D),
                                         fontFamily: 'Bricolage-R',
-                                        fontSize: 10,
+                                        fontSize: 13,
                                       ),
                                     )
                                   : const Text(

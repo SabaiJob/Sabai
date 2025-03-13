@@ -215,6 +215,11 @@ class _JobListingPageState extends State<JobListingPage>
           centerTitle: false,
           title: DropdownButtonHideUnderline(
             child: DropdownButton2<String>(
+              style: const TextStyle(
+                fontFamily: 'Bricolage-R',
+                fontSize: 15,
+                color: Colors.black,
+              ),
               value: selectedValue,
               isExpanded: true,
               hint: const Text('none'),
@@ -257,8 +262,8 @@ class _JobListingPageState extends State<JobListingPage>
                 ),
               ),
               buttonStyleData:  ButtonStyleData(
-                padding: const EdgeInsets.only(left: 5),
-                width: 213,
+                padding: const EdgeInsets.only(left: 8),
+                width: 200,
                 decoration: BoxDecoration(
                   color: const Color(0xffFFEBF6),
                   border: Border.all(color: primaryPinkColor),
