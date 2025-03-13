@@ -2,21 +2,21 @@ import 'dart:async';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
-import 'package:sabai_app/components/work_card.dart';
+//import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/advanced_filter_page.dart';
 import 'package:sabai_app/screens/homepage_menupages/all.dart';
 import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
-import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
+//import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/notification.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
-import 'package:sabai_app/services/language_provider.dart';
-import 'package:shimmer/shimmer.dart';
+// import 'package:sabai_app/services/language_provider.dart';
+// import 'package:shimmer/shimmer.dart';
 
 class JobListingPage extends StatefulWidget {
   final bool showBottomSheet;
@@ -31,50 +31,50 @@ class JobListingPage extends StatefulWidget {
 
 class _JobListingPageState extends State<JobListingPage>
     with TickerProviderStateMixin {
-  final PageController _motivationalTextController = PageController();
-  Timer? _timer;
-  int _currentText = 0;
-  bool _forward = true; // Flag to track direction
-  final List<Map<String, String>> _motivationalSlides = [
-    {
-      'image': 'images/motivation1.png',
-      'text':
-          '"Hard work pays off. Keep striving, and the right job will come.”'
-    },
-    {
-      'image': 'images/motivation2.png',
-      'text': '“Stay dedicated; the right job is on its way.”',
-    },
-    {
-      'image': 'images/motivation3.png',
-      'text': '"Every job is a step forward. Keep going!"'
-    }
-  ];
-  void _autoScrollText() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (_forward) {
-        if (_currentText < 2) {
-          _currentText++;
-        } else {
-          _forward = false;
-          _currentText--; // Start moving back
-        }
-      } else {
-        if (_currentText > 0) {
-          _currentText--;
-        } else {
-          _forward = true;
-          _currentText++; // Start moving forward
-        }
-      }
+  //final PageController _motivationalTextController = PageController();
+  // Timer? _timer;
+  // int _currentText = 0;
+  // bool _forward = true; // Flag to track direction
+  // final List<Map<String, String>> _motivationalSlides = [
+  //   {
+  //     'image': 'images/motivation1.png',
+  //     'text':
+  //         '"Hard work pays off. Keep striving, and the right job will come.”'
+  //   },
+  //   {
+  //     'image': 'images/motivation2.png',
+  //     'text': '“Stay dedicated; the right job is on its way.”',
+  //   },
+  //   {
+  //     'image': 'images/motivation3.png',
+  //     'text': '"Every job is a step forward. Keep going!"'
+  //   }
+  // ];
+  // void _autoScrollText() {
+  //   _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+  //     if (_forward) {
+  //       if (_currentText < 2) {
+  //         _currentText++;
+  //       } else {
+  //         _forward = false;
+  //         _currentText--; // Start moving back
+  //       }
+  //     } else {
+  //       if (_currentText > 0) {
+  //         _currentText--;
+  //       } else {
+  //         _forward = true;
+  //         _currentText++; // Start moving forward
+  //       }
+  //     }
 
-      _motivationalTextController.animateToPage(
-        _currentText,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    });
-  }
+  //     _motivationalTextController.animateToPage(
+  //       _currentText,
+  //       duration: const Duration(milliseconds: 500),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   });
+  // }
 
   // final List<Widget> _pages = [
   //   const All(),
@@ -193,9 +193,9 @@ class _JobListingPageState extends State<JobListingPage>
   //for new appbar
   final List<String> menuItemsList = [
     'Jobs for you',
-    'Best Matched Jobs',
-    'Local Jobs',
-    'Global Jobs'
+    'Best Matched Jobs ✨',
+    'Local Jobs 🇹🇭',
+    'Global Jobs ✈️'
   ];
   String selectedValue = 'Jobs for you';
 
@@ -213,52 +213,64 @@ class _JobListingPageState extends State<JobListingPage>
           automaticallyImplyLeading: false,
           backgroundColor: backgroundColor,
           centerTitle: false,
-          title: DropdownButton2(
-            value: selectedValue,
-            isExpanded: false,
-            hint: const Text('none'),
-            items: menuItemsList
-                .map(
-                  (String item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedValue = value!;
-                if (selectedValue == 'Local Jobs' || selectedValue == 'Jobs for you' || selectedValue == 'Best Matched Jobs') {
-                  jobProvider.setLocatiobType('local');
-                  jobProvider.getJobs(true);
-                  jobProvider.getBestMatchedJobs(true);
-                  jobProvider.getPartnerJobs(true);
-                  jobProvider.fetchPremiumJobs(true);
-                  filterProvider.setLocationType('local');
-                  filterProvider.getFilterJobs(true);
-                } else if (selectedValue == 'Global Jobs') {
-                  jobProvider.setLocatiobType('global');
-                  jobProvider.getJobs(true);
-                  jobProvider.getBestMatchedJobs(true);
-                  jobProvider.getPartnerJobs(true);
-                  jobProvider.fetchPremiumJobs(true);
-                  filterProvider.setLocationType('global');
-                  filterProvider.getFilterJobs(true);
-                }
-              });
-            },
-            iconStyleData: const IconStyleData(
-              icon: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 24,
-                color: primaryPinkColor,
+          title: DropdownButtonHideUnderline(
+            child: DropdownButton2<String>(
+              value: selectedValue,
+              isExpanded: true,
+              hint: const Text('none'),
+              items: menuItemsList
+                  .map(
+                    (String item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedValue = value!;
+                  if (selectedValue == 'Local Jobs 🇹🇭' || selectedValue == 'Jobs for you' || selectedValue == 'Best Matched Jobs ✨') {
+                    jobProvider.setLocatiobType('local');
+                    jobProvider.getJobs(true);
+                    jobProvider.getBestMatchedJobs(true);
+                    jobProvider.getPartnerJobs(true);
+                    jobProvider.fetchPremiumJobs(true);
+                    filterProvider.setLocationType('local');
+                    filterProvider.getFilterJobs(true);
+                  } else if (selectedValue == 'Global Jobs ✈️') {
+                    jobProvider.setLocatiobType('global');
+                    jobProvider.getJobs(true);
+                    jobProvider.getBestMatchedJobs(true);
+                    jobProvider.getPartnerJobs(true);
+                    jobProvider.fetchPremiumJobs(true);
+                    filterProvider.setLocationType('global');
+                    filterProvider.getFilterJobs(true);
+                  }
+                });
+              },
+            
+              iconStyleData: const IconStyleData(
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 30,
+                  color: primaryPinkColor,
+                ),
               ),
-            ),
-            dropdownStyleData: DropdownStyleData(
+              buttonStyleData:  ButtonStyleData(
+                padding: const EdgeInsets.only(left: 5),
+                width: 213,
                 decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            )),
+                  color: const Color(0xffFFEBF6),
+                  border: Border.all(color: primaryPinkColor),
+                  borderRadius: BorderRadius.circular(10),
+                )
+              ),
+              dropdownStyleData: DropdownStyleData(
+                  decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),),
+            ),
           ),
           actions: [
             Row(
@@ -334,7 +346,7 @@ class _JobListingPageState extends State<JobListingPage>
             right: 16,
             top: 12,
           ),
-          child: selectedValue == 'Best Matched Jobs'
+          child: selectedValue == 'Best Matched Jobs ✨'
               ? const BestMatches()
               : const All(),
           // Center(
