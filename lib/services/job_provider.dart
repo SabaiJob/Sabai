@@ -87,7 +87,7 @@ class JobProvider extends ChangeNotifier {
           print('Invalid response structure: ${response.body}');
         }
       } else {
-        print('Error: ${response.statusCode} - ${response.body}');
+        print('Error in get job: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       print('Exception: $e');

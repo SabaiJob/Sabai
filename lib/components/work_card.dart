@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sabai_app/components/popup_widget.dart';
+//import 'package:sabai_app/components/popup_widget.dart';
 import 'package:sabai_app/components/walkthrough_button.dart';
 import 'package:sabai_app/constants.dart';
 import '../screens/job_details_page.dart';
@@ -9,7 +9,8 @@ import '../screens/auth_pages/log_in_controller_page.dart';
 import '../screens/auth_pages/registration_pages_controller.dart';
 import '../services/job_provider.dart';
 import '../services/language_provider.dart';
-import 'package:popover/popover.dart';
+import 'package:sabai_app/components/bottom_sheet.dart';
+//import 'package:popover/popover.dart';
 
 class WorkCard extends StatelessWidget {
   final String jobTitle;
@@ -67,399 +68,346 @@ class WorkCard extends StatelessWidget {
           print(timeDifference);
         }
       },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            isPartner
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          color: Color(0xffFFEBF6),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              isPartner
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 25,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffFFEBF6),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                'images/status.png',
+                                width: 12,
+                                height: 12,
+                              ),
+                              const Text(
+                                'Sabai Job Partner',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: 'Bricolage-R',
+                                  color: Color(0xff6C757D),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                              'images/status.png',
-                              width: 12,
-                              height: 12,
-                            ),
-                            const Text(
-                              'Sabai Job Partner',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontFamily: 'Bricolage-R',
-                                color: Color(0xff6C757D),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, right: 10),
+                          child: Container(
+                            width: 26,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: const Color(0xffF0F1F2),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, right: 10),
-                        child: Container(
-                          width: 26,
-                          height: 26,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: const Color(0xffF0F1F2),
-                            ),
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              isGuest == true
-                                  ? showBottomSheet(
-                                      context: context,
-                                      builder: (context) =>
-                                          guestBotoom(language),
+                            child: IconButton(
+                              onPressed: () {
+                                isGuest == true
+                                    ? showBottomSheet(
+                                        context: context,
+                                        builder: (context) =>
+                                            guestBotoom(language),
+                                      )
+                                    : jobProvider.saveJob(jobId, context);
+                              },
+                              icon: isSaved == false
+                                  ? const Icon(
+                                      CupertinoIcons.heart,
+                                      color: Color(0xffFF3997),
                                     )
-                                  : jobProvider.saveJob(jobId, context);
-                            },
-                            icon: isSaved == false
-                                ? const Icon(
-                                    CupertinoIcons.heart,
-                                    color: Color(0xffFF3997),
-                                  )
-                                : const Icon(
-                                    CupertinoIcons.heart_fill,
-                                    color: Color(0xffFF3997),
-                                  ),
-                            iconSize: 18,
-                            padding: EdgeInsets.zero,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                : const SizedBox(
-                    height: 20,
-                  ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            jobTitle,
-                            style: const TextStyle(
-                              fontSize: 15.63,
-                              fontFamily: 'Bricolage-M',
+                                  : const Icon(
+                                      CupertinoIcons.heart_fill,
+                                      color: Color(0xffFF3997),
+                                    ),
+                              iconSize: 18,
+                              padding: EdgeInsets.zero,
                             ),
-                          ),
-                          RichText(
-                            text: TextSpan(
-                              text: 'By ',
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontFamily: 'Bricolage-R',
-                                color: Color(0xff6C757D),
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: companyName,
-                                  style: const TextStyle(
-                                    fontFamily: 'Bricolage-B',
-                                    fontSize: 10,
-                                    color: Color(0xff6C757D),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      isPartner == false
-                          ? Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Container(
-                                width: 26,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                    color: const Color(0xffF0F1F2),
-                                  ),
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    jobProvider.isGuest == true
-                                        ? showBottomSheet(
-                                            context: context,
-                                            builder: (context) =>
-                                                guestBotoom(language),
-                                          )
-                                        : jobProvider.saveJob(
-                                            jobId,
-                                            context,
-                                          );
-                                  },
-                                  icon: isSaved == false
-                                      ? const Icon(
-                                          CupertinoIcons.heart,
-                                          color: Color(0xffFF3997),
-                                        )
-                                      : const Icon(
-                                          CupertinoIcons.heart_fill,
-                                          color: Color(0xffFF3997),
-                                        ),
-                                  iconSize: 18,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  language.lan == 'English'
-                      ? Text(
-                          timeDifference.isNegative
-                              ? 'Closed'
-                              : isClosedDay > 0
-                                  ? 'Closing in $isClosedDay days'
-                                  : 'Closing in $isClosedHour hours',
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 10,
-                            color: Color(0xffDC3545),
                           ),
                         )
-                      : const Text(
-                          '၃ ရက် အတွင်းပိတ်မည်',
-                          style: TextStyle(
-                            fontFamily: 'Walone-M',
-                            fontSize: 10,
-                            color: Color(0xffDC3545),
-                          ),
-                        ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      language.lan == 'English'
-                          ? const Text(
-                              'Salary',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-R',
-                                fontSize: 10,
-                                color: Color(0xff6C757D),
-                              ),
-                            )
-                          : const Text(
-                              'လစာ',
-                              style: TextStyle(
-                                fontFamily: 'Walone-R',
-                                fontSize: 10,
-                                color: Color(0xff6C757D),
-                              ),
-                            ),
-                      Padding(
-                        padding: language.lan == 'English'
-                            ? const EdgeInsets.only(right: 35)
-                            : const EdgeInsets.only(right: 28),
-                        child: Row(
-                          children: [
-                            language.lan == 'English'
-                                ? const Text(
-                                    'Location',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 10,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  )
-                                : const Text(
-                                    'တည်နေရာ',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 10,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                            SizedBox(
-                              width: language.lan == 'English' ? 63 : 60,
-                            ),
-                            language.lan == 'English'
-                                ? const Text(
-                                    'Safety',
-                                    style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 10,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  )
-                                : const Text(
-                                    'စိတ်ချရမှု',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 10,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      language.lan == 'English'
-                          ? Text(
-                              '$minSalary ~ $maxSalary $currency',
-                              style: const TextStyle(
-                                fontFamily: 'Bricolage-M',
-                                fontSize: 10,
-                                color: Color(0xff4C5258),
-                              ),
-                            )
-                          : const Text(
-                              '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
-                              style: TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 10,
-                                color: Color(0xff4C5258),
-                              ),
-                            ),
-                      Row(
-                        children: [
-                          Text(
-                            location,
-                            style: const TextStyle(
-                              fontFamily: 'Bricolage-M',
-                              fontSize: 10,
-                              color: Color(0xff4C5258),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 55,
-                          ),
-                          JobLevelCard(
-                            language: language,
-                            level: safetyLevel,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    child: Divider(
+                      ],
+                    )
+                  : const SizedBox(
                       height: 10,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Row(
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(top: 2),
-                              child: Icon(
-                                Icons.remove_red_eye_outlined,
-                                size: 13,
-                                color: Color(0xffFF3997),
+                            Text(
+                              jobTitle,
+                              style: const TextStyle(
+                                fontSize: 15.63,
+                                fontFamily: 'Bricolage-M',
                               ),
                             ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            language.lan == 'English'
-                                ? RichText(
-                                    text: TextSpan(
-                                      text: 'viewed by  ',
-                                      style: const TextStyle(
-                                        fontSize: 12.5,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xff6C757D),
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: '$viewCount',
-                                          style: const TextStyle(
-                                            fontSize: 12.5,
-                                            fontFamily: 'Bricolage-B',
-                                            color: Color(0xff6C757D),
-                                          ),
-                                        ),
-                                        const TextSpan(text: '  job hunters'),
-                                      ],
-                                    ),
-                                  )
-                                : const Text(
-                                    'အခြားအလုပ်ရှာဖွေသူ ၂၀ ယောက်ကြည့်ရှုပြီး',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-B',
-                                      fontSize: 10,
-                                      color: Color(0xff899197),
-                                    ),
-                                  ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              child: Image.asset(
-                                'images/give_heart.png',
-                                width: 13,
-                                height: 13,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            language.lan == 'English'
-                                ? const Text(
-                                    '0',
-                                    style: TextStyle(
-                                      fontSize: 12.5,
+                            RichText(
+                              text: TextSpan(
+                                text: 'By ',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Bricolage-R',
+                                  color: Color(0xff6C757D),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: companyName,
+                                    style: const TextStyle(
                                       fontFamily: 'Bricolage-B',
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  )
-                                : const Text(
-                                    '၅၆',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontFamily: 'Walone-B',
+                                      fontSize: 12,
                                       color: Color(0xff6C757D),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
+                        isPartner == false
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Container(
+                                  width: 26,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: const Color(0xffF0F1F2),
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      jobProvider.isGuest == true
+                                          ? showBottomSheet(
+                                              context: context,
+                                              builder: (context) =>
+                                                  guestBotoom(language),
+                                            )
+                                          : jobProvider.saveJob(
+                                              jobId,
+                                              context,
+                                            );
+                                    },
+                                    icon: isSaved == false
+                                        ? const Icon(
+                                            CupertinoIcons.heart,
+                                            color: Color(0xffFF3997),
+                                          )
+                                        : const Icon(
+                                            CupertinoIcons.heart_fill,
+                                            color: Color(0xffFF3997),
+                                          ),
+                                    iconSize: 18,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                       ],
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        language.lan == 'English'
+                            ? const Text(
+                                'Salary',
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-R',
+                                  fontSize: 12.5,
+                                  color: Color(0xff6C757D),
+                                ),
+                              )
+                            : const Text(
+                                'လစာ',
+                                style: TextStyle(
+                                  fontFamily: 'Walone-R',
+                                  fontSize: 12.5,
+                                  color: Color(0xff6C757D),
+                                ),
+                              ),
+                        Padding(
+                          padding: language.lan == 'English'
+                              ? const EdgeInsets.only(right: 25)
+                              : const EdgeInsets.only(right: 28),
+                          child: Row(
+                            children: [
+                              language.lan == 'English'
+                                  ? const Text(
+                                      'Location',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'တည်နေရာ',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    ),
+                              const SizedBox(
+                                width: 70,
+                              ),
+                              language.lan == 'English'
+                                  ? const Text(
+                                      'Safety',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'စိတ်ချရမှု',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$minSalary ~ $maxSalary $currency',
+                          style: const TextStyle(
+                            fontFamily: 'Bricolage-M',
+                            fontSize: 14,
+                            color: Color(0xff4C5258),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                location,
+                                style: const TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 14,
+                                  color: Color(0xff4C5258),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 55,
+                            ),
+                            JobLevelCard(
+                              language: language,
+                              level: safetyLevel,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      child: Divider(
+                        height: 10,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(top: 2),
+                                child: Icon(
+                                  Icons.remove_red_eye_outlined,
+                                  size: 13,
+                                  color: Color(0xffFF3997),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+        
+                              Text(
+                                '$viewCount',
+                                style: const TextStyle(
+                                  fontSize: 12.5,
+                                  fontFamily: 'Bricolage-B',
+                                  color: Color(0xff6C757D),
+                                ),
+                              )                         
+                            ],
+                          ),
+                          if(isClosedDay <= 3)  
+                          language.lan == 'English'
+                              ? Text(
+                                  timeDifference.isNegative
+                                      ? 'Closed'
+                                      : isClosedDay > 0
+                                          ? 'Closing in $isClosedDay days'
+                                          : 'Closing in $isClosedHour hours',
+                                  style: const TextStyle(
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 12,
+                                    color: Color(0xffDC3545),
+                                  ),
+                                )
+                              : Text(
+                                  isClosedDay > 0
+                                      ? '$isClosedDay ရက် အတွင်းပိတ်မည်'
+                                      : '$isClosedHour ရက် အတွင်းပိတ်မည်',
+                                  style: const TextStyle(
+                                    fontFamily: 'Walone-M',
+                                    fontSize: 12,
+                                    color: Color(0xffDC3545),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -567,19 +515,34 @@ class JobLevelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showPopover(
-        context: context,
-        bodyBuilder: (context) => const PopupWidget(),
-        direction: PopoverDirection.top,
-        width: 130,
-        backgroundColor: const Color(0xfff0f1f2),
-        arrowWidth: 10,
-        arrowHeight: 8,
-        radius: 4,
-      ),
+      // onTap: () => showPopover(
+      //   context: context,
+      //   bodyBuilder: (context) => const PopupWidget(),
+      //   direction: PopoverDirection.top,
+      //   width: 130,
+      //   backgroundColor: const Color(0xfff0f1f2),
+      //   arrowWidth: 10,
+      //   arrowHeight: 8,
+      //   radius: 4,
+      // ),
+      onTap: () {
+        showModalBottomSheet(
+            context: context, builder: (context) => const Bottomsheet());
+      },
       child: Card(
-        color: const Color(0xffEAF6EC),
+        color: level == '3'
+            ? const Color(0xffEAF6EC)
+            : level == '2'
+                ? const Color(0xffFFF3CD)
+                : const Color(0xffFCEBEC),
         shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: level == '3'
+                ? const Color(0xff28A745)
+                : level == '2'
+                    ? const Color(0xffFFC107)
+                    : const Color(0xffDC3545),
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Padding(
@@ -587,10 +550,14 @@ class JobLevelCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Icon(
+              Icon(
                 CupertinoIcons.info_circle,
                 size: 11,
-                color: Color(0xff28A745),
+                color: level == '3'
+                    ? const Color(0xff28A745)
+                    : level == '2'
+                        ? const Color(0xffFFC107)
+                        : const Color(0xffDC3545),
               ),
               const SizedBox(
                 width: 3,
@@ -604,9 +571,9 @@ class JobLevelCard extends StatelessWidget {
                         color: Colors.black,
                       ),
                     )
-                  : const Text(
-                      'အဆင့် - ၃',
-                      style: TextStyle(
+                  : Text(
+                      'အဆင့် - $level',
+                      style: const TextStyle(
                         fontFamily: 'Walone-B',
                         fontSize: 10,
                         color: Colors.black,

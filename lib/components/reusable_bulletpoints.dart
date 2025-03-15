@@ -26,7 +26,7 @@ class ReusableBulletPoints extends StatelessWidget {
               content!,
               style: languageProvider.lan == 'English'
                   ? const TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 15.63,
                       fontFamily: 'Bricolage-R',
                       color: Color(0xFF4C5258),
                     )
