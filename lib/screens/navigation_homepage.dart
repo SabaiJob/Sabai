@@ -46,7 +46,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   void initState() {
     super.initState();
     widgetList = [
-      const Community(),
+      const CommunityPage(),
       const Placeholder(),
       JobListingPage(
         showBottomSheet: widget.showButtonSheet,
@@ -77,7 +77,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   }
 
   Future<void> onTabChange(index, JobProvider jobProvider) async {
-    if (index == 1 || index == 0) {
+    if (index == 1) {
       Navigator.push(context, MaterialPageRoute(builder: (context)=>const ComingSoonPage(appBarTitle: Text('Contribution', style: appBarTitleStyleEng,))));
       // if (jobProvider.isDraft == true) {
       //   String? url = await getUrl();

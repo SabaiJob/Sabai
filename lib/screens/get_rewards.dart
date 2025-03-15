@@ -88,7 +88,7 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
               child: Container(
                 height: 33,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200, // Background color for tab bar
+                  color: const Color(0xFFF0F1F2), // Background color for tab bar
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TabBar(

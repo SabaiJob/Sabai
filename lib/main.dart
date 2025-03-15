@@ -9,11 +9,13 @@ import 'package:sabai_app/screens/walkthrough.dart';
 import 'package:sabai_app/services/otp_code_timer_provider.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
+import 'package:sabai_app/services/quote_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context)=> QuoteProvider()..fetchQuotes()),
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => JobProvider()),
         ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider()),
