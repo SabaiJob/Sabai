@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
@@ -116,7 +117,7 @@ class _RegistrationPagesControllerState
       print(e);
     }
   }
-  
+
   //request OTP
   Future<void> requestOTP() async {
     const String url =
@@ -199,19 +200,30 @@ class _RegistrationPagesControllerState
             'Congratulations! You have completed all the required fields for the registration');
         //post user's info api
         try {
-          final response = await ApiService.post(
-            '/auth/userinfo/',
-            {
-              "age": selectedAge,
-              "gender": _selectedGender,
-              "email": _emailController.text,
-              "thai_proficiency": _selectedLanguageLevel,
-              "has_passport": has_passport,
-              "has_work_permit": has_work_permit,
-              "has_id_ceritificate": has_id_certificate,
-            },
-          );
-          if (response.statusCode >= 200 && response.statusCode < 300) {
+          final token = await TokenService.getToken();
+          // Create form data with proper boundary
+          var formData = FormData.fromMap({
+            "age": selectedAge.toString(),
+            "gender": _selectedGender,
+            "email": _emailController.text,
+            "thai_proficiency": _selectedLanguageLevel,
+            "has_passport": has_passport! ? 1 : 0,
+            "has_work_permit": has_work_permit! ? 1 : 0,
+            "has_id_certificate": has_id_certificate! ? 1 : 0,
+          });
+
+          Dio dio = Dio();
+          final response = await dio.post(
+              "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/",
+              options: Options(
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "Authorization": "Bearer $token",
+                },
+              ),
+              data: formData);
+
+          if (response.statusCode! >= 200 && response.statusCode! < 300) {
             //fetch the job categories
             getJobCategory();
             // Move to the next page
@@ -224,16 +236,21 @@ class _RegistrationPagesControllerState
               _currentPage++;
             });
           } else {
+            print(response.statusCode);
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Adding info fail: ${response.body}'),
+                  content: Text('Adding info fail: ${response.statusMessage}'),
                 ),
               );
             }
-            print(response.body);
+            print(response.statusMessage);
           }
         } catch (e) {
+          if (e is DioException) {
+            print('Error status code: ${e.response?.statusCode}');
+            print('Error response data: ${e.response?.data}');
+          }
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

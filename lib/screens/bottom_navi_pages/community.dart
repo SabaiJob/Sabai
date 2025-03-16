@@ -1,192 +1,205 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/screens/communities_pages/fair_work_foundation.dart';
-import 'package:sabai_app/screens/communities_pages/labor_rights.dart';
-import 'package:sabai_app/screens/communities_pages/workers_advocacy.dart';
+import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/quote_provider.dart';
 
-class Community extends StatefulWidget {
-  const Community({super.key});
+class CommunityPage extends StatefulWidget {
+  const CommunityPage({super.key});
 
   @override
-  State<Community> createState() => _CommunityState();
+  State<CommunityPage> createState() => _CommunityPageState();
 }
 
-class _CommunityState extends State<Community> with TickerProviderStateMixin {
-  final List<Widget> _pages = [
-    LaborRight(),
-    const WorkersAdvocacy(),
-    const FairWorkFoundation(),
-  ];
-
-  int _selectedIndex = 0;
-
-  List<String> getNavItems() {
-    return [
-      'Labor Rights',
-      'Workers\' Advocacy',
-      'Fair Work Foundation',
-    ];
+class _CommunityPageState extends State<CommunityPage> {
+  final PageController _pageController = PageController();
+  Timer? _timer;
+  int _currentText = 0;
+  //motivational quote animation
+  void _autoScrollText() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (mounted) {
+        final quoteProvider =
+            Provider.of<QuoteProvider>(context, listen: false);
+        if (quoteProvider.quotes.isNotEmpty) {
+          setState(() {
+            _currentText = (_currentText + 1) % quoteProvider.quotes.length;
+          });
+          _pageController.animateToPage(
+            _currentText,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      }
+    });
   }
 
-  late AnimationController _animationController;
-  late Animation<Offset> _offsetAnimation;
-
-  late List<AnimationController> _menuItemAnimations;
-  late List<Animation<double>> _menuItemScaleAnimations;
+  List categoires = [];
+  List communities = [];
+  int currentPage = 1;
+  bool isLoading = false;
+  bool hasMore = true;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final quoteProvider = Provider.of<QuoteProvider>(context, listen: false);
+      if (!quoteProvider.isLoading) {
+        _autoScrollText();
+      }
+    });
+    fetchCategoires();
+  }
 
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-
-    _offsetAnimation = Tween<Offset>(
-      begin: const Offset(1.0, 0.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
-    _menuItemAnimations = List.generate(
-      _pages.length,
-      (index) => AnimationController(
-        duration: const Duration(milliseconds: 150),
-        vsync: this,
-      ),
-    );
-
-    _menuItemScaleAnimations = _menuItemAnimations.map((controller) {
-      return Tween<double>(begin: 1.0, end: 0.95).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Curves.easeInOut,
-        ),
-      );
-    }).toList();
-
-    _animationController.forward();
+  Future<void> fetchCategoires() async {
+    final response = await http.get(Uri.parse(
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/community/categories/'));
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      setState(() {
+        categoires = jsonDecode(response.body);
+      });
+    }
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    for (var controller in _menuItemAnimations) {
-      controller.dispose();
-    }
     super.dispose();
-  }
-
-  void _navigateToPage(int index) {
-    if (_selectedIndex != index) {
-      _animationController.reset();
-
-      setState(() {
-        _selectedIndex = index;
-      });
-
-      _animationController.forward();
-    }
+    _timer?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
-        title: const Text(
-          'Community',
-          style: appBarTitleStyleEng,
-        ),
-        centerTitle: true,
-        backgroundColor: backgroundColor,
-        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xffF7F7F7),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: Colors.grey.shade300,
-            height: 1,
-          ),
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey.shade300,
+              height: 1.0,
+            )),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "Community",
+                style: appBarTitleStyleEng,
+              )
+            : const Text(
+                'Community',
+                style: appBarTitleStyleMn,
+              ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF3997),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              children: [
-                Image.asset(
-                  'images/status.png',
-                  width: 24,
-                  height: 24,
-                ),
-                const SizedBox(width: 5),
-                const Text(
-                  'We\'ve Got Your Back!',
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-M',
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  getNavItems().length,
-                  (index) => GestureDetector(
-                    onTapDown: (_) {
-                      _menuItemAnimations[index].forward();
-                    },
-                    onTapUp: (_) {
-                      _menuItemAnimations[index].reverse();
-                      _navigateToPage(index);
-                    },
-                    onTapCancel: () {
-                      _menuItemAnimations[index].reverse();
-                    },
-                    child: ScaleTransition(
-                      scale: _menuItemScaleAnimations[index],
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: _selectedIndex == index
-                              ? Colors.white
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          getNavItems()[index],
-                          style: const TextStyle(
-                            color: Color(0xffFF3997),
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 12.5,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+      body: DefaultTabController(
+        length: categoires.length,
+        initialIndex: 0,
+        child: categoires.isEmpty ?
+        const Center(child: CircularProgressIndicator(
+          color: primaryPinkColor,
+        ),) : Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: SizedBox(
+                height: 35,
+                child: Consumer<QuoteProvider>(
+                  builder: (context, quoteProvider, child) {
+                    if (quoteProvider.isLoading) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: primaryPinkColor,
+                      ));
+                    }
+                    if (quoteProvider.quotes.isEmpty) {
+                      return const Center(
+                        child: Text("No quotes available."),
+                      );
+                    }
+                    return PageView.builder(
+                      scrollDirection: Axis.vertical,
+                      controller: _pageController,
+                      itemCount: quoteProvider.quotes.length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            Image.asset(
+                              'images/motivation1.png',
+                              width: 28,
+                              height: 28,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                "${quoteProvider.quotes[index]['text']}",
+                                style: const TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: SlideTransition(
-              position: _offsetAnimation,
-              child: _pages[_selectedIndex],
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                height: 33,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0F1F2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TabBar(
+                        tabAlignment: TabAlignment.start,
+                        automaticIndicatorColorAdjustment: true,
+                        isScrollable: true,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 3, horizontal: 3),
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        labelColor: Colors.pink,
+                        unselectedLabelColor: Colors.pink.shade300,
+                        dividerColor: Colors.transparent,
+                        labelStyle: const TextStyle(
+                          fontSize: 12.5,
+                          color: Color(0xffFF3997),
+                          fontFamily: 'Bricolage-R',
+                        ),
+                        tabs: categoires
+                            .map((category) => Tab(text: category['name']))
+                            .toList(),
+                      ),
+              ),
             ),
-          ),
-        ],
+            const Expanded(
+              child: TabBarView(children: [
+                Center(child: Text('Labor Rights')),
+                Center(child: Text('Workers\' Advocacy')),
+                Center(child: Text('Fair Work Foundation')),
+                Center(child: Text('Employment Support')),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

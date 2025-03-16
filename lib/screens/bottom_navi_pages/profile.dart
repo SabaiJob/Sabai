@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:sabai_app/components/divider_line.dart';
 import 'package:sabai_app/components/listtile_button.dart';
 import 'package:sabai_app/components/right_chev_button.dart';
+import 'package:sabai_app/screens/MyApplications_Screen.dart';
+import 'package:sabai_app/screens/MyCV_screen.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/coming_soon.dart';
@@ -21,6 +23,7 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/services/payment_provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -54,11 +57,11 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
-    if(updatedData != null){
-       setState(() {
-      paymentProvider.userData!['username'] = updatedData["username"];
-      paymentProvider.userData!['email'] = updatedData["email"];
-    });
+    if (updatedData != null) {
+      setState(() {
+        paymentProvider.userData!['username'] = updatedData["username"];
+        paymentProvider.userData!['email'] = updatedData["email"];
+      });
     }
   }
 
@@ -440,12 +443,7 @@ class _ProfileState extends State<Profile> {
                           context,
                           MaterialPageRoute(
                             //RoseCountPage()
-                            builder: (context) => const ComingSoonPage(
-                              appBarTitle: Text(
-                                'Rose Count',
-                                style: appBarTitleStyleEng,
-                              ),
-                            ),
+                            builder: (context) => RoseCountPage(),
                           ),
                         );
                       },
@@ -551,6 +549,38 @@ class _ProfileState extends State<Profile> {
 
               const SizedBox(height: 16),
 
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF0F1F2),
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
+                child: ListTileButton(
+                  ltLeading: const Icon(
+                    CupertinoIcons.doc,
+                    size: 23,
+                    color: Color(0xFFFF3997),
+                  ),
+                  ltTitle: const Text(
+                    'My CV',
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 10,
+                      color: Color(0xFF2B2F32),
+                    ),
+                  ),
+                  ltTrailing: const RightChevronButton(),
+                  navTo: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyCVScreen()));
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
               // Box 2
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -560,7 +590,32 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Column(
                   children: [
-                    // saved jobs
+                    //My Applications
+                    ListTileButton(
+                      ltLeading: const FaIcon(
+                        FontAwesomeIcons.suitcase,
+                        size: 23,
+                        color: Color(0xFFFF3997),
+                      ),
+                      ltTitle: const Text(
+                        'My Application',
+                        style: TextStyle(
+                          fontFamily: 'Bricolage-M',
+                          fontSize: 10,
+                          color: Color(0xFF2B2F32),
+                        ),
+                      ),
+                      ltTrailing: const RightChevronButton(),
+                      navTo: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const MyApplicationScreen()));
+                      },
+                    ),
+                    const DividerLine(),
+                    // Saved Jobs
                     ListTileButton(
                       ltLeading: const Icon(
                         CupertinoIcons.heart,
@@ -764,11 +819,8 @@ class _ProfileState extends State<Profile> {
                     const DividerLine(),
                     // Language
                     ListTileButton(
-                      ltLeading: const Icon(
-                        CupertinoIcons.globe,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
+                      ltLeading: const Icon(CupertinoIcons.globe,
+                          size: 23, color: Color(0xFFFF3997)),
                       ltTitle: Text(
                         languageProvider.lan == 'English'
                             ? 'Language'

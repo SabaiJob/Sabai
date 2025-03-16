@@ -1,271 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/get_rewards.dart';
 import '../constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 
-// class RoseCountPage extends StatelessWidget {
-//   const RoseCountPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var languageProvider = Provider.of<LanguageProvider>(context);
-
-//     return Scaffold(
-//       backgroundColor: backgroundColor,
-// appBar: AppBar(
-//   backgroundColor: Colors.white,
-//   bottom: PreferredSize(
-//       preferredSize: const Size.fromHeight(1.0),
-//       child: Container(
-//         color: Colors.grey.shade300,
-//         height: 1.0,
-//       )),
-//   surfaceTintColor: Colors.transparent,
-//   shadowColor: Colors.transparent,
-//   title: languageProvider.lan == 'English'
-//       ? const Text(
-//           "Your roses",
-//           style: appBarTitleStyleEng,
-//         )
-//       : const Text(
-//           'ကျွန်တော့်နှင်းဆီပွင့်များ',
-//           style: appBarTitleStyleMn,
-//         ),
-//   centerTitle: true,
-//   iconTheme: const IconThemeData(
-//     color: Color(0xFFFF3997),
-//   ),
-// ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             // Curved Background Section
-
-//             ClipPath(
-//               //clipBehavior: Clip.none,
-//               clipper: InwardCurveClipper(),
-//               child: Container(
-//                 height: 300,
-//                 width: double.infinity, // Adjust as needed
-//                 color: const Color(0xFFFED7EA),
-//                 child: Stack(
-//                   clipBehavior: Clip.none,
-//                   children: [
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         Padding(
-//                           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-//                           child: Container(
-//                             width: 139,
-//                             height: 139,
-//                             decoration: const BoxDecoration(
-//                                 color: Color(0xFFFFEBF6),
-//                                 borderRadius:
-//                                     BorderRadius.all(Radius.circular(100)),
-//                                 border: Border(
-//                                   top: BorderSide(
-//                                     color: Color(0xFFFF3997),
-//                                     width: 5,
-//                                   ),
-//                                   bottom: BorderSide(
-//                                     color: Color(0xFFFF3997),
-//                                     width: 5,
-//                                   ),
-//                                   left: BorderSide(
-//                                     color: Color(0xFFFF3997),
-//                                     width: 5,
-//                                   ),
-//                                   right: BorderSide(
-//                                     color: Color(0xFFFF3997),
-//                                     width: 5,
-//                                   ),
-//                                 )),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     Positioned(
-//                         left: 128,
-//                         top: 28,
-//                         child: Image.asset(
-//                           'icons/rose.png',
-//                           width: 120,
-//                           height: 120,
-//                         )),
-//                   ],
-//                 ),
-//               ),
-//             ),
-
-//             // I waant this part to go above
-//             Container(
-//               color: Colors.grey,
-//               padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-//               child: Column(
-//                 children: [
-//                   const Text('You got 46 roses'),
-//                   const SizedBox(
-//                     height: 15,
-//                   ),
-//                   const Text('See who gave you roses'),
-//                   const SizedBox(
-//                     height: 20,
-//                   ),
-//                   const Align(
-//                     alignment: Alignment.topLeft,
-//                     child: Text('Recent givers'),
-//                   ),
-//                   const SizedBox(
-//                     height: 15,
-//                   ),
-// Container(
-//   padding: const EdgeInsets.symmetric(
-//       horizontal: 10, vertical: 10),
-//   decoration: const BoxDecoration(
-//     color: Colors.white,
-//     borderRadius: BorderRadius.all(Radius.circular(16)),
-//   ),
-//   child: const SizedBox(
-//     height:
-//         268, // Set the desired height for the scrollable area
-//     child: SingleChildScrollView(
-//       child: Column(
-//         children:  [
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp1.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('LiLi'),
-//           ),
-//           Divider(color: Color(0xFFF0F1F2)),
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp2.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('Emily Wilson'),
-//           ),
-//           Divider(color: Color(0xFFF0F1F2)),
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp3.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('Kris Johnson'),
-//           ),
-//           Divider(color: Color(0xFFF0F1F2)),
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp4.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('Gavin Burns'),
-//           ),
-//           Divider(color: Color(0xFFF0F1F2)),
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp5.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('Julia Singh'),
-//           ),
-//           Divider(color: Color(0xFFF0F1F2)),
-//           ListTile(
-//             minVerticalPadding: 10,
-//             leading: Image(
-//               image: AssetImage('icons/temp6.png'),
-//               width: 24,
-//               height: 24,
-//             ),
-//             title: Text('Tess Fowler'),
-//           ),
-//         ],
-//       ),
-//     ),
-//   ),
-// ),
-//                   const SizedBox(
-//                     height: 25,
-//                   ),
-// SizedBox(
-//   width: double.infinity,
-//   height: 42,
-//   child: TextButton(
-//     onPressed: () {},
-//     style: TextButton.styleFrom(
-//       backgroundColor: const Color(0xffFF3997),
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(
-//             8), // Set the border radius
-//       ),
-//     ),
-//     child: languageProvider.lan == 'English'
-//         ? const Text(
-//             'Get Rewards',
-//             style: TextStyle(
-//               color: Colors.white,
-//               fontFamily: 'Bricolage-B',
-//               fontSize: 15.63,
-//             ),
-//           )
-//         : const Text(
-//             'ဆုများရယူမယ်',
-//             style: TextStyle(
-//               color: Colors.white,
-//               fontFamily: 'Walone-B',
-//               fontSize: 14,
-//             ),
-
-//           ),
-
-//   ),
-// ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// // CustomClipper for Inward Curve
-// class InwardCurveClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     Path path = Path();
-//     path.lineTo(0, size.height - 50); // Start at bottom-left
-//     path.quadraticBezierTo(
-//       size.width / 2,
-//       size.height - 150, // Control point (higher for inward curve)
-//       size.width, size.height - 50, // End point
-//     );
-//     path.lineTo(size.width, 0); // Top-right corner
-//     path.close(); // Complete the path
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) {
-//     return false;
-//   }
-// }
-
 class RoseCountPage extends StatefulWidget {
+  const RoseCountPage({super.key});
+
   @override
   State<RoseCountPage> createState() => _RoseCountPageState();
 }
@@ -277,7 +18,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFED7EA), // Background for the app
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFED7EA),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
             child: Container(
@@ -292,7 +33,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
                 style: appBarTitleStyleEng,
               )
             : const Text(
-                'ကျွန်တော့်နှင်းဆီပွင့်များ',
+                'ကျွန်တော့်နှင်းဆီပွင့်များ',
                 style: appBarTitleStyleMn,
               ),
         centerTitle: true,
@@ -313,44 +54,8 @@ class _RoseCountPageState extends State<RoseCountPage> {
                   color: Color(0xFFFED7EA),
                 ),
               ),
-              Positioned(
-                top: 50,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    Container(
-                        width: 120,
-                        height: 120,
-                        decoration: const BoxDecoration(
-                            color: Color(0xFFFFEBF6),
-                            shape: BoxShape.circle,
-                            border: Border(
-                              top: BorderSide(
-                                color: Color(0xFFFF3997),
-                                width: 5,
-                              ),
-                              bottom: BorderSide(
-                                color: Color(0xFFFF3997),
-                                width: 5,
-                              ),
-                              left: BorderSide(
-                                color: Color(0xFFFF3997),
-                                width: 5,
-                              ),
-                              right: BorderSide(
-                                color: Color(0xFFFF3997),
-                                width: 5,
-                              ),
-                            )),
-                        child: Image.asset(
-                          'icons/rose.png',
-                          width: 120,
-                          height: 120,
-                        )),
-                  ],
-                ),
-              ),
+              const Positioned(
+                  top: 50, left: 0, right: 0, child: AnimatedRose()),
             ],
           ),
 
@@ -419,7 +124,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
                                   fontSize: 19.5,
                                 )),
                             TextSpan(
-                                text: 'ပွင့်ရခဲ့ပြီ!',
+                                text: 'ပွင့်ရခဲ့ပြီ!',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
                                   fontFamily: 'Walone-B',
@@ -431,7 +136,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
                   Text(
                     languageProvider.lan == 'English'
                         ? 'See who gave you roses.'
-                        : 'ဘယ်သူတွေပေးတာလဲကြည့်မယ်',
+                        : 'ဘယ်သူတွေပေးတာလဲကြည့်မယ်',
                     style: languageProvider.lan == 'English'
                         ? const TextStyle(
                             color: Color(0xFF4C5258),
@@ -582,7 +287,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
                                   ),
                                 ),
                               ),
-                               Divider(color: Color(0xFFF0F1F2)),
+                              Divider(color: Color(0xFFF0F1F2)),
                               ListTile(
                                 minVerticalPadding: 5,
                                 minTileHeight: 10,
@@ -611,7 +316,9 @@ class _RoseCountPageState extends State<RoseCountPage> {
                     width: double.infinity,
                     height: 42,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const GetRewardsPage()));
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffFF3997),
                         shape: RoundedRectangleBorder(
@@ -644,6 +351,146 @@ class _RoseCountPageState extends State<RoseCountPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AnimatedRose extends StatefulWidget {
+  const AnimatedRose({super.key});
+
+  @override
+  State<AnimatedRose> createState() => _AnimatedRoseState();
+}
+
+class _AnimatedRoseState extends State<AnimatedRose>
+    with TickerProviderStateMixin {
+  late AnimationController _floatController;
+  late AnimationController _waveController1;
+  late AnimationController _waveController2;
+  late Animation<double> _floatAnimation;
+  late Animation<double> _waveScaleAnimation1;
+  late Animation<double> _waveOpacityAnimation1;
+  late Animation<double> _waveScaleAnimation2;
+  late Animation<double> _waveOpacityAnimation2;
+
+  @override
+  void initState() {
+    super.initState(); // This should be the first line
+
+    // Initialize controllers first
+    _floatController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _waveController1 = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
+
+    _waveController2 = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    );
+
+    // Then set up animations using the controllers
+    _floatAnimation = Tween<double>(begin: 0, end: 10).animate(
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
+
+    _waveScaleAnimation1 = Tween<double>(begin: 1, end: 3).animate(
+      CurvedAnimation(parent: _waveController1, curve: Curves.easeOut),
+    );
+
+    _waveOpacityAnimation1 = Tween<double>(begin: 0.5, end: 0).animate(
+      CurvedAnimation(parent: _waveController1, curve: Curves.easeOut),
+    );
+
+    _waveScaleAnimation2 = Tween<double>(begin: 1, end: 3.5).animate(
+      CurvedAnimation(parent: _waveController2, curve: Curves.easeOut),
+    );
+
+    _waveOpacityAnimation2 = Tween<double>(begin: 0.5, end: 0).animate(
+      CurvedAnimation(parent: _waveController2, curve: Curves.easeOut),
+    );
+
+    // Start the animations after everything is set up
+    _floatController.repeat(reverse: true);
+    _waveController1.repeat();
+    _waveController2.repeat(
+        reverse: false, period: const Duration(milliseconds: 1500));
+  }
+
+  @override
+  void dispose() {
+    _floatController.dispose();
+    _waveController1.dispose();
+    _waveController2.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: Listenable.merge(
+          [_floatController, _waveController1, _waveController2]),
+      builder: (context, child) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            // First ripple wave
+            Transform.scale(
+              scale: _waveScaleAnimation1.value,
+              child: Opacity(
+                opacity: _waveOpacityAnimation1.value,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.pinkAccent.withOpacity(0.3),
+                  ),
+                ),
+              ),
+            ),
+
+            // Second ripple wave (Delayed)
+            Transform.scale(
+              scale: _waveScaleAnimation2.value,
+              child: Opacity(
+                opacity: _waveOpacityAnimation2.value,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.pinkAccent.withOpacity(0.2),
+                  ),
+                ),
+              ),
+            ),
+
+            // Floating Rose
+            Transform.translate(
+              offset: Offset(0, -_floatAnimation.value),
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFFFEBF6),
+                  border: Border.all(color: const Color(0xFFFF3997), width: 5),
+                ),
+                child: Image.asset(
+                  'icons/rose.png',
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
