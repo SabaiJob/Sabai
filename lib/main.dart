@@ -15,7 +15,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context)=> QuoteProvider()..fetchQuotes()),
+        ChangeNotifierProvider(create: (context)=> QuoteProvider()),
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => JobProvider()),
         ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider()),

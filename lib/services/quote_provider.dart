@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,6 +8,11 @@ class QuoteProvider extends ChangeNotifier{
 
   List<Map<String, String>> get quotes => _quotes;
   bool get isLoading => _isLoading;
+
+  QuoteProvider(){
+    fetchQuotes();
+  }
+
 
   Future<void> fetchQuotes() async{
     try{
@@ -25,6 +29,9 @@ class QuoteProvider extends ChangeNotifier{
       _quotes = [
         {'text': "Error loading quotes", 'author': ""}
       ];
+    }finally{
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
