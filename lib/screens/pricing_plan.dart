@@ -194,7 +194,7 @@ class _PricingPlanState extends State<PricingPlan> {
                   initialPage: 2,
                   autoPlay: false,
                   enlargeCenterPage: true,
-                  enableInfiniteScroll: true, // Disables infinite scrolling.
+                  enableInfiniteScroll: false, // Disables infinite scrolling.
                   viewportFraction: 0.55,
                   onPageChanged: (index, reason) {
                     setState(() {

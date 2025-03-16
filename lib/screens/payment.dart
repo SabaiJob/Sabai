@@ -499,9 +499,13 @@ class _PaymentState extends State<Payment> {
                   isKBZ == true
                       ? paymentProvider.setPaymentMethodId(1)
                       : paymentProvider.setPaymentMethodId(2);
-                  widget.plan == 0
+                  selectedPlan == 0
                       ? paymentProvider.setPricingPlanId(2)
                       : paymentProvider.setPricingPlanId(1);
+
+                  print(
+                    selectedPlan,
+                  );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
