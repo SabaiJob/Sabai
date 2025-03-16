@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_label.dart';
 import 'package:sabai_app/components/reusable_radio_button.dart';
 import 'package:sabai_app/components/reusable_slider.dart';
+import 'package:sabai_app/components/work_card.dart';
 //import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
@@ -329,20 +330,20 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                     itemBuilder: (context, index) {
                       var job = filterJobs[index];
                       var jobInfo = job['info'] as Map<String, dynamic>;
-                      // return WorkCard(
-                      //  jobTitle: jobInfo['title'],
-                      //        isPartner: jobInfo['is_partner'],
-                      //        companyName: jobInfo['company_name'],
-                      //        location: jobInfo['location'],
-                      //        maxSalary: jobInfo['salary_max'],
-                      //     minSalary: jobInfo['salary_min'],
-                      //      currency: jobInfo['currency'],
-                      //       jobId: jobInfo['id'],
-                      //       closingAt: jobInfo['closing_at'],
-                      //      safetyLevel: jobInfo['safety_level'],
-                      //       viewCount: jobInfo['views_count'],
-                      //     );
-                      return SizedBox();
+                      return WorkCard(
+                       jobTitle: jobInfo['title'],
+                             isPartner: jobInfo['is_partner'],
+                             companyName: jobInfo['company_name'],
+                             location: jobInfo['location'],
+                             maxSalary: jobInfo['salary_max'],
+                          minSalary: jobInfo['salary_min'],
+                           currency: jobInfo['currency'],
+                            jobId: jobInfo['id'],
+                            closingAt: jobInfo['closing_at'],
+                           safetyLevel: jobInfo['safety_level'],
+                            viewCount: jobInfo['views_count'],
+                          );
+                      //return SizedBox();
                     }),
               ),
             ]

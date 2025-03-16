@@ -236,103 +236,102 @@ class WorkCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        language.lan == 'English'
-                            ? const Text(
-                                'Salary',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-R',
-                                  fontSize: 12.5,
-                                  color: Color(0xff6C757D),
-                                ),
-                              )
-                            : const Text(
-                                'လစာ',
-                                style: TextStyle(
-                                  fontFamily: 'Walone-R',
-                                  fontSize: 12.5,
-                                  color: Color(0xff6C757D),
-                                ),
-                              ),
-                        Padding(
-                          padding: language.lan == 'English'
-                              ? const EdgeInsets.only(right: 25)
-                              : const EdgeInsets.only(right: 28),
-                          child: Row(
-                            children: [
-                              language.lan == 'English'
-                                  ? const Text(
-                                      'Location',
-                                      style: TextStyle(
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 12.5,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    )
-                                  : const Text(
-                                      'တည်နေရာ',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-R',
-                                        fontSize: 12.5,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                              const SizedBox(
-                                width: 70,
-                              ),
-                              language.lan == 'English'
-                                  ? const Text(
-                                      'Safety',
-                                      style: TextStyle(
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 12.5,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    )
-                                  : const Text(
-                                      'စိတ်ချရမှု',
-                                      style: TextStyle(
-                                        fontFamily: 'Walone-R',
-                                        fontSize: 12.5,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '$minSalary ~ $maxSalary $currency',
-                          style: const TextStyle(
-                            fontFamily: 'Bricolage-M',
-                            fontSize: 14,
-                            color: Color(0xff4C5258),
-                          ),
-                        ),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: 60,
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                location,
-                                style: const TextStyle(
-                                  fontFamily: 'Bricolage-M',
-                                  fontSize: 14,
-                                  color: Color(0xff4C5258),
-                                ),
+                            language.lan == 'English'
+                                ? const Text(
+                                    'Salary',
+                                    style: TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    'လစာ',
+                                    style: TextStyle(
+                                      fontFamily: 'Walone-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              '$minSalary ~ $maxSalary $currency',
+                              style: const TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 14,
+                                color: Color(0xff4C5258),
                               ),
                             ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            language.lan == 'English'
+                                ? const Text(
+                                    'Location',
+                                    style: TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    'တည်နေရာ',
+                                    style: TextStyle(
+                                      fontFamily: 'Walone-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
                             const SizedBox(
-                              width: 55,
+                              height: 10,
+                            ),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              location,
+                              style: const TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 14,
+                                color: Color(0xff4C5258),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            language.lan == 'English'
+                                ? const Text(
+                                    'Safety',
+                                    style: TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  )
+                                : const Text(
+                                    'စိတ်ချရမှု',
+                                    style: TextStyle(
+                                      fontFamily: 'Walone-R',
+                                      fontSize: 12.5,
+                                      color: Color(0xff6C757D),
+                                    ),
+                                  ),
+                            const SizedBox(
+                              height: 2,
                             ),
                             JobLevelCard(
                               language: language,
@@ -362,10 +361,7 @@ class WorkCard extends StatelessWidget {
                                   color: Color(0xffFF3997),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 3,
-                              ),
-        
+                              
                               Text(
                                 '$viewCount',
                                 style: const TextStyle(
@@ -373,33 +369,33 @@ class WorkCard extends StatelessWidget {
                                   fontFamily: 'Bricolage-B',
                                   color: Color(0xff6C757D),
                                 ),
-                              )                         
+                              )
                             ],
                           ),
-                          if(isClosedDay <= 3)  
-                          language.lan == 'English'
-                              ? Text(
-                                  timeDifference.isNegative
-                                      ? 'Closed'
-                                      : isClosedDay > 0
-                                          ? 'Closing in $isClosedDay days'
-                                          : 'Closing in $isClosedHour hours',
-                                  style: const TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    fontSize: 12,
-                                    color: Color(0xffDC3545),
+                          if (isClosedDay <= 3)
+                            language.lan == 'English'
+                                ? Text(
+                                    timeDifference.isNegative
+                                        ? 'Closed'
+                                        : isClosedDay > 0
+                                            ? 'Closing in $isClosedDay days'
+                                            : 'Closing in $isClosedHour hours',
+                                    style: const TextStyle(
+                                      fontFamily: 'Bricolage-R',
+                                      fontSize: 12,
+                                      color: Color(0xffDC3545),
+                                    ),
+                                  )
+                                : Text(
+                                    isClosedDay > 0
+                                        ? '$isClosedDay ရက် အတွင်းပိတ်မည်'
+                                        : '$isClosedHour ရက် အတွင်းပိတ်မည်',
+                                    style: const TextStyle(
+                                      fontFamily: 'Walone-M',
+                                      fontSize: 12,
+                                      color: Color(0xffDC3545),
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  isClosedDay > 0
-                                      ? '$isClosedDay ရက် အတွင်းပိတ်မည်'
-                                      : '$isClosedHour ရက် အတွင်းပိတ်မည်',
-                                  style: const TextStyle(
-                                    fontFamily: 'Walone-M',
-                                    fontSize: 12,
-                                    color: Color(0xffDC3545),
-                                  ),
-                                ),
                         ],
                       ),
                     )
