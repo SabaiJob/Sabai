@@ -144,7 +144,7 @@ class JobFilterProvider with ChangeNotifier {
       'jobNames': [],
       'jobCategories': [],
       'jobLocations': [],
-      'jobTypes': [],
+      'jobTypes': null,
       'thaiLanguageRequired': null,
       'verificationRequired': null,
       'salaryRange': null,
@@ -175,7 +175,7 @@ class JobFilterProvider with ChangeNotifier {
     count += (_filterValues!['jobNames'] as List?)?.length ?? 0;
     count += (_filterValues!['jobCategories'] as List?)?.length ?? 0;
     count += (_filterValues!['jobLocations'] as List?)?.length ?? 0;
-    count += (_filterValues!['jobTypes'] as List?)?.length ?? 0;
+    count += (_filterValues!['jobTypes'] != null) ? 1: 0;
     count += _filterValues!['thaiLanguageRequired'] == true ? 1 : 0;
     count += _filterValues!['verificationRequired'] == true ? 1 : 0;
     count += (_filterValues!['salaryRange'] != null) ? 1 : 0;

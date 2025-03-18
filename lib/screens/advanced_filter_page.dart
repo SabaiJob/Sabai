@@ -65,7 +65,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   List<dynamic> selectedJobNames = [];
   List<int> selectedJobCategoryIndices = [];
   List<dynamic> selectedJobLocations = [];
-  List<int> selectedJobTypeIndices = [];
+  //List<int> selectedJobTypeIndices = [];
+  String? selectedJobType;
   String? selectedLanguageOption;
   String? Value;
   String? selectedVerificationOption;
@@ -83,9 +84,10 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
           .map((index) => _jobCategories[index]['id'])
           .toList(),
       'jobLocations': selectedJobLocations,
-      'jobTypes': selectedJobTypeIndices
-          .map((index) => sabaiAppData.jobTypes[index])
-          .toList(),
+      // 'jobTypes': selectedJobTypeIndices
+      //     .map((index) => sabaiAppData.jobTypes[index])
+      //     .toList(),
+      'jobTypes': selectedJobType,
       'thaiLanguageRequired': selectedLanguageOption == 'Yes'
           ? true
           : selectedLanguageOption == 'No'
@@ -107,7 +109,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       selectedJobNames.clear();
       selectedJobCategoryIndices.clear();
       selectedJobLocations.clear();
-      selectedJobTypeIndices.clear();
+      //selectedJobTypeIndices.clear();
+      selectedJobType = null;
       selectedLanguageOption = null; // Reset to null
       selectedVerificationOption = null;
       miniumSlary = null;
@@ -133,7 +136,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     selectedJobNames.clear();
     selectedJobCategoryIndices.clear();
     selectedJobLocations.clear();
-    selectedJobTypeIndices.clear();
+    //selectedJobTypeIndices.clear();
+    selectedJobType = null;
     selectedLanguageOption = null; // Reset to null
     selectedVerificationOption = null; // Reset to null
     //currentValue = 1000.00;
@@ -168,13 +172,14 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                 ).where((index) => index != -1).toList()
               : [];
           selectedJobLocations = existingFilters['jobLocations'] ?? [];
-          selectedJobTypeIndices = existingFilters['jobTypes'] != null
-              ? List.generate(
-                  existingFilters['jobTypes'].length,
-                  (index) => sabaiAppData.jobTypes
-                      .indexOf(existingFilters['jobTypes'][index]),
-                ).where((index) => index != -1).toList()
-              : [];
+          // selectedJobTypeIndices = existingFilters['jobTypes'] != null
+          //     ? List.generate(
+          //         existingFilters['jobTypes'].length,
+          //         (index) => sabaiAppData.jobTypes
+          //             .indexOf(existingFilters['jobTypes'][index]),
+          //       ).where((index) => index != -1).toList()
+          //     : [];
+          selectedJobType = existingFilters['jobTypes'];
 
           // Restore radio button values (handle null)
           selectedLanguageOption =
@@ -583,48 +588,48 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       children:
                           List.generate(sabaiAppData.jobTypes.length, (index) {
                         final jobType = sabaiAppData.jobTypes[index];
-                        return ChoiceChip(
-                          showCheckmark: false,
-                          label: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                jobType,
-                                style: choiceChipItemStyle,
-                              ),
-                            ],
-                          ),
-                          selected: selectedJobTypeIndices.contains(index),
-                          // onSelected: (selected) {
-                          //   setState(() {
-                          //     if (selected) {
-                          //       selectedJobTypeIndices = [index];
-                          //     } else {
-                          //       selectedJobTypeIndices.clear();
-                          //     }
-                          //   });
-                          // },
-                          onSelected: (selected) {
-                            setState(() {
-                              if (selected) {
-                                selectedJobTypeIndices.add(index);
-                              } else {
-                                selectedJobTypeIndices.remove(index);
-                              }
-                            });
-                          },
-                          selectedColor: Colors.transparent,
-                          backgroundColor: Colors.white,
-                          side: BorderSide(
-                            color: selectedJobTypeIndices.contains(index)
-                                ? Colors.pink
-                                : Colors.transparent,
-                            width: 2,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        );
+                        // return ChoiceChip(
+                        //   showCheckmark: false,
+                        //   label: Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: [
+                        //       Text(
+                        //         jobType,
+                        //         style: choiceChipItemStyle,
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   selected: selectedJobTypeIndices.contains(index),
+                        //   onSelected: (selected) {
+                        //     setState(() {
+                        //       if (selected) {
+                        //         selectedJobTypeIndices.add(index);
+                        //       } else {
+                        //         selectedJobTypeIndices.remove(index);
+                        //       }
+                        //     });
+                        //   },
+                        //   selectedColor: Colors.transparent,
+                        //   backgroundColor: Colors.white,
+                        //   side: BorderSide(
+                        //     color: selectedJobTypeIndices.contains(index)
+                        //         ? Colors.pink
+                        //         : Colors.transparent,
+                        //     width: 2,
+                        //   ),
+                        //   shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(16),
+                        //   ),
+                        // );
+                        return ReusableRadioButton(
+                            rButtonValue: jobType,
+                            rButtonSelectedValue: selectedJobType,
+                            rButtonChoosen: (value) {
+                              setState(() {
+                                selectedJobType = value;
+                              });
+                            },
+                            rButtonName: jobType);
                       }),
                     ),
                     // Thai Language Requirements
@@ -857,7 +862,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                   } else if (selectedJobNames.isEmpty &&
                       selectedJobCategoryIndices.isEmpty &&
                       selectedJobLocations.isEmpty &&
-                      selectedJobTypeIndices.isEmpty &&
+                      // selectedJobTypeIndices.isEmpty &&
+                      selectedJobType == null &&
                       selectedLanguageOption != 'Yes' &&
                       selectedVerificationOption != 'Yes' &&
                       miniumSlary == null &&
@@ -900,10 +906,16 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                           .setLocation('${filterValues['jobLocations'][0]}');
                     }
                     //print('the above is worked 5!');
-                    if (selectedJobTypeIndices.isNotEmpty) {
-                      Provider.of<JobFilterProvider>(context, listen: false)
-                          .setType('${filterValues['jobTypes'][0]}');
-                      // print(filterValues['jobTypes'][0]);
+
+                    // if (selectedJobTypeIndices.isNotEmpty) {
+                    //   Provider.of<JobFilterProvider>(context, listen: false)
+                    //       .setType('${filterValues['jobTypes'][0]}');
+                    //   // print(filterValues['jobTypes'][0]);
+                    // }
+
+                    if(selectedJobType != null){
+                         Provider.of<JobFilterProvider>(context, listen: false)
+                    .setType('$selectedJobType');
                     }
                     //print('the above is worked 6!');
                     if (selectedLanguageOption != null) {
