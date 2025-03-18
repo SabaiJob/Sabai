@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -737,8 +738,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                           FocusScope.of(context).unfocus();
                         },
                         controller: minSalaryTextController,
-                        keyboardType:
-                            const TextInputType.numberWithOptions(signed: true),
+                        keyboardType: Platform.isIOS?
+                            const TextInputType.numberWithOptions(signed: true) : const TextInputType.numberWithOptions(),
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.only(bottom: 10, left: 10),
