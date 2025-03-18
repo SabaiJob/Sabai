@@ -221,7 +221,8 @@ class _RegistrationPagesControllerState
                   "Authorization": "Bearer $token",
                 },
               ),
-              data: formData);
+              data: formData,
+              );
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             //fetch the job categories
