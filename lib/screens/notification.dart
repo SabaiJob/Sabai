@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/screens/navigation_homepage.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:intl/intl.dart';
 
@@ -13,35 +15,67 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  final List<Map<String, dynamic>> noti = [
-    {
-      'img': 'images/noti_moti.png',
-      'title':
-          '“Success is not the result of spontaneous combustion. You must set yourself on fire."\nby Arnold H. Glasow',
-      'time': '2024-12-27T14:00:00Z',
-      'type': 'none',
-    },
-    {
-      'img': 'images/noti_closing.png',
-      'title':
-          '⏰ Hurry! Your Barista position is closing soon! Apply before it\'s too late!',
-      'time': '2024-12-27T13:50:00Z',
-      'type': 'none',
-    },
-    {
-      'img': 'images/noti_open.png',
-      'title':
-          'New positions for Barista in are now open. Check them out and apply today! 🎉',
-      'time': '2024-12-26T15:30:00Z',
-      'type': 'none',
-    },
-    {
-      'img': 'images/noti_rose.png',
-      'title': 'You received 6 roses for your contribution from',
-      'time': '2024-12-26T14:00:00Z',
-      'type': 'contribute',
+  // final List<Map<String, dynamic>> noti = [
+  //   {
+  //     'img': 'images/noti_moti.png',
+  //     'title':
+  //         '“Success is not the result of spontaneous combustion. You must set yourself on fire."\nby Arnold H. Glasow',
+  //     'time': '2024-12-27T14:00:00Z',
+  //     'type': 'none',
+  //   },
+  //   {
+  //     'img': 'images/noti_closing.png',
+  //     'title':
+  //         '⏰ Hurry! Your Barista position is closing soon! Apply before it\'s too late!',
+  //     'time': '2024-12-27T13:50:00Z',
+  //     'type': 'none',
+  //   },
+  //   {
+  //     'img': 'images/noti_open.png',
+  //     'title':
+  //         'New positions for Barista in are now open. Check them out and apply today! 🎉',
+  //     'time': '2024-12-26T15:30:00Z',
+  //     'type': 'none',
+  //   },
+  //   {
+  //     'img': 'images/noti_rose.png',
+  //     'title': 'You received 6 roses for your contribution from',
+  //     'time': '2024-12-26T14:00:00Z',
+  //     'type': 'contribute',
+  //   }
+  // ];
+
+  bool isLoading = true;
+  List<Map<String, dynamic>> noti = [];
+
+  Future<void> loadNotification() async {
+    try {
+      final response = await ApiService.get('/notifications/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = json.decode(response.body);
+        List<Map<String, dynamic>> notiList =
+            data['results'].map<Map<String, dynamic>>((item) {
+          return {
+            'title': item['text'] ?? 'No title',
+            'time': item['created_at'] ?? 'Unknown time',
+            'type': item['type'] ?? 'none'
+          };
+        }).toList();
+
+        setState(() {
+          noti = notiList;
+        });
+      } else {
+        print('error ${response.body}');
+      }
+    } catch (e) {
+      print('Error : $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-  ];
+  }
 
   Map<String, List<Map<String, dynamic>>> groupNotifications(
       List<Map<String, dynamic>> notifications) {
@@ -91,6 +125,13 @@ class _NotificationPageState extends State<NotificationPage> {
     } else {
       return DateFormat('MMMM dd').format(notificationTime);
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() => loadNotification());
   }
 
   @override
@@ -144,7 +185,13 @@ class _NotificationPageState extends State<NotificationPage> {
           ),
         ),
       ),
-      body: Center(
+      body: isLoading == true ? 
+      const Center(
+        child: CircularProgressIndicator(
+          color: primaryPinkColor,
+        ),
+      ): 
+      Center(
         child: noti.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -209,10 +256,9 @@ class _NotificationPageState extends State<NotificationPage> {
                         ),
                         ...items.map(
                           (item) => NotiTile(
-                            img: item['img']!,
                             title: item['title']!,
                             time: timeAgo(item['time']!),
-                            type: item['type']!,
+                            type: item['type']!.toString().toLowerCase(),
                           ),
                         ),
                       ],
@@ -227,14 +273,12 @@ class _NotificationPageState extends State<NotificationPage> {
 
 class NotiTile extends StatelessWidget {
   const NotiTile({
-    required this.img,
     required this.title,
     required this.time,
     required this.type,
     super.key,
   });
 
-  final String img;
   final String title;
   final String time;
   final String type;
@@ -250,19 +294,21 @@ class NotiTile extends StatelessWidget {
       child: ListTile(
         minTileHeight: 82,
         titleAlignment: ListTileTitleAlignment.titleHeight,
-        leading: Image.asset(img),
+        leading: type.toLowerCase()=='successful payment'? Image.asset('images/like.png'): 
+        type.toLowerCase() =='closing soon'? Image.asset('images/noti_closing.png'):
+         Image.asset('images/noti_rose.png'),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'Bricolage-R',
-                fontSize: 10,
+                fontFamily: 'Bricolage-M',
+                fontSize: 13,
                 color: Color(0xff363B3F),
               ),
             ),
-            type == 'contribute'
+            type.toLowerCase() == 'contribute'
                 ? const Stack(
                     alignment: Alignment.center,
                     clipBehavior: Clip.none,
@@ -303,7 +349,7 @@ class NotiTile extends StatelessWidget {
               time,
               style: const TextStyle(
                 fontFamily: 'Bricolage-R',
-                fontSize: 10,
+                fontSize: 11,
                 color: Color(0xFFB6BABE),
               ),
             ),
