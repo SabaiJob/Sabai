@@ -21,7 +21,7 @@ class JobFilterProvider with ChangeNotifier {
   String location = '';
   String jobType = '';
   bool? thaiLanguageRequired;
-  int salaryMin = 1000;
+  int? salaryMin;
   int? salaryMax;
   bool? isVerified;
 
@@ -52,6 +52,11 @@ class JobFilterProvider with ChangeNotifier {
 
   void setVerified(bool value) {
     isVerified = value;
+    notifyListeners();
+  }
+
+  void setMinSalary(int value) {
+    salaryMin = value;
     notifyListeners();
   }
 
@@ -87,7 +92,7 @@ class JobFilterProvider with ChangeNotifier {
       if (thaiLanguageRequired != null) {
         url += '&thai_language_required=$thaiLanguageRequired';
       }
-      url += '&salary_min=$salaryMin';
+      if (salaryMin != null) url += '&salary_min=$salaryMin';
       if (salaryMax != null) url += '&salary_max=$salaryMax';
       if (isVerified != null) url += '&is_verified=$isVerified';
 
@@ -127,7 +132,7 @@ class JobFilterProvider with ChangeNotifier {
     location = '';
     jobType = '';
     thaiLanguageRequired = null;
-    salaryMin = 1000;
+    salaryMin = null;
     salaryMax = null;
     isVerified = null;
 
@@ -142,7 +147,7 @@ class JobFilterProvider with ChangeNotifier {
       'jobTypes': [],
       'thaiLanguageRequired': null,
       'verificationRequired': null,
-      'salaryRange': 1000.0,
+      'salaryRange': null,
     };
     notifyListeners(); // Ensure UI updates
   }
@@ -173,8 +178,8 @@ class JobFilterProvider with ChangeNotifier {
     count += (_filterValues!['jobTypes'] as List?)?.length ?? 0;
     count += _filterValues!['thaiLanguageRequired'] == true ? 1 : 0;
     count += _filterValues!['verificationRequired'] == true ? 1 : 0;
-    count += (_filterValues!['salaryRange'] > 1000.00) ? 1 : 0;
-
+    count += (_filterValues!['salaryRange'] != null) ? 1 : 0;
+    //count += (_filterValues!['maxSalaryRange'] != null) ? 1 : 0;
     return count;
   }
 }

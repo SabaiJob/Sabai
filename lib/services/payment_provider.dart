@@ -37,7 +37,7 @@ class PaymentProvider extends ChangeNotifier {
         final Map<String, dynamic> data = jsonDecode(response.body);
         _userData = data;
         notifyListeners();
-        print(_userData);
+        //print(_userData);
       } else {
         print(response.body);
       }

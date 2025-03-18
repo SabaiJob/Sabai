@@ -27,6 +27,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
 //for new search bar
   bool isSearching = false;
   final TextEditingController _searchController = TextEditingController();
+  final minSalaryTextController = TextEditingController();
+  final maxSalaryTextController = TextEditingController();
   String searchQuery = "";
 
   // get job categories
@@ -67,7 +69,11 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
   String? selectedLanguageOption;
   String? Value;
   String? selectedVerificationOption;
-  double currentValue = 1000.00;
+  int? miniumSlary;
+  int? maximumSalary;
+  String? salaryOptin;
+
+  //double currentValue = 1000.00;
 
   // Method to collect all selected filter values
   Map<String, dynamic> collectFilterValues() {
@@ -90,7 +96,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
           : selectedVerificationOption == 'No'
               ? false
               : null,
-      'salaryRange': currentValue,
+      'salaryRange': miniumSlary ?? maximumSalary,
+      //'maxSalaryRange': maximumSalary,
     };
   }
 
@@ -102,8 +109,10 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       selectedJobLocations.clear();
       selectedJobTypeIndices.clear();
       selectedLanguageOption = null; // Reset to null
-      selectedVerificationOption = null; // Reset to null
-      currentValue = 1000.00;
+      selectedVerificationOption = null;
+      miniumSlary = null;
+      maximumSalary = null; // Reset to null
+      //currentValue = 1000.00;
     });
     Provider.of<JobFilterProvider>(context, listen: false).setFilter(false);
     // Clear filters in the provider
@@ -127,7 +136,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     selectedJobTypeIndices.clear();
     selectedLanguageOption = null; // Reset to null
     selectedVerificationOption = null; // Reset to null
-    currentValue = 1000.00;
+    //currentValue = 1000.00;
     print('name : $selectedJobNames');
     getJobCategory();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -181,7 +190,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       ? 'No'
                       : null;
 
-          currentValue = existingFilters['salaryRange'] ?? 1000.00;
+          //currentValue = existingFilters['salaryRange'] ?? 1000.00;
         });
       }
     });
@@ -331,18 +340,18 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       var job = filterJobs[index];
                       var jobInfo = job['info'] as Map<String, dynamic>;
                       return WorkCard(
-                       jobTitle: jobInfo['title'],
-                             isPartner: jobInfo['is_partner'],
-                             companyName: jobInfo['company_name'],
-                             location: jobInfo['location'],
-                             maxSalary: jobInfo['salary_max'],
-                          minSalary: jobInfo['salary_min'],
-                           currency: jobInfo['currency'],
-                            jobId: jobInfo['id'],
-                            closingAt: jobInfo['closing_at'],
-                           safetyLevel: jobInfo['safety_level'],
-                            viewCount: jobInfo['views_count'],
-                          );
+                        jobTitle: jobInfo['title'],
+                        isPartner: jobInfo['is_partner'],
+                        companyName: jobInfo['company_name'],
+                        location: jobInfo['location'],
+                        maxSalary: jobInfo['salary_max'],
+                        minSalary: jobInfo['salary_min'],
+                        currency: jobInfo['currency'],
+                        jobId: jobInfo['id'],
+                        closingAt: jobInfo['closing_at'],
+                        safetyLevel: jobInfo['safety_level'],
+                        viewCount: jobInfo['views_count'],
+                      );
                       //return SizedBox();
                     }),
               ),
@@ -659,16 +668,129 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                           isStarred: false),
                     ),
                     // Salary Range Slider
-                    ReusableSlider(
-                        minAmount: 1000.00,
-                        maxAmount: 9000.00,
-                        unit: 'THB',
-                        currentValue: currentValue,
-                        sliderOnChanged: (value) {
+                    // ReusableSlider(
+                    //     minAmount: 1000.00,
+                    //     maxAmount: 9000.00,
+                    //     unit: 'THB',
+                    //     currentValue: currentValue,
+                    //     sliderOnChanged: (value) {
+                    //       setState(() {
+                    //         currentValue = value;
+                    //       });
+                    //     }),
+
+                    ReusableRadioButton(
+                      rButtonValue: 'Under 8000',
+                      rButtonChoosen: (value) {
+                        setState(() {
+                          salaryOptin = value;
+                          miniumSlary = 0;
+                          maximumSalary = 8000;
+                        });
+                      },
+                      rButtonName: 'Under 8,000 THb',
+                      rButtonSelectedValue: salaryOptin,
+                    ),
+                    ReusableRadioButton(
+                      rButtonValue: 'Under 120,000',
+                      rButtonChoosen: (value) {
+                        setState(() {
+                          salaryOptin = value;
+                          miniumSlary = 8000;
+                          maximumSalary = 120000;
+                        });
+                      },
+                      rButtonName: '8000 THB to 120,000 THB',
+                      rButtonSelectedValue: salaryOptin,
+                    ),
+                    ReusableRadioButton(
+                      rButtonValue: 'Under 150,000',
+                      rButtonChoosen: (value) {
+                        setState(() {
+                          salaryOptin = value;
+                          miniumSlary = 120000;
+                          maximumSalary = 150000;
+                        });
+                      },
+                      rButtonName: '120,000 THB to 150,000 THB',
+                      rButtonSelectedValue: salaryOptin,
+                    ),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 36,
+                      child: TextField(
+                        onTap: () {
                           setState(() {
-                            currentValue = value;
+                            salaryOptin = null;
                           });
-                        }),
+                        },
+                        onSubmitted: (value) {
+                          setState(() {
+                            miniumSlary = int.tryParse(value);
+                          });
+                          FocusScope.of(context).unfocus();
+                        },
+                        controller: minSalaryTextController,
+                        keyboardType:
+                            const TextInputType.numberWithOptions(signed: true),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.only(bottom: 10, left: 10),
+                          hintText: 'Min',
+                          hintStyle: const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 14,
+                            color: Color(0xff7B838A),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 36,
+                      child: TextField(
+                        onTap: () {
+                          setState(() {
+                            salaryOptin = null;
+                          });
+                        },
+                        onSubmitted: (value) {
+                          setState(() {
+                            maximumSalary = int.tryParse(value);
+                          });
+                          FocusScope.of(context).unfocus();
+                        },
+                        controller: maxSalaryTextController,
+                        keyboardType:
+                            const TextInputType.numberWithOptions(signed: true),
+                        decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.only(bottom: 10, left: 10),
+                          hintText: 'Max',
+                          hintStyle: const TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 14,
+                            color: Color(0xff7B838A),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
                     // Verification
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -737,7 +859,9 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                       selectedJobLocations.isEmpty &&
                       selectedJobTypeIndices.isEmpty &&
                       selectedLanguageOption != 'Yes' &&
-                      selectedVerificationOption != 'Yes') {
+                      selectedVerificationOption != 'Yes' &&
+                      miniumSlary == null &&
+                      maximumSalary == null) {
                     Provider.of<JobFilterProvider>(context, listen: false)
                         .setFilter(false);
                     // Navigate back
@@ -750,47 +874,54 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                         Provider.of<JobFilterProvider>(context, listen: false);
                     jobFilterProvider.updateFilterValues(filterValues);
                     print('it works');
-
+                    print('MINI : $miniumSlary');
+                    print('maximumSalary $maximumSalary');
                     // Use Provider to update filter values
                     Provider.of<JobFilterProvider>(context, listen: false)
                         .updateFilterValues(filterValues);
-                    print('the above is worked 1!');
+                    // print('the above is worked 1!');
                     Provider.of<JobFilterProvider>(context, listen: false)
                         .setFilter(true);
-                    print('the above is worked 2!');
+                    //print('the above is worked 2!');
                     if (selectedJobCategoryIndices.isNotEmpty) {
                       Provider.of<JobFilterProvider>(context, listen: false)
                           .setCategory(filterValues['jobCategories'].join(','));
-                      print(filterValues['jobCategories'].join(','));
+                      // print(filterValues['jobCategories'].join(','));
                     }
-                    print('the above is worked 3!');
-                    print(selectedJobNames.length);
+                    // print('the above is worked 3!');
+                    //print(selectedJobNames.length);
                     if (selectedJobNames.isNotEmpty) {
                       Provider.of<JobFilterProvider>(context, listen: false)
                           .setTitle('${selectedJobNames[0]}');
                     }
-                    print('the above is worked 4!');
+                    //print('the above is worked 4!');
                     if (selectedJobLocations.isNotEmpty) {
                       Provider.of<JobFilterProvider>(context, listen: false)
                           .setLocation('${filterValues['jobLocations'][0]}');
                     }
-                    print('the above is worked 5!');
+                    //print('the above is worked 5!');
                     if (selectedJobTypeIndices.isNotEmpty) {
                       Provider.of<JobFilterProvider>(context, listen: false)
                           .setType('${filterValues['jobTypes'][0]}');
                       // print(filterValues['jobTypes'][0]);
                     }
-                    print('the above is worked 6!');
+                    //print('the above is worked 6!');
                     if (selectedLanguageOption != null) {
                       Provider.of<JobFilterProvider>(context, listen: false)
                           .setThaiReq(filterValues['thaiLanguageRequired']);
                     }
-                    print('the above is worked 7!');
+                    //print('the above is worked 7!');
                     // Provider.of<JobFilterProvider>(context, listen: false)
                     //     .setMinSalary(1000);
-                    if (currentValue != 1000) {
+                    if (miniumSlary != null) {
                       Provider.of<JobFilterProvider>(context, listen: false)
-                          .setMAxSalary(currentValue.toInt());
+                          .setMinSalary(miniumSlary!);
+                      print('adding max salary is work.');
+                    }
+                    if (maximumSalary != null) {
+                      Provider.of<JobFilterProvider>(context, listen: false)
+                          .setMAxSalary(maximumSalary!);
+                      print('adding max salary is work.');
                     }
 
                     if (selectedVerificationOption != null) {
