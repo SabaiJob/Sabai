@@ -30,10 +30,10 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>This app requires access to documents folder for uploading CVs.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take pictures.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app requires access to documents folder for uploading CVs.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>your usage description here</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
