@@ -4,13 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_bulletpoints.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/components/tc_dialog.dart';
+import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobDetailsPage extends StatefulWidget {
-  const JobDetailsPage({super.key, required this.jobId});
+  const JobDetailsPage({super.key, required this.jobId, required this.isClosed});
   final int jobId;
+  final bool isClosed;
 
   @override
   State<JobDetailsPage> createState() => _JobDetailsPageState();
@@ -129,7 +131,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 380,
+                      height: 400,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -299,48 +301,55 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFEAF6EC),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                      ),
+                                    SizedBox(
                                       width: 80,
-                                      height: 21,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.info_outline,
-                                            size: 13,
-                                            color: Color(0xFF28A745),
-                                          ),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                          languageProvider.lan == 'English'
-                                              ? Text(
-                                                  'Level - ${jobDetail['safety_level']}',
-                                                  style: const TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              : const Text(
-                                                  'အဆင့် - ၃',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Walone-B',
-                                                    fontSize: 12,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                        ],
+                                      child: JobLevelCard(
+                                        language: languageProvider,
+                                        level: jobDetail['safety_level'],
                                       ),
                                     ),
+                                    // Container(
+                                    //   decoration: const BoxDecoration(
+                                    //     color: Color(0xFFEAF6EC),
+                                    //     borderRadius: BorderRadius.all(
+                                    //         Radius.circular(4)),
+                                    //   ),
+                                    //   width: 80,
+                                    //   height: 21,
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.center,
+                                    //     children: [
+                                    //       const Icon(
+                                    //         Icons.info_outline,
+                                    //         size: 13,
+                                    //         color: Color(0xFF28A745),
+                                    //       ),
+                                    //       const SizedBox(
+                                    //         width: 2,
+                                    //       ),
+                                    //       languageProvider.lan == 'English'
+                                    //           ? Text(
+                                    //               'Level - ${jobDetail['safety_level']}',
+                                    //               style: const TextStyle(
+                                    //                 fontSize: 12,
+                                    //               ),
+                                    //             )
+                                    //           : const Text(
+                                    //               'အဆင့် - ၃',
+                                    //               style: TextStyle(
+                                    //                 fontFamily: 'Walone-B',
+                                    //                 fontSize: 12,
+                                    //                 color: Colors.black,
+                                    //               ),
+                                    //             ),
+                                    //     ],
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 15,
+                                  height: 10,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -461,14 +470,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     const SizedBox(
                       height: 12,
                     ),
-                         Text(
-                            '${jobDetail['job_summary']}',
-                            style: const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              color: Color(0xFF4C5258),
-                              fontSize: 15.63,
-                            ),
-                          ),
+                    Text(
+                      '${jobDetail['job_summary']}',
+                      style: const TextStyle(
+                        fontFamily: 'Bricolage-R',
+                        color: Color(0xFF4C5258),
+                        fontSize: 15.63,
+                      ),
+                    ),
                     const SizedBox(
                       height: 16,
                     ),
@@ -650,8 +659,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                           ),
                           const SizedBox(
                             width: double.infinity,
-                            child: Divider(
-                            ),
+                            child: Divider(),
                           ),
                           Row(
                             children: [
@@ -784,13 +792,13 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               width: 287,
               height: 42,
               child: TextButton(
-                onPressed: () {
+                onPressed: widget.isClosed ? null :() {
                   showDialog(
                       context: context,
                       builder: (context) => const TAndCDialog());
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xffFF3997),
+                  backgroundColor: widget.isClosed ? const Color(0x50FF3997) :  const Color(0xffFF3997),
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(8), // Set the border radius

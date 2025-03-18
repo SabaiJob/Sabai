@@ -64,6 +64,7 @@ class WorkCard extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => JobDetailsPage(
                         jobId: jobId,
+                        isClosed: timeDifference.isNegative,
                       )));
           print(timeDifference);
         }
