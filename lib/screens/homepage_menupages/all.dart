@@ -64,7 +64,7 @@ class _AllState extends State<All> {
 
   void fetchPremiumJobs() async {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
-    await jobProvider.fetchPremiumJobs(true);
+    await jobProvider.fetchPremiumJobs(_currentPage == 1, page: _currentPage);
   }
 
   void fetchUserData() async {
@@ -234,43 +234,57 @@ class _AllState extends State<All> {
                     //_currentPage = 1;
                     await jobProvider.fetchPremiumJobs(true);
                   },
-                  child: jobProvider.isPremiumLoading == true 
+                  child: jobProvider.isPremiumLoading == true
                       ? const Center(
                           child: CircularProgressIndicator(
                             color: primaryPinkColor,
                           ),
                         )
                       : ListView.builder(
-                          //controller: _scrollController,
-                          itemCount: jobProvider.premiumJobs.length,
+                          controller: _scrollController,
+                          itemCount: jobProvider.premiumJobs.length + 1,
                           itemBuilder: (context, index) {
-                            // if (index == jobProvider.allTypeJobs.length) {
-                            //   // Show a loading indicator at the bottom if there are more pages to load
-                            //   if (_currentPage < jobProvider.totalPages) {
-                            //     return const Center(
-                            //       child: CircularProgressIndicator(
-                            //         color: primaryPinkColor,
-                            //       ),
-                            //     );
-                            //   } else {
-                            //     // No more pages to load
-                            //     return Container();
-                            //   }
-                            // }
-                            final job = jobProvider.premiumJobs[index];
-                            return WorkCard(
-                              jobTitle: job['title'] ?? 'none',
-                              companyName: job['company_name'] ?? 'none',
-                              location: job['location'] ?? 'none',
-                              minSalary: job['salary_min'] ?? 'none',
-                              maxSalary: job['salary_max'] ?? 'none',
-                              currency: job['currency'] ?? 'none',
-                              jobId: job['id'] ?? 'none',
-                              isPartner: job['is_partner'] ?? false,
-                              closingAt: job['closing_at'] ?? '',
-                              safetyLevel: job['safety_level'],
-                              viewCount: job['views_count'],
-                            );
+                            if (index == jobProvider.premiumJobs.length) {
+                              // Show a loading indicator at the bottom if there are more pages to load
+                              if (_currentPage <
+                                  jobProvider.premiumTotalPages) {
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: primaryPinkColor,
+                                  ),
+                                );
+                              } else {
+                                // No more pages to load
+                                return Container();
+                              }
+                            }
+                            final jobType = jobProvider.premiumJobs[index];
+                            if (jobType['type'] == 'job') {
+                              final job = jobType['info'];
+                              return WorkCard(
+                                jobTitle: job['title'] ?? 'none',
+                                companyName: job['company_name'] ?? 'none',
+                                location: job['location'] ?? 'none',
+                                minSalary: job['salary_min'] ?? 00,
+                                maxSalary: job['salary_max'] ?? 00,
+                                currency: job['currency'] ?? 'none',
+                                jobId: job['id'] ?? 00,
+                                isPartner: job['is_partner'] ?? false,
+                                closingAt: job['closing_at'] ?? '',
+                                safetyLevel: job['safety_level'] ?? '',
+                                viewCount: job['views_count'] ?? 0,
+                              );
+                            } else {
+                              final adInfo =
+                                  jobType['info'] as Map<String, dynamic>;
+                              return AdCard(
+                                url: adInfo['link'],
+                                imageUrl: adInfo['poster'],
+                              );
+                            }
+                            // return SizedBox(
+                            //   child: Text('none'),
+                            // );
                           },
                         ),
                 ),

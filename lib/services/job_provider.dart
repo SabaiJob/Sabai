@@ -129,8 +129,7 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.get(
-          '/jobs/search/?best_matches=true');
+      final response = await ApiService.get('/jobs/search/?best_matches=true&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -236,16 +235,26 @@ class JobProvider extends ChangeNotifier {
   List<dynamic> _premiumJobs = [];
   List<dynamic> get premiumJobs => _premiumJobs;
   bool isPremiumLoading = false;
-  Future<void> fetchPremiumJobs(bool isLoading) async {
+  int premiumTotalPages = 1;
+  Future<void> fetchPremiumJobs(bool isLoading, {int page = 1}) async {
     isPremiumLoading = isLoading;
     notifyListeners();
     try {
-      final response =
-          await ApiService.get('/jobs/new-jobs/?location_type=$locationType');
+      final response = await ApiService.get('/jobs/search/?is_new=true&location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final data = json.decode(response.body);
-        _premiumJobs = data['results'];
-        print(_premiumJobs);
+        final newJobs = data['results'];
+        if (page == 1) {
+          _premiumJobs = newJobs;
+          // print(_premiumJobs);
+          // print(newJobs);
+        } else {
+          _premiumJobs.addAll(newJobs);
+        }
+
+        if (data.containsKey('total_pages')) {
+          premiumTotalPages = data['total_pages'];
+        }
       } else {
         print('error ${response.body}');
       }
