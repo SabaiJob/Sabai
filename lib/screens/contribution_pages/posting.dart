@@ -392,12 +392,12 @@ class _PostingState extends State<Posting> {
                     //     :
                     () async {
                   await contribute(
-                      text: text ?? "",
+                      text: text ?? "none",
                       link: widget.url != null ? widget.url! : "https://www.google.co.th/",
                       location: {"location": widget.location},
                       imagePaths: _images!.map((image) => image.path).toList());
                   setState(() {
-                    print('Text: ${text ?? ""}');
+                    print('Text: ${text ?? "none"}');
                     print('Link: ${widget.url ?? "https://www.google.co.th/"}');
                     print('Location: ${widget.location}');
                     print(
@@ -505,8 +505,10 @@ class _PostingState extends State<Posting> {
                           color: Colors.grey,
                         ),
                       ),
-                      onSubmitted: (value) {
-                        text = value;
+                      onChanged: (value) {
+                        setState(() {
+                          text = value;
+                        });
                         print(text);
                       },
                     ),

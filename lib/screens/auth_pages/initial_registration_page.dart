@@ -18,15 +18,6 @@ class InitialRegistrationPage extends StatelessWidget {
   // Phone Number
   final TextEditingController phoneNumberController;
 
-  // Email
-  //final TextEditingController emailController;
-
-  // Gender
-  //final String? selectedGender;
-  //final bool isGenderError;
-  //final String genderErrorMessage;
-  //final Function(String? value) onGenderChanged;
-
   const InitialRegistrationPage({
     super.key,
     required this.formKey,
@@ -38,7 +29,11 @@ class InitialRegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
-    return SingleChildScrollView(
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: SingleChildScrollView(
       child: Form(
         key: formKey,
         child: Column(
@@ -93,48 +88,7 @@ class InitialRegistrationPage extends StatelessWidget {
                 hint: languageProvider.lan == 'English'
                     ? 'Enter your full name'
                     : 'သင့်အမည် ထည့်ပါ'),
-            // Gender Label
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 12),
-            //   child: ReusableLabelHolder(
-            //     labelName:
-            //         languageProvider.lan == 'English' ? 'Gender' : 'လိင်',
-            //     textStyle: languageProvider.lan == 'English'
-            //         ? labelStyleEng
-            //         : labelStyleMm,
-            //     isStarred: true,
-            //   ),
-            // ),
-            // Gender Dropdown
-            // ReusableContainer(
-            //   hasError: isGenderError,
-            //   childWidget: ReusableDropdown(
-            //     dropdownItems: languageProvider.lan == 'English'
-            //         ? sabaiAppData.genderItemsInEng
-            //         : sabaiAppData.genderItemsInMm,
-            //     selectedItem: selectedGender,
-            //     cusHeight: 36,
-            //     cusWidth: 400,
-            //     whenOnChanged: onGenderChanged,
-            //     hintText: languageProvider.lan == 'English'
-            //         ? 'Select One'
-            //         : 'တစ်ခုရွေးချယ်ပါ',
-            //   ),
-            // ),
-            //when gender is empty
-            // if (isGenderError)
-            //   Align(
-            //     alignment: Alignment.topLeft,
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(top: 1),
-            //       child: Text(
-            //         genderErrorMessage,
-            //         style: languageProvider.lan == 'English'
-            //             ? errorTextStyleEng
-            //             : errorTextStyleMm,
-            //       ),
-            //     ),
-            //   ),
+            
             // Phone Number Title
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -163,51 +117,11 @@ class InitialRegistrationPage extends StatelessWidget {
               },
               hint: '+66 2134567',
             ),
-            // Email Title
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 12),
-            //   child: ReusableLabelHolder(
-            //     labelName: languageProvider.lan == 'English'
-            //         ? 'Email Address'
-            //         : 'အီးမေးလ် လိပ်စာ',
-            //     textStyle: languageProvider.lan == 'English'
-            //         ? labelStyleEng
-            //         : labelStyleMm,
-            //     isStarred: false,
-            //   ),
-            // ),
-            // Email Address TextField
-            // SizedBox(
-            //   width: 400,
-            //   height: 36,
-            //   child: TextField(
-            //     controller: emailController,
-            //     keyboardType: TextInputType.emailAddress,
-            //     style: languageProvider.lan == 'English'
-            //         ? textfieldTextStyleEng
-            //         : textfieldTextStyleMm,
-            //     textAlign: TextAlign.start,
-            //     decoration: InputDecoration(
-            //       enabledBorder: enableBorderStyle,
-            //       focusedBorder: focusedBorderStyle,
-            //       filled: true,
-            //       fillColor: Colors.white,
-            //       hintText: languageProvider.lan == 'English'
-            //           ? ("Enter your email address")
-            //           : ('သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
-            //       hintStyle: languageProvider.lan == 'English' ?
-            //       textfieldHintTextStyleEng: textfieldHintTextStyleMm,
-            //       contentPadding:
-            //           const EdgeInsets.only(top: 1, bottom: 1, left: 10),
-            //       border: const OutlineInputBorder(
-            //         borderSide: BorderSide.none,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            
           ],
         ),
       ),
+    )
     );
   }
 }
