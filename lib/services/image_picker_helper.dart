@@ -16,13 +16,24 @@ class ImagePickerHelper {
 
   // select multiple photos
   Future<List<XFile>> pickMultipleImage() async {
-   try {
-    final multipleImages = await picker.pickMultiImage();
-    return multipleImages; 
-  } catch (e) {
-    print('Error picking images: $e');
-    return []; // Return an empty list on error
+    try {
+      final multipleImages = await picker.pickMultiImage();
+      return multipleImages;
+    } catch (e) {
+      print('Error picking images: $e');
+      return []; // Return an empty list on error
+    }
   }
+
+  Future<List<XFile>> takeImage() async {
+    final image = await picker.pickImage(source: ImageSource.camera);
+    try {
+      List<XFile> images = [image!];
+      return images;
+    } catch (e) {
+      print('Error taking images: $e');
+      return []; // Return an empty list on error
+    }
   }
   //
 }

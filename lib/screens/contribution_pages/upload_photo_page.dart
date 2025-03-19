@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
@@ -56,7 +57,17 @@ class UploadPhotoPage extends StatelessWidget {
               height: 30,
             ),
             GestureDetector(
-              onTap: whenCameraIsCalled,
+              onTap: () async {
+                final images = await imagePickerHelper.takeImage();
+                if (images != null && images.isNotEmpty) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Posting(
+                                selectedImages: images,
+                              )));
+                }
+              },
               child: Container(
                 width: double.infinity,
                 height: 42,
@@ -90,7 +101,6 @@ class UploadPhotoPage extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => Posting(
                                 selectedImages: images,
-                                
                               )));
                 }
               },
