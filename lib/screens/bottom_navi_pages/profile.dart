@@ -23,7 +23,7 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/services/payment_provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

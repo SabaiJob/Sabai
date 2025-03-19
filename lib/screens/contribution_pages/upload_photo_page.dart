@@ -90,6 +90,7 @@ class UploadPhotoPage extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => Posting(
                                 selectedImages: images,
+                                
                               )));
                 }
               },

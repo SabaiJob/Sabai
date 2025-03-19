@@ -1,19 +1,26 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_alertbox.dart';
+import 'package:sabai_app/components/unsuccessful_dialouge.dart';
 import 'package:sabai_app/constants.dart';
+//import 'package:sabai_app/screens/auth_pages/api_service.dart';
+import 'package:sabai_app/screens/auth_pages/token_service.dart';
 import 'package:sabai_app/screens/contribution_pages/add_location.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class Posting extends StatefulWidget {
   Posting(
       {this.location,
@@ -24,11 +31,11 @@ class Posting extends StatefulWidget {
       super.key});
 
   String? url;
-  List<XFile>? selectedImages = [];
+  List<XFile>? selectedImages;
   late String? location;
   late bool? isLocated = false;
   final String? draftText;
-   // Add this to track the current URL
+  // Add this to track the current URL
 
   @override
   State<Posting> createState() => _PostingState();
@@ -40,7 +47,154 @@ class _PostingState extends State<Posting> {
   ImagePickerHelper imagePickerHelper = ImagePickerHelper();
   List<XFile>? _images = [];
   String? _currentUrl;
- 
+  String? userProfileUrl;
+  String? userName;
+  String? text;
+
+  Future<void> contribute({
+    required String text,
+    required String link,
+    required Map<String, dynamic> location,
+    required List<String> imagePaths,
+  }) async {
+    final token = await TokenService.getToken();
+    print('it is not in the try');
+    try {
+      print('it is in thr try');
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReusableAlertBox();
+        },
+      );
+      Dio dio = Dio();
+      FormData formData = FormData.fromMap({
+        'text': text,
+        'link': link,
+        // Convert location map to a JSON string
+        'location': jsonEncode(location),
+        // Add multiple image files
+        'images': [
+          for (String path in imagePaths)
+            await MultipartFile.fromFile(path, filename: path.split('/').last),
+        ],
+      });
+
+      final response = await dio.post(
+        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/contributions/',
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print('success');
+        Navigator.pop;
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) {
+              return Dialog(
+                backgroundColor: Colors.white,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: SizedBox(
+                    height: 340,
+                    width: 324,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Image.asset(
+                          'images/contribute_success.png',
+                          width: 140,
+                          height: 140,
+                        ),
+                        const Text(
+                          '🎉 Woohoo! Thank You!',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-SMB',
+                            fontSize: 19.53,
+                          ),
+                        ),
+                        const Text(
+                          textAlign: TextAlign.center,
+                          'We’ll review your contribution and let\nyou know when it’s ready!',
+                          style: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 15.63,
+                            color: Color(0xff6C757D),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 292,
+                          height: 29,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              backgroundColor: primaryPinkColor,
+                            ),
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NavigationHomepage(),
+                                ),
+                              );
+                            },
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Done',
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-R',
+                                  fontSize: 12.5,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+      } else {
+        print('error for ${response.statusCode}');
+        // Navigator.pop;
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return const UnsuccessfulDialouge(
+        //       dialougeText: 'Sorry! The request is unsuccessful',
+        //     );
+        //   },
+        // );
+        //Navigator.pop;
+      }
+    } catch (e) {
+      print('Error $e');
+      //Navigator.pop;
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return const UnsuccessfulDialouge(
+      //       dialougeText: 'Sorry! The request is unsuccessful',
+      //     );
+      //   },
+      // );
+      //Navigator.pop;
+    }
+  }
 
   @override
   void initState() {
@@ -48,11 +202,21 @@ class _PostingState extends State<Posting> {
     _currentUrl = widget.url; // Store initial URL
     _initializeImages();
     _restoreDraftImages();
+    //fetching user data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final profileData = Provider.of<PaymentProvider>(context, listen: false);
+      profileData.getProfileData();
+      setState(() {
+        userName = profileData.userData!['username'];
+        userProfileUrl = profileData.userData!['photo'];
+      });
+    });
     // Initialize text controller with draft text
     if (widget.draftText != null) {
       textController.text = widget.draftText!;
     }
   }
+
   void _initializeImages() {
     if (widget.selectedImages != null && widget.selectedImages!.isNotEmpty) {
       _images = widget.selectedImages;
@@ -69,18 +233,19 @@ class _PostingState extends State<Posting> {
   }
 
   Future<void> _restoreDraftImages() async {
-  final prefs = await SharedPreferences.getInstance();
-  final imagePaths = prefs.getStringList('draft_images');
-  if (imagePaths != null && imagePaths.isNotEmpty) {
-    final validPaths = imagePaths.where((path) => File(path).existsSync()).toList();
-    debugPrint('Restored paths: $validPaths'); // Debugging
-    if (validPaths.isNotEmpty) {
-      setState(() {
-        _images = validPaths.map((path) => XFile(path)).toList();
-      });
+    final prefs = await SharedPreferences.getInstance();
+    final imagePaths = prefs.getStringList('draft_images');
+    if (imagePaths != null && imagePaths.isNotEmpty) {
+      final validPaths =
+          imagePaths.where((path) => File(path).existsSync()).toList();
+      debugPrint('Restored paths: $validPaths'); // Debugging
+      if (validPaths.isNotEmpty) {
+        setState(() {
+          _images = validPaths.map((path) => XFile(path)).toList();
+        });
+      }
     }
   }
-}
 
   void _addImages(List<XFile> newImages) {
     setState(() {
@@ -104,7 +269,7 @@ class _PostingState extends State<Posting> {
         itemBuilder: (context, index) {
           final imagePath = _images![index].path;
           if (!File(imagePath).existsSync()) {
-            debugPrint('Invalid file: $imagePath'); 
+            debugPrint('Invalid file: $imagePath');
             // Skip invalid files
             return const SizedBox();
           }
@@ -183,7 +348,8 @@ class _PostingState extends State<Posting> {
       appBar: AppBar(
         leading: (widget.url != null ||
                 widget.location != null ||
-                widget.isLocated != null ||textController.text.trim().isNotEmpty ||
+                widget.isLocated != null ||
+                textController.text.trim().isNotEmpty ||
                 (_images != null && _images!.isNotEmpty))
             ? LeadingIcon(
                 url: widget.url ?? '',
@@ -214,93 +380,31 @@ class _PostingState extends State<Posting> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                onPressed: () {
-                  jobProvider.setDraft(false);
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return const ReusableAlertBox();
-                    },
-                  );
-                  Future.delayed(const Duration(seconds: 3), () {
-                    Navigator.pop(context);
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            backgroundColor: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              child: SizedBox(
-                                height: 340,
-                                width: 324,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Image.asset(
-                                      'images/contribute_success.png',
-                                      width: 140,
-                                      height: 140,
-                                    ),
-                                    const Text(
-                                      '🎉 Woohoo! Thank You!',
-                                      style: TextStyle(
-                                        fontFamily: 'Bricolage-SMB',
-                                        fontSize: 19.53,
-                                      ),
-                                    ),
-                                    const Text(
-                                      textAlign: TextAlign.center,
-                                      'We’ll review your contribution and let\nyou know when it’s ready!',
-                                      style: TextStyle(
-                                        fontFamily: 'Bricolage-R',
-                                        fontSize: 15.63,
-                                        color: Color(0xff6C757D),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 292,
-                                      height: 29,
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          backgroundColor: primaryPinkColor,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const NavigationHomepage(),
-                                            ),
-                                          );
-                                        },
-                                        child: const Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            'Done',
-                                            style: TextStyle(
-                                              fontFamily: 'Bricolage-R',
-                                              fontSize: 12.5,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        });
+                onPressed:
+                    //widget.location == null
+                    //     ? () {
+                    //         showDialog(
+                    //             context: context,
+                    //             builder: (context) => const UnsuccessfulDialouge(
+                    //                 dialougeText:
+                    //                     'Location is needee to make a job post!'));
+                    //       }
+                    //     :
+                    () async {
+                  await contribute(
+                      text: text ?? "",
+                      link: widget.url != null ? widget.url! : "https://www.google.co.th/",
+                      location: {"location": widget.location},
+                      imagePaths: _images!.map((image) => image.path).toList());
+                  setState(() {
+                    print('Text: ${text ?? ""}');
+                    print('Link: ${widget.url ?? "https://www.google.co.th/"}');
+                    print('Location: ${widget.location}');
+                    print(
+                        'Image Paths: ${_images!.map((image) => image.path).toList()}');
+                    print(jsonEncode(widget.location));
                   });
+                  jobProvider.setDraft(false);
                 },
                 child: const Text(
                   'Contribute',
@@ -329,18 +433,38 @@ class _PostingState extends State<Posting> {
                       alignment: WrapAlignment.start,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Image.asset(
-                          'images/avatar2.png',
-                          width: 40,
-                          height: 40,
+                        userProfileUrl != null
+                            ? ClipOval(
+                                child: Image.network(
+                                  userProfileUrl!,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Image.asset(
+                                'images/avatar2.png',
+                                width: 40,
+                                height: 40,
+                              ),
+                        const SizedBox(
+                          width: 5,
                         ),
-                        const Text(
-                          'Cameron Williamson',
-                          style: TextStyle(
-                            fontSize: 15.63,
-                            fontFamily: 'Bricolage-SMB',
-                          ),
-                        ),
+                        userName != null
+                            ? Text(
+                                userName!,
+                                style: const TextStyle(
+                                  fontSize: 15.63,
+                                  fontFamily: 'Bricolage-SMB',
+                                ),
+                              )
+                            : const Text(
+                                'Cameron Williamson',
+                                style: TextStyle(
+                                  fontSize: 15.63,
+                                  fontFamily: 'Bricolage-SMB',
+                                ),
+                              ),
                         if (widget.isLocated == true)
                           RichText(
                             text: TextSpan(
@@ -370,6 +494,7 @@ class _PostingState extends State<Posting> {
                     child: TextField(
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.done,
                       controller: textController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -380,6 +505,10 @@ class _PostingState extends State<Posting> {
                           color: Colors.grey,
                         ),
                       ),
+                      onSubmitted: (value) {
+                        text = value;
+                        print(text);
+                      },
                     ),
                   ),
 
@@ -416,6 +545,7 @@ class _PostingState extends State<Posting> {
                             onPreviewDataFetched: (data) {
                               setState(() {
                                 _previewData = data;
+                                print("url : ${widget.url}");
                               });
                             },
                             previewData: _previewData,
@@ -557,7 +687,7 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.setBool('isLocated', widget.isLocated);
     // Get the current images from the Posting widget
     final postingState = context.findAncestorStateOfType<_PostingState>();
-    if(postingState != null){
+    if (postingState != null) {
       await prefs.setString('draftText', postingState.textController.text);
     }
     if (postingState != null && postingState._images != null) {
@@ -603,45 +733,47 @@ class _LeadingIconState extends State<LeadingIcon> {
   // }
   // bool _isPageEmpty() {
   //   final postingState = context.findAncestorStateOfType<_PostingState>();
-    
+
   //   // Check for images - ensure we handle both null and empty cases
   //   final hasImages = postingState?._images?.isNotEmpty ?? false;
-    
+
   //   // Check URL - handle null case
   //   final hasUrl = widget.url.isNotEmpty;
-    
+
   //   // Check location - handle null case
   //   final hasLocation = widget.location.isNotEmpty;
-    
+
   //   // Check text content - handle null case
   //   final hasText = postingState?.textController.text.trim().isNotEmpty ?? false;
-    
+
   //   // Debug prints to help identify the state
   //   debugPrint('Has Images: $hasImages');
   //   debugPrint('Has URL: $hasUrl');
   //   debugPrint('Has Location: $hasLocation');
   //   debugPrint('Has Text: $hasText');
-    
+
   //   // Page is empty only if all conditions are false
   //   return !(hasImages || hasUrl || hasLocation || hasText);
   // }
   bool _isPageEmpty() {
     final postingState = context.findAncestorStateOfType<_PostingState>();
-    
+
     // Check for images
     final hasImages = postingState?._images?.isNotEmpty ?? false;
-    
+
     // Check URL - now using the tracked URL from PostingState
     final hasUrl = postingState?._currentUrl?.isNotEmpty ?? false;
-    
+
     // Check location
     final hasLocation = widget.location.isNotEmpty;
-    
+
     // Check text content
-    final hasText = postingState?.textController.text.trim().isNotEmpty ?? false;
-    
-    debugPrint('Empty Check - Images: $hasImages, URL: $hasUrl, Location: $hasLocation, Text: $hasText');
-    
+    final hasText =
+        postingState?.textController.text.trim().isNotEmpty ?? false;
+
+    debugPrint(
+        'Empty Check - Images: $hasImages, URL: $hasUrl, Location: $hasLocation, Text: $hasText');
+
     return !(hasImages || hasUrl || hasLocation || hasText);
   }
 
@@ -650,91 +782,90 @@ class _LeadingIconState extends State<LeadingIcon> {
     var jobProvider = Provider.of<JobProvider>(context);
     return IconButton(
       onPressed: () {
-        if(_isPageEmpty()){
-         deleteDraft(jobProvider);
+        if (_isPageEmpty()) {
+          deleteDraft(jobProvider);
           Navigator.pop(context);
-        }else{
+        } else {
           showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.white,
-              child: SizedBox(
-                width: 320,
-                height: 323,
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 24,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Image.asset(
-                            'images/draft.png',
-                            width: 140,
-                            height: 75.06,
-                          ),
-                          const Text(
-                            'Save this post as a draft',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-M',
-                              fontSize: 19.53,
+            context: context,
+            builder: (context) {
+              return Dialog(
+                backgroundColor: Colors.white,
+                child: SizedBox(
+                  width: 320,
+                  height: 323,
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 24,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Image.asset(
+                              'images/draft.png',
+                              width: 140,
+                              height: 75.06,
                             ),
-                          ),
-                          const Text(
-                            'If you discard now, you’ll lose this post.',
-                            style: TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 12.5,
-                              color: Color(0xff6C757D),
+                            const Text(
+                              'Save this post as a draft',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 19.53,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          DraftTextButtons(
-                            function: () {
-                              saveDraft(jobProvider);
-                            },
-                            text: 'Save Draft',
-                          ),
-                          DraftTextButtons(
-                            function: () {
-                              deleteDraft(jobProvider);
-                            },
-                            text: 'Discard Post',
-                          ),
-                          DraftTextButtons(
-                            function: () {
-                              Navigator.pop(context);
-                            },
-                            text: 'Keep Editing',
-                          ),
-                        ],
+                            const Text(
+                              'If you discard now, you’ll lose this post.',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-R',
+                                fontSize: 12.5,
+                                color: Color(0xff6C757D),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            DraftTextButtons(
+                              function: () {
+                                saveDraft(jobProvider);
+                              },
+                              text: 'Save Draft',
+                            ),
+                            DraftTextButtons(
+                              function: () {
+                                deleteDraft(jobProvider);
+                              },
+                              text: 'Discard Post',
+                            ),
+                            DraftTextButtons(
+                              function: () {
+                                Navigator.pop(context);
+                              },
+                              text: 'Keep Editing',
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        CupertinoIcons.xmark_circle,
-                        size: 28,
-                        color: primaryPinkColor,
-                      ),
-                    )
-                  ],
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          CupertinoIcons.xmark_circle,
+                          size: 28,
+                          color: primaryPinkColor,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
         }
-        
       },
       icon: const Icon(
         Icons.arrow_back,
