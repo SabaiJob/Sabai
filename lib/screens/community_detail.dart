@@ -1,8 +1,42 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:sabai_app/constants.dart';
 
-class CommunityDetail extends StatelessWidget {
-  const CommunityDetail({super.key});
+class CommunityDetail extends StatefulWidget {
+  final int id;
+  const CommunityDetail({super.key, required this.id});
+
+  @override
+  State<CommunityDetail> createState() => _CommunityDetailState();
+}
+
+class _CommunityDetailState extends State<CommunityDetail> {
+  Map<String, dynamic>? communityData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCommunityDetails();
+  }
+
+   Future<void> fetchCommunityDetails() async {
+    final response = await http.get(
+      Uri.parse('https://sabai-job-backend-k9wda.ondigitalocean.app/api/community/${widget.id}/'),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        communityData = jsonDecode(response.body);
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +61,33 @@ class CommunityDetail extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading ? const Center(
+        child: CircularProgressIndicator(
+          color: primaryPinkColor,
+        ),
+      ) : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Center(
             child: Column(
               children: [
-                Image.asset(
-                  'images/community_detail.png',
-                  width: 100,
-                  height: 100,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    communityData!['image'],
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 200,
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Labour Rights Promotion Network Foundation (LPN)',
-                    style: TextStyle(
+                    communityData!['name'],
+                    style: const TextStyle(
                       fontFamily: 'Bricolage-R',
                       fontSize: 15.63,
                     ),
@@ -55,155 +96,89 @@ class CommunityDetail extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                const Text(
-                  'Category : Labour  Rights',
-                  style: TextStyle(
+                Text(
+                  'Category : ${communityData!['category']['name']}',
+                  style: const TextStyle(
                     fontSize: 12.5,
                     fontFamily: 'Bricolage-R',
                     color: Color(0xff616971),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(20.0),
+                 Padding(
+                  padding: const EdgeInsets.all(20.0),
                   child: Card(
                     elevation: 5,
                     color: Colors.white,
                     child: Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Text(
+                          const Text(
                             'Contact Information',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Bricolage-M',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Website',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                                Text(
-                                  'https://th.lpnfoundation.org/',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                              ],
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: buildContact('Website', communityData!['website']),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                             child: Divider(
                               height: 1,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Email',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                                Text(
-                                  'sompongLPN@gmail.com',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                              ],
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: buildContact('Email', communityData!['email']),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                             child: Divider(
                               height: 1,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Phone Number',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                                Text(
-                                  '+66 84 121 1609',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Bricolage-R',
-                                  ),
-                                ),
-                              ],
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: buildContact('Phone Number', communityData!['phone']),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Card(
                     elevation: 5,
                     color: Colors.white,
                     child: Padding(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'About the organization',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Bricolage-M',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
-                            'Due to the severe damage to the marine life and '
-                            'ecosystems of the Gulf of Thailand due to overfishing, and the lack of '
-                            'sufficient fishing to sustain demand, seafood companies that want to maintain profits have to send'
-                            ' their ships far from the Gulf of Thailand.And because of the difficult'
-                            ' working conditions, being far from home, being out in the middle of the '
-                            'ocean in foreign seas, there is a shortage of labor on many fishing boats. '
-                            'Therefore, they have to rely on human trafficking to find labor to work on the boats. The workers on '
-                            'these fishing boats have to suffer from the terrible working conditions on the boats and being out at '
-                            'sea for many years.With such “gray” networks and the lack of clarity in the recruitment of labor through '
-                            'the brokerage system, all those involved in the seafood business, including factories, importers, exporters,'
-                            ' companies, and government officials, have an excuse to deny responsibility or even deny acknowledgment.This'
-                            ' is why we need to demand transparency in the supply chains of seafood businesses in order to end the '
-                            'existence of slave labor.',
-                            style: TextStyle(
+                            communityData!['about'],
+                            style: const TextStyle(
                               fontSize: 12,
                               fontFamily: 'Bricolage-R',
                             ),
@@ -219,7 +194,7 @@ class CommunityDetail extends StatelessWidget {
         ),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: [
+      persistentFooterButtons: isLoading ? null : [
         Container(
           width: 375,
           height: 42,
@@ -246,5 +221,27 @@ class CommunityDetail extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Row buildContact(String title, String value) {
+    return  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Bricolage-R',
+                                ),
+                              ),
+                              Text(
+                                value,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Bricolage-R',
+                                ),
+                              ),
+                            ],
+                          );
   }
 }
