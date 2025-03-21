@@ -129,7 +129,8 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.get('/jobs/search/?best_matches=true&page=$page');
+      final response =
+          await ApiService.get('/jobs/search/?best_matches=true&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('results') && data['results'] is List) {
@@ -240,7 +241,8 @@ class JobProvider extends ChangeNotifier {
     isPremiumLoading = isLoading;
     notifyListeners();
     try {
-      final response = await ApiService.get('/jobs/search/?is_new=true&location_type=$locationType&page=$page');
+      final response = await ApiService.get(
+          '/jobs/search/?is_new=true&location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final data = json.decode(response.body);
         final newJobs = data['results'];
@@ -312,6 +314,50 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
+  List<dynamic> _appliedJobs = [];
+  int _totalAppliedJobsPage = 1;
+  int get totalAppliedJobsPage => _totalAppliedJobsPage;
+  List<dynamic> get appliedJobs => _appliedJobs;
+  bool isLoadigForAppliedJobs = true;
+  Future<void> fetchAppliedJobs(bool isLoading, BuildContext context,
+      {int page = 1}) async {
+    try {
+      isLoadigForAppliedJobs = isLoading;
+      notifyListeners();
+      final response =
+          await ApiService.get('/jobs/search/?is_applied=true&page=$page');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = json.decode(response.body);
+        if (page == 1) {
+          _appliedJobs = data['results'];
+          notifyListeners();
+        } else {
+          _appliedJobs.addAll(data['results']);
+          notifyListeners();
+        }
+
+        if (data.containsKey('total_pages')) {
+          _totalAppliedJobsPage = data['total_pages'];
+          notifyListeners();
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error fetching data ${response.body}'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error $e'),
+        ),
+      );
+    } finally {}
+    isLoadigForAppliedJobs = false;
+    notifyListeners();
+  }
+
   //hardcoded stuff
   final List<String> _allJobs = [
     'Barista',
@@ -336,15 +382,6 @@ class JobProvider extends ChangeNotifier {
 
   final List<Map<String, dynamic>> _bestMatched = [];
   List<Map<String, dynamic>> get bestMatched => _bestMatched;
-
-  // void toggleSavedJobs(String jobTitle) {
-  //   if (_savedJobs.contains(jobTitle)) {
-  //     _savedJobs.remove(jobTitle);
-  //   } else {
-  //     _savedJobs.add(jobTitle);
-  //   }
-  //   notifyListeners();
-  // }
 
   void addBestMatched(String category) {
     // _bestMatched.clear(); // Clear previous matches
