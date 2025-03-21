@@ -1,29 +1,35 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/reusable_alertbox.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/screens/auth_pages/token_service.dart';
-import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/screens/successful_application.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyCVScreen extends StatefulWidget {
-  const MyCVScreen({super.key});
+class CvUploadModel extends StatefulWidget {
+  final int jobId;
+  const CvUploadModel({super.key, required this.jobId});
 
   @override
-  State<MyCVScreen> createState() => _MyCVScreenState();
+  State<CvUploadModel> createState() => _CvUploadModelState();
 }
 
-class _MyCVScreenState extends State<MyCVScreen> {
+class _CvUploadModelState extends State<CvUploadModel> {
   String? _fileName;
   double _uploadProgress = 0.0;
   String _uploadStatus = "no_file";
   String? _cvFileUrl; // Store the CV file URL
   bool _isLoading = true;
+  bool CVFileExists = false;
 
   @override
   void initState() {
@@ -31,25 +37,63 @@ class _MyCVScreenState extends State<MyCVScreen> {
     fetchUserData();
   }
 
+  void applyJob() async {
+    try {
+      final response = await http.post(
+          Uri.parse(
+              'https://sabai-job-backend-k9wda.ondigitalocean.app/api/jobs/apply/'),
+          headers: await ApiService.getHeaders(),
+          body: jsonEncode({"job_id": widget.jobId}));
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = jsonDecode(response.body);
+        String message = data["message"];
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext dialogContext) =>
+                const ReusableAlertBox(text: 'Submitting'),
+          );
+        }
+        // Use a separate context variable for the dialog
+        await Future.delayed(const Duration(seconds: 3));
+        // Close the dialog and navigate
+        if (mounted) {
+          Navigator.of(context, rootNavigator: true)
+              .pop(); // This ensures the dialog is closed
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const SuccessfulApplicationScreen()));
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+    }
+  }
+
   void fetchUserData() async {
     setState(() {
       _isLoading = true;
     });
-    try{
+    try {
       final paymentProvider =
-        Provider.of<PaymentProvider>(context, listen: false);
-    await paymentProvider.getProfileData();
+          Provider.of<PaymentProvider>(context, listen: false);
+      await paymentProvider.getProfileData();
 
-    final userData = paymentProvider.userData;
-    if (userData != null && userData['user_info']?['cv_file'] != null) {
-      setState(() {
-        _cvFileUrl = userData['user_info']['cv_file'];
-        _uploadStatus = "success";
-      });
-    }
-    }catch(e){
+      final userData = paymentProvider.userData;
+      if (userData != null &&
+          userData['user_info']?['cv_file'] != null &&
+          userData['user_info']['cv_file'] != '') {
+        setState(() {
+          _cvFileUrl = userData['user_info']['cv_file'];
+          _uploadStatus = "success";
+          CVFileExists = true;
+        });
+      }
+    } catch (e) {
       print("Error fetching user data: $e");
-    }finally{
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -137,7 +181,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
         _uploadProgress = 0.0;
       });
 
-    await dio.post(
+      await dio.post(
         uploadUrl,
         data: formData,
         options: Options(
@@ -165,6 +209,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
           _cvFileUrl = userData['user_info']['cv_file'];
           _fileName = fileName; // Store the filename
           _uploadStatus = "success";
+          CVFileExists = true;
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -196,6 +241,30 @@ class _MyCVScreenState extends State<MyCVScreen> {
       case "uploading":
         return Column(
           children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+                Text(
+                  'Or',
+                  style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12.5,
+                      color: Color(0xFF989EA4)),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+              ],
+            ),
             const Text(
               "Uploading...",
               style: TextStyle(fontSize: 15.63, fontFamily: 'Bricolage-M'),
@@ -218,9 +287,29 @@ class _MyCVScreenState extends State<MyCVScreen> {
       case "success":
         return Column(
           children: [
-            const Text(
-              'Your uploaded CV',
-              style: TextStyle(fontSize: 15.63, fontFamily: 'Bricolage-M'),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+                Text(
+                  'Or',
+                  style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12.5,
+                      color: Color(0xFF989EA4)),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
             Container(
@@ -240,27 +329,10 @@ class _MyCVScreenState extends State<MyCVScreen> {
                   style: const TextStyle(
                       fontFamily: 'Bricolage-SMB', fontSize: 12.5),
                 ),
-                trailing: GestureDetector(
-                  onTap: pickFile,
-                  child:  Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFF0F1F2)),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: const Text(
-                      "Update Here",
-                      style: TextStyle(
-                        color: Color(0xFFFF3997),
-                        fontFamily: 'Bricolage-R',
-                        fontSize: 12.5,
-                      ),
-                    ),
-                  ),
-                ),
                 onTap: () {
                   if (_cvFileUrl != null) {
-                    launchUrl(Uri.parse(_cvFileUrl!), mode: LaunchMode.externalApplication);
+                    launchUrl(Uri.parse(_cvFileUrl!),
+                        mode: LaunchMode.externalApplication);
                   }
                 },
               ),
@@ -271,6 +343,30 @@ class _MyCVScreenState extends State<MyCVScreen> {
       case "failed":
         return Column(
           children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+                Text(
+                  'Or',
+                  style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12.5,
+                      color: Color(0xFF989EA4)),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Divider(
+                    color: Color(0xFFD3D6D8),
+                  ),
+                ),
+              ],
+            ),
             const Text(
               "Upload failed. Please try again.",
               style: TextStyle(
@@ -291,13 +387,52 @@ class _MyCVScreenState extends State<MyCVScreen> {
         );
 
       default: // "no_file"
-        return Column(
+        return const SizedBox(
+          height: 1,
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color(0xfff0f1f2),
+            width: 10,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "You haven't uploaded any CV yet.",
-              style: TextStyle(fontSize: 15.63, fontFamily: 'Bricolage-M'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Upload your CV",
+                    style:
+                        TextStyle(fontFamily: 'Bricolage-M', fontSize: 15.6)),
+                IconButton(
+                  icon: const Icon(
+                    Icons.close_outlined,
+                    color: Colors.pink,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 10,
+            ),
             InkWell(
               onTap: pickFile,
               child: DottedBorder(
@@ -327,67 +462,35 @@ class _MyCVScreenState extends State<MyCVScreen> {
                 ),
               ),
             ),
-          ],
-        );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var languageProvider = Provider.of<LanguageProvider>(context);
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
-      appBar: AppBar(
-        backgroundColor: const Color(0xffF7F7F7),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: Colors.grey.shade300,
-            height: 1.0,
-          ),
-        ),
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        title: languageProvider.lan == 'English'
-            ? const Text("My CV", style: appBarTitleStyleEng)
-            : const Text("My CV", style: appBarTitleStyleMn),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Color(0xFFFF3997)),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: _isLoading ? const CircularProgressIndicator(color: primaryPinkColor,) : Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 113,
-                    height: 114,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFf9edc2),
-                      shape: BoxShape.circle,
-                      border:
-                          Border.all(color: const Color(0xFFFFC107), width: 2),
-                    ),
-                  ),
-                  Positioned(
-                    child: Image.asset(
-                      'images/mycv.png',
-                      width: 80,
-                      height: 80,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: CVFileExists ? applyJob : null,
+              style: TextButton.styleFrom(
+                minimumSize: const Size(277, 34),
+                side: const BorderSide(color: Color(0xFFfe9bcb)),
+                backgroundColor:
+                    CVFileExists ? primaryPinkColor : const Color(0xFFfe9bcb),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Set the border radius
+                ),
               ),
-              const SizedBox(height: 25),
-              _buildUploadStatus(),
-            ],
-          ),
+              child: const SizedBox(
+                width: 277,
+                height: 23,
+                child: Text(
+                  'Submit',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Bricolage-SMB',
+                    color: Colors.white,
+                    fontSize: 12.5,
+                  ),
+                ),
+              ),
+            ),
+            _buildUploadStatus(),
+          ],
         ),
       ),
     );
