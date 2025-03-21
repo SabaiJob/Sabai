@@ -662,7 +662,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   children: [
                                     ClipOval(
                                       child: Image.network(
-                                        'https://sabai-job-storage.nyc3.digitaloceanspaces.com/sabai-job-storage/media/profile_photo/default.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00B3F8YWVERRREFKVR%2F20250320%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250320T124312Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=8d3e191335153ffb748ef5855797986fbc6bb557aae052a171ef870e33f5f3eb',
+                                        jobDetail['contribution']['user']['photo'],
                                         width: 24,
                                         height: 24,
                                         fit: BoxFit.cover,
@@ -672,7 +672,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       width: 10,
                                     ),
                                     Text(
-                                      jobDetail['contribution'],
+                                      jobDetail['contribution']['user']['username'],
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontFamily: 'Bricolage-R',
@@ -816,11 +816,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               width: 287,
               height: 42,
               child: TextButton(
-                onPressed: widget.isClosed ? null :() {
-                  showDialog(
-                      context: context,
-                      builder: (context) => TAndCDialog(jobId: widget.jobId));
-                },
+                onPressed: widget.isClosed
+                    ? null
+                    : () {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                TAndCDialog(jobId: widget.jobId));
+                      },
                 style: TextButton.styleFrom(
                   backgroundColor: widget.isClosed
                       ? const Color(0x50FF3997)

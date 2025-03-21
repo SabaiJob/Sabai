@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:sabai_app/components/divider_line.dart';
 import 'package:sabai_app/components/listtile_button.dart';
 import 'package:sabai_app/components/right_chev_button.dart';
-import 'package:sabai_app/screens/MyApplications_Screen.dart';
+import 'package:sabai_app/screens/applications_screen.dart';
 import 'package:sabai_app/screens/MyCV_screen.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
