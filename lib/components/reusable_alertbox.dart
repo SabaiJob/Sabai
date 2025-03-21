@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
 class ReusableAlertBox extends StatelessWidget {
+  final String text;
   const ReusableAlertBox({
     super.key,
+    required this.text
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Dialog(
+    return Dialog(
       backgroundColor: Colors.white,
       child: SizedBox(
         width: 120,
         height: 200,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            SizedBox(
+            const SizedBox(
               height: 110,
               width: 110,
               child: Stack(
@@ -42,12 +44,13 @@ class ReusableAlertBox extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Text(
-              'Loading...',
-              style: TextStyle(
+              //'Loading...',
+              text,
+              style: const TextStyle(
                 fontSize: 12.5,
                 fontFamily: 'Bricolage-R',
                 color: Color(0xff41464B),

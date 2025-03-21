@@ -128,7 +128,7 @@ class _ContributePageState extends State<ContributePage> {
                         barrierDismissible: false,
                         context: context,
                         builder: (context) {
-                          return const ReusableAlertBox();
+                          return const ReusableAlertBox(text: 'Loading...',);
                         },
                       );
                       Future.delayed(

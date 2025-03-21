@@ -65,7 +65,7 @@ class _PostingState extends State<Posting> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return const ReusableAlertBox();
+          return const ReusableAlertBox(text: 'Loading...',);
         },
       );
       Dio dio = Dio();

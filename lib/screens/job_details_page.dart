@@ -74,7 +74,6 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchJobDetail();
     fetchCategory();
@@ -795,7 +794,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 onPressed: widget.isClosed ? null :() {
                   showDialog(
                       context: context,
-                      builder: (context) => const TAndCDialog());
+                      builder: (context) => TAndCDialog(jobId: widget.jobId));
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: widget.isClosed ? const Color(0x50FF3997) :  const Color(0xffFF3997),
@@ -851,7 +850,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                 onPressed: () {
                   showDialog(
                       context: context,
-                      builder: (context) => const TAndCDialog());
+                      builder: (context) => TAndCDialog(jobId: widget.jobId));
                 },
                 child: const Image(
                   image: AssetImage('images/share_icon.png'),
