@@ -266,8 +266,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
         child: Column(
           children: [
             Container(
-              width: 295,
-              height: 40,
+              width: double.infinity,
+              height: 50,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: TextField(
