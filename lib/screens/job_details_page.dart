@@ -10,7 +10,8 @@ import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobDetailsPage extends StatefulWidget {
-  const JobDetailsPage({super.key, required this.jobId, required this.isClosed});
+  const JobDetailsPage(
+      {super.key, required this.jobId, required this.isClosed});
   final int jobId;
   final bool isClosed;
 
@@ -636,26 +637,50 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                               )
                             ],
                           ),
-                          const Row(
-                            children: [
-                              Image(
-                                image: AssetImage('images/status.png'),
-                                width: 24,
-                                height: 24,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Sabai',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Bricolage-R',
-                                  color: Color(0xFF6C757D),
+                          jobDetail['contribution'] == null
+                              ? const Row(
+                                  children: [
+                                    Image(
+                                      image: AssetImage('images/status.png'),
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Sabai',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Bricolage-R',
+                                        color: Color(0xFF6C757D),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    ClipOval(
+                                      child: Image.network(
+                                        'https://sabai-job-storage.nyc3.digitaloceanspaces.com/sabai-job-storage/media/profile_photo/default.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00B3F8YWVERRREFKVR%2F20250320%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250320T124312Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=8d3e191335153ffb748ef5855797986fbc6bb557aae052a171ef870e33f5f3eb',
+                                        width: 24,
+                                        height: 24,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      jobDetail['contribution'],
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Bricolage-R',
+                                        color: Color(0xFF6C757D),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
                           const SizedBox(
                             width: double.infinity,
                             child: Divider(),
@@ -797,7 +822,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                       builder: (context) => TAndCDialog(jobId: widget.jobId));
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: widget.isClosed ? const Color(0x50FF3997) :  const Color(0xffFF3997),
+                  backgroundColor: widget.isClosed
+                      ? const Color(0x50FF3997)
+                      : const Color(0xffFF3997),
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(8), // Set the border radius

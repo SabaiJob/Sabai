@@ -50,6 +50,7 @@ class _PostingState extends State<Posting> {
   String? userProfileUrl;
   String? userName;
   String? text;
+  bool? isLoading;
 
   Future<void> contribute({
     required String text,
@@ -58,16 +59,21 @@ class _PostingState extends State<Posting> {
     required List<String> imagePaths,
   }) async {
     final token = await TokenService.getToken();
-    print('it is not in the try');
+    //print('it is not in the try');
     try {
-      print('it is in thr try');
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const ReusableAlertBox(text: 'Loading...',);
-        },
-      );
+      //print('it is in thr try');
+      setState(() {
+        isLoading = true;
+      });
+      if (isLoading == true) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return const ReusableAlertBox(text: 'Loading...',);
+          },
+        );
+      }
       Dio dio = Dio();
       FormData formData = FormData.fromMap({
         'text': text,
@@ -93,6 +99,9 @@ class _PostingState extends State<Posting> {
       );
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         print('success');
+        setState(() {
+          isLoading = false;
+        });
         Navigator.pop;
         showDialog(
             barrierDismissible: false,
@@ -170,28 +179,34 @@ class _PostingState extends State<Posting> {
             });
       } else {
         print('error for ${response.statusCode}');
+        setState(() {
+          isLoading = false;
+        });
         // Navigator.pop;
-        // showDialog(
-        //   context: context,
-        //   builder: (context) {
-        //     return const UnsuccessfulDialouge(
-        //       dialougeText: 'Sorry! The request is unsuccessful',
-        //     );
-        //   },
-        // );
-        //Navigator.pop;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const UnsuccessfulDialouge(
+              dialougeText: 'Sorry! The request is unsuccessful',
+            );
+          },
+        );
+        Navigator.pop;
       }
     } catch (e) {
       print('Error $e');
+      setState(() {
+        isLoading = false;
+      });
       //Navigator.pop;
-      // showDialog(
-      //   context: context,
-      //   builder: (context) {
-      //     return const UnsuccessfulDialouge(
-      //       dialougeText: 'Sorry! The request is unsuccessful',
-      //     );
-      //   },
-      // );
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const UnsuccessfulDialouge(
+            dialougeText: 'Sorry! The request is unsuccessful',
+          );
+        },
+      );
       //Navigator.pop;
     }
   }
@@ -381,19 +396,21 @@ class _PostingState extends State<Posting> {
                   ),
                 ),
                 onPressed:
-                    //widget.location == null
-                    //     ? () {
-                    //         showDialog(
-                    //             context: context,
-                    //             builder: (context) => const UnsuccessfulDialouge(
-                    //                 dialougeText:
-                    //                     'Location is needee to make a job post!'));
-                    //       }
-                    //     :
+                    text == null && _images!.isEmpty 
+                        ? () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => const UnsuccessfulDialouge(
+                                    dialougeText:
+                                        'Please fill in the valid information to make a job post!'));
+                          }
+                        :
                     () async {
                   await contribute(
                       text: text ?? "none",
-                      link: widget.url != null ? widget.url! : "https://www.google.co.th/",
+                      link: widget.url != null
+                          ? widget.url!
+                          : "https://www.google.co.th/",
                       location: {"location": widget.location},
                       imagePaths: _images!.map((image) => image.path).toList());
                   setState(() {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
+import 'package:sabai_app/services/general_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:intl/intl.dart';
 
@@ -45,36 +46,12 @@ class _NotificationPageState extends State<NotificationPage> {
   //   }
   // ];
 
-  bool isLoading = true;
-  List<Map<String, dynamic>> noti = [];
-
+  //bool isLoading = true;
+  //List<Map<String, dynamic>> noti = [];
   Future<void> loadNotification() async {
-    try {
-      final response = await ApiService.get('/notifications/');
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final data = json.decode(response.body);
-        List<Map<String, dynamic>> notiList =
-            data['results'].map<Map<String, dynamic>>((item) {
-          return {
-            'title': item['text'] ?? 'No title',
-            'time': item['created_at'] ?? 'Unknown time',
-            'type': item['type'] ?? 'none'
-          };
-        }).toList();
-
-        setState(() {
-          noti = notiList;
-        });
-      } else {
-        print('error ${response.body}');
-      }
-    } catch (e) {
-      print('Error : $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    final generalProvider =
+        Provider.of<GeneralProvider>(context, listen: false);
+    await generalProvider.loadNotification();
   }
 
   Map<String, List<Map<String, dynamic>>> groupNotifications(
@@ -131,12 +108,18 @@ class _NotificationPageState extends State<NotificationPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.microtask(() => loadNotification());
+    //Future.microtask(() => loadNotification());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadNotification();
+    });
+    //print(noti);
   }
 
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var generalProvider = Provider.of<GeneralProvider>(context);
+    final noti = generalProvider.noti;
     final groupedNoti = groupNotifications(noti);
     return Scaffold(
       backgroundColor: const Color(0xffF7F7F7),
@@ -185,88 +168,88 @@ class _NotificationPageState extends State<NotificationPage> {
           ),
         ),
       ),
-      body: isLoading == true ? 
-      const Center(
-        child: CircularProgressIndicator(
-          color: primaryPinkColor,
-        ),
-      ): 
-      Center(
-        child: noti.isEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'images/notification.png',
-                    width: 168,
-                    height: 298,
-                  ),
-                  languageProvider.lan == 'English'
-                      ? const Text(
-                          "You're all caught up!",
-                          style: TextStyle(
-                            fontFamily: 'Bricolage-M',
-                            fontSize: 24.41,
-                          ),
-                        )
-                      : const Text(
-                          "အသိပေးချက်အသစ်မရှိပါ",
-                          style: TextStyle(
-                            fontFamily: 'Walone-B',
-                            fontSize: 24.41,
-                          ),
-                        ),
-                  languageProvider.lan == 'English'
-                      ? const Text(
-                          "Check back later for updates.",
-                          style: TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.63,
-                          ),
-                        )
-                      : const Text(
-                          "နောက်ပိုင်းတွင် အပ်ဒိတ်များအတွက် ပြန်လည်စစ်ဆေးပါ။",
-                          style: TextStyle(
-                            fontFamily: 'Walone-B',
-                            fontSize: 14,
-                          ),
-                        )
-                ],
-              )
-            : ListView(
-                children: groupedNoti.entries.map(
-                  (entry) {
-                    final header = entry.key;
-                    final items = entry.value;
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 13),
-                          child: Text(
-                            header,
-                            style: const TextStyle(
-                              fontFamily: 'Bricolage-R',
-                              fontSize: 15.63,
-                              color: Color(0xFF41464B),
-                            ),
-                          ),
-                        ),
-                        ...items.map(
-                          (item) => NotiTile(
-                            title: item['title']!,
-                            time: timeAgo(item['time']!),
-                            type: item['type']!.toString().toLowerCase(),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ).toList(),
+      body: generalProvider.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: primaryPinkColor,
               ),
-      ),
+            )
+          : Center(
+              child: noti.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'images/notification.png',
+                          width: 168,
+                          height: 298,
+                        ),
+                        languageProvider.lan == 'English'
+                            ? const Text(
+                                "You're all caught up!",
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-M',
+                                  fontSize: 24.41,
+                                ),
+                              )
+                            : const Text(
+                                "အသိပေးချက်အသစ်မရှိပါ",
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 24.41,
+                                ),
+                              ),
+                        languageProvider.lan == 'English'
+                            ? const Text(
+                                "Check back later for updates.",
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-R',
+                                  fontSize: 15.63,
+                                ),
+                              )
+                            : const Text(
+                                "နောက်ပိုင်းတွင် အပ်ဒိတ်များအတွက် ပြန်လည်စစ်ဆေးပါ။",
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                ),
+                              )
+                      ],
+                    )
+                  : ListView(
+                      children: groupedNoti.entries.map(
+                        (entry) {
+                          final header = entry.key;
+                          final items = entry.value;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 13),
+                                child: Text(
+                                  header,
+                                  style: const TextStyle(
+                                    fontFamily: 'Bricolage-R',
+                                    fontSize: 15.63,
+                                    color: Color(0xFF41464B),
+                                  ),
+                                ),
+                              ),
+                              ...items.map(
+                                (item) => NotiTile(
+                                  title: item['title']!,
+                                  time: timeAgo(item['time']!),
+                                  type: item['type']!.toString().toLowerCase(),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ).toList(),
+                    ),
+            ),
     );
   }
 }
@@ -294,9 +277,11 @@ class NotiTile extends StatelessWidget {
       child: ListTile(
         minTileHeight: 82,
         titleAlignment: ListTileTitleAlignment.titleHeight,
-        leading: type.toLowerCase()=='successful payment'? Image.asset('images/like.png'): 
-        type.toLowerCase() =='closing soon'? Image.asset('images/noti_closing.png'):
-         Image.asset('images/noti_rose.png'),
+        leading: type.toLowerCase() == 'successful payment'
+            ? Image.asset('images/like.png')
+            : type.toLowerCase() == 'closing soon'
+                ? Image.asset('images/noti_closing.png')
+                : Image.asset('images/noti_rose.png'),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

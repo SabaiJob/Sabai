@@ -13,6 +13,7 @@ import 'package:sabai_app/screens/homepage_menupages/bestmatches.dart';
 //import 'package:sabai_app/screens/homepage_menupages/partnerships.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/notification.dart';
+import 'package:sabai_app/services/general_provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 // import 'package:sabai_app/services/language_provider.dart';
@@ -96,11 +97,18 @@ class _JobListingPageState extends State<JobListingPage>
   // late List<AnimationController> _menuItemAnimations;
   // late List<Animation<double>> _menuItemScaleAnimations;
 
+  Future<void> loadNotification() async {
+    final generalProvider =
+        Provider.of<GeneralProvider>(context, listen: false);
+    await generalProvider.loadNotification();
+  }
+
   bool isSearching = false;
   bool isSwitch = false;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadNotification();
       final jobProvider = Provider.of<JobProvider>(context, listen: false);
       jobProvider.setLocatiobType('local');
       final filterProvider =
@@ -109,7 +117,7 @@ class _JobListingPageState extends State<JobListingPage>
     });
 
     super.initState();
-   // _autoScrollText();
+    // _autoScrollText();
     // Show the bottom sheet automatically after the screen loads
     if (widget.showBottomSheet) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -203,7 +211,7 @@ class _JobListingPageState extends State<JobListingPage>
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
     var filterProvider = Provider.of<JobFilterProvider>(context);
-
+    var generalProvider = Provider.of<GeneralProvider>(context);
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -234,7 +242,9 @@ class _JobListingPageState extends State<JobListingPage>
               onChanged: (value) {
                 setState(() {
                   selectedValue = value!;
-                  if (selectedValue == 'Local Jobs 🇹🇭' || selectedValue == 'Jobs for you' || selectedValue == 'Best Matched Jobs ✨') {
+                  if (selectedValue == 'Local Jobs 🇹🇭' ||
+                      selectedValue == 'Jobs for you' ||
+                      selectedValue == 'Best Matched Jobs ✨') {
                     jobProvider.setLocatiobType('local');
                     jobProvider.getJobs(true);
                     jobProvider.getBestMatchedJobs(true);
@@ -253,7 +263,6 @@ class _JobListingPageState extends State<JobListingPage>
                   }
                 });
               },
-            
               iconStyleData: const IconStyleData(
                 icon: Icon(
                   Icons.keyboard_arrow_down_rounded,
@@ -261,38 +270,43 @@ class _JobListingPageState extends State<JobListingPage>
                   color: primaryPinkColor,
                 ),
               ),
-              buttonStyleData:  ButtonStyleData(
-                padding: const EdgeInsets.only(left: 8),
-                width: 200,
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFEBF6),
-                  border: Border.all(color: primaryPinkColor),
-                  borderRadius: BorderRadius.circular(10),
-                )
-              ),
-              dropdownStyleData: DropdownStyleData(
+              buttonStyleData: ButtonStyleData(
+                  padding: const EdgeInsets.only(left: 8),
+                  width: 200,
                   decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),),
+                    color: const Color(0xffFFEBF6),
+                    border: Border.all(color: primaryPinkColor),
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+              dropdownStyleData: DropdownStyleData(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
           ),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationPage(),
-                        ));
-                  },
-                  icon: const Icon(
-                    CupertinoIcons.bell,
-                    size: 24,
-                    color: primaryPinkColor,
+                Badge(
+                  textColor: primaryPinkColor,
+                  backgroundColor: const Color(0xFFFED7EA),
+                  label: Text(generalProvider.notiCount.toString()),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationPage(),
+                          ));
+                    },
+                    child: const Icon(
+                      CupertinoIcons.bell,
+                      size: 24,
+                      color: primaryPinkColor,
+                    ),
                   ),
                 ),
                 // IconButton(
@@ -310,6 +324,9 @@ class _JobListingPageState extends State<JobListingPage>
                 //     size: 24,
                 //   ),
                 // ),
+                const SizedBox(
+                  width: 10,
+                ),
                 Badge(
                     textColor: primaryPinkColor,
                     backgroundColor: const Color(0xFFFED7EA),
@@ -338,7 +355,7 @@ class _JobListingPageState extends State<JobListingPage>
                         color: primaryPinkColor,
                       ),
                     )),
-               const SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
               ],

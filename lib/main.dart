@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/auth_pages/token_service.dart';
+import 'package:sabai_app/services/general_provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/jobfilter_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
@@ -22,6 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => PhoneNumberProvider()),
         ChangeNotifierProvider(create: (context) => JobFilterProvider()),
         ChangeNotifierProvider(create: (context) => PaymentProvider()),
+        ChangeNotifierProvider(create: (context)=> GeneralProvider())
       ],
       child: const Sabai(),
     ),
