@@ -70,7 +70,10 @@ class _AllState extends State<All> {
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
-    await paymentProvider.getProfileData(context);
+    final jobProvider = Provider.of<JobProvider>(context, listen: false);
+    if (!jobProvider.isGuest) {
+      await paymentProvider.getProfileData(context);
+    }
   }
 
   void fetchAllJobs() async {

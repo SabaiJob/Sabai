@@ -17,8 +17,9 @@ class ApiService {
   static Future<http.Response> get(String endPoint) async {
     final headers = await getHeaders();
     final response = await http.get(
-      Uri.parse(
-          'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      // Uri.parse(
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      Uri.parse('https://api.sabaijob.com/api$endPoint'),
       headers: headers,
     );
     return response;

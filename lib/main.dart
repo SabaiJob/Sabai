@@ -47,26 +47,26 @@ class _SabaiState extends State<Sabai> {
     }
   }
 
-  void fetchUserData() async {
-    final paymentProvider =
-        Provider.of<PaymentProvider>(context, listen: false);
-    try {
-      await paymentProvider.getProfileData(context);
-      // If we get here, token is valid
-    } catch (e) {
-      // If the API call fails due to auth issues, invalidate the token
-      if (e.toString().contains('401') ||
-          e.toString().contains('unauthorized')) {
-        await TokenService.deleteToken(); // Clear the invalid token
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  // // void fetchUserData() async {
+  // //   final paymentProvider =
+  // //       Provider.of<PaymentProvider>(context, listen: false);
+  // //   try {
+  // //     await paymentProvider.getProfileData(context);
+  // //     // If we get here, token is valid
+  // //   } catch (e) {
+  // //     // If the API call fails due to auth issues, invalidate the token
+  // //     if (e.toString().contains('401') ||
+  // //         e.toString().contains('unauthorized')) {
+  // //       await TokenService.deleteToken(); // Clear the invalid token
+  // //     }
+  // //   }
+  // // }
+  //
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
