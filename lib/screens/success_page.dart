@@ -19,19 +19,29 @@ class _SuccessPageState extends State<SuccessPage> {
     super.initState();
     loading();
   }
-  void loading(){
+
+  void loading() {
     Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
-      Navigator.pushReplacement(
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const NavigationHomepage(
+      //       showButtonSheet: true,
+      //     ),
+      //   ), ,
+      // );
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const NavigationHomepage(
-            showButtonSheet: true,
-          ),
-        ),
+            builder: (context) => const NavigationHomepage(
+                  showButtonSheet: true,
+                )),
+        (route) => false,
       );
     });
   }
+
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);

@@ -13,6 +13,7 @@ import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import 'package:sabai_app/screens/contribution_pages/upload_photo_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationHomepage extends StatefulWidget {
@@ -56,34 +57,39 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     ];
   }
 
-  Future<String?> getUrl() async {
+  Future<String?> getUrl(PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('url');
+    return prefs.getString('url_$phone');
   }
 
-  Future<String?> getLocation() async {
+  Future<String?> getLocation(PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('location');
+    return prefs.getString('location_$phone');
   }
 
-  Future<bool?> getIsLocated() async {
+  Future<bool?> getIsLocated(PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLocated');
+    return prefs.getBool('isLocated_$phone');
   }
 
-  Future<String?> getDraftText() async {
+  Future<String?> getDraftText(PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('draftText');
+    return prefs.getString('draftText_$phone');
   }
 
-  Future<void> onTabChange(index, JobProvider jobProvider) async {
+  Future<void> onTabChange(
+      index, JobProvider jobProvider, PaymentProvider paymentProvider) async {
     if (index == 1) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>const ComingSoonPage(appBarTitle: Text('Contribution', style: appBarTitleStyleEng,))));
       if (jobProvider.isDraft == true) {
-        String? url = await getUrl();
-        String? location = await getLocation();
-        String? draftText = await getDraftText();
-        bool? isLocated = await getIsLocated();
+        String? url = await getUrl(paymentProvider);
+        String? location = await getLocation(paymentProvider);
+        String? draftText = await getDraftText(paymentProvider);
+        bool? isLocated = await getIsLocated(paymentProvider);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -174,6 +180,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 90,
@@ -202,7 +209,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           type: BottomNavigationBarType.fixed,
           //onTap: onTabChange,
           onTap: (value) {
-            onTabChange(value, jobProvider);
+            onTabChange(value, jobProvider, paymentProvider);
           },
           items: [
             BottomNavigationBarItem(

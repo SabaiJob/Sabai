@@ -360,18 +360,28 @@ class _RegistrationPagesControllerState
     bool isAnyJobCategorySelected =
         _jobCategories.any((category) => category['selected'] == true);
     if (!isAnyJobCategorySelected) {
-      print('Error: Please select at least one job category.');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Please select at least one job category.',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
+      // print('Error: Please select at least one job category.');
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text(
+      //       'Please select at least one job category.',
+      //       style: TextStyle(color: Colors.white),
+      //     ),
+      //     backgroundColor: Colors.red,
+      //     duration: Duration(seconds: 2),
+      //   ),
+      // );
+      // return;
+      setState(() {
+        var selectedJobCategories = _jobCategories
+            .where((category) => category['selected'] == true)
+            .map((category) => category['id'])
+            .toList();
+        print('did you choose something? Y/N ${isAnyJobCategorySelected}');
+        print('Selected Categories: ${selectedJobCategories}');
+
+        completeRegistration(selectedJobCategories, languageProvider);
+      });
     } else {
       setState(() {
         var selectedJobCategories = _jobCategories

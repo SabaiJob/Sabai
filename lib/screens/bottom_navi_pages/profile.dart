@@ -24,6 +24,7 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/services/payment_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/job_provider.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,6 +44,18 @@ class _ProfileState extends State<Profile> {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
     await paymentProvider.getProfileData(context);
+  }
+
+  Future<void> deleteDraft(
+      JobProvider jobProvider, PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('url_$phone');
+    await prefs.remove('location_$phone');
+    await prefs.remove('isLocated_$phone');
+    await prefs.remove('draft_images_$phone');
+    await prefs.remove('draftText_$phone');
+    jobProvider.setDraft(false);
   }
 
   @override
@@ -1119,6 +1132,7 @@ class _ProfileState extends State<Profile> {
                                       ),
                                 GestureDetector(
                                   onTap: () async {
+                                    deleteDraft(jobProvider, paymentProvider);
                                     await ApiService.logout(context);
                                   },
                                   child: Container(

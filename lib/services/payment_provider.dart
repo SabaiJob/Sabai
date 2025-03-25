@@ -9,6 +9,10 @@ import '../screens/auth_pages/api_service.dart';
 import '../screens/auth_pages/token_service.dart';
 
 class PaymentProvider extends ChangeNotifier {
+  //for saving draft
+  String _userPhNo = '';
+  String get userPhNo => _userPhNo;
+
   String _purchaseDate = '';
   int _pricingPlanId = 0;
   int _paymentMethodId = 0;
@@ -41,7 +45,8 @@ class PaymentProvider extends ChangeNotifier {
         final Map<String, dynamic> data = jsonDecode(response.body);
         _userData = data;
         notifyListeners();
-        //print(_userData);
+        _userPhNo = _userData!['phone'];
+        print(_userPhNo);
       } else {
         print(response.body);
         if (response.statusCode == 401) {

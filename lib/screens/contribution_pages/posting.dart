@@ -90,7 +90,8 @@ class _PostingState extends State<Posting> {
       });
 
       final response = await dio.post(
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/contributions/',
+        // 'https://sabai-job-backend-k9wda.ondigitalocean.app/api/contributions/',
+        'https://api.sabaijob.com/api/contributions/',
         data: formData,
         options: Options(
           headers: {
@@ -218,10 +219,11 @@ class _PostingState extends State<Posting> {
     super.initState();
     _currentUrl = widget.url; // Store initial URL
     _initializeImages();
-    _restoreDraftImages();
+    // _restoreDraftImages();
     //fetching user data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileData = Provider.of<PaymentProvider>(context, listen: false);
+      _restoreDraftImages(profileData);
       profileData.getProfileData(context);
       setState(() {
         userName = profileData.userData!['username'];
@@ -249,9 +251,10 @@ class _PostingState extends State<Posting> {
     }
   }
 
-  Future<void> _restoreDraftImages() async {
+  Future<void> _restoreDraftImages(PaymentProvider paymentProvider) async {
     final prefs = await SharedPreferences.getInstance();
-    final imagePaths = prefs.getStringList('draft_images');
+    String phone = paymentProvider.userPhNo;
+    final imagePaths = prefs.getStringList('draft_images_$phone');
     if (imagePaths != null && imagePaths.isNotEmpty) {
       final validPaths =
           imagePaths.where((path) => File(path).existsSync()).toList();
@@ -701,22 +704,25 @@ class LeadingIcon extends StatefulWidget {
 }
 
 class _LeadingIconState extends State<LeadingIcon> {
-  Future<void> saveDraft(JobProvider jobProvider) async {
+  Future<void> saveDraft(
+      JobProvider jobProvider, PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('url', widget.url);
-    await prefs.setString('location', widget.location);
-    await prefs.setBool('isLocated', widget.isLocated);
+    await prefs.setString('url_$phone', widget.url);
+    await prefs.setString('location_$phone', widget.location);
+    await prefs.setBool('isLocated_$phone', widget.isLocated);
     // Get the current images from the Posting widget
     final postingState = context.findAncestorStateOfType<_PostingState>();
     if (postingState != null) {
-      await prefs.setString('draftText', postingState.textController.text);
+      await prefs.setString(
+          'draftText_$phone', postingState.textController.text);
     }
     if (postingState != null && postingState._images != null) {
       // Convert XFile paths to list of strings
       final imagePaths =
           postingState._images!.map((image) => image.path).toList();
       // Save image paths as string list
-      await prefs.setStringList('draft_images', imagePaths);
+      await prefs.setStringList('draft_images_$phone', imagePaths);
     }
     jobProvider.setDraft(true);
     Navigator.pushReplacement(
@@ -727,13 +733,15 @@ class _LeadingIconState extends State<LeadingIcon> {
     );
   }
 
-  Future<void> deleteDraft(JobProvider jobProvider) async {
+  Future<void> deleteDraft(
+      JobProvider jobProvider, PaymentProvider paymentProvider) async {
+    String phone = paymentProvider.userPhNo;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('url');
-    await prefs.remove('location');
-    await prefs.remove('isLocated');
-    await prefs.remove('draft_images');
-    await prefs.remove('draftText');
+    await prefs.remove('url_$phone');
+    await prefs.remove('location_$phone');
+    await prefs.remove('isLocated_$phone');
+    await prefs.remove('draft_images_$phone');
+    await prefs.remove('draftText_$phone');
     jobProvider.setDraft(false);
     Navigator.pushReplacement(
       context,
@@ -743,39 +751,6 @@ class _LeadingIconState extends State<LeadingIcon> {
     );
   }
 
-  // bool _isPageEmpty() {
-  //   final postingState = context.findAncestorStateOfType<_PostingState>();
-  //   final hasImages = postingState != null && postingState._images != null && postingState._images!.isNotEmpty;
-  //   final hasUrl = widget.url.isNotEmpty;
-  //   final hasLocation = widget.location.isNotEmpty;
-  //   final textNotEmpty = postingState != null && postingState.textController.text.trim().isNotEmpty;
-
-  //   return !(hasImages || hasUrl || hasLocation || textNotEmpty);
-  // }
-  // bool _isPageEmpty() {
-  //   final postingState = context.findAncestorStateOfType<_PostingState>();
-
-  //   // Check for images - ensure we handle both null and empty cases
-  //   final hasImages = postingState?._images?.isNotEmpty ?? false;
-
-  //   // Check URL - handle null case
-  //   final hasUrl = widget.url.isNotEmpty;
-
-  //   // Check location - handle null case
-  //   final hasLocation = widget.location.isNotEmpty;
-
-  //   // Check text content - handle null case
-  //   final hasText = postingState?.textController.text.trim().isNotEmpty ?? false;
-
-  //   // Debug prints to help identify the state
-  //   debugPrint('Has Images: $hasImages');
-  //   debugPrint('Has URL: $hasUrl');
-  //   debugPrint('Has Location: $hasLocation');
-  //   debugPrint('Has Text: $hasText');
-
-  //   // Page is empty only if all conditions are false
-  //   return !(hasImages || hasUrl || hasLocation || hasText);
-  // }
   bool _isPageEmpty() {
     final postingState = context.findAncestorStateOfType<_PostingState>();
 
@@ -801,10 +776,11 @@ class _LeadingIconState extends State<LeadingIcon> {
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return IconButton(
       onPressed: () {
         if (_isPageEmpty()) {
-          deleteDraft(jobProvider);
+          deleteDraft(jobProvider, paymentProvider);
           Navigator.pop(context);
         } else {
           showDialog(
@@ -851,13 +827,13 @@ class _LeadingIconState extends State<LeadingIcon> {
                             ),
                             DraftTextButtons(
                               function: () {
-                                saveDraft(jobProvider);
+                                saveDraft(jobProvider, paymentProvider);
                               },
                               text: 'Save Draft',
                             ),
                             DraftTextButtons(
                               function: () {
-                                deleteDraft(jobProvider);
+                                deleteDraft(jobProvider, paymentProvider);
                               },
                               text: 'Discard Post',
                             ),
