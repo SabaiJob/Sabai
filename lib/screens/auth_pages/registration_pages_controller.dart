@@ -485,7 +485,7 @@ class _RegistrationPagesControllerState
                 ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    requestOtp: requestOTP(),
+                    //requestOtp: requestOTP(),
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     }),

@@ -51,7 +51,7 @@ class _SabaiState extends State<Sabai> {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
     try {
-      await paymentProvider.getProfileData();
+      await paymentProvider.getProfileData(context);
       // If we get here, token is valid
     } catch (e) {
       // If the API call fails due to auth issues, invalidate the token

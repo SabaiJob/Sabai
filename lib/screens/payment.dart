@@ -28,7 +28,7 @@ class _PaymentState extends State<Payment> {
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
-    await paymentProvider.getProfileData();
+    await paymentProvider.getProfileData(context);
   }
 
   @override

@@ -12,12 +12,12 @@ import 'package:sabai_app/services/phone_number_provider.dart';
 class OtpCodeVerificationPage extends StatelessWidget {
   final TextEditingController pinCodeController;
   final Function(String) whenOnComplete;
-  final Future<void> requestOtp;
+  //final Future<void> requestOtp;
   const OtpCodeVerificationPage({
     super.key,
     required this.pinCodeController,
     required this.whenOnComplete,
-    required this.requestOtp,
+    //required this.requestOtp,
   });
 
   @override
@@ -98,7 +98,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                             onTap: otpTimer.isTimerActive
                                 ? null
                                 : () async {
-                                    await requestOtp;
+                                    //await requestOtp;
                                     otpTimer.resetTimer();
                                     print("Resending OTP...");
                                   },

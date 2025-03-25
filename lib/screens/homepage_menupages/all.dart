@@ -70,7 +70,7 @@ class _AllState extends State<All> {
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
-    await paymentProvider.getProfileData();
+    await paymentProvider.getProfileData(context);
   }
 
   void fetchAllJobs() async {

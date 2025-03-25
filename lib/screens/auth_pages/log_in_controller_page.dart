@@ -246,7 +246,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     phoneNumberController: _phoneNumberController),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
-                    requestOtp: requestOTP(),
+                    //requestOtp: requestOTP(),
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     })

@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:sabai_app/screens/walkthrough.dart';
 
 import '../screens/auth_pages/api_service.dart';
+import '../screens/auth_pages/token_service.dart';
 
 class PaymentProvider extends ChangeNotifier {
   String _purchaseDate = '';
@@ -30,7 +34,7 @@ class PaymentProvider extends ChangeNotifier {
 
   Map<String, dynamic>? _userData;
   Map<String, dynamic>? get userData => _userData;
-  Future<void> getProfileData() async {
+  Future<void> getProfileData(BuildContext context) async {
     try {
       final response = await ApiService.get('/auth/token/verify/');
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -40,6 +44,14 @@ class PaymentProvider extends ChangeNotifier {
         //print(_userData);
       } else {
         print(response.body);
+        if (response.statusCode == 401) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Walkthrough(),
+            ),
+          );
+        }
       }
     } catch (e) {
       print(e);

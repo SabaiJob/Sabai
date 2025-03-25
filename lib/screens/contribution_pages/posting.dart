@@ -70,7 +70,9 @@ class _PostingState extends State<Posting> {
           barrierDismissible: false,
           context: context,
           builder: (context) {
-            return const ReusableAlertBox(text: 'Loading...',);
+            return const ReusableAlertBox(
+              text: 'Loading...',
+            );
           },
         );
       }
@@ -220,7 +222,7 @@ class _PostingState extends State<Posting> {
     //fetching user data
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileData = Provider.of<PaymentProvider>(context, listen: false);
-      profileData.getProfileData();
+      profileData.getProfileData(context);
       setState(() {
         userName = profileData.userData!['username'];
         userProfileUrl = profileData.userData!['photo'];
@@ -395,34 +397,34 @@ class _PostingState extends State<Posting> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                onPressed:
-                    text == null && _images!.isEmpty 
-                        ? () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => const UnsuccessfulDialouge(
-                                    dialougeText:
-                                        'Please fill in the valid information to make a job post!'));
-                          }
-                        :
-                    () async {
-                  await contribute(
-                      text: text ?? "none",
-                      link: widget.url != null
-                          ? widget.url!
-                          : "https://www.google.co.th/",
-                      location: {"location": widget.location},
-                      imagePaths: _images!.map((image) => image.path).toList());
-                  setState(() {
-                    print('Text: ${text ?? "none"}');
-                    print('Link: ${widget.url ?? "https://www.google.co.th/"}');
-                    print('Location: ${widget.location}');
-                    print(
-                        'Image Paths: ${_images!.map((image) => image.path).toList()}');
-                    print(jsonEncode(widget.location));
-                  });
-                  jobProvider.setDraft(false);
-                },
+                onPressed: text == null && _images!.isEmpty
+                    ? () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => const UnsuccessfulDialouge(
+                                dialougeText:
+                                    'Please fill in the valid information to make a job post!'));
+                      }
+                    : () async {
+                        await contribute(
+                            text: text ?? "none",
+                            link: widget.url != null
+                                ? widget.url!
+                                : "https://www.google.co.th/",
+                            location: {"location": widget.location},
+                            imagePaths:
+                                _images!.map((image) => image.path).toList());
+                        setState(() {
+                          print('Text: ${text ?? "none"}');
+                          print(
+                              'Link: ${widget.url ?? "https://www.google.co.th/"}');
+                          print('Location: ${widget.location}');
+                          print(
+                              'Image Paths: ${_images!.map((image) => image.path).toList()}');
+                          print(jsonEncode(widget.location));
+                        });
+                        jobProvider.setDraft(false);
+                      },
                 child: const Text(
                   'Contribute',
                   style: TextStyle(

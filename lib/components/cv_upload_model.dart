@@ -79,7 +79,7 @@ class _CvUploadModelState extends State<CvUploadModel> {
     try {
       final paymentProvider =
           Provider.of<PaymentProvider>(context, listen: false);
-      await paymentProvider.getProfileData();
+      await paymentProvider.getProfileData(context);
 
       final userData = paymentProvider.userData;
       if (userData != null &&
@@ -201,7 +201,7 @@ class _CvUploadModelState extends State<CvUploadModel> {
       // After successful upload, fetch the updated profile data
       final paymentProvider =
           Provider.of<PaymentProvider>(context, listen: false);
-      await paymentProvider.getProfileData();
+      await paymentProvider.getProfileData(context);
 
       final userData = paymentProvider.userData;
       if (userData != null && userData['user_info']?['cv_file'] != null) {

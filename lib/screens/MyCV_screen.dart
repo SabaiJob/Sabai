@@ -35,21 +35,21 @@ class _MyCVScreenState extends State<MyCVScreen> {
     setState(() {
       _isLoading = true;
     });
-    try{
+    try {
       final paymentProvider =
-        Provider.of<PaymentProvider>(context, listen: false);
-    await paymentProvider.getProfileData();
+          Provider.of<PaymentProvider>(context, listen: false);
+      await paymentProvider.getProfileData(context);
 
-    final userData = paymentProvider.userData;
-    if (userData != null && userData['user_info']?['cv_file'] != null) {
-      setState(() {
-        _cvFileUrl = userData['user_info']['cv_file'];
-        _uploadStatus = "success";
-      });
-    }
-    }catch(e){
+      final userData = paymentProvider.userData;
+      if (userData != null && userData['user_info']?['cv_file'] != null) {
+        setState(() {
+          _cvFileUrl = userData['user_info']['cv_file'];
+          _uploadStatus = "success";
+        });
+      }
+    } catch (e) {
       print("Error fetching user data: $e");
-    }finally{
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -137,7 +137,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
         _uploadProgress = 0.0;
       });
 
-    await dio.post(
+      await dio.post(
         uploadUrl,
         data: formData,
         options: Options(
@@ -157,7 +157,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
       // After successful upload, fetch the updated profile data
       final paymentProvider =
           Provider.of<PaymentProvider>(context, listen: false);
-      await paymentProvider.getProfileData();
+      await paymentProvider.getProfileData(context);
 
       final userData = paymentProvider.userData;
       if (userData != null && userData['user_info']?['cv_file'] != null) {
@@ -242,7 +242,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
                 ),
                 trailing: GestureDetector(
                   onTap: pickFile,
-                  child:  Container(
+                  child: Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       border: Border.all(color: const Color(0xFFF0F1F2)),
@@ -260,7 +260,8 @@ class _MyCVScreenState extends State<MyCVScreen> {
                 ),
                 onTap: () {
                   if (_cvFileUrl != null) {
-                    launchUrl(Uri.parse(_cvFileUrl!), mode: LaunchMode.externalApplication);
+                    launchUrl(Uri.parse(_cvFileUrl!),
+                        mode: LaunchMode.externalApplication);
                   }
                 },
               ),
@@ -357,37 +358,41 @@ class _MyCVScreenState extends State<MyCVScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: _isLoading ? const CircularProgressIndicator(color: primaryPinkColor,) : Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 113,
-                    height: 114,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFf9edc2),
-                      shape: BoxShape.circle,
-                      border:
-                          Border.all(color: const Color(0xFFFFC107), width: 2),
+          child: _isLoading
+              ? const CircularProgressIndicator(
+                  color: primaryPinkColor,
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 113,
+                          height: 114,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFf9edc2),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: const Color(0xFFFFC107), width: 2),
+                          ),
+                        ),
+                        Positioned(
+                          child: Image.asset(
+                            'images/mycv.png',
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Positioned(
-                    child: Image.asset(
-                      'images/mycv.png',
-                      width: 80,
-                      height: 80,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-              _buildUploadStatus(),
-            ],
-          ),
+                    const SizedBox(height: 25),
+                    _buildUploadStatus(),
+                  ],
+                ),
         ),
       ),
     );
