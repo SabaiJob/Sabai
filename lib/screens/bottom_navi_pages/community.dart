@@ -109,6 +109,7 @@ class _CommunityPageState extends State<CommunityPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1.0),
@@ -120,11 +121,11 @@ class _CommunityPageState extends State<CommunityPage> {
         shadowColor: Colors.transparent,
         title: languageProvider.lan == 'English'
             ? const Text(
-                "Community",
+                "Organizations",
                 style: appBarTitleStyleEng,
               )
             : const Text(
-                'Community',
+                'အဖွဲ့အစည်း',
                 style: appBarTitleStyleMn,
               ),
         centerTitle: true,
@@ -144,7 +145,7 @@ class _CommunityPageState extends State<CommunityPage> {
             : Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: SizedBox(
                       height: 35,
                       child: Consumer<QuoteProvider>(
@@ -190,7 +191,7 @@ class _CommunityPageState extends State<CommunityPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(

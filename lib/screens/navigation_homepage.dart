@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/constants.dart';
 //import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/community.dart';
 //import 'package:sabai_app/screens/coming_soon.dart';
@@ -11,6 +13,7 @@ import 'package:sabai_app/screens/bottom_navi_pages/profile.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import 'package:sabai_app/screens/contribution_pages/upload_photo_page.dart';
+import 'package:sabai_app/services/general_provider.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,7 +79,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     return prefs.getString('draftText');
   }
 
-  Future<void> onTabChange(index, JobProvider jobProvider) async {
+  Future<void> onTabChange(index, JobProvider jobProvider, GeneralProvider generalProvider) async {
     if (index == 1) {
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>const ComingSoonPage(appBarTitle: Text('Contribution', style: appBarTitleStyleEng,))));
       if (jobProvider.isDraft == true) {
@@ -139,6 +142,11 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     } else {
       setState(() {
         currentIndex = index;
+        if(currentIndex == 0){
+          generalProvider.sethelp(true);
+        }else{
+          generalProvider.sethelp(false);
+        }
       });
     }
   }
@@ -174,6 +182,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
+    var generalProvider = Provider.of<GeneralProvider>(context);
     return Scaffold(
       bottomNavigationBar: SizedBox(
         height: 90,
@@ -202,13 +211,14 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           type: BottomNavigationBarType.fixed,
           //onTap: onTabChange,
           onTap: (value) {
-            onTabChange(value, jobProvider);
+            onTabChange(value, jobProvider, generalProvider);
           },
           items: [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.apartment),
+              icon:  Image.asset('icons/help.png',width: 25, height: 25,
+               color: generalProvider.help == true ? primaryPinkColor : const Color(0xff899197),),
               label:
-                  languageProvider.lan == 'English' ? 'Community' : 'အလုပ်ရှာ',
+                  languageProvider.lan == 'English' ? 'Help' : 'အကူအညီ',
             ),
             BottomNavigationBarItem(
               icon: const Icon(CupertinoIcons.add_circled),
@@ -216,7 +226,7 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
                   languageProvider.lan == 'English' ? 'Contribute' : 'အလုပ်တင်',
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.work_outline_outlined),
+              icon: const Icon(CupertinoIcons.briefcase),
               label: languageProvider.lan == 'English' ? 'Jobs' : 'အလုပ်ရှာ',
             ),
             BottomNavigationBarItem(

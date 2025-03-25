@@ -30,24 +30,24 @@ class _WalkthroughState extends State<Walkthrough> {
   }
 
   void _startAutoScroll() {
-   _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-    setState(() {
-      if (_forward) {
-        if (_currentText < 3) {
-          _currentText++;
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      setState(() {
+        if (_forward) {
+          if (_currentText < 3) {
+            _currentText++;
+          } else {
+            _forward = false; // Start moving backward
+            _currentText--;
+          }
         } else {
-          _forward = false; // Start moving backward
-          _currentText--;
+          if (_currentText > 0) {
+            _currentText--;
+          } else {
+            _forward = true; // Start moving forward again
+            _currentText++;
+          }
         }
-      } else {
-        if (_currentText > 0) {
-          _currentText--;
-        } else {
-          _forward = true; // Start moving forward again
-          _currentText++;
-        }
-      }
-    });
+      });
 
       _controller.animateToPage(_currentText,
           duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -193,99 +193,102 @@ class _WalkthroughState extends State<Walkthrough> {
                   ],
                 ),
                 //Colum includes description, Get Started, Log In, Continue as Guest buttons
-                Column(
-                  children: [
-                    languageProvider.lan == 'English'
-                        // description in Eng
-                        ? RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                              text: 'By registering, you accept our ',
-                              style: walkthroughDescriptionEng,
-                              children: [
-                                TextSpan(
-                                  text: 'Terms and Conditions of \nUse ',
-                                  style: walkthroughDescriptionBoldEng,
-                                ),
-                                TextSpan(
-                                  text: 'and our ',
-                                ),
-                                TextSpan(
-                                  text: 'Privacy Policy.',
-                                  style: walkthroughDescriptionBoldEng,
-                                ),
-                              ],
-                            ),
-                          )
-                        // description in Mm
-                        : RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                                text:
-                                    'စာရင်းသွင်းခြင်းဖြင့် သင့်အနေနှင့် ကျွန်ုပ်တို့၏',
-                                style: walkthroughDescriptionMm,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      languageProvider.lan == 'English'
+                          // description in Eng
+                          ? RichText(
+                              textAlign: TextAlign.center,
+                              text: const TextSpan(
+                                text: 'By registering, you accept our ',
+                                style: walkthroughDescriptionEng,
                                 children: [
                                   TextSpan(
-                                    text:
-                                        'အသုံးပြုမှုစည်းမျဉ်းများနှင့်\nကိုယ်ရေးအချက်အလက်မူဝါဒ',
-                                    style: walkthroughDescriptionBoldMm,
+                                    text: 'Terms and Conditions of \nUse ',
+                                    style: walkthroughDescriptionBoldEng,
                                   ),
                                   TextSpan(
-                                    text: 'ကို လက်ခံသည်ဟု ယူဆပါသည်',
-                                    style: walkthroughDescriptionMm,
+                                    text: 'and our ',
                                   ),
-                                ]),
-                          ),
-                    //SizedBox
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    //Get Started
-                    Button(
-                      languageProvider: languageProvider,
-                      textEng: 'Get Started',
-                      textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
-                      color: primaryPinkColor,
-                      widget: const RegistrationPagesController(),
-                      tColor: Colors.white,
-                      bColor: primaryPinkColor,
-                      isGuest: false,
-                    ),
-                    //SizedBox
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    //Log in
-                    Button(
-                      languageProvider: languageProvider,
-                      textEng: 'Log In',
-                      textMm: '၀င်ရောက်ရန်',
-                      color: Colors.white,
-                      widget: const LogInControllerPage(),
-                      tColor: primaryPinkColor,
-                      bColor: primaryPinkColor,
-                      isGuest: false,
-                    ),
-                    //SizedBox
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    //Continue as Guest
-                    Button(
-                      languageProvider: languageProvider,
-                      textEng: 'Continue as guest',
-                      textMm: 'ဧည့်သည်အဖြစ် ဆက်သွားပါ',
-                      color: backgroundColor,
-                      widget: const JobListingPage(),
-                      tColor: primaryPinkColor,
-                      bColor: Colors.transparent,
-                      isGuest: true,
-                    ),
-                    //SizedBox
-                    const SizedBox(
-                      height: 30,
-                    )
-                  ],
+                                  TextSpan(
+                                    text: 'Privacy Policy.',
+                                    style: walkthroughDescriptionBoldEng,
+                                  ),
+                                ],
+                              ),
+                            )
+                          // description in Mm
+                          : RichText(
+                              textAlign: TextAlign.center,
+                              text: const TextSpan(
+                                  text:
+                                      'စာရင်းသွင်းခြင်းဖြင့် သင့်အနေနှင့် ကျွန်ုပ်တို့၏',
+                                  style: walkthroughDescriptionMm,
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          'အသုံးပြုမှုစည်းမျဉ်းများနှင့်\nကိုယ်ရေးအချက်အလက်မူဝါဒ',
+                                      style: walkthroughDescriptionBoldMm,
+                                    ),
+                                    TextSpan(
+                                      text: 'ကို လက်ခံသည်ဟု ယူဆပါသည်',
+                                      style: walkthroughDescriptionMm,
+                                    ),
+                                  ]),
+                            ),
+                      //SizedBox
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      //Get Started
+                      Button(
+                        languageProvider: languageProvider,
+                        textEng: 'Get Started',
+                        textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
+                        color: primaryPinkColor,
+                        widget: const RegistrationPagesController(),
+                        tColor: Colors.white,
+                        bColor: primaryPinkColor,
+                        isGuest: false,
+                      ),
+                      //SizedBox
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      //Log in
+                      Button(
+                        languageProvider: languageProvider,
+                        textEng: 'Log In',
+                        textMm: '၀င်ရောက်ရန်',
+                        color: Colors.white,
+                        widget: const LogInControllerPage(),
+                        tColor: primaryPinkColor,
+                        bColor: primaryPinkColor,
+                        isGuest: false,
+                      ),
+                      //SizedBox
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      //Continue as Guest
+                      Button(
+                        languageProvider: languageProvider,
+                        textEng: 'Continue as guest',
+                        textMm: 'ဧည့်သည်အဖြစ် ဆက်သွားပါ',
+                        color: backgroundColor,
+                        widget: const JobListingPage(),
+                        tColor: primaryPinkColor,
+                        bColor: Colors.transparent,
+                        isGuest: true,
+                      ),
+                      //SizedBox
+                      const SizedBox(
+                        height: 30,
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

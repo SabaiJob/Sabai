@@ -200,12 +200,11 @@ class _JobListingPageState extends State<JobListingPage>
 
   //for new appbar
   final List<String> menuItemsList = [
-    'Jobs for you',
-    'Best Matched Jobs ✨',
+    'Jobs for you ✨',
     'Local Jobs 🇹🇭',
     'Global Jobs ✈️'
   ];
-  String selectedValue = 'Jobs for you';
+  String selectedValue = 'Jobs for you ✨';
 
   @override
   Widget build(BuildContext context) {
@@ -243,11 +242,12 @@ class _JobListingPageState extends State<JobListingPage>
                 setState(() {
                   selectedValue = value!;
                   if (selectedValue == 'Local Jobs 🇹🇭' ||
-                      selectedValue == 'Jobs for you' ||
-                      selectedValue == 'Best Matched Jobs ✨') {
+                      selectedValue == 'Jobs for you' 
+                      //selectedValue == 'Best Matched Jobs ✨'
+                      ) {
                     jobProvider.setLocatiobType('local');
                     jobProvider.getJobs(true);
-                    jobProvider.getBestMatchedJobs(true);
+                    //jobProvider.getBestMatchedJobs(true);
                     jobProvider.getPartnerJobs(true);
                     jobProvider.fetchPremiumJobs(true);
                     filterProvider.setLocationType('local');
@@ -255,7 +255,7 @@ class _JobListingPageState extends State<JobListingPage>
                   } else if (selectedValue == 'Global Jobs ✈️') {
                     jobProvider.setLocatiobType('global');
                     jobProvider.getJobs(true);
-                    jobProvider.getBestMatchedJobs(true);
+                    //jobProvider.getBestMatchedJobs(true);
                     jobProvider.getPartnerJobs(true);
                     jobProvider.fetchPremiumJobs(true);
                     filterProvider.setLocationType('global');
@@ -270,14 +270,15 @@ class _JobListingPageState extends State<JobListingPage>
                   color: primaryPinkColor,
                 ),
               ),
-              buttonStyleData: ButtonStyleData(
-                  padding: const EdgeInsets.only(left: 8),
-                  width: 200,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFFEBF6),
-                    border: Border.all(color: primaryPinkColor),
-                    borderRadius: BorderRadius.circular(10),
-                  )),
+              buttonStyleData: const ButtonStyleData(
+                  padding:  EdgeInsets.only(left: 8),
+                  width: 150,
+                  // decoration: BoxDecoration(
+                  //   color: const Color(0xffFFEBF6),
+                  //   border: Border.all(color: primaryPinkColor),
+                  //   borderRadius: BorderRadius.circular(10),
+                  // )
+                  ),
               dropdownStyleData: DropdownStyleData(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -362,15 +363,17 @@ class _JobListingPageState extends State<JobListingPage>
             ),
           ],
         ),
-        body: Padding(
+        body: const Padding(
           padding: const EdgeInsets.only(
             left: 16,
             right: 16,
             top: 12,
           ),
-          child: selectedValue == 'Best Matched Jobs ✨'
-              ? const BestMatches()
-              : const All(),
+          child: 
+          // selectedValue == 'Best Matched Jobs ✨'
+          //     ? const BestMatches()
+          //     : 
+               All(),
           // Center(
           //     child: const SizedBox(
           //       child: Text('No Data Available'),

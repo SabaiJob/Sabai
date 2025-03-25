@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 import '../../components/ad_card.dart';
 import '../../components/work_card.dart';
@@ -47,6 +48,7 @@ class _MyContributionState extends State<MyContribution> {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     final jobProvider = Provider.of<JobProvider>(context);
     final contributedJobs = jobProvider.contributedJobs
         .where((job) => job['type'] == 'job')
@@ -63,10 +65,15 @@ class _MyContributionState extends State<MyContribution> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: backgroundColor,
-        title: const Text(
-          'My Contributions',
-          style: appBarTitleStyleEng,
-        ),
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "My Contributions",
+                style: appBarTitleStyleEng,
+              )
+            : const Text(
+                'ကျွန်တော့်ကူညီမှုများ',
+                style: appBarTitleStyleMn,
+              ),
         iconTheme: const IconThemeData(
           color: primaryPinkColor,
         ),

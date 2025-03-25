@@ -7,6 +7,13 @@ class GeneralProvider extends ChangeNotifier {
   int _notiCount = 0;
   int get notiCount => _notiCount;
 
+  bool _help = false;
+  bool get help => _help;
+  void sethelp(bool value){
+    _help = value;
+    notifyListeners();
+  }
+
   List<Map<String, dynamic>> _noti = [];
   List<Map<String, dynamic>> get noti => _noti;
   bool isLoading = true;
