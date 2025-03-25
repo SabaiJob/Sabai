@@ -16,14 +16,14 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context)=> QuoteProvider()),
+        ChangeNotifierProvider(create: (context) => QuoteProvider()),
         ChangeNotifierProvider(create: (context) => LanguageProvider()),
         ChangeNotifierProvider(create: (context) => JobProvider()),
         ChangeNotifierProvider(create: (context) => OtpCodeTimerProvider()),
         ChangeNotifierProvider(create: (context) => PhoneNumberProvider()),
         ChangeNotifierProvider(create: (context) => JobFilterProvider()),
         ChangeNotifierProvider(create: (context) => PaymentProvider()),
-        ChangeNotifierProvider(create: (context)=> GeneralProvider())
+        ChangeNotifierProvider(create: (context) => GeneralProvider())
       ],
       child: const Sabai(),
     ),
@@ -45,6 +45,27 @@ class _SabaiState extends State<Sabai> {
     } else {
       return const NavigationHomepage();
     }
+  }
+
+  void fetchUserData() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    try {
+      await paymentProvider.getProfileData();
+      // If we get here, token is valid
+    } catch (e) {
+      // If the API call fails due to auth issues, invalidate the token
+      if (e.toString().contains('401') ||
+          e.toString().contains('unauthorized')) {
+        await TokenService.deleteToken(); // Clear the invalid token
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

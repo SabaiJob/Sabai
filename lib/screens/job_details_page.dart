@@ -662,7 +662,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   children: [
                                     ClipOval(
                                       child: Image.network(
-                                        jobDetail['contribution']['user']['photo'],
+                                        jobDetail['contribution']['user']
+                                            ['photo'],
                                         width: 24,
                                         height: 24,
                                         fit: BoxFit.cover,
@@ -672,7 +673,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       width: 10,
                                     ),
                                     Text(
-                                      jobDetail['contribution']['user']['username'],
+                                      jobDetail['contribution']['user']
+                                          ['username'],
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontFamily: 'Bricolage-R',
@@ -809,88 +811,81 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
               ),
             ),
       persistentFooterButtons: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(
-              width: 287,
-              height: 42,
-              child: TextButton(
-                onPressed: widget.isClosed
-                    ? null
-                    : () {
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                TAndCDialog(jobId: widget.jobId));
-                      },
-                style: TextButton.styleFrom(
-                  backgroundColor: widget.isClosed
-                      ? const Color(0x50FF3997)
-                      : const Color(0xffFF3997),
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(8), // Set the border radius
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    languageProvider.lan == 'English'
-                        ? const Text(
-                            'Apply Now',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Bricolage-B',
-                              fontSize: 15.63,
-                            ),
-                          )
-                        : const Text(
-                            'လျှောက်ထားရန်',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Walone-B',
-                              fontSize: 14,
-                            ),
-                          ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    const Icon(
-                      CupertinoIcons.arrow_right,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+        SizedBox(
+          width: double.infinity,
+          height: 42,
+          child: TextButton(
+            onPressed: widget.isClosed
+                ? null
+                : () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => TAndCDialog(jobId: widget.jobId));
+                  },
+            style: TextButton.styleFrom(
+              backgroundColor: widget.isClosed
+                  ? const Color(0x50FF3997)
+                  : const Color(0xffFF3997),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Set the border radius
               ),
             ),
-            SizedBox(
-              width: 40,
-              height: 42,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(
-                        color: Color.fromARGB(255, 230, 233, 235),
-                        width: 1.5,
-                      )),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                languageProvider.lan == 'English'
+                    ? const Text(
+                        'Apply Now',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Bricolage-B',
+                          fontSize: 15.63,
+                        ),
+                      )
+                    : const Text(
+                        'လျှောက်ထားရန်',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Walone-B',
+                          fontSize: 14,
+                        ),
+                      ),
+                const SizedBox(
+                  width: 15,
                 ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => TAndCDialog(jobId: widget.jobId));
-                },
-                child: const Image(
-                  image: AssetImage('images/share_icon.png'),
-                  width: 24,
-                  height: 24,
+                const Icon(
+                  CupertinoIcons.arrow_right,
+                  color: Colors.white,
                 ),
-              ),
+              ],
             ),
-          ],
-        )
+          ),
+        ),
+        // SizedBox(
+        //   width: 40,
+        //   height: 42,
+        //   child: TextButton(
+        //     style: TextButton.styleFrom(
+        //       backgroundColor: Colors.white,
+        //       shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(8),
+        //           side: const BorderSide(
+        //             color: Color.fromARGB(255, 230, 233, 235),
+        //             width: 1.5,
+        //           )),
+        //     ),
+        //     onPressed: () {
+        //       showDialog(
+        //           context: context,
+        //           builder: (context) => TAndCDialog(jobId: widget.jobId));
+        //     },
+        //     child: const Image(
+        //       image: AssetImage('images/share_icon.png'),
+        //       width: 24,
+        //       height: 24,
+        //     ),
+        //   ),
+        // )
       ],
     );
   }

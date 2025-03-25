@@ -27,8 +27,9 @@ class ApiService {
   static Future<http.Response> post(String endPoint, dynamic body) async {
     final headers = await getHeaders();
     final response = await http.post(
-      Uri.parse(
-          'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      // Uri.parse(
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      Uri.parse('https://api.sabaijob.com/api$endPoint'),
       headers: headers,
       body: json.encode(body),
     );
@@ -38,8 +39,9 @@ class ApiService {
   static Future<http.Response> put(String endPoint, dynamic body) async {
     final headers = await getHeaders();
     final response = await http.put(
-      Uri.parse(
-          'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      // Uri.parse(
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      Uri.parse('https://api.sabaijob.com/api$endPoint'),
       headers: headers,
       body: json.encode(body),
     );

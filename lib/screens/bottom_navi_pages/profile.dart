@@ -9,6 +9,7 @@ import 'package:sabai_app/screens/MyCV_screen.dart';
 import 'package:sabai_app/screens/about.dart';
 import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/coming_soon.dart';
+import 'package:sabai_app/screens/contribution_pages/my_contribution.dart';
 import 'package:sabai_app/screens/edit_profile.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
 import 'package:sabai_app/screens/on_premium_page.dart';
@@ -23,6 +24,8 @@ import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/services/payment_provider.dart';
+
+import '../../services/job_provider.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
@@ -35,7 +38,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
-  
+
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
@@ -46,6 +49,12 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     fetchUserData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<JobProvider>(context, listen: false).fetchContributedJobs(
+        false,
+        context,
+      );
+    });
   }
 
   Future<void> navToEditProfile(PaymentProvider paymentProvider) async {
@@ -54,7 +63,7 @@ class _ProfileState extends State<Profile> {
       MaterialPageRoute(
         builder: (context) => EditProfile(
           initialName: paymentProvider.userData!['username'],
-          initialEmail: paymentProvider.userData!['email'],
+          initialEmail: paymentProvider.userData!['email'] ?? '',
         ),
       ),
     );
@@ -71,7 +80,7 @@ class _ProfileState extends State<Profile> {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
-
+    final jobProvider = Provider.of<JobProvider>(context);
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
 
@@ -335,7 +344,7 @@ class _ProfileState extends State<Profile> {
               Text(
                   languageProvider.lan == 'English'
                       ? '${paymentProvider.userData!['phone']}'
-                      : '+၆၆ ၆၇၂၈၁၉၃၂',
+                      : '${paymentProvider.userData!['phone']}',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
                           color: Color(0xFF6C757D),
@@ -367,12 +376,7 @@ class _ProfileState extends State<Profile> {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ComingSoonPage(
-                                    appBarTitle: Text(
-                                      'My Contributions',
-                                      style: appBarTitleStyleEng,
-                                    ),
-                                  ))),
+                              builder: (context) => const MyContribution())),
                       child: SizedBox(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -411,8 +415,8 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 Text(
                                   languageProvider.lan == 'English'
-                                      ? '8 Posts'
-                                      : '၈ ပိုစ့်',
+                                      ? '${jobProvider.contributedJobs.length} Posts'
+                                      : '${jobProvider.contributedJobs.length} ပိုစ့်',
                                   style: languageProvider.lan == 'English'
                                       ? const TextStyle(
                                           color: Color(0xFF2B2F32),

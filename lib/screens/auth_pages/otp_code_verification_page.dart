@@ -12,10 +12,13 @@ import 'package:sabai_app/services/phone_number_provider.dart';
 class OtpCodeVerificationPage extends StatelessWidget {
   final TextEditingController pinCodeController;
   final Function(String) whenOnComplete;
-  const OtpCodeVerificationPage(
-      {super.key,
-      required this.pinCodeController,
-      required this.whenOnComplete});
+  final Future<void> requestOtp;
+  const OtpCodeVerificationPage({
+    super.key,
+    required this.pinCodeController,
+    required this.whenOnComplete,
+    required this.requestOtp,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +40,14 @@ class OtpCodeVerificationPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12, bottom: 32),
             child: SizedBox(
               child: Align(
-                alignment: Alignment.topLeft,
-                child: Consumer<PhoneNumberProvider>(builder: (context, phoneNumberProvider, child){
-                  return ReusableContentHolder(
-                    content: languageProvider.lan == "English"
-                        ? 'We sent a SMS with your OTP code to ${phoneNumberProvider.phoneNumber}'
-                        : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို  ${phoneNumberProvider.phoneNumber} သို့ ပို့ခဲ့ပါပြီ။');
-                })
-              ),
+                  alignment: Alignment.topLeft,
+                  child: Consumer<PhoneNumberProvider>(
+                      builder: (context, phoneNumberProvider, child) {
+                    return ReusableContentHolder(
+                        content: languageProvider.lan == "English"
+                            ? 'We sent a SMS with your OTP code to ${phoneNumberProvider.phoneNumber}'
+                            : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို  ${phoneNumberProvider.phoneNumber} သို့ ပို့ခဲ့ပါပြီ။');
+                  })),
             ),
           ),
           //pincode textfield
@@ -94,7 +97,8 @@ class OtpCodeVerificationPage extends StatelessWidget {
                         : GestureDetector(
                             onTap: otpTimer.isTimerActive
                                 ? null
-                                : () {
+                                : () async {
+                                    await requestOtp;
                                     otpTimer.resetTimer();
                                     print("Resending OTP...");
                                   },

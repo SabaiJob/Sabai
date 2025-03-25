@@ -1,24 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sabai_app/components/ad_card.dart';
-import 'package:sabai_app/components/work_card.dart';
-import 'package:sabai_app/constants.dart';
-import 'package:sabai_app/services/job_provider.dart';
 
-class MyApplicationScreen extends StatefulWidget {
-  const MyApplicationScreen({super.key});
+import '../../components/ad_card.dart';
+import '../../components/work_card.dart';
+import '../../constants.dart';
+import '../../services/job_provider.dart';
+
+class MyContribution extends StatefulWidget {
+  const MyContribution({super.key});
 
   @override
-  State<MyApplicationScreen> createState() => _MyApplicationScreenState();
+  State<MyContribution> createState() => _MyContributionState();
 }
 
-class _MyApplicationScreenState extends State<MyApplicationScreen> {
+class _MyContributionState extends State<MyContribution> {
   bool isSearching = false;
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String searchQuery = "";
-  int _currentAppliedJobPage = 1;
+  int _currentContributedJobsPages = 1;
 
   @override
   void initState() {
@@ -26,9 +27,9 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<JobProvider>(context, listen: false).fetchAppliedJobs(
-          _currentAppliedJobPage == 1, context,
-          page: _currentAppliedJobPage);
+      Provider.of<JobProvider>(context, listen: false).fetchContributedJobs(
+          _currentContributedJobsPages == 1, context,
+          page: _currentContributedJobsPages);
     });
   }
 
@@ -36,10 +37,10 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
     final jobProvider = Provider.of<JobProvider>(context, listen: false);
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      if (_currentAppliedJobPage < jobProvider.totalAppliedJobsPage) {
-        _currentAppliedJobPage++;
+      if (_currentContributedJobsPages < jobProvider.totalContributedJobsPage) {
+        _currentContributedJobsPages++;
         jobProvider.fetchAppliedJobs(false, context,
-            page: _currentAppliedJobPage);
+            page: _currentContributedJobsPages);
       }
     }
   }
@@ -47,23 +48,23 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
   @override
   Widget build(BuildContext context) {
     final jobProvider = Provider.of<JobProvider>(context);
-    final appliedJobs =
-        jobProvider.appliedJobs.where((job) => job['type'] == 'job').toList();
-    final filterJobs = appliedJobs.where((job) {
+    final contributedJobs = jobProvider.contributedJobs
+        .where((job) => job['type'] == 'job')
+        .toList();
+    final filterJobs = contributedJobs.where((job) {
       final jobInfo = job['info'] as Map<String, dynamic>;
       final jobTitle = jobInfo['title'] as String;
       bool matchesQuery =
           jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
       return matchesQuery;
     }).toList();
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: backgroundColor,
         title: const Text(
-          'My Applications',
+          'My Contributions',
           style: appBarTitleStyleEng,
         ),
         iconTheme: const IconThemeData(
@@ -77,7 +78,7 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
           ),
         ),
       ),
-      body: jobProvider.isLoadigForAppliedJobs == true
+      body: jobProvider.isLoadingForContributedJobs == true
           ? const Center(
               child: CircularProgressIndicator(
                 color: primaryPinkColor,
@@ -175,7 +176,7 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                       ),
                     ] else ...[
                       Text(
-                        'Total ( ${jobProvider.appliedJobs.length} ) applications',
+                        'Total ( ${jobProvider.contributedJobs.length} ) posts',
                         style: const TextStyle(
                           fontFamily: 'Bricolage-M',
                           fontSize: 15.63,
@@ -184,10 +185,10 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      jobProvider.appliedJobs.isEmpty
+                      jobProvider.contributedJobs.isEmpty
                           ? const Center(
                               child: Text(
-                                'You haven\'t applied any jobs yet! ',
+                                'You haven\'t posted any jobs yet! ',
                                 style: TextStyle(
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 15.63,
@@ -197,12 +198,14 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                           : Expanded(
                               child: ListView.builder(
                                   controller: _scrollController,
-                                  itemCount: jobProvider.appliedJobs.length + 1,
+                                  itemCount:
+                                      jobProvider.contributedJobs.length + 1,
                                   itemBuilder: (context, index) {
                                     if (index ==
-                                        jobProvider.appliedJobs.length) {
-                                      if (_currentAppliedJobPage <
-                                          jobProvider.totalAppliedJobsPage) {
+                                        jobProvider.contributedJobs.length) {
+                                      if (_currentContributedJobsPages <
+                                          jobProvider
+                                              .totalContributedJobsPage) {
                                         return const Center(
                                           child: CircularProgressIndicator(
                                             color: primaryPinkColor,
@@ -213,7 +216,8 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                                       }
                                     }
 
-                                    final appliedJobs = jobProvider.appliedJobs;
+                                    final appliedJobs =
+                                        jobProvider.contributedJobs;
                                     if (appliedJobs[index]['type'] == 'job') {
                                       final jobDetail =
                                           appliedJobs[index]['info'];

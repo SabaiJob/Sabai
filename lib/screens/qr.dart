@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/general_dialouge.dart';
+import 'package:sabai_app/components/unsuccessful_dialouge.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/payment_verifying.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
@@ -65,6 +67,17 @@ class _QrState extends State<Qr> {
     required int paymentMethodId,
     required File fileImage,
   }) async {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent dismissing by tapping outside
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
     final token = await TokenService.getToken();
     try {
       String fileName = fileImage.path.split('/').last;
@@ -91,6 +104,9 @@ class _QrState extends State<Qr> {
         ),
       );
 
+      // Close loading dialog first
+      Navigator.of(context).pop();
+
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         print("Subscription order created successfully: ${response.data}");
         Navigator.of(context).pushAndRemoveUntil(
@@ -101,8 +117,19 @@ class _QrState extends State<Qr> {
         print("Failed to create subscription order: ${response.statusCode}");
       }
     } catch (e) {
+      // Close loading dialog first
+      Navigator.of(context).pop();
+
       if (e is DioException) {
-        print("DioError: ${e.response?.data}"); // Log the error response
+        print("DioError: ${e.response?.data}");
+        if (e.response!.data.toString().contains('pending')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return const GeneralDialouge(
+                    dialougeText: 'You already have a pending subscription!');
+              });
+        }
       } else {
         print("Error uploading payment screenshot: $e");
       }

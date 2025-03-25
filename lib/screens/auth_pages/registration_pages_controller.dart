@@ -120,9 +120,9 @@ class _RegistrationPagesControllerState
 
   //request OTP
   Future<void> requestOTP() async {
-    const String url =
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
-
+    // const String url =
+    //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
+    const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
     final Map<String, dynamic> requestBody = {
       "phone": _phoneNumberController.text,
     };
@@ -214,15 +214,16 @@ class _RegistrationPagesControllerState
 
           Dio dio = Dio();
           final response = await dio.post(
-              "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/",
-              options: Options(
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  "Authorization": "Bearer $token",
-                },
-              ),
-              data: formData,
-              );
+            // "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/",
+            'https://api.sabaijob.com/api/auth/userinfo/',
+            options: Options(
+              headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer $token",
+              },
+            ),
+            data: formData,
+          );
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
             //fetch the job categories
@@ -270,8 +271,10 @@ class _RegistrationPagesControllerState
   void _handleOTPVerificationPage(
       String enteredPinCode, JobProvider jobProvider) async {
     if (_currentPage == 1) {
+      // const String url =
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
       const String url =
-          'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
+          'https://api.sabaijob.com/api/auth/otp/confirm/register/';
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
@@ -482,6 +485,7 @@ class _RegistrationPagesControllerState
                 ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
+                    requestOtp: requestOTP(),
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     }),

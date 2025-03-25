@@ -314,6 +314,7 @@ class JobProvider extends ChangeNotifier {
     }
   }
 
+  //fetch applied jobs
   List<dynamic> _appliedJobs = [];
   int _totalAppliedJobsPage = 1;
   int get totalAppliedJobsPage => _totalAppliedJobsPage;
@@ -355,6 +356,51 @@ class JobProvider extends ChangeNotifier {
       );
     } finally {}
     isLoadigForAppliedJobs = false;
+    notifyListeners();
+  }
+
+  //fetch contributed jobs
+  List<dynamic> _contributedJobs = [];
+  int _totalContributedJobsPage = 1;
+  int get totalContributedJobsPage => _totalContributedJobsPage;
+  List<dynamic> get contributedJobs => _contributedJobs;
+  bool isLoadingForContributedJobs = true;
+  Future<void> fetchContributedJobs(bool isLoading, BuildContext context,
+      {int page = 1}) async {
+    try {
+      isLoadingForContributedJobs = isLoading;
+      notifyListeners();
+      final response = await ApiService.get(
+          '/jobs/search/?my_contributions=true&page=$page');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = json.decode(response.body);
+        if (page == 1) {
+          _contributedJobs = data['results'];
+          notifyListeners();
+        } else {
+          _contributedJobs.addAll(data['results']);
+          notifyListeners();
+        }
+
+        if (data.containsKey('total_pages')) {
+          _totalContributedJobsPage = data['total_pages'];
+          notifyListeners();
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error fetching data ${response.body}'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error $e'),
+        ),
+      );
+    } finally {}
+    isLoadingForContributedJobs = false;
     notifyListeners();
   }
 

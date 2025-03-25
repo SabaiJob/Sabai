@@ -30,8 +30,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
 
   //user login
   Future<void> userLogin() async {
-    const String url =
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/login/';
+    const String url = 'https://api.sabaijob.com/api/auth/login/';
 
     final Map<String, dynamic> requestBody = {
       'full_name': _fullNameController.text,
@@ -71,8 +70,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
 
   //request OTP
   Future<void> requestOTP() async {
-    const String url =
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
+    // const String url =
+    //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
+    const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
 
     final Map<String, dynamic> requestBody = {
       "phone": _phoneNumberController.text,
@@ -141,8 +141,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
       //                 showButtonSheet: false,
       //               )));
       // }
-      const String url =
-          'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/login/';
+      // const String url =
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/login/';
+      const String url = 'https://api.sabaijob.com/api/auth/otp/confirm/login/';
 
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
@@ -245,6 +246,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     phoneNumberController: _phoneNumberController),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
+                    requestOtp: requestOTP(),
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     })
