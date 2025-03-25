@@ -84,9 +84,10 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     return prefs.getString('draftText_$phone');
   }
 
-  Future<void> onTabChange(
-      index, JobProvider jobProvider, PaymentProvider paymentProvider, GeneralProvider generalProvider) async {
+  Future<void> onTabChange(index, JobProvider jobProvider,
+      PaymentProvider paymentProvider, GeneralProvider generalProvider) async {
     if (index == 1) {
+      generalProvider.sethelp(false);
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>const ComingSoonPage(appBarTitle: Text('Contribution', style: appBarTitleStyleEng,))));
       if (jobProvider.isDraft == true) {
         String? url = await getUrl(paymentProvider);
@@ -148,9 +149,9 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
     } else {
       setState(() {
         currentIndex = index;
-        if(currentIndex == 0){
+        if (currentIndex == 0) {
           generalProvider.sethelp(true);
-        }else{
+        } else {
           generalProvider.sethelp(false);
         }
       });
@@ -218,14 +219,19 @@ class _NavigationHomepageState extends State<NavigationHomepage> {
           type: BottomNavigationBarType.fixed,
           //onTap: onTabChange,
           onTap: (value) {
-            onTabChange(value, jobProvider, paymentProvider,generalProvider);
+            onTabChange(value, jobProvider, paymentProvider, generalProvider);
           },
           items: [
             BottomNavigationBarItem(
-              icon:  Image.asset('icons/help.png',width: 25, height: 25,
-               color: generalProvider.help == true ? primaryPinkColor : const Color(0xff899197),),
-              label:
-                  languageProvider.lan == 'English' ? 'Help' : 'အကူအညီ',
+              icon: Image.asset(
+                'icons/help.png',
+                width: 25,
+                height: 25,
+                color: generalProvider.help == true
+                    ? primaryPinkColor
+                    : const Color(0xff899197),
+              ),
+              label: languageProvider.lan == 'English' ? 'Help' : 'အကူအညီ',
             ),
             BottomNavigationBarItem(
               icon: const Icon(CupertinoIcons.add_circled),
