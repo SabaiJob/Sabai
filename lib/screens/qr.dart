@@ -34,8 +34,10 @@ class Qr extends StatefulWidget {
 }
 
 class _QrState extends State<Qr> {
-  final String imageUrl =
-      'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
+  // final String imageUrl =
+  //     'https://softmatic.com/images/QR%20Example%20Umlauts%20Accented.png';
+  String kbzQr = '';
+  String promptQr = '';
 
   FileImage? _selectedImage;
   Map<String, dynamic>? Kbz;
@@ -57,6 +59,8 @@ class _QrState extends State<Qr> {
         setState(() {
           Kbz = data[0];
           prompt = data[1];
+          kbzQr = Kbz!['qr'];
+          promptQr = prompt!['qr'];
         });
       }
     } catch (e) {}
@@ -94,7 +98,8 @@ class _QrState extends State<Qr> {
 
       Dio dio = Dio();
       Response response = await dio.post(
-        "https://sabai-job-backend-k9wda.ondigitalocean.app/api/sales/subscribe/",
+        //"https://sabai-job-backend-k9wda.ondigitalocean.app/api/sales/subscribe/",
+        "https://api.sabaijob.com/api/sales/subscribe/",
         data: formData,
         options: Options(
           headers: {
@@ -198,7 +203,7 @@ class _QrState extends State<Qr> {
                         ),
                       ),
                       Image.network(
-                        imageUrl,
+                        widget.isKbz == true ? kbzQr : promptQr,
                         width: 195,
                         height: 180,
                       ),
@@ -226,7 +231,9 @@ class _QrState extends State<Qr> {
                               try {
                                 final saved =
                                     await ImageSaverUtil.saveNetworkImage(
-                                        imageUrl);
+                                        widget.isKbz == true
+                                            ? kbzQr
+                                            : promptQr);
                                 // Show success or failure message
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
