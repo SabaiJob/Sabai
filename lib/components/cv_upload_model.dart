@@ -41,7 +41,7 @@ class _CvUploadModelState extends State<CvUploadModel> {
     try {
       final response = await http.post(
           Uri.parse(
-              'https://sabai-job-backend-k9wda.ondigitalocean.app/api/jobs/apply/'),
+              'https://api.sabaijob.com/api/jobs/apply/'),
           headers: await ApiService.getHeaders(),
           body: jsonEncode({"job_id": widget.jobId}));
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -164,7 +164,7 @@ class _CvUploadModelState extends State<CvUploadModel> {
   Future<void> uploadFile(Uint8List fileBytes, String fileName) async {
     final Dio dio = Dio();
     String uploadUrl =
-        "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/";
+        "https://api.sabaijob.com/api/auth/userinfo/";
 
     final token = await TokenService.getToken();
 

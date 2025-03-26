@@ -63,36 +63,36 @@ class LogInFormPage extends StatelessWidget {
                 ),
       
                 // Full Name
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: ReusableLabelHolder(
-                    labelName:
-                        languageProvider.lan == 'English' ? 'Full Name' : 'အမည်',
-                    textStyle: languageProvider.lan == 'English'
-                        ? labelStyleEng
-                        : labelStyleMm,
-                    isStarred: true,
-                  ),
-                ),
-                // Full Name TextFormField
-                ReusableTextformfield(
-                    keyboardType: TextInputType.name,
-                    textEditingController: fullNameController,
-                    validating: (value) {
-                      if (value == null || value.isEmpty) {
-                        return languageProvider.lan == 'English'
-                            ? "Full Name is required"
-                            : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
-                      }
-                      return null;
-                    },
-                    hint: languageProvider.lan == 'English'
-                        ? 'Enter your full name'
-                        : 'သင့်အမည် ထည့်ပါ'),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 8),
+                //   child: ReusableLabelHolder(
+                //     labelName:
+                //         languageProvider.lan == 'English' ? 'Full Name' : 'အမည်',
+                //     textStyle: languageProvider.lan == 'English'
+                //         ? labelStyleEng
+                //         : labelStyleMm,
+                //     isStarred: true,
+                //   ),
+                // ),
+                // // Full Name TextFormField
+                // ReusableTextformfield(
+                //     keyboardType: TextInputType.name,
+                //     textEditingController: fullNameController,
+                //     validating: (value) {
+                //       if (value == null || value.isEmpty) {
+                //         return languageProvider.lan == 'English'
+                //             ? "Full Name is required"
+                //             : "အမည်အပြည့်အစုံထည့်ရန်လိုအပ်သည်";
+                //       }
+                //       return null;
+                //     },
+                //     hint: languageProvider.lan == 'English'
+                //         ? 'Enter your full name'
+                //         : 'သင့်အမည် ထည့်ပါ'),
       
                 // Phone Number
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(top: 8,bottom: 8),
                   child: ReusableLabelHolder(
                     labelName: languageProvider.lan == 'English'
                         ? 'Phone Number'

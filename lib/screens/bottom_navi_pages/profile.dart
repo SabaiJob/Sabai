@@ -18,6 +18,7 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/privacy_policy.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
+import 'package:sabai_app/screens/savejobsprofile.dart';
 import 'package:sabai_app/screens/terms_and_conditions_page.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/language_provider.dart';
@@ -348,7 +349,7 @@ class _ProfileState extends State<Profile> {
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Bricolage-B',
-                    fontSize: 12.5,
+                    fontSize: 14,
                   )),
               const SizedBox(
                 height: 5,
@@ -362,12 +363,12 @@ class _ProfileState extends State<Profile> {
                       ? const TextStyle(
                           color: Color(0xFF6C757D),
                           fontFamily: 'Bricolage-R',
-                          fontSize: 10,
+                          fontSize: 12,
                         )
                       : const TextStyle(
                           color: Color(0xFF6C757D),
                           fontFamily: 'Walone-B',
-                          fontSize: 10,
+                          fontSize: 12,
                         )),
               const SizedBox(
                 height: 20,
@@ -418,12 +419,12 @@ class _ProfileState extends State<Profile> {
                                       ? const TextStyle(
                                           color: Color(0xFF565E64),
                                           fontFamily: 'Bricolage-R',
-                                          fontSize: 10,
+                                          fontSize: 12,
                                         )
                                       : const TextStyle(
                                           color: Color(0xFF565E64),
                                           fontFamily: 'Walone-B',
-                                          fontSize: 10,
+                                          fontSize: 12,
                                         ),
                                 ),
                                 Text(
@@ -434,12 +435,12 @@ class _ProfileState extends State<Profile> {
                                       ? const TextStyle(
                                           color: Color(0xFF2B2F32),
                                           fontFamily: 'Bricolage-B',
-                                          fontSize: 10,
+                                          fontSize: 11,
                                         )
                                       : const TextStyle(
                                           color: Color(0xFF2B2F32),
                                           fontFamily: 'Walone-B',
-                                          fontSize: 10,
+                                          fontSize: 11,
                                         ),
                                 ),
                               ],
@@ -448,119 +449,120 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    //Striaght Line
-                    Container(
-                      width: 1,
-                      height: 43,
-                      color: const Color(0xFFE2E3E5),
-                    ),
+                    //Temporary block
+                    // //Striaght Line
+                    // Container(
+                    //   width: 1,
+                    //   height: 43,
+                    //   color: const Color(0xFFE2E3E5),
+                    // ),
                     // Rose Counts
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            //RoseCountPage()
-                            builder: (context) => RoseCountPage(),
-                          ),
-                        );
-                      },
-                      child: SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            languageProvider.lan == 'English'
-                                ? RichText(
-                                    text: const TextSpan(children: [
-                                      TextSpan(
-                                          text: 'Got ',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Bricolage-R',
-                                            fontSize: 10,
-                                          )),
-                                      TextSpan(
-                                          text: '46 ',
-                                          style: TextStyle(
-                                            color: Color(0xFF2B2F32),
-                                            fontFamily: 'Bricolage-B',
-                                            fontSize: 10,
-                                          )),
-                                      TextSpan(
-                                          text: 'roses',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Bricolage-R',
-                                            fontSize: 10,
-                                          )),
-                                    ]),
-                                  )
-                                : RichText(
-                                    text: const TextSpan(children: [
-                                      TextSpan(
-                                          text: 'နှင်းဆီ ',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Walone-R',
-                                            fontSize: 10,
-                                          )),
-                                      TextSpan(
-                                          text: '၄၆ပွင့် ',
-                                          style: TextStyle(
-                                            color: Color(0xFF2B2F32),
-                                            fontFamily: 'Walone-B',
-                                            fontSize: 10,
-                                          )),
-                                      TextSpan(
-                                          text: 'ရခဲ့ပြီ',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Walone-R',
-                                            fontSize: 10,
-                                          )),
-                                    ]),
-                                  ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            const Stack(
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                    child: Image(
-                                  image: AssetImage('images/avatar1.png'),
-                                  width: 24,
-                                  height: 24,
-                                )),
-                                Positioned(
-                                    left: 12,
-                                    child: Image(
-                                      image: AssetImage('images/avatar2.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
-                                    left: 24,
-                                    child: Image(
-                                      image: AssetImage('images/avatar3.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
-                                    left: 36,
-                                    child: Image(
-                                      image: AssetImage('images/avatar4.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         //RoseCountPage()
+                    //         builder: (context) => RoseCountPage(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: SizedBox(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         languageProvider.lan == 'English'
+                    //             ? RichText(
+                    //                 text: const TextSpan(children: [
+                    //                   TextSpan(
+                    //                       text: 'Got ',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF565E64),
+                    //                         fontFamily: 'Bricolage-R',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                   TextSpan(
+                    //                       text: '46 ',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF2B2F32),
+                    //                         fontFamily: 'Bricolage-B',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                   TextSpan(
+                    //                       text: 'roses',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF565E64),
+                    //                         fontFamily: 'Bricolage-R',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                 ]),
+                    //               )
+                    //             : RichText(
+                    //                 text: const TextSpan(children: [
+                    //                   TextSpan(
+                    //                       text: 'နှင်းဆီ ',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF565E64),
+                    //                         fontFamily: 'Walone-R',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                   TextSpan(
+                    //                       text: '၄၆ပွင့် ',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF2B2F32),
+                    //                         fontFamily: 'Walone-B',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                   TextSpan(
+                    //                       text: 'ရခဲ့ပြီ',
+                    //                       style: TextStyle(
+                    //                         color: Color(0xFF565E64),
+                    //                         fontFamily: 'Walone-R',
+                    //                         fontSize: 10,
+                    //                       )),
+                    //                 ]),
+                    //               ),
+                    //         const SizedBox(
+                    //           height: 5,
+                    //         ),
+                    //         const Stack(
+                    //           alignment: Alignment.center,
+                    //           clipBehavior: Clip.none,
+                    //           children: [
+                    //             Positioned(
+                    //                 child: Image(
+                    //               image: AssetImage('images/avatar1.png'),
+                    //               width: 24,
+                    //               height: 24,
+                    //             )),
+                    //             Positioned(
+                    //                 left: 12,
+                    //                 child: Image(
+                    //                   image: AssetImage('images/avatar2.png'),
+                    //                   width: 24,
+                    //                   height: 24,
+                    //                 )),
+                    //             Positioned(
+                    //                 left: 24,
+                    //                 child: Image(
+                    //                   image: AssetImage('images/avatar3.png'),
+                    //                   width: 24,
+                    //                   height: 24,
+                    //                 )),
+                    //             Positioned(
+                    //                 left: 36,
+                    //                 child: Image(
+                    //                   image: AssetImage('images/avatar4.png'),
+                    //                   width: 24,
+                    //                   height: 24,
+                    //                 )),
+                    //           ],
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -583,7 +585,7 @@ class _ProfileState extends State<Profile> {
                     'My CV',
                     style: TextStyle(
                       fontFamily: 'Bricolage-M',
-                      fontSize: 10,
+                      fontSize: 12,
                       color: Color(0xFF2B2F32),
                     ),
                   ),
@@ -619,7 +621,7 @@ class _ProfileState extends State<Profile> {
                         'My Application',
                         style: TextStyle(
                           fontFamily: 'Bricolage-M',
-                          fontSize: 10,
+                          fontSize: 12,
                           color: Color(0xFF2B2F32),
                         ),
                       ),
@@ -647,12 +649,12 @@ class _ProfileState extends State<Profile> {
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
@@ -661,44 +663,44 @@ class _ProfileState extends State<Profile> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SaveJobs()));
+                                builder: (context) => const SaveJobsProfile()));
                       },
                     ),
-                    const DividerLine(),
+                    // const DividerLine(),
                     // Rewards
-                    ListTileButton(
-                      ltLeading: const Icon(
-                        CupertinoIcons.gift,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      ltTitle: Text(
-                        languageProvider.lan == 'English'
-                            ? 'Rewards'
-                            : 'ဆုများ',
-                        style: languageProvider.lan == 'English'
-                            ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              )
-                            : const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 10,
-                                color: Color(0xFF2B2F32),
-                              ),
-                      ),
-                      ltTrailing: const RightChevronButton(),
-                      navTo: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ComingSoonPage(
-                                    appBarTitle: Text(
-                                      'Rewards',
-                                      style: appBarTitleStyleEng,
-                                    ),
-                                  ))),
-                    ),
+                    // ListTileButton(
+                    //   ltLeading: const Icon(
+                    //     CupertinoIcons.gift,
+                    //     size: 23,
+                    //     color: Color(0xFFFF3997),
+                    //   ),
+                    //   ltTitle: Text(
+                    //     languageProvider.lan == 'English'
+                    //         ? 'Rewards'
+                    //         : 'ဆုများ',
+                    //     style: languageProvider.lan == 'English'
+                    //         ? const TextStyle(
+                    //             fontFamily: 'Bricolage-M',
+                    //             fontSize: 10,
+                    //             color: Color(0xFF2B2F32),
+                    //           )
+                    //         : const TextStyle(
+                    //             fontFamily: 'Walone-B',
+                    //             fontSize: 10,
+                    //             color: Color(0xFF2B2F32),
+                    //           ),
+                    //   ),
+                    //   ltTrailing: const RightChevronButton(),
+                    //   navTo: () => Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => const ComingSoonPage(
+                    //                 appBarTitle: Text(
+                    //                   'Rewards',
+                    //                   style: appBarTitleStyleEng,
+                    //                 ),
+                    //               ))),
+                    // ),
                   ],
                 ),
               ),
@@ -729,12 +731,12 @@ class _ProfileState extends State<Profile> {
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
@@ -846,12 +848,12 @@ class _ProfileState extends State<Profile> {
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Color(0xFF2B2F32),
                               ),
                       ),
@@ -914,12 +916,12 @@ class _ProfileState extends State<Profile> {
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 ),
                         ),
@@ -948,12 +950,12 @@ class _ProfileState extends State<Profile> {
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 ),
                         ),
@@ -987,12 +989,12 @@ class _ProfileState extends State<Profile> {
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 ),
                         ),
@@ -1022,12 +1024,12 @@ class _ProfileState extends State<Profile> {
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: Color(0xFF2B2F32),
                                 ),
                         ),
@@ -1054,159 +1056,162 @@ class _ProfileState extends State<Profile> {
                       builder: (context) {
                         return Dialog(
                           insetPadding:
-                              const EdgeInsets.symmetric(horizontal: 15),
+                              const EdgeInsets.symmetric(horizontal: 25),
                           backgroundColor: Colors.white,
                           child: SizedBox(
                             width: 320,
                             height: 439,
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: IconButton(
-                                    onPressed: () {
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.dangerous_outlined,
+                                        color: primaryPinkColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Image.asset(
+                                    'images/log_out.png',
+                                    width: 200,
+                                    height: 200,
+                                  ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'Are you sure you want to\nlog out?',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-M',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'အကောင့်မှထွက်ရန်သေချာပြီလား',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 1,
+                                        )
+                                      : const SizedBox(
+                                          height: 15,
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'You can log back in anytime to access your\naccount.',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 12.5,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'အချိန်မရွေးပြန်၀င်န်ိုင်ပါသည်',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 11,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 10,
+                                        )
+                                      : const SizedBox(
+                                          height: 30,
+                                        ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      deleteDraft(jobProvider, paymentProvider);
+                                      await ApiService.logout(context);
+                                    },
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'Yes, Log Out',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'ထွက်မည်',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
                                       Navigator.pop(context);
                                     },
-                                    icon: const Icon(
-                                      Icons.dangerous_outlined,
-                                      color: primaryPinkColor,
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'No, Stay within the app',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'မထွက်ပါ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Image.asset(
-                                  'images/log_out.png',
-                                  width: 200,
-                                  height: 200,
-                                ),
-                                languageProvider.lan == 'English'
-                                    ? const Text(
-                                        textAlign: TextAlign.center,
-                                        'Are you sure you want to\nlog out?',
-                                        style: TextStyle(
-                                          fontFamily: 'Bricolage-M',
-                                          fontSize: 19.53,
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    : const Text(
-                                        textAlign: TextAlign.center,
-                                        'အကောင့်မှထွက်ရန်သေချာပြီလား',
-                                        style: TextStyle(
-                                          fontFamily: 'Walone-B',
-                                          fontSize: 19.53,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                languageProvider.lan == 'English'
-                                    ? const SizedBox(
-                                        height: 1,
-                                      )
-                                    : const SizedBox(
-                                        height: 15,
-                                      ),
-                                languageProvider.lan == 'English'
-                                    ? const Text(
-                                        textAlign: TextAlign.center,
-                                        'You can log back in anytime to access your\naccount.',
-                                        style: TextStyle(
-                                          fontFamily: 'Bricolage-R',
-                                          fontSize: 12.5,
-                                          color: Color(0xFF6C757D),
-                                        ),
-                                      )
-                                    : const Text(
-                                        textAlign: TextAlign.center,
-                                        'အချိန်မရွေးပြန်၀င်န်ိုင်ပါသည်',
-                                        style: TextStyle(
-                                          fontFamily: 'Walone-B',
-                                          fontSize: 11,
-                                          color: Color(0xFF6C757D),
-                                        ),
-                                      ),
-                                languageProvider.lan == 'English'
-                                    ? const SizedBox(
-                                        height: 10,
-                                      )
-                                    : const SizedBox(
-                                        height: 30,
-                                      ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    deleteDraft(jobProvider, paymentProvider);
-                                    await ApiService.logout(context);
-                                  },
-                                  child: Container(
-                                    width: 288,
-                                    height: 29,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color(0xFFF0F1F2),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: languageProvider.lan == 'English'
-                                          ? const Text(
-                                              textAlign: TextAlign.center,
-                                              'Yes, Log Out',
-                                              style: TextStyle(
-                                                fontFamily: 'Bricolage-R',
-                                                fontSize: 12.5,
-                                                color: Color(0xFFDC3545),
-                                              ),
-                                            )
-                                          : const Text(
-                                              textAlign: TextAlign.center,
-                                              'ထွက်မည်',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-B',
-                                                fontSize: 11,
-                                                color: Color(0xFFDC3545),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Container(
-                                    width: 288,
-                                    height: 29,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color(0xFFF0F1F2),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: languageProvider.lan == 'English'
-                                          ? const Text(
-                                              textAlign: TextAlign.center,
-                                              'No, Stay within the app',
-                                              style: TextStyle(
-                                                fontFamily: 'Bricolage-R',
-                                                fontSize: 12.5,
-                                                color: Color(0xFFFF3997),
-                                              ),
-                                            )
-                                          : const Text(
-                                              textAlign: TextAlign.center,
-                                              'မထွက်ပါ',
-                                              style: TextStyle(
-                                                fontFamily: 'Walone-B',
-                                                fontSize: 11,
-                                                color: Color(0xFFFF3997),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -1236,7 +1241,7 @@ class _ProfileState extends State<Profile> {
                             'Log Out',
                             style: TextStyle(
                               fontFamily: 'Bricolage-M',
-                              fontSize: 10,
+                              fontSize: 12,
                               color: Color(0xFF2B2F32),
                             ),
                           )
@@ -1244,7 +1249,7 @@ class _ProfileState extends State<Profile> {
                             'အကောင့်မှထွက်မည်',
                             style: TextStyle(
                               fontFamily: 'Walone-B',
-                              fontSize: 10,
+                              fontSize: 12,
                               color: Color(0xFF2B2F32),
                             ),
                           ),

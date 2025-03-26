@@ -23,7 +23,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
    Future<void> fetchCommunityDetails() async {
     final response = await http.get(
-      Uri.parse('https://sabai-job-backend-k9wda.ondigitalocean.app/api/community/${widget.id}/'),
+      Uri.parse('https://api.sabaijob.com/api/community/${widget.id}/'),
     );
 
     if (response.statusCode == 200) {

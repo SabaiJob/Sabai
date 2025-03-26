@@ -120,7 +120,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
   Future<void> uploadFile(Uint8List fileBytes, String fileName) async {
     final Dio dio = Dio();
     String uploadUrl =
-        "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/";
+        "https://api.sabaijob.com/api/auth/userinfo/";
 
     final token = await TokenService.getToken();
 
