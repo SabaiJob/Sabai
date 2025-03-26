@@ -46,7 +46,6 @@ class SabaiAppData {
   final List<String> _durationItemsInMm = ['လ', 'နှစ်'];
 
   final List<String> _languageLevelsInEng = [
-    'Novice',
     'Basic',
     'Conversational',
     'Working Proficiency',

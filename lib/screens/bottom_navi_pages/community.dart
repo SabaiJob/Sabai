@@ -40,11 +40,12 @@ class _CommunityPageState extends State<CommunityPage> {
   }
 
   List categoires = [];
-  Map<int, List> communityData = {}; // Store community data for each category
-  Map<int, int> currentPage = {}; // Store current page for each category
-  Map<int, bool> isLoading = {}; // Track loading state for each category
-  Map<int, bool> hasMore =
-      {}; // Track if more data is available for each category
+  Map<int, List> communityData = {};
+  Map<int, int> currentPage = {};
+  Map<int, bool> isLoading = {};
+  Map<int, bool> hasMore = {};
+  bool _isInitialLoading = true;
+
 
   @override
   void initState() {
@@ -57,9 +58,14 @@ class _CommunityPageState extends State<CommunityPage> {
     });
     fetchCategories();
   }
+
   Future<void> fetchCategories() async {
-    final response = await http.get(Uri.parse(
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/community/categories/'));
+    setState(() {
+      _isInitialLoading = true;
+    });
+    try{
+      final response = await http.get(Uri.parse(
+        'https://api.sabaijob.com/api/community/categories/'));
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final List fetchedCategories = jsonDecode(response.body);
       setState(() {
@@ -75,6 +81,13 @@ class _CommunityPageState extends State<CommunityPage> {
         fetchCommunity(categoryId);
       }
     }
+    }catch(e){
+      print('Error fetching categories $e');
+    }finally{
+      setState(() {
+        _isInitialLoading = false;
+      });
+    }
   }
 
   Future<void> fetchCommunity(int categoryId) async {
@@ -82,8 +95,9 @@ class _CommunityPageState extends State<CommunityPage> {
     setState(() {
       isLoading[categoryId] = true;
     });
-    final response = await http.get(Uri.parse(
-        'https://sabai-job-backend-k9wda.ondigitalocean.app/api/community/?page=${currentPage[categoryId]}&category=$categoryId'));
+    try{
+      final response = await http.get(Uri.parse(
+        'https://api.sabaijob.com/api/community/?page=${currentPage[categoryId]}&category=$categoryId'));
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -93,6 +107,13 @@ class _CommunityPageState extends State<CommunityPage> {
         if (hasMore[categoryId]!) {
           currentPage[categoryId] = currentPage[categoryId]! + 1;
         }
+      });
+    }
+    }catch(e){
+      print('Error fetching communities $e');
+    }finally{
+      setState(() {
+       isLoading[categoryId] = false;
       });
     }
   }
@@ -133,19 +154,24 @@ class _CommunityPageState extends State<CommunityPage> {
           color: Color(0xFFFF3997),
         ),
       ),
-      body: DefaultTabController(
+      body: _isInitialLoading ? const Center(
+        child: CircularProgressIndicator(
+          color: primaryPinkColor,
+        ),
+      ) : DefaultTabController(
         length: categoires.length,
         initialIndex: 0,
         child: categoires.isEmpty
             ? const Center(
-                child: CircularProgressIndicator(
-                  color: primaryPinkColor,
+                child: Text(
+                  'No organizations found at the moment'
                 ),
               )
             : Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: SizedBox(
                       height: 35,
                       child: Consumer<QuoteProvider>(
@@ -271,8 +297,14 @@ class _CommunityPageState extends State<CommunityPage> {
                                   ],
                                 ),
                                 child: ListTile(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CommunityDetail(id: community['id'],)));
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CommunityDetail(
+                                                  id: community['id'],
+                                                )));
                                   },
                                   subtitle: Text(
                                     community['about'],

@@ -115,7 +115,7 @@ class InitialRegistrationPage extends StatelessWidget {
                 }
                 return null;
               },
-              hint: '+66 2134567',
+              hint: '0662134567',
             ),
             
           ],

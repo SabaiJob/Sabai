@@ -16,7 +16,7 @@ class QuoteProvider extends ChangeNotifier{
 
   Future<void> fetchQuotes() async{
     try{
-      final response = await http.get(Uri.parse('https://sabai-job-backend-k9wda.ondigitalocean.app/api/quotes/'));
+      final response = await http.get(Uri.parse('https://api.sabaijob.com/api/quotes/'));
       if(response.statusCode >= 200 && response.statusCode < 300){
         List<dynamic> responseData = jsonDecode(response.body);
         _quotes = responseData.map((quote)=>{

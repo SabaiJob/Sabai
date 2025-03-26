@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/components/custom_progress_bar.dart';
 import 'package:sabai_app/components/reusable_double_circle_loading_component.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
@@ -470,18 +471,25 @@ class _RegistrationPagesControllerState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // fixed progress indicator
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 24),
+            //   child: StepProgressIndicator(
+            //     roundedEdges: const Radius.circular(10),
+            //     padding: 0.0,
+            //     totalSteps: totalSteps,
+            //     currentStep: _progressStep,
+            //     selectedColor: const Color(0xFFFF3997),
+            //     unselectedColor: const Color.fromARGB(100, 76, 82, 88),
+            //     size: 8.0,
+            //   ),
+            // ),
+
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
-              child: StepProgressIndicator(
-                roundedEdges: const Radius.circular(10),
-                padding: 0.0,
-                totalSteps: totalSteps,
-                currentStep: _progressStep,
-                selectedColor: const Color(0xFFFF3997),
-                unselectedColor: const Color.fromARGB(100, 76, 82, 88),
-                size: 8.0,
-              ),
+              child: CustomProgressBar(
+                  totalSteps: totalSteps, currentStep: _progressStep),
             ),
+
             // Page View
             Expanded(
                 child: PageView(

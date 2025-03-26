@@ -44,7 +44,7 @@ class LogInFormPage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: ReusableTitleHolder(
                       title: languageProvider.lan == 'English'
-                          ? 'User Registration'
+                          ? 'Log in to Sabai Job'
                           : 'အကောင့်က၀င်ရောက်ရန်',
                     ),
                   ),
@@ -57,7 +57,7 @@ class LogInFormPage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: ReusableContentHolder(
                         content: languageProvider.lan == 'English'
-                            ? 'Lorem ipsum dolor sit amet consectetur. Ut vel nvitae sed quam maecenas cursus pharetra.'
+                            ? 'Log in to find jobs, show your skills, and connect with employers easily!'
                             : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
                   ),
                 ),
@@ -116,7 +116,7 @@ class LogInFormPage extends StatelessWidget {
                     }
                     return null;
                   },
-                  hint: '+66 2134567',
+                  hint: '0662134567',
                 ),
               ],
             )),
