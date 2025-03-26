@@ -50,7 +50,7 @@ class _PostingState extends State<Posting> {
   String? userProfileUrl;
   String? userName;
   String? text;
-  bool? isLoading;
+  //bool? isLoading;
 
   Future<void> contribute({
     required String text,
@@ -62,10 +62,10 @@ class _PostingState extends State<Posting> {
     //print('it is not in the try');
     try {
       //print('it is in thr try');
-      setState(() {
-        isLoading = true;
-      });
-      if (isLoading == true) {
+      // setState(() {
+      //   isLoading = true;
+      // });
+      
         showDialog(
           barrierDismissible: false,
           context: context,
@@ -75,7 +75,7 @@ class _PostingState extends State<Posting> {
             );
           },
         );
-      }
+      
       Dio dio = Dio();
       FormData formData = FormData.fromMap({
         'text': text,
@@ -100,12 +100,10 @@ class _PostingState extends State<Posting> {
           },
         ),
       );
+
       if (response.statusCode! >= 200 && response.statusCode! < 300) {
         print('success');
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.pop;
+        Navigator.pop(context);
         showDialog(
             barrierDismissible: false,
             context: context,
@@ -153,12 +151,13 @@ class _PostingState extends State<Posting> {
                               backgroundColor: primaryPinkColor,
                             ),
                             onPressed: () {
-                              Navigator.pushReplacement(
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const NavigationHomepage(),
                                 ),
+                                (route)=>false,
                               );
                             },
                             child: const Align(
@@ -182,10 +181,7 @@ class _PostingState extends State<Posting> {
             });
       } else {
         print('error for ${response.statusCode}');
-        setState(() {
-          isLoading = false;
-        });
-        // Navigator.pop;
+        Navigator.pop(context);
         showDialog(
           context: context,
           builder: (context) {
@@ -194,14 +190,10 @@ class _PostingState extends State<Posting> {
             );
           },
         );
-        Navigator.pop;
       }
     } catch (e) {
       print('Error $e');
-      setState(() {
-        isLoading = false;
-      });
-      //Navigator.pop;
+      Navigator.pop(context);
       showDialog(
         context: context,
         builder: (context) {
@@ -363,244 +355,247 @@ class _PostingState extends State<Posting> {
         ? Uri.tryParse(widget.url!)
         : null;
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        leading: (widget.url != null ||
-                widget.location != null ||
-                widget.isLocated != null ||
-                textController.text.trim().isNotEmpty ||
-                (_images != null && _images!.isNotEmpty))
-            ? LeadingIcon(
-                url: widget.url ?? '',
-                location: widget.location ?? '',
-                isLocated: widget.isLocated ?? false,
-                draftText: widget.draftText ?? '',
-              )
-            : const BackButton(color: primaryPinkColor),
-        iconTheme: const IconThemeData(
-          color: primaryPinkColor,
-        ),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
         backgroundColor: backgroundColor,
-        title: const Text(
-          'Post',
-          style: appBarTitleStyleEng,
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: SizedBox(
-              width: 78,
-              height: 35,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryPinkColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+        appBar: AppBar(
+          leading: (widget.url != null ||
+                  widget.location != null ||
+                  widget.isLocated != null ||
+                  textController.text.trim().isNotEmpty ||
+                  (_images != null && _images!.isNotEmpty))
+              ? LeadingIcon(
+                  url: widget.url ?? '',
+                  location: widget.location ?? '',
+                  isLocated: widget.isLocated ?? false,
+                  draftText: widget.draftText ?? '',
+                )
+              : const BackButton(color: primaryPinkColor),
+          iconTheme: const IconThemeData(
+            color: primaryPinkColor,
+          ),
+          backgroundColor: backgroundColor,
+          title: const Text(
+            'Post',
+            style: appBarTitleStyleEng,
+          ),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: SizedBox(
+                width: 78,
+                height: 35,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryPinkColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-                onPressed: text == null && _images!.isEmpty
-                    ? () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => const UnsuccessfulDialouge(
-                                dialougeText:
-                                    'Please fill in the valid information to make a job post!'));
-                      }
-                    : () async {
-                        await contribute(
-                            text: text ?? "none",
-                            link: widget.url != null
-                                ? widget.url!
-                                : "https://www.google.co.th/",
-                            location: {"location": widget.location},
-                            imagePaths:
-                                _images!.map((image) => image.path).toList());
-                        setState(() {
-                          print('Text: ${text ?? "none"}');
-                          print(
-                              'Link: ${widget.url ?? "https://www.google.co.th/"}');
-                          print('Location: ${widget.location}');
-                          print(
-                              'Image Paths: ${_images!.map((image) => image.path).toList()}');
-                          print(jsonEncode(widget.location));
-                        });
-                        jobProvider.setDraft(false);
-                      },
-                child: const Text(
-                  'Contribute',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontFamily: 'Bricolage-B',
-                    color: Colors.white,
+                  onPressed: text == null && _images!.isEmpty
+                      ? () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => const UnsuccessfulDialouge(
+                                  dialougeText:
+                                      'Please fill in the valid information to make a job post!'));
+                        }
+                      : () async {
+                          await contribute(
+                              text: text ?? "none",
+                              link: widget.url != null
+                                  ? widget.url!
+                                  : "",
+                              location: {"location": widget.location},
+                              imagePaths:
+                                  _images!.map((image) => image.path).toList());
+                          setState(() {
+                            print('Text: ${text ?? "none"}');
+                            print(
+                                'Link: ${widget.url ?? ""}');
+                            print('Location: ${widget.location}');
+                            print(
+                                'Image Paths: ${_images!.map((image) => image.path).toList()}');
+                            print(jsonEncode(widget.location));
+                          });
+                          jobProvider.setDraft(false);
+                        },
+                  child: const Text(
+                    'Contribute',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: 'Bricolage-B',
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  // User info section
-                  SizedBox(
-                    width: double.infinity,
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        userProfileUrl != null
-                            ? ClipOval(
-                                child: Image.network(
-                                  userProfileUrl!,
+            )
+          ],
+        ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    // User info section
+                    SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          userProfileUrl != null
+                              ? ClipOval(
+                                  child: Image.network(
+                                    userProfileUrl!,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Image.asset(
+                                  'images/avatar2.png',
                                   width: 40,
                                   height: 40,
-                                  fit: BoxFit.cover,
                                 ),
-                              )
-                            : Image.asset(
-                                'images/avatar2.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        userName != null
-                            ? Text(
-                                userName!,
-                                style: const TextStyle(
-                                  fontSize: 15.63,
-                                  fontFamily: 'Bricolage-SMB',
-                                ),
-                              )
-                            : const Text(
-                                'Cameron Williamson',
-                                style: TextStyle(
-                                  fontSize: 15.63,
-                                  fontFamily: 'Bricolage-SMB',
-                                ),
-                              ),
-                        if (widget.isLocated == true)
-                          RichText(
-                            text: TextSpan(
-                              text: ' is at ',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.63,
-                                fontFamily: 'Bricolage-R',
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: '${widget.location}',
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          userName != null
+                              ? Text(
+                                  userName!,
                                   style: const TextStyle(
+                                    fontSize: 15.63,
                                     fontFamily: 'Bricolage-SMB',
                                   ),
                                 )
-                              ],
+                              : const Text(
+                                  'Cameron Williamson',
+                                  style: TextStyle(
+                                    fontSize: 15.63,
+                                    fontFamily: 'Bricolage-SMB',
+                                  ),
+                                ),
+                          if (widget.isLocated == true)
+                            RichText(
+                              text: TextSpan(
+                                text: ' is at ',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.63,
+                                  fontFamily: 'Bricolage-R',
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: '${widget.location}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Bricolage-SMB',
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                      ],
-                    ),
-                  ),
-
-                  // Text input field
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextField(
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.done,
-                      controller: textController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Say something',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Bricolage-R',
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                        ],
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          text = value;
-                        });
-                        print(text);
-                      },
                     ),
-                  ),
-
-                  // Link preview if URL is provided
-                  if (uri != null) ...[
-                    GestureDetector(
-                      onTap: () async {
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri,
-                              mode: LaunchMode.externalApplication);
-                        } else {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text('Could not launch ${widget.url}')),
-                            );
+      
+                    // Text input field
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        textInputAction: TextInputAction.done,
+                        controller: textController,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Say something',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Bricolage-R',
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            text = value;
+                          });
+                          print(text);
+                        },
+                      ),
+                    ),
+      
+                    // Link preview if URL is provided
+                    if (uri != null) ...[
+                      GestureDetector(
+                        onTap: () async {
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          } else {
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content:
+                                        Text('Could not launch ${widget.url}')),
+                              );
+                            }
                           }
-                        }
-                      },
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: LinkPreview(
-                            linkStyle: const TextStyle(
-                              color: Colors.blue,
-                              fontFamily: 'Bricolage-R',
-                              decoration: TextDecoration.none,
-                              fontSize: 12.5,
+                        },
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: LinkPreview(
+                              linkStyle: const TextStyle(
+                                color: Colors.blue,
+                                fontFamily: 'Bricolage-R',
+                                decoration: TextDecoration.none,
+                                fontSize: 12.5,
+                              ),
+                              enableAnimation: true,
+                              onPreviewDataFetched: (data) {
+                                setState(() {
+                                  _previewData = data;
+                                  print("url : ${widget.url}");
+                                });
+                              },
+                              previewData: _previewData,
+                              text: uri.toString(),
+                              width: MediaQuery.of(context).size.width,
                             ),
-                            enableAnimation: true,
-                            onPreviewDataFetched: (data) {
-                              setState(() {
-                                _previewData = data;
-                                print("url : ${widget.url}");
-                              });
-                            },
-                            previewData: _previewData,
-                            text: uri.toString(),
-                            width: MediaQuery.of(context).size.width,
                           ),
                         ),
                       ),
-                    ),
+                    ],
+                    const SizedBox(height: 20),
+      
+                    // Images grid
+                    _buildImageGrid(),
                   ],
-                  const SizedBox(height: 20),
-
-                  // Images grid
-                  _buildImageGrid(),
-                ],
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: RowWrapper(
-              whenOnPressedAddPhoto: _addImages,
-              onLocationSelected: (location, isLocated) {
-                setState(() {
-                  widget.location = location;
-                  widget.isLocated = isLocated;
-                });
-              },
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: RowWrapper(
+                whenOnPressedAddPhoto: _addImages,
+                onLocationSelected: (location, isLocated) {
+                  setState(() {
+                    widget.location = location;
+                    widget.isLocated = isLocated;
+                  });
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -743,11 +738,12 @@ class _LeadingIconState extends State<LeadingIcon> {
     await prefs.remove('draft_images_$phone');
     await prefs.remove('draftText_$phone');
     jobProvider.setDraft(false);
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => const NavigationHomepage(),
       ),
+      (route)=>false,
     );
   }
 

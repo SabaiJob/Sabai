@@ -22,6 +22,14 @@ class AuthController {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         nextScreen();
       } else {
+        if (response.body.toString().contains('already exists')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              
+              content: Text('User with this phone number already exists.'),
+            ),
+          );
+        }
         print(response.body);
       }
     } catch (e) {
