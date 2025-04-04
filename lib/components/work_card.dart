@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-//import 'package:sabai_app/components/popup_widget.dart';
 import 'package:sabai_app/components/walkthrough_button.dart';
 import 'package:sabai_app/constants.dart';
 import '../screens/job_details_page.dart';
@@ -10,7 +9,6 @@ import '../screens/auth_pages/registration_pages_controller.dart';
 import '../services/job_provider.dart';
 import '../services/language_provider.dart';
 import 'package:sabai_app/components/bottom_sheet.dart';
-//import 'package:popover/popover.dart';
 
 class WorkCard extends StatelessWidget {
   final String jobTitle;
@@ -24,19 +22,21 @@ class WorkCard extends StatelessWidget {
   final String closingAt;
   final String safetyLevel;
   final int viewCount;
-  const WorkCard(
-      {required this.jobTitle,
-      required this.isPartner,
-      required this.companyName,
-      required this.location,
-      required this.maxSalary,
-      required this.minSalary,
-      required this.currency,
-      required this.jobId,
-      required this.closingAt,
-      required this.safetyLevel,
-      required this.viewCount,
-      super.key});
+
+  const WorkCard({
+    required this.jobTitle,
+    required this.isPartner,
+    required this.companyName,
+    required this.location,
+    required this.maxSalary,
+    required this.minSalary,
+    required this.currency,
+    required this.jobId,
+    required this.closingAt,
+    required this.safetyLevel,
+    required this.viewCount,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,29 +44,68 @@ class WorkCard extends StatelessWidget {
     var jobProvider = Provider.of<JobProvider>(context);
     bool? isSaved = jobProvider.isSaved(jobId);
     bool? isGuest = jobProvider.isGuest;
-    final closed = DateTime.parse(closingAt).toLocal();
-    final now = DateTime.now();
-    final timeDifference = closed.difference(now);
-    final isClosedDay = timeDifference.inDays;
-    final isClosedHour = timeDifference.inHours - 7;
+
+    //old code
+    // final closed = DateTime.parse(closingAt).toLocal();
+    // final now = DateTime.now();
+    // final timeDifference = closed.difference(now);
+    // final isClosedDay = timeDifference.inDays;
+    // final isClosedHour = timeDifference.inHours - 7;
+    // Handle closing date calculation
+    Duration timeDifference = Duration.zero;
+    bool isClosed = false;
+    String closingMessage = '';
+    bool showClosingMessage = false;
+
+    if (closingAt.isNotEmpty) {
+      try {
+        final closed = DateTime.parse(closingAt).toLocal();
+        final now = DateTime.now();
+        timeDifference = closed.difference(now);
+        isClosed = timeDifference.isNegative;
+        final daysRemaining = timeDifference.inDays;
+        final hoursRemaining = timeDifference.inHours - (daysRemaining * 24);
+
+        if (isClosed) {
+          closingMessage = language.lan == 'English' ? 'Closed' : 'ပိတ်သွားပြီ';
+          showClosingMessage = true;
+        } else if (daysRemaining <= 3) {
+          showClosingMessage = true;
+          closingMessage = language.lan == 'English'
+              ? daysRemaining > 0
+                  ? 'Closing in $daysRemaining days'
+                  : 'Closing in $hoursRemaining hours'
+              : daysRemaining > 0
+                  ? '$daysRemaining ရက် အတွင်းပိတ်မည်'
+                  : '$hoursRemaining နာရီ အတွင်းပိတ်မည်';
+        }
+      } catch (e) {
+        debugPrint('Error parsing closing date: $e');
+        isClosed = true;
+        closingMessage = language.lan == 'English' ? 'Closed' : 'ပိတ်သွားပြီ';
+        showClosingMessage = true;
+      }
+    } else {
+      isClosed = true;
+    }
+
     return GestureDetector(
       onTap: () {
-        if (jobProvider.isGuest == true) {
+        if (isGuest == true) {
           showBottomSheet(
             context: context,
-            builder: (context) {
-              return guestBotoom(language);
-            },
+            builder: (context) => guestBotoom(language),
           );
         } else {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => JobDetailsPage(
-                        jobId: jobId,
-                        isClosed: timeDifference.isNegative,
-                      )));
-          print(timeDifference);
+            context,
+            MaterialPageRoute(
+              builder: (context) => JobDetailsPage(
+                jobId: jobId,
+                isClosed: isClosed,
+              ),
+            ),
+          );
         }
       },
       child: Padding(
@@ -151,9 +190,7 @@ class WorkCard extends StatelessWidget {
                         )
                       ],
                     )
-                  : const SizedBox(
-                      height: 10,
-                    ),
+                  : const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
@@ -194,51 +231,45 @@ class WorkCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        isPartner == false
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Container(
-                                  width: 26,
-                                  height: 26,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(
-                                      color: const Color(0xffF0F1F2),
-                                    ),
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      jobProvider.isGuest == true
-                                          ? showBottomSheet(
-                                              context: context,
-                                              builder: (context) =>
-                                                  guestBotoom(language),
-                                            )
-                                          : jobProvider.saveJob(
-                                              jobId,
-                                              context,
-                                            );
-                                    },
-                                    icon: isSaved == false
-                                        ? const Icon(
-                                            CupertinoIcons.heart,
-                                            color: Color(0xffFF3997),
-                                          )
-                                        : const Icon(
-                                            CupertinoIcons.heart_fill,
-                                            color: Color(0xffFF3997),
-                                          ),
-                                    iconSize: 18,
-                                    padding: EdgeInsets.zero,
-                                  ),
+                        if (!isPartner)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Container(
+                              width: 26,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: const Color(0xffF0F1F2),
                                 ),
-                              )
-                            : const SizedBox(),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  jobProvider.isGuest == true
+                                      ? showBottomSheet(
+                                          context: context,
+                                          builder: (context) =>
+                                              guestBotoom(language),
+                                        )
+                                      : jobProvider.saveJob(jobId, context);
+                                },
+                                icon: isSaved == false
+                                    ? const Icon(
+                                        CupertinoIcons.heart,
+                                        color: Color(0xffFF3997),
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.heart_fill,
+                                        color: Color(0xffFF3997),
+                                      ),
+                                iconSize: 18,
+                                padding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Column(
@@ -261,9 +292,7 @@ class WorkCard extends StatelessWidget {
                                       color: Color(0xff6C757D),
                                     ),
                                   ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             Text(
                               overflow: TextOverflow.ellipsis,
                               '$minSalary ~ $maxSalary $currency',
@@ -296,9 +325,7 @@ class WorkCard extends StatelessWidget {
                                       color: Color(0xff6C757D),
                                     ),
                                   ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             Text(
                               overflow: TextOverflow.ellipsis,
                               location,
@@ -331,22 +358,16 @@ class WorkCard extends StatelessWidget {
                                       color: Color(0xff6C757D),
                                     ),
                                   ),
-                            const SizedBox(
-                              height: 2,
-                            ),
+                            const SizedBox(height: 2),
                             JobLevelCard(
                               language: language,
                               level: safetyLevel,
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
-                    const SizedBox(
-                      child: Divider(
-                        height: 10,
-                      ),
-                    ),
+                    const SizedBox(child: Divider(height: 10)),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: Row(
@@ -362,7 +383,6 @@ class WorkCard extends StatelessWidget {
                                   color: Color(0xffFF3997),
                                 ),
                               ),
-                              
                               Text(
                                 '$viewCount',
                                 style: const TextStyle(
@@ -370,36 +390,23 @@ class WorkCard extends StatelessWidget {
                                   fontFamily: 'Bricolage-B',
                                   color: Color(0xff6C757D),
                                 ),
-                              )
+                              ),
                             ],
                           ),
-                          if (isClosedDay <= 3)
-                            language.lan == 'English'
-                                ? Text(
-                                    timeDifference.isNegative
-                                        ? 'Closed'
-                                        : isClosedDay > 0
-                                            ? 'Closing in $isClosedDay days'
-                                            : 'Closing in $isClosedHour hours',
-                                    style: const TextStyle(
-                                      fontFamily: 'Bricolage-R',
-                                      fontSize: 12,
-                                      color: Color(0xffDC3545),
-                                    ),
-                                  )
-                                : Text(
-                                    isClosedDay > 0
-                                        ? '$isClosedDay ရက် အတွင်းပိတ်မည်'
-                                        : '$isClosedHour ရက် အတွင်းပိတ်မည်',
-                                    style: const TextStyle(
-                                      fontFamily: 'Walone-M',
-                                      fontSize: 12,
-                                      color: Color(0xffDC3545),
-                                    ),
-                                  ),
+                          if (showClosingMessage)
+                            Text(
+                              closingMessage,
+                              style: TextStyle(
+                                fontFamily: language.lan == 'English'
+                                    ? 'Bricolage-R'
+                                    : 'Walone-M',
+                                fontSize: 12,
+                                color: const Color(0xffDC3545),
+                              ),
+                            ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -431,17 +438,15 @@ class WorkCard extends StatelessWidget {
                           width: 196,
                           height: 196,
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         const Text(
                           'You\'re in Guest Mode',
                           style: TextStyle(
-                              fontSize: 19.53, fontFamily: 'Bricolage-SMB,'),
+                            fontSize: 19.53,
+                            fontFamily: 'Bricolage-SMB',
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        const SizedBox(height: 10),
                         const Text(
                           textAlign: TextAlign.center,
                           'To explore jobs tailored to your skills and\npreferences, please sign up or log in.',
@@ -451,9 +456,7 @@ class WorkCard extends StatelessWidget {
                             color: Color(0xff6C757D),
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 20),
                         Button(
                           languageProvider: language,
                           textEng: 'Get Started',
@@ -464,9 +467,7 @@ class WorkCard extends StatelessWidget {
                           bColor: primaryPinkColor,
                           isGuest: true,
                         ),
-                        const SizedBox(
-                          height: 13,
-                        ),
+                        const SizedBox(height: 13),
                         Button(
                           languageProvider: language,
                           textEng: 'Log In',
@@ -484,16 +485,14 @@ class WorkCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: const Icon(
                       CupertinoIcons.xmark_circle,
                       size: 28,
                       color: primaryPinkColor,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -504,7 +503,11 @@ class WorkCard extends StatelessWidget {
 }
 
 class JobLevelCard extends StatelessWidget {
-  const JobLevelCard({super.key, required this.language, required this.level});
+  const JobLevelCard({
+    super.key,
+    required this.language,
+    required this.level,
+  });
 
   final LanguageProvider language;
   final String level;
@@ -512,19 +515,11 @@ class JobLevelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => showPopover(
-      //   context: context,
-      //   bodyBuilder: (context) => const PopupWidget(),
-      //   direction: PopoverDirection.top,
-      //   width: 130,
-      //   backgroundColor: const Color(0xfff0f1f2),
-      //   arrowWidth: 10,
-      //   arrowHeight: 8,
-      //   radius: 4,
-      // ),
       onTap: () {
         showModalBottomSheet(
-            context: context, builder: (context) => const Bottomsheet());
+          context: context,
+          builder: (context) => const Bottomsheet(),
+        );
       },
       child: Card(
         color: level == '3'
@@ -556,9 +551,7 @@ class JobLevelCard extends StatelessWidget {
                         ? const Color(0xffFFC107)
                         : const Color(0xffDC3545),
               ),
-              const SizedBox(
-                width: 3,
-              ),
+              const SizedBox(width: 3),
               language.lan == 'English'
                   ? Text(
                       'Level-$level',

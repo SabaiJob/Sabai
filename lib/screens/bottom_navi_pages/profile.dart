@@ -180,6 +180,34 @@ class _ProfileState extends State<Profile> {
                           child: ClipOval(
                             child: Image.network(
                               '${paymentProvider.userData?['photo']}',
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Failed to load image'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                });
+                                return const Icon(Icons.error); // Fallback widget
+                              },
                               width: 80,
                               height: 80,
                               fit: BoxFit.cover,
@@ -1062,7 +1090,8 @@ class _ProfileState extends State<Profile> {
                             width: 320,
                             height: 439,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Column(
                                 children: [
                                   Align(
