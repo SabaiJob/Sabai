@@ -95,6 +95,7 @@ class _ProfileState extends State<Profile> {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
     final jobProvider = Provider.of<JobProvider>(context);
+    bool _hasShownImageErrorThisSession = false;
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
 
@@ -197,16 +198,25 @@ class _ProfileState extends State<Profile> {
                               },
                               errorBuilder: (BuildContext context, Object error,
                                   StackTrace? stackTrace) {
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Failed to load image'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                });
-                                return const Icon(Icons.error); // Fallback widget
+                                if (!_hasShownImageErrorThisSession) {
+                                  _hasShownImageErrorThisSession = true;
+                                  Future.microtask(() {
+                                    if (context.mounted) {
+                                      // Check if context is still valid
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar() // Hide any existing snackbar
+                                        ..showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text('Failed to load image'),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                    }
+                                  });
+                                }
+                                return const Icon(
+                                    Icons.error); // Fallback widget
                               },
                               width: 80,
                               height: 80,
@@ -389,12 +399,12 @@ class _ProfileState extends State<Profile> {
                       : '${paymentProvider.userData!['phone']}',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
-                          color: Color(0xFF6C757D),
+                          //color: Color(0xFF6C757D),
                           fontFamily: 'Bricolage-R',
                           fontSize: 12,
                         )
                       : const TextStyle(
-                          color: Color(0xFF6C757D),
+                          // color: Color(0xFF6C757D),
                           fontFamily: 'Walone-B',
                           fontSize: 12,
                         )),
@@ -445,12 +455,12 @@ class _ProfileState extends State<Profile> {
                                       : 'ကျွန်တော့်ကူညီမှုများ',
                                   style: languageProvider.lan == 'English'
                                       ? const TextStyle(
-                                          color: Color(0xFF565E64),
+                                          // color: Color(0xFF565E64),
                                           fontFamily: 'Bricolage-R',
                                           fontSize: 12,
                                         )
                                       : const TextStyle(
-                                          color: Color(0xFF565E64),
+                                          //color: Color(0xFF565E64),
                                           fontFamily: 'Walone-B',
                                           fontSize: 12,
                                         ),
@@ -461,12 +471,12 @@ class _ProfileState extends State<Profile> {
                                       : '${jobProvider.contributedJobs.length} ပိုစ့်',
                                   style: languageProvider.lan == 'English'
                                       ? const TextStyle(
-                                          color: Color(0xFF2B2F32),
+                                          //color: Color(0xFF2B2F32),
                                           fontFamily: 'Bricolage-B',
                                           fontSize: 11,
                                         )
                                       : const TextStyle(
-                                          color: Color(0xFF2B2F32),
+                                          //color: Color(0xFF2B2F32),
                                           fontFamily: 'Walone-B',
                                           fontSize: 11,
                                         ),
@@ -614,7 +624,7 @@ class _ProfileState extends State<Profile> {
                     style: TextStyle(
                       fontFamily: 'Bricolage-M',
                       fontSize: 12,
-                      color: Color(0xFF2B2F32),
+                      //color: Color(0xFF2B2F32),
                     ),
                   ),
                   ltTrailing: const RightChevronButton(),
@@ -645,14 +655,22 @@ class _ProfileState extends State<Profile> {
                         size: 23,
                         color: Color(0xFFFF3997),
                       ),
-                      ltTitle: const Text(
-                        'My Application',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 12,
-                          color: Color(0xFF2B2F32),
-                        ),
-                      ),
+                      ltTitle: languageProvider.lan == 'English'
+                          ? const Text(
+                              'My Application',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-M',
+                                fontSize: 12,
+                                //color: Color(0xFF2B2F32),
+                              ),
+                            )
+                          : const Text(
+                              'သိမ်းထားသည့်အလုပ်များ',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 12,
+                              ),
+                            ),
                       ltTrailing: const RightChevronButton(),
                       navTo: () {
                         Navigator.push(
@@ -678,15 +696,15 @@ class _ProfileState extends State<Profile> {
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
-                      ltTrailing: RightChevronButton(),
+                      ltTrailing: const RightChevronButton(),
                       navTo: () {
                         Navigator.push(
                             context,
@@ -760,12 +778,12 @@ class _ProfileState extends State<Profile> {
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
                       ltTrailing: Container(
@@ -877,12 +895,12 @@ class _ProfileState extends State<Profile> {
                             ? const TextStyle(
                                 fontFamily: 'Bricolage-M',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
                       ltTrailing: ToggleButtons(
@@ -945,12 +963,12 @@ class _ProfileState extends State<Profile> {
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -979,12 +997,12 @@ class _ProfileState extends State<Profile> {
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  // color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -1018,12 +1036,12 @@ class _ProfileState extends State<Profile> {
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -1053,12 +1071,12 @@ class _ProfileState extends State<Profile> {
                               ? const TextStyle(
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const Icon(CupertinoIcons.right_chevron,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 import '../../components/reusable_alertbox.dart';
 
@@ -35,6 +37,7 @@ class _ContributePageState extends State<ContributePage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -56,31 +59,57 @@ class _ContributePageState extends State<ContributePage> {
               width: 208,
               height: 208,
             ),
-            const Text(
-              'Contribute to community',
-              style: TextStyle(
-                fontFamily: 'Bricolage-SMB',
-                fontSize: 24.41,
-              ),
-            ),
-            const Text(
-              'help others to find jobs',
-              style: TextStyle(
-                fontFamily: 'Bricolage-R',
-                fontSize: 15.63,
-                color: Color(0xff6C757D),
-              ),
-            ),
+            languageProvider.lan == 'English'
+                ? const Text(
+                    'Contribute to community',
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-SMB',
+                      fontSize: 24.41,
+                    ),
+                  )
+                : const Text(
+                    textAlign: TextAlign.center,
+                    'အလုပ်တင်ပြီး\nအခြားသူများကိုကူညီမယ်',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 24.41,
+                    ),
+                  ),
+            languageProvider.lan == 'English'
+                ? const Text(
+                    'Help others to find jobs',
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-R',
+                      fontSize: 15.63,
+                      color: Color(0xff6C757D),
+                    ),
+                  )
+                : const Text(
+                    'အခြားသူများကို အလုပ်ရှာဖွေရေး၌ ကူညီရာရောက်ပါတယ်',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 14,
+                      color: Color(0xff6C757D),
+                    ),
+                  ),
             const SizedBox(
               height: 30,
             ),
-            const Align(
+             Align(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: 
+              languageProvider.lan == 'English'?
+              const Text(
                 'Paste Job Post Link',
                 style: TextStyle(
                   fontFamily: 'Bricolage-M',
                   fontSize: 15.63,
+                ),
+              ): const Text(
+                'အလုပ် ပို့စ်လင့်ခ် ကို တင်မယ်',
+                style: TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -101,13 +130,18 @@ class _ContributePageState extends State<ContributePage> {
                     child: TextField(
                       style: const TextStyle(overflow: TextOverflow.ellipsis),
                       controller: linkController,
-                      decoration: const InputDecoration(
-                        hintStyle: TextStyle(
+                      decoration:  InputDecoration(
+                        hintStyle: languageProvider.lan == 'English'?
+                        const TextStyle(
                           fontFamily: 'Bricolage-R',
                           fontSize: 14,
                           color: Colors.black,
+                        ):const TextStyle(
+                          fontFamily: 'Walone-R',
+                          fontSize: 14,
+                          color: Colors.black,
                         ),
-                        hintText: 'Paste here',
+                        hintText: languageProvider.lan == 'English'? 'Paste here': 'လင့်ခ်ကိုဒီမှာတင်မှာ',
                         border: InputBorder.none,
                       ),
                     ),
@@ -128,7 +162,9 @@ class _ContributePageState extends State<ContributePage> {
                         barrierDismissible: false,
                         context: context,
                         builder: (context) {
-                          return const ReusableAlertBox(text: 'Loading...',);
+                          return const ReusableAlertBox(
+                            text: 'Loading...',
+                          );
                         },
                       );
                       Future.delayed(
@@ -222,25 +258,34 @@ class _ContributePageState extends State<ContributePage> {
             const SizedBox(
               height: 30,
             ),
-            const Row(
+             Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Divider(
                     thickness: 1,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: 
+                  languageProvider.lan == 'English' ?
+                  const  Text(
                     'or',
                     style: TextStyle(
                       fontFamily: 'Bricolage-R',
                       fontSize: 15.63,
                       color: Color(0xff6C757D),
                     ),
+                  ): const Text(
+                    'သို့မဟုတ်',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 14,
+                      color: Color(0xff6C757D),
+                    ),
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: Divider(
                     height: 5,
                   ),
@@ -261,12 +306,21 @@ class _ContributePageState extends State<ContributePage> {
                     color: primaryPinkColor,
                   ),
                 ),
-                child: const Center(
-                  child: Text(
+                child:  Center(
+                  child: 
+                    languageProvider.lan == 'English' ?
+                  const Text(
                     'Upload Photo',
                     style: TextStyle(
                       fontFamily: 'Bricolage-B',
                       fontSize: 15.63,
+                      color: primaryPinkColor,
+                    ),
+                  ):const Text(
+                    'ဓာတ်ပုံ တင်ပါ',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 15,
                       color: primaryPinkColor,
                     ),
                   ),

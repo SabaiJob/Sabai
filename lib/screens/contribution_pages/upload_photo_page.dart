@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/contribution_pages/posting.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class UploadPhotoPage extends StatelessWidget {
   final Function()? whenCameraIsCalled;
@@ -11,6 +13,7 @@ class UploadPhotoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ImagePickerHelper imagePickerHelper = ImagePickerHelper();
+    final languageProvider = Provider.of<LanguageProvider>(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -35,21 +38,36 @@ class UploadPhotoPage extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
+            languageProvider.lan == 'English'?
             const Text(
               'Upload Photo',
               style: TextStyle(
                 fontFamily: 'Bricolage-SMB',
                 fontSize: 24.41,
               ),
-            ),
+            ):const Text(
+              'ဓာတ်ပုံ တင်ပါ',
+              style: TextStyle(
+                fontFamily: 'Walone-B',
+                fontSize: 24.41,
+              ),
+            ) ,
             const SizedBox(
               height: 15,
             ),
+            languageProvider.lan == 'English'?
             const Text(
               'capture and share job posts',
               style: TextStyle(
                 fontFamily: 'Bricolage-R',
                 fontSize: 15.63,
+                color: Color(0xff6C757D),
+              ),
+            ): const Text(
+              'အလုပ် ပိုစ့်တွေကိုဓာတ်ပုံရိုက်တင်မယ်',
+              style: TextStyle(
+                fontFamily: 'Walone-B',
+                fontSize: 14,
                 color: Color(0xff6C757D),
               ),
             ),
@@ -77,12 +95,21 @@ class UploadPhotoPage extends StatelessWidget {
                     color: primaryPinkColor,
                   ),
                 ),
-                child: const Center(
-                  child: Text(
+                child:  Center(
+                  child: 
+                  languageProvider.lan == 'English' ?
+                  const Text(
                     'Take Photo',
                     style: TextStyle(
                       fontFamily: 'Bricolage-B',
                       fontSize: 15.63,
+                      color: primaryPinkColor,
+                    ),
+                  ): const Text(
+                    'ဓာတ်ပုံရိုက်မယ်',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 14,
                       color: primaryPinkColor,
                     ),
                   ),
@@ -113,12 +140,21 @@ class UploadPhotoPage extends StatelessWidget {
                     color: primaryPinkColor,
                   ),
                 ),
-                child: const Center(
-                  child: Text(
+                child:  Center(
+                  child:
+                  languageProvider.lan == 'English' ?
+                  const  Text(
                     'Upload From Gallery',
                     style: TextStyle(
                       fontFamily: 'Bricolage-B',
                       fontSize: 15.63,
+                      color: primaryPinkColor,
+                    ),
+                  ): const Text(
+                    'ဂါလရီကနေတင်မယ်',
+                    style: TextStyle(
+                      fontFamily: 'Walone-B',
+                      fontSize: 14,
                       color: primaryPinkColor,
                     ),
                   ),
