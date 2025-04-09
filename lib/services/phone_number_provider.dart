@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PhoneNumberProvider extends ChangeNotifier{
-  String _phoneNumber = '06';
+  String _email = '';
 
-  String get phoneNumber => _phoneNumber;
+  String get phoneNumber => _email;
 
-  void setPhoneNumber(String newNumber){
-    _phoneNumber = newNumber;
+  void setEmail(String newEmail){
+    _email = newEmail;
     notifyListeners();
   }
 

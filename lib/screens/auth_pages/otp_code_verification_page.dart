@@ -46,7 +46,7 @@ class OtpCodeVerificationPage extends StatelessWidget {
                   return RichText(
                       text: TextSpan(children: [
                     const TextSpan(
-                        text: 'We sent a SMS with your OTP code to ',
+                        text: 'We sent an OTP code to ',
                         style: TextStyle(
                           fontFamily: 'Walone-R',
                           fontSize: 14,

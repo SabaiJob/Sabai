@@ -120,7 +120,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
       print('Your full name: ${_fullNameController.text}');
       print('Your Phone Number: ${_phoneNumberController.text}');
       phoneNumberProvider
-          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+          .setEmail(_emailController.text.toString().trim());
       // _pageController.nextPage(
       //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       // setState(() {

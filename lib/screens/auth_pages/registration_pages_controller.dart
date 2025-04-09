@@ -168,7 +168,7 @@ class _RegistrationPagesControllerState
   void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
     if (_currentPage == _pageController.initialPage) {
       phoneNumberProvider
-          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+          .setEmail(_emailController.text.toString().trim());
       initialRegister();
     }
   }
