@@ -148,7 +148,7 @@ class _PostingState extends State<Posting> {
                                 textAlign: TextAlign.center,
                                 'We’ll review your contribution and let\nyou know when it’s ready!',
                                 style: TextStyle(
-                                  fontFamily: 'Bricolage-R',
+                                  fontFamily: 'Walone-B',
                                   fontSize: 15.63,
                                   color: Color(0xff6C757D),
                                 ),

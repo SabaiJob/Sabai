@@ -167,7 +167,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                               style: TextStyle(
                                                   fontFamily: 'Bricolage-R',
                                                   fontSize: 12.5,
-                                                  color: Color(0xFF6C757D)),
+                                                  //color: Color(0xFF6C757D),
+                                                  ),
                                             )
                                           : RichText(
                                               text: const TextSpan(
@@ -175,7 +176,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                                 style: TextStyle(
                                                   fontFamily: 'Bricolage-R',
                                                   fontSize: 10,
-                                                  color: Color(0xFF6C757D),
+                                                 // color: Color(0xFF6C757D),
                                                 ),
                                                 children: [
                                                   TextSpan(
@@ -183,7 +184,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                       fontFamily: 'Walone-B',
-                                                      color: Color(0xFF6C757D),
+                                                      //color: Color(0xFF6C757D),
                                                     ),
                                                   )
                                                 ],
@@ -210,8 +211,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     const Text(
                                       'Offered by',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
+                                        //color: Color(0xFF6C757D),
+                                        fontFamily: 'Walone-R',
                                         fontSize: 12.5,
                                       ),
                                     ),
@@ -221,8 +222,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     Text(
                                       '${jobDetail['company_name']}',
                                       style: const TextStyle(
-                                        color: Color(0xFF4C5258),
-                                        fontFamily: 'Bricolage-M',
+                                        //color: Color(0xFF4C5258),
+                                        fontFamily: 'Walone-B',
                                         fontSize: 15.63,
                                       ),
                                     ),
@@ -239,8 +240,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         ? const Text(
                                             'Salary',
                                             style: TextStyle(
-                                              color: Color(0xFF6C757D),
-                                              fontFamily: 'Bricolage-R',
+                                             // color: Color(0xFF6C757D),
+                                              fontFamily: 'Walone-R',
                                               fontSize: 12.5,
                                             ),
                                           )
@@ -249,7 +250,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                             style: TextStyle(
                                               fontFamily: 'Walone-R',
                                               fontSize: 12.5,
-                                              color: Color(0xff6C757D),
+                                             // color: Color(0xff6C757D),
                                             ),
                                           ),
                                     const SizedBox(
@@ -259,8 +260,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         ? Text(
                                             '${jobDetail['salary_min']} ~ ${jobDetail['salary_max']} ${jobDetail['currency']}',
                                             style: const TextStyle(
-                                              color: Color(0xFF4C5258),
-                                              fontFamily: 'Bricolage-M',
+                                             // color: Color(0xFF4C5258),
+                                              fontFamily: 'Walone-B',
                                               fontSize: 15.63,
                                             ),
                                           )
@@ -269,7 +270,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                             style: TextStyle(
                                               fontFamily: 'Walone-B',
                                               fontSize: 15.63,
-                                              color: Color(0xff4C5258),
+                                             // color: Color(0xff4C5258),
                                             ),
                                           ),
                                   ],
@@ -283,10 +284,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   children: [
                                     languageProvider.lan == 'English'
                                         ? const Text(
-                                            'Safety Status',
+                                            'Safety',
                                             style: TextStyle(
-                                              color: Color(0xFF6C757D),
-                                              fontFamily: 'Bricolage-R',
+                                              //color: Color(0xFF6C757D),
+                                              fontFamily: 'Walone-R',
                                               fontSize: 12.5,
                                             ),
                                           )
@@ -295,7 +296,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                             style: TextStyle(
                                               fontFamily: 'Walone-R',
                                               fontSize: 12.5,
-                                              color: Color(0xff6C757D),
+                                              //color: Color(0xff6C757D),
                                             ),
                                           ),
                                     const SizedBox(
@@ -308,44 +309,6 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         level: jobDetail['safety_level'],
                                       ),
                                     ),
-                                    // Container(
-                                    //   decoration: const BoxDecoration(
-                                    //     color: Color(0xFFEAF6EC),
-                                    //     borderRadius: BorderRadius.all(
-                                    //         Radius.circular(4)),
-                                    //   ),
-                                    //   width: 80,
-                                    //   height: 21,
-                                    //   child: Row(
-                                    //     mainAxisAlignment:
-                                    //         MainAxisAlignment.center,
-                                    //     children: [
-                                    //       const Icon(
-                                    //         Icons.info_outline,
-                                    //         size: 13,
-                                    //         color: Color(0xFF28A745),
-                                    //       ),
-                                    //       const SizedBox(
-                                    //         width: 2,
-                                    //       ),
-                                    //       languageProvider.lan == 'English'
-                                    //           ? Text(
-                                    //               'Level - ${jobDetail['safety_level']}',
-                                    //               style: const TextStyle(
-                                    //                 fontSize: 12,
-                                    //               ),
-                                    //             )
-                                    //           : const Text(
-                                    //               'အဆင့် - ၃',
-                                    //               style: TextStyle(
-                                    //                 fontFamily: 'Walone-B',
-                                    //                 fontSize: 12,
-                                    //                 color: Colors.black,
-                                    //               ),
-                                    //             ),
-                                    //     ],
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -359,8 +322,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         ? const Text(
                                             'Location',
                                             style: TextStyle(
-                                              color: Color(0xFF6C757D),
-                                              fontFamily: 'Bricolage-R',
+                                             // color: Color(0xFF6C757D),
+                                              fontFamily: 'Walone-R',
                                               fontSize: 12.5,
                                             ),
                                           )
@@ -369,7 +332,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                             style: TextStyle(
                                               fontFamily: 'Walone-R',
                                               fontSize: 12.5,
-                                              color: Color(0xff6C757D),
+                                              //color: Color(0xff6C757D),
                                             ),
                                           ),
                                     const SizedBox(
@@ -377,8 +340,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     ),
                                     Text('${jobDetail['location']}',
                                         style: const TextStyle(
-                                          color: Color(0xFF4C5258),
-                                          fontFamily: 'Bricolage-M',
+                                         // color: Color(0xFF4C5258),
+                                          fontFamily: 'Walone-B',
                                           fontSize: 15.63,
                                         )),
                                   ],
@@ -393,8 +356,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     const Text(
                                       'Job Category',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
+                                        //color: Color(0xFF6C757D),
+                                        fontFamily: 'Walone-R',
                                         fontSize: 12.5,
                                       ),
                                     ),
@@ -423,8 +386,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     const Text(
                                       'Job Type',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
+                                      
+                                        fontFamily: 'Walone-R',
                                         fontSize: 12.5,
                                       ),
                                     ),
@@ -434,8 +397,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     Text(
                                       '${jobDetail['job_type']}',
                                       style: const TextStyle(
-                                        color: Color(0xFF4C5258),
-                                        fontFamily: 'Bricolage-M',
+                                    
+                                        fontFamily: 'Walone-B',
                                         fontSize: 15.63,
                                       ),
                                     ),
@@ -455,7 +418,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                             'Job Summary',
                             style: TextStyle(
                               fontSize: 15.63,
-                              fontFamily: 'Bricolage-M',
+                              fontFamily: 'Walone-B',
                               color: Color(0xFF363B3F),
                             ),
                           )
@@ -473,8 +436,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     Text(
                       '${jobDetail['job_summary']}',
                       style: const TextStyle(
-                        fontFamily: 'Bricolage-R',
-                        color: Color(0xFF4C5258),
+                        fontFamily: 'Walone-R',
+                       // color: Color(0xFF4C5258),
                         fontSize: 15.63,
                       ),
                     ),
@@ -486,7 +449,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                             'Responsibilities',
                             style: TextStyle(
                               fontSize: 15.63,
-                              fontFamily: 'Bricolage-M',
+                              fontFamily: 'Walone-B',
                               color: Color(0xFF363B3F),
                             ),
                           )
@@ -519,7 +482,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                             'Qualifications',
                             style: TextStyle(
                               fontSize: 15.63,
-                              fontFamily: 'Bricolage-M',
+                              fontFamily: 'Walone-B',
                               color: Color(0xFF363B3F),
                             ),
                           )
@@ -582,15 +545,15 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   ? const Text(
                                       'Contributed by',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
+                                        //color: Color(0xFF6C757D),
+                                        fontFamily: 'Walone-B',
                                         fontSize: 13,
                                       ),
                                     )
                                   : const Text(
                                       'အလုပ်တင်ပေးသူ',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
+                                        //color: Color(0xFF6C757D),
                                         fontFamily: 'Walone-B',
                                         fontSize: 10,
                                       ),
@@ -619,7 +582,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         ? const Text(
                                             'Say Thanks',
                                             style: TextStyle(
-                                              fontFamily: 'Bricolage-R',
+                                              fontFamily: 'Walone-B',
                                               fontSize: 10,
                                               color: Color(0xFFFF4DA1),
                                             ),
@@ -639,6 +602,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                           ),
                           jobDetail['contribution'] == null
                               ? const Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Image(
                                       image: AssetImage('images/status.png'),
@@ -652,8 +616,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       'Sabai',
                                       style: TextStyle(
                                         fontSize: 14,
-                                        fontFamily: 'Bricolage-R',
-                                        color: Color(0xFF6C757D),
+                                        fontFamily: 'Walone-R',
+                                        //color: Color(0xFF6C757D),
                                       ),
                                     )
                                   ],
@@ -678,7 +642,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontFamily: 'Bricolage-R',
-                                        color: Color(0xFF6C757D),
+                                        //color: Color(0xFF6C757D),
                                       ),
                                     )
                                   ],
@@ -693,15 +657,15 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                   ? const Text(
                                       'Interested by',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
-                                        fontFamily: 'Bricolage-R',
+                                        //color: Color(0xFF6C757D),
+                                        fontFamily: 'Walone-B',
                                         fontSize: 13,
                                       ),
                                     )
                                   : const Text(
                                       'သင့်လို ယခုအလုပ်ကိုစိတ်ဝင်စားသူများ',
                                       style: TextStyle(
-                                        color: Color(0xFF6C757D),
+                                       // color: Color(0xFF6C757D),
                                         fontFamily: 'Walone-B',
                                         fontSize: 10,
                                       ),

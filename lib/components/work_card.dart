@@ -214,16 +214,17 @@ class WorkCard extends StatelessWidget {
                                 text: 'By ',
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  fontFamily: 'Bricolage-R',
+                                  fontFamily: 'Walone-B',
                                   color: Color(0xff6C757D),
                                 ),
                                 children: [
                                   TextSpan(
                                     text: companyName,
                                     style: const TextStyle(
-                                      fontFamily: 'Bricolage-B',
+                                      fontFamily: 'Walone-B',
                                       fontSize: 12,
-                                      color: Color(0xff6C757D),
+                                      color: Colors.black,
+                                     // color: Color(0xff6C757D),
                                     ),
                                   ),
                                 ],
@@ -279,7 +280,7 @@ class WorkCard extends StatelessWidget {
                                 ? const Text(
                                     'Salary',
                                     style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
+                                      fontFamily: 'Walon-R',
                                       fontSize: 12.5,
                                       color: Color(0xff6C757D),
                                     ),
@@ -297,7 +298,7 @@ class WorkCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               '$minSalary ~ $maxSalary $currency',
                               style: const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Walone-B',
                                 fontSize: 14,
                                 color: Color(0xff4C5258),
                               ),
@@ -312,7 +313,7 @@ class WorkCard extends StatelessWidget {
                                 ? const Text(
                                     'Location',
                                     style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
+                                      fontFamily: 'Walone-R',
                                       fontSize: 12.5,
                                       color: Color(0xff6C757D),
                                     ),
@@ -330,7 +331,7 @@ class WorkCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               location,
                               style: const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Walone-B',
                                 fontSize: 14,
                                 color: Color(0xff4C5258),
                               ),
@@ -345,7 +346,7 @@ class WorkCard extends StatelessWidget {
                                 ? const Text(
                                     'Safety',
                                     style: TextStyle(
-                                      fontFamily: 'Bricolage-R',
+                                      fontFamily: 'Walone-R',
                                       fontSize: 12.5,
                                       color: Color(0xff6C757D),
                                     ),
@@ -376,7 +377,7 @@ class WorkCard extends StatelessWidget {
                           Row(
                             children: [
                               const Padding(
-                                padding: EdgeInsets.only(top: 2),
+                                padding: EdgeInsets.only(top: 0, right: 3),
                                 child: Icon(
                                   Icons.remove_red_eye_outlined,
                                   size: 13,
@@ -398,7 +399,7 @@ class WorkCard extends StatelessWidget {
                               closingMessage,
                               style: TextStyle(
                                 fontFamily: language.lan == 'English'
-                                    ? 'Bricolage-R'
+                                    ? 'Walone-B'
                                     : 'Walone-M',
                                 fontSize: 12,
                                 color: const Color(0xffDC3545),
