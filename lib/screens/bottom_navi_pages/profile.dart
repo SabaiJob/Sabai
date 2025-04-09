@@ -448,6 +448,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   languageProvider.lan == 'English'
@@ -622,7 +623,7 @@ class _ProfileState extends State<Profile> {
                   ltTitle: const Text(
                     'My CV',
                     style: TextStyle(
-                      fontFamily: 'Bricolage-M',
+                      fontFamily: 'Bricolage-B',
                       fontSize: 12,
                       //color: Color(0xFF2B2F32),
                     ),
@@ -659,7 +660,7 @@ class _ProfileState extends State<Profile> {
                           ? const Text(
                               'My Application',
                               style: TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
                                 //color: Color(0xFF2B2F32),
                               ),
@@ -694,7 +695,7 @@ class _ProfileState extends State<Profile> {
                             : 'သိမ်းထားသည့်အလုပ်များ',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
                                 //color: Color(0xFF2B2F32),
                               )
@@ -776,7 +777,7 @@ class _ProfileState extends State<Profile> {
                             : 'အကောင့်အမျိုးစား',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
                                 //color: Color(0xFF2B2F32),
                               )
@@ -893,7 +894,7 @@ class _ProfileState extends State<Profile> {
                             : 'ဘာသာစကား',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
                                 //color: Color(0xFF2B2F32),
                               )
@@ -961,7 +962,7 @@ class _ProfileState extends State<Profile> {
                               : 'အကူညီ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
                                   //color: Color(0xFF2B2F32),
                                 )
@@ -995,7 +996,7 @@ class _ProfileState extends State<Profile> {
                               : 'ထုတ်ပြန်ချက်နှင့် ရေးရာမူဝါဒ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
                                   //color: Color(0xFF2B2F32),
                                 )
@@ -1034,7 +1035,7 @@ class _ProfileState extends State<Profile> {
                               : 'ကိုယ်ရေးအချက်အလက် မူဝါဒ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
                                   //color: Color(0xFF2B2F32),
                                 )
@@ -1069,7 +1070,7 @@ class _ProfileState extends State<Profile> {
                               : 'Sabai Jobs အကြောင်း',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
                                   //color: Color(0xFF2B2F32),
                                 )
@@ -1287,9 +1288,10 @@ class _ProfileState extends State<Profile> {
                         ? const Text(
                             'Log Out',
                             style: TextStyle(
-                              fontFamily: 'Bricolage-M',
+                              fontFamily: 'Bricolage-B',
                               fontSize: 12,
-                              color: Color(0xFF2B2F32),
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
                             ),
                           )
                         : const Text(
@@ -1297,7 +1299,8 @@ class _ProfileState extends State<Profile> {
                             style: TextStyle(
                               fontFamily: 'Walone-B',
                               fontSize: 12,
-                              color: Color(0xFF2B2F32),
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
                             ),
                           ),
                   ],

@@ -79,7 +79,7 @@ class _ContributePageState extends State<ContributePage> {
                 ? const Text(
                     'Help others to find jobs',
                     style: TextStyle(
-                      fontFamily: 'Bricolage-R',
+                      fontFamily: 'Walone-B',
                       fontSize: 15.63,
                       color: Color(0xff6C757D),
                     ),
@@ -135,11 +135,11 @@ class _ContributePageState extends State<ContributePage> {
                         const TextStyle(
                           fontFamily: 'Bricolage-R',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: Color(0xff7B838A),
                         ):const TextStyle(
                           fontFamily: 'Walone-R',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: Color(0xff7B838A),
                         ),
                         hintText: languageProvider.lan == 'English'? 'Paste here': 'လင့်ခ်ကိုဒီမှာတင်မှာ',
                         border: InputBorder.none,
