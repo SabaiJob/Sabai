@@ -9,6 +9,7 @@ class AuthController {
       {required BuildContext context,
       required String fullName,
       required String phoneNum,
+      required String email,
       required String endPoint,
       required VoidCallback nextScreen}) async {
     try {
@@ -18,6 +19,7 @@ class AuthController {
               body: jsonEncode({
                 "full_name": fullName,
                 "phone": phoneNum,
+                "email": email,
               }));
       if (response.statusCode >= 200 && response.statusCode < 300) {
         nextScreen();
@@ -25,8 +27,19 @@ class AuthController {
         if (response.body.toString().contains('already exists')) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              
               content: Text('User with this phone number already exists.'),
+            ),
+          );
+        } else if (response.body.toString().contains('valid email')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please enter the correct email!'),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please enter the essential information!'),
             ),
           );
         }

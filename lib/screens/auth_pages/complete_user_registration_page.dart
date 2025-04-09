@@ -267,48 +267,48 @@ class CompleteUserInfoPage extends StatelessWidget {
               onChanged: whenStatusOnChange),
 
           // Email Title
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: ReusableLabelHolder(
-              labelName: languageProvider.lan == 'English'
-                  ? 'Email Address (Optional)'
-                  : 'အီးမေးလ် လိပ်စာ',
-              textStyle: languageProvider.lan == 'English'
-                  ? labelStyleEng
-                  : labelStyleMm,
-              isStarred: false,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(bottom: 12),
+          //   child: ReusableLabelHolder(
+          //     labelName: languageProvider.lan == 'English'
+          //         ? 'Email Address (Optional)'
+          //         : 'အီးမေးလ် လိပ်စာ',
+          //     textStyle: languageProvider.lan == 'English'
+          //         ? labelStyleEng
+          //         : labelStyleMm,
+          //     isStarred: false,
+          //   ),
+          // ),
           //Email Address TextField
-          SizedBox(
-            width: 400,
-            height: 36,
-            child: TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              style: languageProvider.lan == 'English'
-                  ? textfieldTextStyleEng
-                  : textfieldTextStyleMm,
-              textAlign: TextAlign.start,
-              decoration: InputDecoration(
-                enabledBorder: enableBorderStyle,
-                focusedBorder: focusedBorderStyle,
-                filled: true,
-                fillColor: Colors.white,
-                hintText: languageProvider.lan == 'English'
-                    ? ("Enter your email address")
-                    : ('သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
-                hintStyle: languageProvider.lan == 'English'
-                    ? textfieldHintTextStyleEng
-                    : textfieldHintTextStyleMm,
-                contentPadding:
-                    const EdgeInsets.only(top: 1, bottom: 1, left: 10),
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 400,
+          //   height: 36,
+          //   child: TextField(
+          //     controller: emailController,
+          //     keyboardType: TextInputType.emailAddress,
+          //     style: languageProvider.lan == 'English'
+          //         ? textfieldTextStyleEng
+          //         : textfieldTextStyleMm,
+          //     textAlign: TextAlign.start,
+          //     decoration: InputDecoration(
+          //       enabledBorder: enableBorderStyle,
+          //       focusedBorder: focusedBorderStyle,
+          //       filled: true,
+          //       fillColor: Colors.white,
+          //       hintText: languageProvider.lan == 'English'
+          //           ? ("Enter your email address")
+          //           : ('သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
+          //       hintStyle: languageProvider.lan == 'English'
+          //           ? textfieldHintTextStyleEng
+          //           : textfieldHintTextStyleMm,
+          //       contentPadding:
+          //           const EdgeInsets.only(top: 1, bottom: 1, left: 10),
+          //       border: const OutlineInputBorder(
+          //         borderSide: BorderSide.none,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

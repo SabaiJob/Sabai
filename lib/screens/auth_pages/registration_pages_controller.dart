@@ -106,6 +106,7 @@ class _RegistrationPagesControllerState
           context: context,
           fullName: _fullNameController.text,
           phoneNum: _phoneNumberController.text,
+          email: _emailController.text,
           endPoint: '/auth/register/',
           nextScreen: () {
             requestOTP();
@@ -125,7 +126,8 @@ class _RegistrationPagesControllerState
     //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
     const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
     final Map<String, dynamic> requestBody = {
-      "phone": _phoneNumberController.text,
+      //"phone": _phoneNumberController.text,
+      "email" : _emailController.text,
     };
 
     try {
@@ -279,7 +281,8 @@ class _RegistrationPagesControllerState
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
-        "full_name": _fullNameController.text
+        "full_name": _fullNameController.text,
+        "email" : _emailController.text,
       };
 
       try {
@@ -500,6 +503,7 @@ class _RegistrationPagesControllerState
                   formKey: _formKey,
                   fullNameController: _fullNameController,
                   phoneNumberController: _phoneNumberController,
+                  emailController: _emailController,
                 ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,

@@ -18,18 +18,23 @@ class LogInFormPage extends StatelessWidget {
   // Phone Number
   final TextEditingController phoneNumberController;
 
+  //for email
+  final TextEditingController emailController;
+
   const LogInFormPage(
       {super.key,
       required this.formKey,
       required this.fullNameController,
-      required this.phoneNumberController});
+      required this.phoneNumberController,
+      required this.emailController,
+      });
 
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return GestureDetector(
-      onTap: (){
-         FocusScope.of(context).unfocus(); 
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -49,7 +54,7 @@ class LogInFormPage extends StatelessWidget {
                     ),
                   ),
                 ),
-      
+
                 // Subtitle
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -61,7 +66,7 @@ class LogInFormPage extends StatelessWidget {
                             : 'သင့်အကောင့်ကို၀င်ရောက်ဖို့ ဒီအချက်အလက်တွေကိုဖြည့်ပါ'),
                   ),
                 ),
-      
+
                 // Full Name
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -89,14 +94,13 @@ class LogInFormPage extends StatelessWidget {
                 //     hint: languageProvider.lan == 'English'
                 //         ? 'Enter your full name'
                 //         : 'သင့်အမည် ထည့်ပါ'),
-      
+
                 // Phone Number
                 Padding(
-                  padding: const EdgeInsets.only(top: 8,bottom: 8),
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: ReusableLabelHolder(
-                    labelName: languageProvider.lan == 'English'
-                        ? 'Phone Number'
-                        : 'ဖုန်းနံပါတ်',
+                    labelName:
+                        languageProvider.lan == 'English' ? 'Email' : 'Email',
                     textStyle: languageProvider.lan == 'English'
                         ? labelStyleEng
                         : labelStyleMm,
@@ -104,19 +108,44 @@ class LogInFormPage extends StatelessWidget {
                   ),
                 ),
                 // Phone Number TextFormField
+                // ReusableTextformfield(
+                //   formatter: [FilteringTextInputFormatter.digitsOnly],
+                //   keyboardType: TextInputType.phone,
+                //   textEditingController: phoneNumberController,
+                //   validating: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return languageProvider.lan == 'English'
+                //           ? "Phone Number is required"
+                //           : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
+                //     }
+                //     return null;
+                //   },
+                //   hint: '0662134567',
+                // ),
+
                 ReusableTextformfield(
-                  formatter: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.phone,
-                  textEditingController: phoneNumberController,
+                  //formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.emailAddress,
+                  textEditingController: emailController,
                   validating: (value) {
                     if (value == null || value.isEmpty) {
                       return languageProvider.lan == 'English'
-                          ? "Phone Number is required"
-                          : "ဖုန်းနံပါတ်ထည့်ရန်လိုအပ်သည်";
+                          ? "Email is required"
+                          : "Email ထည့်ရန်လိုအပ်သည်";
                     }
+                    final emailRegex = RegExp(
+                          r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+                    if (!emailRegex.hasMatch(value)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter a valid email address'),
+                          ),
+                        );
+                        return 'Please enter a valid email address';
+                      }
                     return null;
                   },
-                  hint: '0662134567',
+                  hint: 'email',
                 ),
               ],
             )),
