@@ -61,7 +61,7 @@ class InitialRegistrationPage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: ReusableContentHolder(
                         content: languageProvider.lan == 'English'
-                            ? 'Please provide your basic information to get started. This helps us tailor job opportunities just for you.'
+                            ? 'Please provide your basic information to get started.'
                             : 'အကောင့်အသစ်ပြုလုပ်ရန် သင့်ကိုယ်ရေးကိုယ်တာအချက်လက်များကိုထည့်သွင်းပေးပါ။ သင့်တင့်သော အလုပ်အကိုင်အခွင့်အလမ်းများကို ရှာဖွေဖို့ ဒီအချက်အလက်တွေက အရမ်းအရေးကြီးပါတယ်။'),
                   ),
                 ),

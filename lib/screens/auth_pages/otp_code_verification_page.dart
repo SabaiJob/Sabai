@@ -40,16 +40,44 @@ class OtpCodeVerificationPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12, bottom: 32),
             child: SizedBox(
               child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Consumer<PhoneNumberProvider>(
-                      builder: (context, phoneNumberProvider, child) {
-                    return ReusableContentHolder(
-                        content: languageProvider.lan == "English"
-                            ? 'We sent a SMS with your OTP code to ${phoneNumberProvider.phoneNumber}'
-                            : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို  ${phoneNumberProvider.phoneNumber} သို့ ပို့ခဲ့ပါပြီ။');
-                  })),
+                alignment: Alignment.topLeft,
+                child: Consumer<PhoneNumberProvider>(
+                    builder: (context, phoneNumberProvider, child) {
+                  return RichText(
+                      text: TextSpan(children: [
+                    const TextSpan(
+                        text: 'We sent a SMS with your OTP code to ',
+                        style: TextStyle(
+                          fontFamily: 'Walone-R',
+                          fontSize: 14,
+                          color: Color(0xFF2B2F32),
+                        )),
+                    TextSpan(
+                        text: phoneNumberProvider.phoneNumber,
+                        style: const TextStyle(
+                          fontFamily: 'Walone-B',
+                          fontSize: 14,
+                          color: Color(0xFF000000),
+                        )),
+                  ]));
+                }),
+              ),
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 12, bottom: 32),
+          //   child: SizedBox(
+          //     child: Align(
+          //         alignment: Alignment.topLeft,
+          //         child: Consumer<PhoneNumberProvider>(
+          //             builder: (context, phoneNumberProvider, child) {
+          //           return ReusableContentHolder(
+          //               content: languageProvider.lan == "English"
+          //                   ? 'We sent a SMS with your OTP code to ${phoneNumberProvider.phoneNumber}'
+          //                   : 'ကျွန်ုပ်တို့သည် သင့် OTP ကုဒ်ပါ SMS ကို  ${phoneNumberProvider.phoneNumber} သို့ ပို့ခဲ့ပါပြီ။');
+          //         })),
+          //   ),
+          // ),
           //pincode textfield
           PinCodeTextField(
             keyboardType: TextInputType.number,
@@ -90,10 +118,16 @@ class OtpCodeVerificationPage extends StatelessWidget {
                       width: 5,
                     ),
                     otpTimer.isTimerActive
-                        ? Text(
-                            'Request a new OTP in 00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.',
-                            style: otpCodeTimerTextStyle,
-                          )
+                        ? RichText(
+                            text: TextSpan(children: [
+                            const TextSpan(
+                                text: 'Request a new OTP in ',
+                                style: otpCodeTimerTextStyle),
+                            TextSpan(
+                                text:
+                                    '00:${otpTimer.remainingTime.toString().padLeft(2, '0')}.',
+                                style: otpCodeTimer1TextStyle)
+                          ]))
                         : GestureDetector(
                             onTap: otpTimer.isTimerActive
                                 ? null
