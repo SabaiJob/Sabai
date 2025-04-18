@@ -327,13 +327,16 @@ class WorkCard extends StatelessWidget {
                                     ),
                                   ),
                             const SizedBox(height: 10),
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              location,
-                              style: const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 14,
-                                color: Color(0xff4C5258),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                overflow: TextOverflow.ellipsis,
+                                location,
+                                style: const TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                  color: Color(0xff4C5258),
+                                ),
                               ),
                             ),
                           ],
