@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/components/cv_upload_model.dart';
 import 'package:sabai_app/components/reusable_bulletpoints.dart';
+import 'package:sabai_app/services/general_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -103,9 +104,15 @@ class TAndCDialog extends StatelessWidget {
                 height: 50,
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await GeneralService.saveForApplyButton(true);
                   Navigator.pop(context);
-                  showDialog(context: context, builder: (context) => CvUploadModel(jobId: jobId,), barrierDismissible: false);
+                  showDialog(
+                      context: context,
+                      builder: (context) => CvUploadModel(
+                            jobId: jobId,
+                          ),
+                      barrierDismissible: false);
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(277, 34),

@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sabai_app/components/cv_upload_model.dart';
 import 'package:sabai_app/components/reusable_bulletpoints.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/components/tc_dialog.dart';
 import 'package:sabai_app/components/work_card.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
+import 'package:sabai_app/services/general_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class JobDetailsPage extends StatefulWidget {
@@ -783,10 +785,21 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           child: TextButton(
             onPressed: widget.isClosed
                 ? null
-                : () {
-                    showDialog(
+                : () async {
+                   bool isAccepted = await GeneralService.getForApplyButton();
+                    if(isAccepted){
+                       showDialog(
+                      context: context,
+                      builder: (context) => CvUploadModel(
+                            jobId: widget.jobId,
+                          ),
+                      barrierDismissible: false);
+                    }else{
+                       showDialog(
                         context: context,
                         builder: (context) => TAndCDialog(jobId: widget.jobId));
+                    }
+                   
                   },
             style: TextButton.styleFrom(
               backgroundColor: widget.isClosed
