@@ -1306,6 +1306,219 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
+               const SizedBox(
+                height: 16,
+              ),
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          insetPadding:
+                              const EdgeInsets.symmetric(horizontal: 25),
+                          backgroundColor: Colors.white,
+                          child: SizedBox(
+                            width: 320,
+                            height: 439,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.dangerous_outlined,
+                                        color: primaryPinkColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Image.asset(
+                                    'images/log_out.png',
+                                    width: 200,
+                                    height: 200,
+                                  ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'Are you sure to\ndelete your account!',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-M',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'အကောင့်ဖျက်ရန်သေချာပြီလား',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 1,
+                                        )
+                                      : const SizedBox(
+                                          height: 15,
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'All of your data will be erased and you will lose all of your saved jobs.',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 12.5,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'သင့်ဒေတာအားလုံး ဖျက်ပစ်မည်ဖြစ်ပြီး သင်သိမ်းဆည်းထားသော အလုပ်အကိုင်အားလုံး ဆုံးရှုံးသွားပါမည်။',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 11,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 10,
+                                        )
+                                      : const SizedBox(
+                                          height: 30,
+                                        ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      deleteDraft(jobProvider, paymentProvider);
+                                      await ApiService.logout(context);
+                                    },
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'Yes, Delete',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'ဖျက်မည်',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'Nevermind',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'မဖျက်ပါ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                style: TextButton.styleFrom(
+                  fixedSize: const Size(double.infinity, 52),
+                  backgroundColor: const Color(0xFFF0F1F2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8), // Set the border radius
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.delete_forever,
+                      color: Color(0xFFFF3997),
+                      size: 23,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    languageProvider.lan == 'English'
+                        ? const Text(
+                            'Delete Account',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-B',
+                              fontSize: 12,
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
+                            ),
+                          )
+                        : const Text(
+                            'အကောင့်ဖျက်မည်',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 12,
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
