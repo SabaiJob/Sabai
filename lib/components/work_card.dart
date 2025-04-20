@@ -85,6 +85,8 @@ class WorkCard extends StatelessWidget {
         closingMessage = language.lan == 'English' ? 'Closed' : 'ပိတ်သွားပြီ';
         showClosingMessage = true;
       }
+    } else if (closingAt.isEmpty) {
+      isClosed = false;
     } else {
       isClosed = true;
     }
@@ -224,7 +226,7 @@ class WorkCard extends StatelessWidget {
                                       fontFamily: 'Walone-B',
                                       fontSize: 12,
                                       color: Colors.black,
-                                     // color: Color(0xff6C757D),
+                                      // color: Color(0xff6C757D),
                                     ),
                                   ),
                                 ],

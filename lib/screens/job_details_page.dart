@@ -27,7 +27,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     try {
       final response = await ApiService.get('/jobs/${widget.jobId}/');
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           jobDetail = data['job'];
           interestedUser = data['job']['interested_by']['users'];
