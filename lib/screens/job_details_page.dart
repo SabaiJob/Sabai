@@ -310,7 +310,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                       width: 80,
                                       child: JobLevelCard(
                                         language: languageProvider,
-                                        level: jobDetail['safety_level'],
+                                        level: jobDetail['safety_level'] ?? '0',
                                       ),
                                     ),
                                   ],
@@ -371,7 +371,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     Text(
                                       //'${jobDetail['category']}',
                                       getCategoryNameById(
-                                          jobDetail['category']),
+                                          jobDetail['category'] ?? -1),
                                       style: const TextStyle(
                                         //color: Color(0xFF4C5258),
                                         color: Colors.black,
@@ -471,7 +471,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     ListView.builder(
                       primary: false,
                       shrinkWrap: true,
-                      itemCount: jobDetail['key_responsibilities'].length,
+                      itemCount: jobDetail['key_responsibilities'].length ?? 0,
                       itemBuilder: (context, index) {
                         return ReusableBulletPoints(
                             content:
@@ -504,7 +504,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     ListView.builder(
                       primary: false,
                       shrinkWrap: true,
-                      itemCount: jobDetail['qualifications'].length,
+                      itemCount: jobDetail['qualifications'].length ?? 0,
                       itemBuilder: (context, index) {
                         return ReusableBulletPoints(
                             content: '${jobDetail['qualifications'][index]}');
