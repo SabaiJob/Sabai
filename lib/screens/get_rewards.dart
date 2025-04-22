@@ -1,16 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/redeem_rewards_page.dart';
+import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
-class GetRewardsPage extends StatefulWidget {
-  const GetRewardsPage({super.key});
+class RewardsPage extends StatefulWidget {
+  const RewardsPage({super.key});
 
   @override
-  State<GetRewardsPage> createState() => _GetRewardsPageState();
+  State<RewardsPage> createState() => _RewardsPageState();
 }
 
-class _GetRewardsPageState extends State<GetRewardsPage> {
+class _RewardsPageState extends State<RewardsPage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
@@ -18,6 +21,7 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
       initialIndex: 0,
       length: 3,
       child: Scaffold(
+        backgroundColor: const Color(0xFFF7F7F7),
         appBar: AppBar(
           backgroundColor: const Color(0xFFFED7EA),
           bottom: PreferredSize(
@@ -68,12 +72,46 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
                     ),
                     width: 343,
                     height: 85,
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('You got 46 roses!'),
-                        Divider(),
-                        Text('How to earn roses ?')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'You got 46 roses!',
+                              style: TextStyle(
+                                  fontFamily: 'Bricolage-SMB',
+                                  fontSize: 15.63,
+                                  color: Colors.black),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RoseCountPage())),
+                              child: const Icon(
+                                Icons.arrow_forward_sharp,
+                                color: primaryPinkColor,
+                              ),
+                            )
+                          ],
+                        ),
+                        const Divider(),
+                        const Text(
+                          'How to earn roses ?',
+                          style: TextStyle(
+                              fontFamily: 'Walone - B',
+                              fontSize: 11,
+                              color: Color(0xFF2B2F32),
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0xFF2B2F32),
+                              decorationStyle: TextDecorationStyle.solid),
+                        )
                       ],
                     ),
                   ),
@@ -88,7 +126,8 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
               child: Container(
                 height: 33,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0F1F2), // Background color for tab bar
+                  color:
+                      const Color(0xFFF0F1F2), // Background color for tab bar
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: TabBar(
@@ -118,17 +157,20 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
               ),
             ),
             const SizedBox(
-              width: 200,
-              height: 200,
+              height: 20,
+            ),
+            const SizedBox(
+              width: double.infinity,
+              height: 400,
               child: TabBarView(children: [
                 Center(
-                  child: Text('Available'),
+                  child: AvailableRewards(),
                 ),
                 Center(
-                  child: Text('Expired'),
+                  child: ExpiredRewards(),
                 ),
                 Center(
-                  child: Text('Redeemed'),
+                  child: RedeemedRewards(),
                 ),
               ]),
             ),
@@ -136,6 +178,206 @@ class _GetRewardsPageState extends State<GetRewardsPage> {
         ),
       ),
     );
+  }
+}
+
+class AvailableRewards extends StatelessWidget {
+  const AvailableRewards({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+              // placeholder for image
+              leading: Container(
+                width: 40,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              title: const Text(
+                'Sabai Tote Bag',
+                style: TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 11,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Redeem before ',
+                      style: TextStyle(
+                        fontFamily: 'Walone-R',
+                        fontSize: 11,
+                        color: Color(0xFF6C757D),
+                      ),
+                    ),
+                    TextSpan(
+                      text: '14 Jan 2025',
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 11,
+                        color: Color(0xFF2B2F32),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              trailing: GestureDetector(
+                onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const RedeemRewardsPage ())),
+                child: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: primaryPinkColor,
+                ),
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+              height: 16,
+            ),
+        itemCount: 3);
+  }
+}
+
+class ExpiredRewards extends StatelessWidget {
+  const ExpiredRewards({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+              // placeholder for image
+              leading: Container(
+                width: 40,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              title: const Text(
+                'Sabai Job Tote Bag',
+                style: TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 11,
+                  color: Color(0xFF6C757D),
+                ),
+              ),
+              subtitle: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Expired On ',
+                      style: TextStyle(
+                        fontFamily: 'Walone-R',
+                        fontSize: 11,
+                        color: Color(0xFF6C757D),
+                      ),
+                    ),
+                    TextSpan(
+                      text: '14 Jan 2025',
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 11,
+                        color: Color(0xFF6C757D),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+              height: 16,
+            ),
+        itemCount: 3);
+  }
+}
+
+class RedeemedRewards extends StatelessWidget {
+  const RedeemedRewards({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+              // placeholder for image
+              leading: Container(
+                width: 40,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              title: const Text(
+                'Sabai Tote Bag',
+                style: TextStyle(
+                  fontFamily: 'Walone-B',
+                  fontSize: 11,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Redeem before ',
+                      style: TextStyle(
+                        fontFamily: 'Walone-R',
+                        fontSize: 11,
+                        color: Color(0xFF6C757D),
+                      ),
+                    ),
+                    TextSpan(
+                      text: '14 Jan 2025',
+                      style: TextStyle(
+                        fontFamily: 'Walone-B',
+                        fontSize: 11,
+                        color: Color(0xFF2B2F32),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              trailing: const Icon(
+                CupertinoIcons.check_mark_circled,
+                color: Color(0xFF28A745),
+                size: 18,
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+              height: 16,
+            ),
+        itemCount: 3);
   }
 }
 
@@ -278,129 +520,3 @@ class _AnimatedBoxState extends State<AnimatedBox>
     );
   }
 }
-
-
-// import 'package:flutter/material.dart';
-
-
-
-// class RewardsScreen extends StatelessWidget {
-//   final List<String> rewards = List.generate(5, (index) => "Sabai Job Tote Bag");
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: 3,
-//       child: Scaffold(
-//         backgroundColor: Colors.pink[50],
-//         appBar: AppBar(
-//           backgroundColor: Colors.pink[50],
-//           elevation: 0,
-//           leading: IconButton(
-//             icon: Icon(Icons.arrow_back, color: Colors.pink),
-//             onPressed: () {},
-//           ),
-//           title: Text(
-//             "My Rewards",
-//             style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-//           ),
-//           centerTitle: true,
-//         ),
-//         body: Column(
-//           children: [
-//             SizedBox(height: 10),
-            
-//             // Gift Icon
-//             CircleAvatar(
-//               radius: 40,
-//               backgroundColor: Colors.white,
-//               child: Image.asset("assets/gift.png", width: 50),
-//             ),
-            
-//             SizedBox(height: 15),
-            
-//             // Roses Count Card
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 20),
-//               child: Card(
-//                 elevation: 2,
-//                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-//                 child: Padding(
-//                   padding: const EdgeInsets.all(12.0),
-//                   child: Column(
-//                     children: [
-//                       Text("You got", style: TextStyle(fontSize: 16)),
-//                       Text(
-//                         "46 roses!",
-//                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.pink),
-//                       ),
-//                       SizedBox(height: 5),
-//                       TextButton(
-//                         onPressed: () {},
-//                         child: Text("How to earn roses?", style: TextStyle(color: Colors.pink)),
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-            
-//             SizedBox(height: 10),
-            
-//             // Tab Bar
-            // TabBar(
-            //   labelColor: Colors.pink,
-            //   unselectedLabelColor: Colors.grey,
-            //   indicatorColor: Colors.pink,
-            //   tabs: [
-            //     Tab(text: "Available"),
-            //     Tab(text: "Expired"),
-            //     Tab(text: "Redeemed"),
-            //   ],
-            // ),
-            
-//             Expanded(
-//               child: TabBarView(
-//                 children: [
-//                   RewardsList(rewards: rewards),
-//                   Center(child: Text("No expired rewards")),
-//                   Center(child: Text("No redeemed rewards")),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// // Reward List Widget
-// class RewardsList extends StatelessWidget {
-//   final List<String> rewards;
-  
-//   RewardsList({required this.rewards});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       padding: EdgeInsets.all(10),
-//       itemCount: rewards.length,
-//       itemBuilder: (context, index) {
-//         return Card(
-//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-//           child: ListTile(
-//             contentPadding: EdgeInsets.all(10),
-//             leading: ClipRRect(
-//               borderRadius: BorderRadius.circular(10),
-//               child: Image.asset("assets/tote_bag.png", width: 50),
-//             ),
-//             title: Text(rewards[index], style: TextStyle(fontWeight: FontWeight.bold)),
-//             subtitle: Text("Redeem before 14 Jan 2025", style: TextStyle(color: Colors.grey)),
-//             trailing: Icon(Icons.arrow_forward_ios, color: Colors.pink),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

@@ -11,6 +11,7 @@ import 'package:sabai_app/screens/bottom_navi_pages/save_jobs.dart';
 import 'package:sabai_app/screens/coming_soon.dart';
 import 'package:sabai_app/screens/contribution_pages/my_contribution.dart';
 import 'package:sabai_app/screens/edit_profile.dart';
+import 'package:sabai_app/screens/get_rewards.dart';
 import 'package:sabai_app/screens/help_and_support.dart';
 import 'package:sabai_app/screens/on_premium_page.dart';
 import 'package:sabai_app/screens/pricing_plan.dart';
@@ -490,118 +491,118 @@ class _ProfileState extends State<Profile> {
                     ),
                     //Temporary block
                     // //Striaght Line
-                    // Container(
-                    //   width: 1,
-                    //   height: 43,
-                    //   color: const Color(0xFFE2E3E5),
-                    // ),
-                    // Rose Counts
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         //RoseCountPage()
-                    //         builder: (context) => RoseCountPage(),
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: SizedBox(
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         languageProvider.lan == 'English'
-                    //             ? RichText(
-                    //                 text: const TextSpan(children: [
-                    //                   TextSpan(
-                    //                       text: 'Got ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Bricolage-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: '46 ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF2B2F32),
-                    //                         fontFamily: 'Bricolage-B',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: 'roses',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Bricolage-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                 ]),
-                    //               )
-                    //             : RichText(
-                    //                 text: const TextSpan(children: [
-                    //                   TextSpan(
-                    //                       text: 'နှင်းဆီ ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Walone-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: '၄၆ပွင့် ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF2B2F32),
-                    //                         fontFamily: 'Walone-B',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: 'ရခဲ့ပြီ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Walone-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                 ]),
-                    //               ),
-                    //         const SizedBox(
-                    //           height: 5,
-                    //         ),
-                    //         const Stack(
-                    //           alignment: Alignment.center,
-                    //           clipBehavior: Clip.none,
-                    //           children: [
-                    //             Positioned(
-                    //                 child: Image(
-                    //               image: AssetImage('images/avatar1.png'),
-                    //               width: 24,
-                    //               height: 24,
-                    //             )),
-                    //             Positioned(
-                    //                 left: 12,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar2.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //             Positioned(
-                    //                 left: 24,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar3.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //             Positioned(
-                    //                 left: 36,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar4.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //           ],
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // )
+                    Container(
+                      width: 1,
+                      height: 43,
+                      color: const Color(0xFFE2E3E5),
+                    ),
+                    //Rose Counts
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            //RoseCountPage()
+                            builder: (context) => const RoseCountPage(),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            languageProvider.lan == 'English'
+                                ? RichText(
+                                    text: const TextSpan(children: [
+                                      TextSpan(
+                                          text: 'Got ',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 10,
+                                          )),
+                                      TextSpan(
+                                          text: '46 ',
+                                          style: TextStyle(
+                                            color: Color(0xFF2B2F32),
+                                            fontFamily: 'Bricolage-B',
+                                            fontSize: 10,
+                                          )),
+                                      TextSpan(
+                                          text: 'roses',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 10,
+                                          )),
+                                    ]),
+                                  )
+                                : RichText(
+                                    text: const TextSpan(children: [
+                                      TextSpan(
+                                          text: 'နှင်းဆီ ',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Walone-R',
+                                            fontSize: 10,
+                                          )),
+                                      TextSpan(
+                                          text: '၄၆ပွင့် ',
+                                          style: TextStyle(
+                                            color: Color(0xFF2B2F32),
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 10,
+                                          )),
+                                      TextSpan(
+                                          text: 'ရခဲ့ပြီ',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Walone-R',
+                                            fontSize: 10,
+                                          )),
+                                    ]),
+                                  ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                    child: Image(
+                                  image: AssetImage('images/avatar1.png'),
+                                  width: 24,
+                                  height: 24,
+                                )),
+                                Positioned(
+                                    left: 12,
+                                    child: Image(
+                                      image: AssetImage('images/avatar2.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                                Positioned(
+                                    left: 24,
+                                    child: Image(
+                                      image: AssetImage('images/avatar3.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                                Positioned(
+                                    left: 36,
+                                    child: Image(
+                                      image: AssetImage('images/avatar4.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -713,41 +714,35 @@ class _ProfileState extends State<Profile> {
                                 builder: (context) => const SaveJobsProfile()));
                       },
                     ),
-                    // const DividerLine(),
+                    const DividerLine(),
                     // Rewards
-                    // ListTileButton(
-                    //   ltLeading: const Icon(
-                    //     CupertinoIcons.gift,
-                    //     size: 23,
-                    //     color: Color(0xFFFF3997),
-                    //   ),
-                    //   ltTitle: Text(
-                    //     languageProvider.lan == 'English'
-                    //         ? 'Rewards'
-                    //         : 'ဆုများ',
-                    //     style: languageProvider.lan == 'English'
-                    //         ? const TextStyle(
-                    //             fontFamily: 'Bricolage-M',
-                    //             fontSize: 10,
-                    //             color: Color(0xFF2B2F32),
-                    //           )
-                    //         : const TextStyle(
-                    //             fontFamily: 'Walone-B',
-                    //             fontSize: 10,
-                    //             color: Color(0xFF2B2F32),
-                    //           ),
-                    //   ),
-                    //   ltTrailing: const RightChevronButton(),
-                    //   navTo: () => Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => const ComingSoonPage(
-                    //                 appBarTitle: Text(
-                    //                   'Rewards',
-                    //                   style: appBarTitleStyleEng,
-                    //                 ),
-                    //               ))),
-                    // ),
+                    ListTileButton(
+                      ltLeading: const Icon(
+                        CupertinoIcons.gift,
+                        size: 23,
+                        color: Color(0xFFFF3997),
+                      ),
+                      ltTitle: Text(
+                        languageProvider.lan == 'English'
+                            ? 'Rewards'
+                            : 'ဆုများ',
+                        style: languageProvider.lan == 'English'
+                            ? const TextStyle(
+                                 fontFamily: 'Bricolage-B',
+                                fontSize: 12,
+                              )
+                            : const TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 12,
+                                color: Color(0xFF2B2F32),
+                              ),
+                      ),
+                      ltTrailing: const RightChevronButton(),
+                      navTo: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RewardsPage() )),
+                    ),
                   ],
                 ),
               ),
