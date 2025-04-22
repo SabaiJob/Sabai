@@ -95,6 +95,7 @@ class _ProfileState extends State<Profile> {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
     final jobProvider = Provider.of<JobProvider>(context);
+    bool _hasShownImageErrorThisSession = false;
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
 
@@ -180,6 +181,43 @@ class _ProfileState extends State<Profile> {
                           child: ClipOval(
                             child: Image.network(
                               '${paymentProvider.userData?['photo']}',
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stackTrace) {
+                                if (!_hasShownImageErrorThisSession) {
+                                  _hasShownImageErrorThisSession = true;
+                                  Future.microtask(() {
+                                    if (context.mounted) {
+                                      // Check if context is still valid
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar() // Hide any existing snackbar
+                                        ..showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text('Failed to load image'),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                    }
+                                  });
+                                }
+                                return const Icon(
+                                    Icons.error); // Fallback widget
+                              },
                               width: 80,
                               height: 80,
                               fit: BoxFit.cover,
@@ -361,12 +399,12 @@ class _ProfileState extends State<Profile> {
                       : '${paymentProvider.userData!['phone']}',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
-                          color: Color(0xFF6C757D),
+                          //color: Color(0xFF6C757D),
                           fontFamily: 'Bricolage-R',
                           fontSize: 12,
                         )
                       : const TextStyle(
-                          color: Color(0xFF6C757D),
+                          // color: Color(0xFF6C757D),
                           fontFamily: 'Walone-B',
                           fontSize: 12,
                         )),
@@ -410,6 +448,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   languageProvider.lan == 'English'
@@ -417,12 +456,12 @@ class _ProfileState extends State<Profile> {
                                       : 'ကျွန်တော့်ကူညီမှုများ',
                                   style: languageProvider.lan == 'English'
                                       ? const TextStyle(
-                                          color: Color(0xFF565E64),
+                                          // color: Color(0xFF565E64),
                                           fontFamily: 'Bricolage-R',
                                           fontSize: 12,
                                         )
                                       : const TextStyle(
-                                          color: Color(0xFF565E64),
+                                          //color: Color(0xFF565E64),
                                           fontFamily: 'Walone-B',
                                           fontSize: 12,
                                         ),
@@ -433,12 +472,12 @@ class _ProfileState extends State<Profile> {
                                       : '${jobProvider.contributedJobs.length} ပိုစ့်',
                                   style: languageProvider.lan == 'English'
                                       ? const TextStyle(
-                                          color: Color(0xFF2B2F32),
+                                          //color: Color(0xFF2B2F32),
                                           fontFamily: 'Bricolage-B',
                                           fontSize: 11,
                                         )
                                       : const TextStyle(
-                                          color: Color(0xFF2B2F32),
+                                          //color: Color(0xFF2B2F32),
                                           fontFamily: 'Walone-B',
                                           fontSize: 11,
                                         ),
@@ -584,9 +623,9 @@ class _ProfileState extends State<Profile> {
                   ltTitle: const Text(
                     'My CV',
                     style: TextStyle(
-                      fontFamily: 'Bricolage-M',
+                      fontFamily: 'Bricolage-B',
                       fontSize: 12,
-                      color: Color(0xFF2B2F32),
+                      //color: Color(0xFF2B2F32),
                     ),
                   ),
                   ltTrailing: const RightChevronButton(),
@@ -617,14 +656,22 @@ class _ProfileState extends State<Profile> {
                         size: 23,
                         color: Color(0xFFFF3997),
                       ),
-                      ltTitle: const Text(
-                        'My Application',
-                        style: TextStyle(
-                          fontFamily: 'Bricolage-M',
-                          fontSize: 12,
-                          color: Color(0xFF2B2F32),
-                        ),
-                      ),
+                      ltTitle: languageProvider.lan == 'English'
+                          ? const Text(
+                              'My Application',
+                              style: TextStyle(
+                                fontFamily: 'Bricolage-B',
+                                fontSize: 12,
+                                //color: Color(0xFF2B2F32),
+                              ),
+                            )
+                          : const Text(
+                              'သိမ်းထားသည့်အလုပ်များ',
+                              style: TextStyle(
+                                fontFamily: 'Walone-B',
+                                fontSize: 12,
+                              ),
+                            ),
                       ltTrailing: const RightChevronButton(),
                       navTo: () {
                         Navigator.push(
@@ -648,17 +695,17 @@ class _ProfileState extends State<Profile> {
                             : 'သိမ်းထားသည့်အလုပ်များ',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
-                      ltTrailing: RightChevronButton(),
+                      ltTrailing: const RightChevronButton(),
                       navTo: () {
                         Navigator.push(
                             context,
@@ -730,14 +777,14 @@ class _ProfileState extends State<Profile> {
                             : 'အကောင့်အမျိုးစား',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
                       ltTrailing: Container(
@@ -847,14 +894,14 @@ class _ProfileState extends State<Profile> {
                             : 'ဘာသာစကား',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                fontFamily: 'Bricolage-M',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               )
                             : const TextStyle(
                                 fontFamily: 'Walone-B',
                                 fontSize: 12,
-                                color: Color(0xFF2B2F32),
+                                //color: Color(0xFF2B2F32),
                               ),
                       ),
                       ltTrailing: ToggleButtons(
@@ -915,14 +962,14 @@ class _ProfileState extends State<Profile> {
                               : 'အကူညီ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -949,14 +996,14 @@ class _ProfileState extends State<Profile> {
                               : 'ထုတ်ပြန်ချက်နှင့် ရေးရာမူဝါဒ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  // color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -988,14 +1035,14 @@ class _ProfileState extends State<Profile> {
                               : 'ကိုယ်ရေးအချက်အလက် မူဝါဒ',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const RightChevronButton(),
@@ -1023,14 +1070,14 @@ class _ProfileState extends State<Profile> {
                               : 'Sabai Jobs အကြောင်း',
                           style: languageProvider.lan == 'English'
                               ? const TextStyle(
-                                  fontFamily: 'Bricolage-M',
+                                  fontFamily: 'Bricolage-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 )
                               : const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 12,
-                                  color: Color(0xFF2B2F32),
+                                  //color: Color(0xFF2B2F32),
                                 ),
                         ),
                         ltTrailing: const Icon(CupertinoIcons.right_chevron,
@@ -1062,7 +1109,8 @@ class _ProfileState extends State<Profile> {
                             width: 320,
                             height: 439,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Column(
                                 children: [
                                   Align(
@@ -1240,9 +1288,10 @@ class _ProfileState extends State<Profile> {
                         ? const Text(
                             'Log Out',
                             style: TextStyle(
-                              fontFamily: 'Bricolage-M',
+                              fontFamily: 'Bricolage-B',
                               fontSize: 12,
-                              color: Color(0xFF2B2F32),
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
                             ),
                           )
                         : const Text(
@@ -1250,7 +1299,221 @@ class _ProfileState extends State<Profile> {
                             style: TextStyle(
                               fontFamily: 'Walone-B',
                               fontSize: 12,
-                              color: Color(0xFF2B2F32),
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+               const SizedBox(
+                height: 16,
+              ),
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          insetPadding:
+                              const EdgeInsets.symmetric(horizontal: 25),
+                          backgroundColor: Colors.white,
+                          child: SizedBox(
+                            width: 320,
+                            height: 439,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.dangerous_outlined,
+                                        color: primaryPinkColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Image.asset(
+                                    'images/log_out.png',
+                                    width: 200,
+                                    height: 200,
+                                  ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'Are you sure to\ndelete your account!',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-M',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'အကောင့်ဖျက်ရန်သေချာပြီလား',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 19.53,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 1,
+                                        )
+                                      : const SizedBox(
+                                          height: 15,
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const Text(
+                                          textAlign: TextAlign.center,
+                                          'All of your data will be erased and you will lose all of your saved jobs.',
+                                          style: TextStyle(
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 12.5,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        )
+                                      : const Text(
+                                          textAlign: TextAlign.center,
+                                          'သင့်ဒေတာအားလုံး ဖျက်ပစ်မည်ဖြစ်ပြီး သင်သိမ်းဆည်းထားသော အလုပ်အကိုင်အားလုံး ဆုံးရှုံးသွားပါမည်။',
+                                          style: TextStyle(
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 11,
+                                            color: Color(0xFF6C757D),
+                                          ),
+                                        ),
+                                  languageProvider.lan == 'English'
+                                      ? const SizedBox(
+                                          height: 10,
+                                        )
+                                      : const SizedBox(
+                                          height: 30,
+                                        ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      deleteDraft(jobProvider, paymentProvider);
+                                      await ApiService.logout(context);
+                                    },
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'Yes, Delete',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'ဖျက်မည်',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFDC3545),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      width: 288,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color(0xFFF0F1F2),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: languageProvider.lan == 'English'
+                                            ? const Text(
+                                                textAlign: TextAlign.center,
+                                                'Nevermind',
+                                                style: TextStyle(
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12.5,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              )
+                                            : const Text(
+                                                textAlign: TextAlign.center,
+                                                'မဖျက်ပါ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 11,
+                                                  color: Color(0xFFFF3997),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                style: TextButton.styleFrom(
+                  fixedSize: const Size(double.infinity, 52),
+                  backgroundColor: const Color(0xFFF0F1F2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(8), // Set the border radius
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.delete_forever,
+                      color: Color(0xFFFF3997),
+                      size: 23,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    languageProvider.lan == 'English'
+                        ? const Text(
+                            'Delete Account',
+                            style: TextStyle(
+                              fontFamily: 'Bricolage-B',
+                              fontSize: 12,
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
+                            ),
+                          )
+                        : const Text(
+                            'အကောင့်ဖျက်မည်',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 12,
+                              color: Colors.black,
+                              //color: Color(0xFF2B2F32),
                             ),
                           ),
                   ],

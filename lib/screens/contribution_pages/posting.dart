@@ -15,6 +15,7 @@ import 'package:sabai_app/screens/contribution_pages/add_location.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/services/image_picker_helper.dart';
 import 'package:sabai_app/services/job_provider.dart';
+import 'package:sabai_app/services/language_provider.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
@@ -50,6 +51,8 @@ class _PostingState extends State<Posting> {
   String? userProfileUrl;
   String? userName;
   String? text;
+  bool _hasShownImageErrorThisSession = false;
+
   //bool? isLoading;
 
   Future<void> contribute({
@@ -57,6 +60,7 @@ class _PostingState extends State<Posting> {
     required String link,
     required Map<String, dynamic> location,
     required List<String> imagePaths,
+    required LanguageProvider languageProvider,
   }) async {
     final token = await TokenService.getToken();
     //print('it is not in the try');
@@ -65,17 +69,17 @@ class _PostingState extends State<Posting> {
       // setState(() {
       //   isLoading = true;
       // });
-      
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) {
-            return const ReusableAlertBox(
-              text: 'Loading...',
-            );
-          },
-        );
-      
+
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReusableAlertBox(
+            text: 'Loading...',
+          );
+        },
+      );
+
       Dio dio = Dio();
       FormData formData = FormData.fromMap({
         'text': text,
@@ -124,22 +128,40 @@ class _PostingState extends State<Posting> {
                           width: 140,
                           height: 140,
                         ),
-                        const Text(
-                          '🎉 Woohoo! Thank You!',
-                          style: TextStyle(
-                            fontFamily: 'Bricolage-SMB',
-                            fontSize: 19.53,
-                          ),
-                        ),
-                        const Text(
-                          textAlign: TextAlign.center,
-                          'We’ll review your contribution and let\nyou know when it’s ready!',
-                          style: TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 15.63,
-                            color: Color(0xff6C757D),
-                          ),
-                        ),
+                        languageProvider.lan == 'English'
+                            ? const Text(
+                                '🎉 Woohoo! Thank You!',
+                                style: TextStyle(
+                                  fontFamily: 'Bricolage-SMB',
+                                  fontSize: 19.53,
+                                ),
+                              )
+                            : const Text(
+                                '🎉 ကျေးဇူးတင်ပါသည်!',
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 19.53,
+                                ),
+                              ),
+                        languageProvider.lan == 'English'
+                            ? const Text(
+                                textAlign: TextAlign.center,
+                                'We’ll review your contribution and let\nyou know when it’s ready!',
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 15.63,
+                                  color: Color(0xff6C757D),
+                                ),
+                              )
+                            : const Text(
+                                textAlign: TextAlign.center,
+                                'ကျွန်ုပ်တို့သည် သင်အလုပ်တင်ပေးမှုကို\nပြန်လည်သုံးသပ်ပြီး ပြီးဆုံးသွားသည့်အခါ\nသတင်းပို့ပါမည်',
+                                style: TextStyle(
+                                  fontFamily: 'Walone-B',
+                                  fontSize: 14,
+                                  color: Color(0xff6C757D),
+                                ),
+                              ),
                         SizedBox(
                           width: 292,
                           height: 29,
@@ -157,19 +179,28 @@ class _PostingState extends State<Posting> {
                                   builder: (context) =>
                                       const NavigationHomepage(),
                                 ),
-                                (route)=>false,
+                                (route) => false,
                               );
                             },
-                            child: const Align(
+                            child: Align(
                               alignment: Alignment.center,
-                              child: Text(
-                                'Done',
-                                style: TextStyle(
-                                  fontFamily: 'Bricolage-R',
-                                  fontSize: 12.5,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: languageProvider.lan == 'English'
+                                  ? const Text(
+                                      'Done',
+                                      style: TextStyle(
+                                        fontFamily: 'Bricolage-R',
+                                        fontSize: 12.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'ပြီးဆုံးပြီ',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-B',
+                                        fontSize: 11,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         )
@@ -350,6 +381,7 @@ class _PostingState extends State<Posting> {
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
+    var languageProvider = Provider.of<LanguageProvider>(context);
     final uri = widget.url != null &&
             (widget.url!.startsWith('http') || widget.url!.startsWith('https'))
         ? Uri.tryParse(widget.url!)
@@ -376,10 +408,15 @@ class _PostingState extends State<Posting> {
             color: primaryPinkColor,
           ),
           backgroundColor: backgroundColor,
-          title: const Text(
-            'Post',
-            style: appBarTitleStyleEng,
-          ),
+          title: languageProvider.lan == 'English'
+              ? const Text(
+                  'Post',
+                  style: appBarTitleStyleEng,
+                )
+              : const Text(
+                  'အလုပ်ပိုစ့်',
+                  style: appBarTitleStyleMn,
+                ),
           centerTitle: true,
           actions: [
             Padding(
@@ -404,17 +441,16 @@ class _PostingState extends State<Posting> {
                         }
                       : () async {
                           await contribute(
-                              text: text ?? "none",
-                              link: widget.url != null
-                                  ? widget.url!
-                                  : "",
-                              location: {"location": widget.location},
-                              imagePaths:
-                                  _images!.map((image) => image.path).toList());
+                            text: text ?? "none",
+                            link: widget.url != null ? widget.url! : "",
+                            location: {"location": widget.location},
+                            imagePaths:
+                                _images!.map((image) => image.path).toList(),
+                            languageProvider: languageProvider,
+                          );
                           setState(() {
                             print('Text: ${text ?? "none"}');
-                            print(
-                                'Link: ${widget.url ?? ""}');
+                            print('Link: ${widget.url ?? ""}');
                             print('Location: ${widget.location}');
                             print(
                                 'Image Paths: ${_images!.map((image) => image.path).toList()}');
@@ -422,14 +458,23 @@ class _PostingState extends State<Posting> {
                           });
                           jobProvider.setDraft(false);
                         },
-                  child: const Text(
-                    'Contribute',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'Bricolage-B',
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: languageProvider.lan == 'English'
+                      ? const Text(
+                          'Contribute',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: 'Bricolage-B',
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'တင်မည်',
+                          style: TextStyle(
+                            fontFamily: 'Walone-B',
+                            fontSize: 11,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             )
@@ -453,6 +498,46 @@ class _PostingState extends State<Posting> {
                               ? ClipOval(
                                   child: Image.network(
                                     userProfileUrl!,
+                                    loadingBuilder: (
+                                      BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress,
+                                    ) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stactTrack) {
+                                      if (!_hasShownImageErrorThisSession) {
+                                        _hasShownImageErrorThisSession = true;
+                                        Future.microtask(() {
+                                          if (context.mounted) {
+                                            // Check if context is still valid
+                                            ScaffoldMessenger.of(context)
+                                              ..hideCurrentSnackBar() // Hide any existing snackbar
+                                              ..showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Failed to load image'),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              );
+                                          }
+                                        });
+                                      }
+                                      return const Icon(Icons.error);
+                                    },
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.cover,
@@ -503,7 +588,7 @@ class _PostingState extends State<Posting> {
                         ],
                       ),
                     ),
-      
+
                     // Text input field
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -529,7 +614,7 @@ class _PostingState extends State<Posting> {
                         },
                       ),
                     ),
-      
+
                     // Link preview if URL is provided
                     if (uri != null) ...[
                       GestureDetector(
@@ -575,7 +660,7 @@ class _PostingState extends State<Posting> {
                       ),
                     ],
                     const SizedBox(height: 20),
-      
+
                     // Images grid
                     _buildImageGrid(),
                   ],
@@ -743,7 +828,7 @@ class _LeadingIconState extends State<LeadingIcon> {
       MaterialPageRoute(
         builder: (context) => const NavigationHomepage(),
       ),
-      (route)=>false,
+      (route) => false,
     );
   }
 

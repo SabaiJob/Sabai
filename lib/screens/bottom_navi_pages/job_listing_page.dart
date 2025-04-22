@@ -242,7 +242,7 @@ class _JobListingPageState extends State<JobListingPage>
                 setState(() {
                   selectedValue = value!;
                   if (selectedValue == 'Local Jobs 🇹🇭' ||
-                      selectedValue == 'Jobs for you' 
+                      selectedValue == 'Jobs for you ✨' 
                       //selectedValue == 'Best Matched Jobs ✨'
                       ) {
                     jobProvider.setLocatiobType('local');

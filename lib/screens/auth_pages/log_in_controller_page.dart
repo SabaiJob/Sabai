@@ -27,14 +27,16 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   final TextEditingController _pinCodeController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   //user login
   Future<void> userLogin() async {
     const String url = 'https://api.sabaijob.com/api/auth/login/';
 
     final Map<String, dynamic> requestBody = {
-      'full_name': _fullNameController.text,
-      'phone': _phoneNumberController.text,
+      //'full_name': _fullNameController.text,
+      //'phone': _phoneNumberController.text,
+      'email' : _emailController.text,
     };
 
     try {
@@ -75,7 +77,8 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
     const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
 
     final Map<String, dynamic> requestBody = {
-      "phone": _phoneNumberController.text,
+      //"phone": _phoneNumberController.text,
+      "email" : _emailController.text,
     };
 
     try {
@@ -117,7 +120,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
       print('Your full name: ${_fullNameController.text}');
       print('Your Phone Number: ${_phoneNumberController.text}');
       phoneNumberProvider
-          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+          .setEmail(_emailController.text.toString().trim());
       // _pageController.nextPage(
       //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       // setState(() {
@@ -146,7 +149,8 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
       const String url = 'https://api.sabaijob.com/api/auth/otp/confirm/login/';
 
       final Map<String, dynamic> requestBody = {
-        "phone": _phoneNumberController.text,
+        //"phone": _phoneNumberController.text,
+        'email' : _emailController.text,
         "otp": enteredPinCode,
       };
 
@@ -243,7 +247,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                 LogInFormPage(
                     formKey: _formKey,
                     fullNameController: _fullNameController,
-                    phoneNumberController: _phoneNumberController),
+                    phoneNumberController: _phoneNumberController,
+                    emailController: _emailController,
+                    ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
                     //requestOtp: requestOTP(),

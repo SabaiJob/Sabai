@@ -58,11 +58,13 @@ const dropdownHintTextStyleMm = TextStyle(
 const walkthroughTitleStyleEng = TextStyle(
   fontFamily: 'Bricolage-M',
   fontSize: 24.41,
+  color: Color(0xFF000000)
 );
 
 const walkthroughTitleStyleMm = TextStyle(
   fontFamily: 'Walone-B',
   fontSize: 24.41,
+  color: Color(0xFF000000)
 );
 
 const sabaiJobStyle = TextStyle(
@@ -72,18 +74,20 @@ const sabaiJobStyle = TextStyle(
 );
 
 const walkthroughIndicatorTextEng = TextStyle(
-  fontFamily: 'Bricolage-R',
-  fontSize: 15.63,
+  fontFamily: 'Walone-B',
+  fontSize: 14,
   color: Color(0xFF41464B),
 );
 
 const walkthroughIndicatorTextMm = TextStyle(
   fontFamily: 'Walone-R',
   fontSize: 14,
+  color: Color(0xFF41464B)
 );
 
 const walkthroughDescriptionEng = TextStyle(
-  fontSize: 12.5,
+  fontFamily: 'Walone-B',
+  fontSize: 11,
   color: Color(0xff4C5258),
 );
 
@@ -179,22 +183,30 @@ const textfieldHintTextStyleMm = TextStyle(
 );
 
 const otpCodeRequestTextStyle = TextStyle(
-  fontSize: 15.63,
-  fontFamily: 'Bricolage-R',
-  color: Color(0xFF6C757D),
+  fontSize: 14,
+  fontFamily: 'Walone-R',
+  color: Color(0xFF41464B),
 );
 
 const otpCodeReRequestTextStyle = TextStyle(
-  fontSize: 15.63,
-  fontFamily: 'Bricolage-SMB',
+  fontSize: 14,
+  fontFamily: 'Walone-B',
   color: primaryPinkColor,
+  decoration: TextDecoration.underline,
+  decorationColor: primaryPinkColor
 );
 
 const otpCodeTimerTextStyle = TextStyle(
-  color: Color(0xFF6C757D),
-  fontFamily: 'Bricolage-R',
-  fontSize: 15.63,
+  color: Color(0xFF41464B),
+  fontFamily: 'Walone-R',
+  fontSize: 14,
 );
+
+const otpCodeTimer1TextStyle = TextStyle(
+  color: Colors.black,
+  fontFamily: 'Walone-B',
+  fontSize: 14,
+); 
 
 const errorTextStyleEng =
     TextStyle(color: Colors.red, fontSize: 10, fontFamily: 'Bricolage-M');

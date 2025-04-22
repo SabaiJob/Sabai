@@ -192,7 +192,7 @@ class _WalkthroughState extends State<Walkthrough> {
                     ),
                   ],
                 ),
-                //Colum includes description, Get Started, Log In, Continue as Guest buttons
+                //Colum includes description, Get Sign Up, Log In, Continue as Guest buttons
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -242,10 +242,10 @@ class _WalkthroughState extends State<Walkthrough> {
                       const SizedBox(
                         height: 15,
                       ),
-                      //Get Started
+                      //Sign Up
                       Button(
                         languageProvider: languageProvider,
-                        textEng: 'Get Started',
+                        textEng: 'Sign Up',
                         textMm: 'အကောင့်အသစ်ပြုလုပ်ရန်',
                         color: primaryPinkColor,
                         widget: const RegistrationPagesController(),

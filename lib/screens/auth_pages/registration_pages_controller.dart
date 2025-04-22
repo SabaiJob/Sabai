@@ -106,6 +106,7 @@ class _RegistrationPagesControllerState
           context: context,
           fullName: _fullNameController.text,
           phoneNum: _phoneNumberController.text,
+          email: _emailController.text,
           endPoint: '/auth/register/',
           nextScreen: () {
             requestOTP();
@@ -125,7 +126,8 @@ class _RegistrationPagesControllerState
     //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
     const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
     final Map<String, dynamic> requestBody = {
-      "phone": _phoneNumberController.text,
+      //"phone": _phoneNumberController.text,
+      "email" : _emailController.text,
     };
 
     try {
@@ -162,11 +164,11 @@ class _RegistrationPagesControllerState
 
   int _progressStep = 0;
 
-  // User Registration
+  // handle initialRegister method
   void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
     if (_currentPage == _pageController.initialPage) {
       phoneNumberProvider
-          .setPhoneNumber(_phoneNumberController.text.toString().trim());
+          .setEmail(_emailController.text.toString().trim());
       initialRegister();
     }
   }
@@ -279,7 +281,8 @@ class _RegistrationPagesControllerState
       final Map<String, dynamic> requestBody = {
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
-        "full_name": _fullNameController.text
+        "full_name": _fullNameController.text,
+        "email" : _emailController.text,
       };
 
       try {
@@ -487,7 +490,7 @@ class _RegistrationPagesControllerState
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
               child: CustomProgressBar(
-                  totalSteps: totalSteps, currentStep: _progressStep),
+                  totalSteps: 3, currentStep: _progressStep),
             ),
 
             // Page View
@@ -500,6 +503,7 @@ class _RegistrationPagesControllerState
                   formKey: _formKey,
                   fullNameController: _fullNameController,
                   phoneNumberController: _phoneNumberController,
+                  emailController: _emailController,
                 ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
@@ -507,44 +511,45 @@ class _RegistrationPagesControllerState
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     }),
-                CompleteUserInfoPage(
-                  isLanguageLevelError: _isLanguageLevelError,
-                  selectedLanguageLevel: _selectedLanguageLevel,
-                  whenLanguageLevelOnChanged: (value) {
-                    setState(() {
-                      _selectedLanguageLevel = value;
-                      _isLanguageLevelError = false;
-                    });
-                  },
-                  languageLevelErrorMessage: _languageLevelErrorMessage,
-                  selectedGender: _selectedGender,
-                  genderErrorMessage: _genderErrorMessage,
-                  isGenderError: _isGenderError,
-                  onGenderChanged: (value) {
-                    setState(() {
-                      _selectedGender = value;
-                      _isGenderError = false;
-                    });
-                  },
-                  selectedAge: selectedAge ?? '',
-                  whenAgeOnChange: (value) {
-                    setState(() {
-                      selectedAge = value!;
-                    });
-                  },
-                  selectedStatus: selectedStatus ?? '',
-                  whenStatusOnChange: (value) {
-                    setState(() {
-                      selectedStatus = value!;
-                      updateStatus();
-                    });
-                  },
-                  emailController: _emailController,
-                  isAgeError: _isAgeError,
-                  ageErrorMessage: _ageErrorMessage,
-                  isStatusError: _isStatusError,
-                  statusErrorMessage: _statusErrorMessage,
-                ),
+                // temporary method
+                // CompleteUserInfoPage(
+                //   isLanguageLevelError: _isLanguageLevelError,
+                //   selectedLanguageLevel: _selectedLanguageLevel,
+                //   whenLanguageLevelOnChanged: (value) {
+                //     setState(() {
+                //       _selectedLanguageLevel = value;
+                //       _isLanguageLevelError = false;
+                //     });
+                //   },
+                //   languageLevelErrorMessage: _languageLevelErrorMessage,
+                //   selectedGender: _selectedGender,
+                //   genderErrorMessage: _genderErrorMessage,
+                //   isGenderError: _isGenderError,
+                //   onGenderChanged: (value) {
+                //     setState(() {
+                //       _selectedGender = value;
+                //       _isGenderError = false;
+                //     });
+                //   },
+                //   selectedAge: selectedAge ?? '',
+                //   whenAgeOnChange: (value) {
+                //     setState(() {
+                //       selectedAge = value!;
+                //     });
+                //   },
+                //   selectedStatus: selectedStatus ?? '',
+                //   whenStatusOnChange: (value) {
+                //     setState(() {
+                //       selectedStatus = value!;
+                //       updateStatus();
+                //     });
+                //   },
+                //   emailController: _emailController,
+                //   isAgeError: _isAgeError,
+                //   ageErrorMessage: _ageErrorMessage,
+                //   isStatusError: _isStatusError,
+                //   statusErrorMessage: _statusErrorMessage,
+                // ),
                 SelectJobCategoryPage(
                     jobCategoryLength: _jobCategories.length,
                     jobCategoryList: _jobCategories,
@@ -569,11 +574,18 @@ class _RegistrationPagesControllerState
                 children: [
                   TextButton(
                     onPressed: () {
-                      if (_currentPage == _pageController.initialPage) {
+                      // original method
+                      // if (_currentPage == _pageController.initialPage) {
+                      //   _handleUserRegistration(phoneNumberProvider);
+                      // } else if (_currentPage == 2) {
+                      //   _handleProfileSetUp();
+                      // } else {
+                      //   _handleCreateProfile(languageProvider);
+                      // }
+                      // temporary method
+                      if (_currentPage == _pageController.initialPage){
                         _handleUserRegistration(phoneNumberProvider);
-                      } else if (_currentPage == 2) {
-                        _handleProfileSetUp();
-                      } else {
+                      }else{
                         _handleCreateProfile(languageProvider);
                       }
                     },

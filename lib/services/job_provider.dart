@@ -69,7 +69,7 @@ class JobProvider extends ChangeNotifier {
           '/jobs/search/?location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print('hi this is from all jobs');
-        final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         if (data.containsKey('results') && data['results'] is List) {
           final newJobs = data['results'];
           if (page == 1) {

@@ -13,14 +13,14 @@ class ReusableContentHolder extends StatelessWidget {
       content!,
       style: languageProvider.lan == 'English'
           ? const TextStyle(
-              fontFamily: 'Bricolage-R',
-              fontSize: 15.63,
-              color: Color(0xFF08210E),
+              fontFamily: 'Walone-R',
+              fontSize: 14,
+              color: Color(0xFF2B2F32),
             )
           : const TextStyle(
               fontFamily: 'Walone-R',
               fontSize: 14,
-              color: Colors.black,
+              color: Color(0xFF08210E),
             ),
     );
   }

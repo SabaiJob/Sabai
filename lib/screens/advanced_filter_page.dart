@@ -41,7 +41,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
         final List<dynamic> data = json.decode(response.body);
         final List<Map<String, dynamic>> jobCategories = data.map((job) {
           String name = job['name'];
-          String imageLink = job['image'];
+          String? imageLink = job['image'];
           int id = job['id'];
           return {
             'name': name ?? 'Unknown',
@@ -57,7 +57,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
         print('error: ${response.body} , ststusCode: ${response.statusCode} ');
       }
     } catch (e) {
-      print(e);
+      print('E $e');
     }
   }
 
@@ -466,11 +466,13 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                                 jobCategory['name'],
                                 style: choiceChipItemStyle,
                               ),
-                              Image.network(
+                             if(jobCategory['image'] != '')
+                               Image.network(
                                 jobCategory['image'],
                                 width: 15,
                                 height: 15,
                               ),
+                             
                             ],
                           ),
                           selected: selectedJobCategoryIndices.contains(index),

@@ -78,7 +78,7 @@ class _SuccessPageState extends State<SuccessPage> {
               ),
               languageProvider.lan == 'English'
                   ? const Text(
-                      'Take a bow',
+                      'Congratulations!',
                       style: successPageTitleEng,
                     )
                   : const Text(
@@ -90,7 +90,7 @@ class _SuccessPageState extends State<SuccessPage> {
               ),
               languageProvider.lan == 'English'
                   ? const Text(
-                      'Congratulations! Your profile is all set up.',
+                      'Your profile is all set up.',
                       style: successPageSubTitleEng,
                     )
                   : const Text(
