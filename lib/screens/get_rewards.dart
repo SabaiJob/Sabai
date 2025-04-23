@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/earn_roses_page.dart';
 import 'package:sabai_app/screens/redeem_rewards_page.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
@@ -102,15 +103,19 @@ class _RewardsPageState extends State<RewardsPage> {
                           ],
                         ),
                         const Divider(),
-                        const Text(
-                          'How to earn roses ?',
-                          style: TextStyle(
-                              fontFamily: 'Walone - B',
-                              fontSize: 11,
-                              color: Color(0xFF2B2F32),
-                              decoration: TextDecoration.underline,
-                              decorationColor: Color(0xFF2B2F32),
-                              decorationStyle: TextDecorationStyle.solid),
+                        const SizedBox(),
+                        GestureDetector(
+                          onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const EarnRosesPage())),
+                          child: const Text(
+                            'How to earn roses ?',
+                            style: TextStyle(
+                                fontFamily: 'Walone - B',
+                                fontSize: 11,
+                                color: Color(0xFF2B2F32),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF2B2F32),
+                                decorationStyle: TextDecorationStyle.solid),
+                          ),
                         )
                       ],
                     ),
@@ -235,7 +240,10 @@ class AvailableRewards extends StatelessWidget {
                 ),
               ),
               trailing: GestureDetector(
-                onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const RedeemRewardsPage ())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RedeemRewardsPage())),
                 child: const Icon(
                   Icons.arrow_forward_ios,
                   color: primaryPinkColor,
