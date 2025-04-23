@@ -274,102 +274,112 @@ class WorkCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            language.lan == 'English'
-                                ? const Text(
-                                    'Salary',
-                                    style: TextStyle(
-                                      fontFamily: 'Walon-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              language.lan == 'English'
+                                  ? const Text(
+                                      'Salary',
+                                      style: TextStyle(
+                                        fontFamily: 'Walon-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'လစာ',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
                                     ),
-                                  )
-                                : const Text(
-                                    'လစာ',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                            const SizedBox(height: 10),
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              '$minSalary ~ $maxSalary $currency',
-                              style: const TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 14,
-                                color: Color(0xff4C5258),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            language.lan == 'English'
-                                ? const Text(
-                                    'Location',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  )
-                                : const Text(
-                                    'တည်နေရာ',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              width: 150,
-                              child: Text(
+                              const SizedBox(height: 10),
+                              Text(
                                 overflow: TextOverflow.ellipsis,
-                                location,
+                                '$minSalary ~ $maxSalary $currency',
                                 style: const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 14,
                                   color: Color(0xff4C5258),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            language.lan == 'English'
-                                ? const Text(
-                                    'Safety',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
+                        //const Spacer(),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              language.lan == 'English'
+                                  ? const Text(
+                                      'Location',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'တည်နေရာ',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
                                     ),
-                                  )
-                                : const Text(
-                                    'စိတ်ချရမှု',
-                                    style: TextStyle(
-                                      fontFamily: 'Walone-R',
-                                      fontSize: 12.5,
-                                      color: Color(0xff6C757D),
-                                    ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  location,
+                                  style: const TextStyle(
+                                    fontFamily: 'Walone-B',
+                                    fontSize: 14,
+                                    color: Color(0xff4C5258),
                                   ),
-                            const SizedBox(height: 2),
-                            JobLevelCard(
-                              language: language,
-                              level: safetyLevel,
-                            ),
-                          ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        //const Spacer(),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              language.lan == 'English'
+                                  ? const Text(
+                                      'Safety',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'စိတ်ချရမှု',
+                                      style: TextStyle(
+                                        fontFamily: 'Walone-R',
+                                        fontSize: 12.5,
+                                        color: Color(0xff6C757D),
+                                      ),
+                                    ),
+                              const SizedBox(height: 2),
+                              JobLevelCard(
+                                language: language,
+                                level: safetyLevel,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
