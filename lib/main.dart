@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
@@ -12,7 +14,9 @@ import 'package:sabai_app/services/payment_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
 import 'package:sabai_app/services/quote_provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
@@ -46,6 +50,22 @@ class _SabaiState extends State<Sabai> {
       return const NavigationHomepage();
     }
   }
+
+  Future<void> getDeviceToken() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request permission for iOS (no effect on Android)
+  NotificationSettings settings = await messaging.requestPermission();
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    String? token = await messaging.getToken();
+    print("✅ FCM Token: $token");
+
+    // You can send this token to your backend server to send push notifications
+  } else {
+    print("❌ User declined or has not accepted permission");
+  }
+}
 
   // // void fetchUserData() async {
   // //   final paymentProvider =
