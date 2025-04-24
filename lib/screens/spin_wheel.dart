@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:sabai_app/constants.dart';
@@ -233,7 +232,7 @@ class _SpinWheelState extends State<SpinWheel> {
               ),
               if (spinning == false) ...[
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.2,
                 )
               ] else ...[
                 SizedBox(

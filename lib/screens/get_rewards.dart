@@ -53,7 +53,7 @@ class _RewardsPageState extends State<RewardsPage> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 200,
+                  height: 150,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Color(0xFFFED7EA),
@@ -61,11 +61,69 @@ class _RewardsPageState extends State<RewardsPage> {
                 ),
                 const Positioned(
                     top: 20, left: 0, right: 0, child: AnimatedBox()),
-                Positioned(
-                  top: 150,
-                  left: 20,
-                  right: 20,
-                  child: Container(
+                // Positioned(
+                //   top: 150,
+                //   left: 20,
+                //   right: 20,
+                //   child: Container(
+                //     padding: const EdgeInsets.symmetric(horizontal: 15),
+                //     decoration: const BoxDecoration(
+                //       borderRadius: BorderRadius.all(Radius.circular(16)),
+                //       color: Colors.white,
+                //     ),
+                //     width: 343,
+                //     height: 85,
+                //     child: Column(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             const Text(
+                //               'You got 46 roses!',
+                //               style: TextStyle(
+                //                   fontFamily: 'Bricolage-SMB',
+                //                   fontSize: 15.63,
+                //                   color: Colors.black),
+                //             ),
+                //             const SizedBox(
+                //               width: 10,
+                //             ),
+                //             GestureDetector(
+                //               onTap: () => Navigator.push(
+                //                   context,
+                //                   MaterialPageRoute(
+                //                       builder: (context) =>
+                //                           const RoseCountPage())),
+                //               child: const Icon(
+                //                 Icons.arrow_forward_sharp,
+                //                 color: primaryPinkColor,
+                //               ),
+                //             )
+                //           ],
+                //         ),
+                //         const Divider(),
+                //         const SizedBox(),
+                //         GestureDetector(
+                //           onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const EarnRosesPage())),
+                //           child: const Text(
+                //             'How to earn roses ?',
+                //             style: TextStyle(
+                //                 fontFamily: 'Walone - B',
+                //                 fontSize: 11,
+                //                 color: Color(0xFF2B2F32),
+                //                 decoration: TextDecoration.underline,
+                //                 decorationColor: Color(0xFF2B2F32),
+                //                 decorationStyle: TextDecorationStyle.solid),
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+            Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -103,7 +161,6 @@ class _RewardsPageState extends State<RewardsPage> {
                           ],
                         ),
                         const Divider(),
-                        const SizedBox(),
                         GestureDetector(
                           onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const EarnRosesPage())),
                           child: const Text(
@@ -120,11 +177,8 @@ class _RewardsPageState extends State<RewardsPage> {
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
             const SizedBox(
-              height: 45,
+              height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -164,9 +218,9 @@ class _RewardsPageState extends State<RewardsPage> {
             const SizedBox(
               height: 20,
             ),
-            const SizedBox(
-              width: double.infinity,
-              height: 400,
+            const Expanded(
+              // width: double.infinity,
+              // height: 400,
               child: TabBarView(children: [
                 Center(
                   child: AvailableRewards(),
