@@ -24,10 +24,16 @@ class AuthController {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         nextScreen();
       } else {
-        if (response.body.toString().contains('already exists')) {
+        if (response.body.toString().contains('phone already exists')) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('User with this phone number already exists.'),
+            ),
+          );
+        } else if (response.body.toString().contains('email already exists')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('User with this email already exists.'),
             ),
           );
         } else if (response.body.toString().contains('valid email')) {

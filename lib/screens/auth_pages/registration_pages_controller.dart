@@ -14,6 +14,7 @@ import 'package:sabai_app/screens/auth_pages/token_service.dart';
 import 'package:sabai_app/screens/success_page.dart';
 import 'package:sabai_app/services/job_provider.dart';
 import 'package:sabai_app/services/phone_number_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -127,7 +128,7 @@ class _RegistrationPagesControllerState
     const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
     final Map<String, dynamic> requestBody = {
       //"phone": _phoneNumberController.text,
-      "email" : _emailController.text,
+      "email": _emailController.text,
     };
 
     try {
@@ -167,8 +168,7 @@ class _RegistrationPagesControllerState
   // handle initialRegister method
   void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
     if (_currentPage == _pageController.initialPage) {
-      phoneNumberProvider
-          .setEmail(_emailController.text.toString().trim());
+      phoneNumberProvider.setEmail(_emailController.text.toString().trim());
       initialRegister();
     }
   }
@@ -204,6 +204,8 @@ class _RegistrationPagesControllerState
         //post user's info api
         try {
           final token = await TokenService.getToken();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          final fcmToken = prefs.getString('fcm_token');
           // Create form data with proper boundary
           var formData = FormData.fromMap({
             "age": selectedAge.toString(),
@@ -213,6 +215,7 @@ class _RegistrationPagesControllerState
             "has_passport": has_passport! ? 1 : 0,
             "has_work_permit": has_work_permit! ? 1 : 0,
             "has_id_certificate": has_id_certificate! ? 1 : 0,
+            "fcm_token": fcmToken
           });
 
           Dio dio = Dio();
@@ -229,6 +232,7 @@ class _RegistrationPagesControllerState
           );
 
           if (response.statusCode! >= 200 && response.statusCode! < 300) {
+            print('fcmToken $fcmToken');
             //fetch the job categories
             getJobCategory();
             // Move to the next page
@@ -282,7 +286,7 @@ class _RegistrationPagesControllerState
         "phone": _phoneNumberController.text,
         "otp": enteredPinCode,
         "full_name": _fullNameController.text,
-        "email" : _emailController.text,
+        "email": _emailController.text,
       };
 
       try {
