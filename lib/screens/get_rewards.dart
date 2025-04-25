@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/earn_roses_page.dart';
+import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/redeem_rewards_page.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
+import 'package:sabai_app/screens/spin_wheel.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class RewardsPage extends StatefulWidget {
@@ -24,6 +26,18 @@ class _RewardsPageState extends State<RewardsPage> {
       child: Scaffold(
         backgroundColor: const Color(0xFFF7F7F7),
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NavigationHomepage()));
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: primaryPinkColor,
+            ),
+          ),
           backgroundColor: const Color(0xFFFED7EA),
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(1.0),
@@ -124,59 +138,61 @@ class _RewardsPageState extends State<RewardsPage> {
               ],
             ),
             Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      color: Colors.white,
-                    ),
-                    width: 343,
-                    height: 85,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'You got 46 roses!',
-                              style: TextStyle(
-                                  fontFamily: 'Bricolage-SMB',
-                                  fontSize: 15.63,
-                                  color: Colors.black),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RoseCountPage())),
-                              child: const Icon(
-                                Icons.arrow_forward_sharp,
-                                color: primaryPinkColor,
-                              ),
-                            )
-                          ],
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                color: Colors.white,
+              ),
+              width: 343,
+              height: 85,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'You got 46 roses!',
+                        style: TextStyle(
+                            fontFamily: 'Bricolage-SMB',
+                            fontSize: 15.63,
+                            color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RoseCountPage())),
+                        child: const Icon(
+                          Icons.arrow_forward_sharp,
+                          color: primaryPinkColor,
                         ),
-                        const Divider(),
-                        GestureDetector(
-                          onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const EarnRosesPage())),
-                          child: const Text(
-                            'How to earn roses ?',
-                            style: TextStyle(
-                                fontFamily: 'Walone - B',
-                                fontSize: 11,
-                                color: Color(0xFF2B2F32),
-                                decoration: TextDecoration.underline,
-                                decorationColor: Color(0xFF2B2F32),
-                                decorationStyle: TextDecorationStyle.solid),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
+                  const Divider(),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EarnRosesPage())),
+                    child: const Text(
+                      'How to earn roses ?',
+                      style: TextStyle(
+                          fontFamily: 'Walone - B',
+                          fontSize: 11,
+                          color: Color(0xFF2B2F32),
+                          decoration: TextDecoration.underline,
+                          decorationColor: Color(0xFF2B2F32),
+                          decorationStyle: TextDecorationStyle.solid),
+                    ),
+                  )
+                ],
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),

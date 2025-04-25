@@ -96,10 +96,9 @@ class _SpinWheelState extends State<SpinWheel> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pushAndRemoveUntil(
+                onPressed: () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const RewardsPage()),
-                  (route) => false,
                 ),
                 label: const Text(
                   "Redeem the Reward",
@@ -204,29 +203,44 @@ class _SpinWheelState extends State<SpinWheel> {
                     shape: BoxShape.circle,
                     color: Colors.blue,
                   ),
-                  child: FortuneWheel(
-                    animateFirst: false,
-                    selected: controller.stream,
-                    items: [
-                      for (int i = 0; i < rewards.length; i++)
-                        FortuneItem(
-                          child: Text(rewards[i]),
-                          style: FortuneItemStyle(
-                            color: i.isEven
-                                ? Colors.white
-                                : Colors.blue, // Alternating colors
-                            borderColor: Colors.grey[300]!, // Border color
-                            borderWidth: 1.0, // Border width
-                            textStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: i.isEven
-                                  ? Colors.black
-                                  : Colors.white, // Text color contrast
-                            ),
+                  child: Container(
+                    padding: const EdgeInsets.all(1),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xffFFD700),
+                    ),
+                    child: FortuneWheel(
+                      animateFirst: false,
+                      selected: controller.stream,
+                      indicators: const [
+                        FortuneIndicator(
+                          alignment: Alignment.topCenter,
+                          child: TriangleIndicator(
+                            color: Color(0xffFFD700),
                           ),
                         ),
-                    ],
+                      ],
+                      items: [
+                        for (int i = 0; i < rewards.length; i++)
+                          FortuneItem(
+                            child: Text(rewards[i]),
+                            style: FortuneItemStyle(
+                              color: i.isEven
+                                  ? Colors.white
+                                  : Colors.blue, // Alternating colors
+                              // borderColor: Colors.grey[300]!, // Border color
+                              borderWidth: 0.0, // Border width
+                              textStyle: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: i.isEven
+                                    ? Colors.black
+                                    : Colors.white, // Text color contrast
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),

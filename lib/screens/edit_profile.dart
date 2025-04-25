@@ -5,7 +5,8 @@ import 'package:sabai_app/screens/auth_pages/api_service.dart';
 class EditProfile extends StatefulWidget {
   final String initialName;
   final String initialEmail;
-  const EditProfile({super.key, required this.initialName, required this.initialEmail});
+  const EditProfile(
+      {super.key, required this.initialName, required this.initialEmail});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -34,71 +35,72 @@ class _EditProfileState extends State<EditProfile> {
     super.dispose();
   }
 
-  void trackChanges(){
+  void trackChanges() {
     setState(() {
-      isEdited = nameController.text != widget.initialName || emailController.text != widget.initialEmail;
+      isEdited = nameController.text != widget.initialName ||
+          emailController.text != widget.initialEmail;
     });
   }
 
-  Future<void>  saveProfile()async{
-    if(!isEdited){
+  Future<void> saveProfile() async {
+    if (!isEdited) {
       Navigator.pop(context);
       return;
     }
-    
+
     String updatedName = nameController.text;
     String updatedEmail = emailController.text;
     if (updatedName.isEmpty || updatedEmail.isEmpty) {
-    showCustomSnackBar(
-      message: "Name and email cannot be empty!",
-      isError: true,
-    );
-    return;
-  }
-
-   try{
-    final response = await ApiService.put('/auth/profile-update/', {
-      "username": updatedName, "email" : updatedEmail
-    });
-    if(response.statusCode >= 200 && response.statusCode < 300){
       showCustomSnackBar(
-        message: "Profile updated successfully!",
-        isError: false,
+        message: "Name and email cannot be empty!",
+        isError: true,
       );
-      Navigator.pop(context, {"username": updatedName, "email": updatedEmail});
+      return;
     }
-    else{
+
+    try {
+      final response = await ApiService.put('/auth/profile-update/',
+          {"username": updatedName, "email": updatedEmail});
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        showCustomSnackBar(
+          message: "Profile updated successfully!",
+          isError: false,
+        );
+        Navigator.pop(
+            context, {"username": updatedName, "email": updatedEmail});
+      } else {
+        showCustomSnackBar(
+          message: "Failed to update profile. Please try again.",
+          isError: true,
+        );
+      }
+    } catch (e) {
       showCustomSnackBar(
-        message: "Failed to update profile. Please try again.",
+        message: "An error occurred: $e",
         isError: true,
       );
     }
-   }catch(e){
-    showCustomSnackBar(
-      message: "An error occurred: $e",
-      isError: true,
-    );
-   }
   }
 
   void showCustomSnackBar({required String message, required bool isError}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        message,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        //backgroundColor: isError ? Colors.redAccent : Colors.green,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        action: SnackBarAction(
+          label: "Dismiss",
+          textColor: Colors.white,
+          onPressed: () {},
+        ),
       ),
-      //backgroundColor: isError ? Colors.redAccent : Colors.green,
-      behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(16),
-      action: SnackBarAction(
-        label: "Dismiss",
-        textColor: Colors.white,
-        onPressed: () {},
-      ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +120,10 @@ class _EditProfileState extends State<EditProfile> {
         iconTheme: const IconThemeData(
           color: Color(0xFFFF3997),
         ),
-        title: const Text('Edit Profile', style: appBarTitleStyleEng,),
+        title: const Text(
+          'Edit Profile',
+          style: appBarTitleStyleEng,
+        ),
         elevation: 2,
       ),
       body: SingleChildScrollView(
@@ -140,19 +145,20 @@ class _EditProfileState extends State<EditProfile> {
                         child: const Icon(Icons.person,
                             size: 60, color: Colors.grey),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(Icons.camera_alt,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
+                      //Camera icon
+                      // Positioned(
+                      //   bottom: 0,
+                      //   right: 0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color: Theme.of(context).primaryColor,
+                      //       shape: BoxShape.circle,
+                      //     ),
+                      //     padding: const EdgeInsets.all(8),
+                      //     child: const Icon(Icons.camera_alt,
+                      //         color: Colors.white, size: 20),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
