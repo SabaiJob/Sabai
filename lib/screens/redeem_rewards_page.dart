@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_label.dart';
-import 'package:sabai_app/components/reusable_textformfield.dart';
-import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/success_rewards_page.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
 class RedeemRewardsPage extends StatelessWidget {
@@ -322,7 +321,9 @@ class RedeemRewardsPage extends StatelessWidget {
       persistentFooterAlignment: AlignmentDirectional.center,
       persistentFooterButtons: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> const SuccessRewards()));
+          },
           style: TextButton.styleFrom(
             fixedSize: const Size(343, 42),
             backgroundColor: const Color(0xffFF3997),
