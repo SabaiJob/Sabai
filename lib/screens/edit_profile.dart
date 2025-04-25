@@ -140,19 +140,19 @@ class _EditProfileState extends State<EditProfile> {
                         child: const Icon(Icons.person,
                             size: 60, color: Colors.grey),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(Icons.camera_alt,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
+                      // Positioned(
+                      //   bottom: 0,
+                      //   right: 0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color: Theme.of(context).primaryColor,
+                      //       shape: BoxShape.circle,
+                      //     ),
+                      //     padding: const EdgeInsets.all(8),
+                      //     child: const Icon(Icons.camera_alt,
+                      //         color: Colors.white, size: 20),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

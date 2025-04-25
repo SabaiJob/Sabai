@@ -302,6 +302,7 @@ class _RegistrationPagesControllerState
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
+          getJobCategory();
           setState(() {
             _currentPage++;
             _progressStep++;
