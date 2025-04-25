@@ -12,11 +12,15 @@ class ReusableBulletPoints extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.circle,
-            size: 6,
-            color: Colors.pink,
+          const Padding(
+            padding:  EdgeInsets.only(top: 6.5),
+            child:  Icon(
+              Icons.circle,
+              size: 6,
+              color: Colors.pink,
+            ),
           ),
           const SizedBox(
             width: 10,
@@ -24,6 +28,7 @@ class ReusableBulletPoints extends StatelessWidget {
           Expanded(
             child: Text(
               content!,
+              textAlign: TextAlign.start,
               style: languageProvider.lan == 'English'
                   ? const TextStyle(
                       fontSize: 15.63,
