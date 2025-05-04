@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sabai_app/screens/get_rewards.dart';
+import 'package:sabai_app/screens/spin_wheel.dart';
 import '../constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
@@ -317,7 +317,7 @@ class _RoseCountPageState extends State<RoseCountPage> {
                     height: 42,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const GetRewardsPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const SpinWheel()));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffFF3997),

@@ -16,38 +16,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  // final List<Map<String, dynamic>> noti = [
-  //   {
-  //     'img': 'images/noti_moti.png',
-  //     'title':
-  //         '“Success is not the result of spontaneous combustion. You must set yourself on fire."\nby Arnold H. Glasow',
-  //     'time': '2024-12-27T14:00:00Z',
-  //     'type': 'none',
-  //   },
-  //   {
-  //     'img': 'images/noti_closing.png',
-  //     'title':
-  //         '⏰ Hurry! Your Barista position is closing soon! Apply before it\'s too late!',
-  //     'time': '2024-12-27T13:50:00Z',
-  //     'type': 'none',
-  //   },
-  //   {
-  //     'img': 'images/noti_open.png',
-  //     'title':
-  //         'New positions for Barista in are now open. Check them out and apply today! 🎉',
-  //     'time': '2024-12-26T15:30:00Z',
-  //     'type': 'none',
-  //   },
-  //   {
-  //     'img': 'images/noti_rose.png',
-  //     'title': 'You received 6 roses for your contribution from',
-  //     'time': '2024-12-26T14:00:00Z',
-  //     'type': 'contribute',
-  //   }
-  // ];
-
-  //bool isLoading = true;
-  //List<Map<String, dynamic>> noti = [];
   Future<void> loadNotification() async {
     final generalProvider =
         Provider.of<GeneralProvider>(context, listen: false);
