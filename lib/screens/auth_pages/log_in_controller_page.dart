@@ -184,10 +184,13 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
             (Route<dynamic> route) => false,
           );
         } else {
+          _pinCodeController.clear();
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('OTP confirmation failed: ${response.body}'),
+              const SnackBar(
+                backgroundColor: Color(0xFFf44336),
+                behavior: SnackBarBehavior.floating,
+                content: Text('OTP confirmation failed'),
               ),
             );
           }

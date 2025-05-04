@@ -22,6 +22,7 @@ class WorkCard extends StatelessWidget {
   final String closingAt;
   final String safetyLevel;
   final int viewCount;
+  final bool isNegotiable;
 
   const WorkCard({
     required this.jobTitle,
@@ -35,6 +36,7 @@ class WorkCard extends StatelessWidget {
     required this.closingAt,
     required this.safetyLevel,
     required this.viewCount,
+    required this.isNegotiable,
     super.key,
   });
 
@@ -201,38 +203,43 @@ class WorkCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              jobTitle,
-                              style: const TextStyle(
-                                fontSize: 15.63,
-                                fontFamily: 'Bricolage-M',
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: 'By ',
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                jobTitle,
                                 style: const TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'Walone-B',
-                                  color: Color(0xff6C757D),
+                                  fontSize: 15.63,
+                                  fontFamily: 'Bricolage-M',
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: companyName,
-                                    style: const TextStyle(
-                                      fontFamily: 'Walone-B',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      // color: Color(0xff6C757D),
-                                    ),
-                                  ),
-                                ],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
+                              RichText(
+                                text: TextSpan(
+                                  text: 'By ',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Walone-B',
+                                    color: Color(0xff6C757D),
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: companyName,
+                                      style: const TextStyle(
+                                        fontFamily: 'Walone-B',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),   
+                                    ),
+                                  ],
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
                         if (!isPartner)
                           Padding(
@@ -301,7 +308,11 @@ class WorkCard extends StatelessWidget {
                               const SizedBox(height: 10),
                               Text(
                                 overflow: TextOverflow.ellipsis,
-                                '$minSalary ~ $maxSalary $currency',
+                                isNegotiable
+                                    ? language.lan == 'English'
+                                        ? 'Negotiable'
+                                        : 'ညှိနှိုင်း'
+                                    : '$minSalary ~ $maxSalary $currency',
                                 style: const TextStyle(
                                   fontFamily: 'Walone-B',
                                   fontSize: 14,
@@ -578,10 +589,10 @@ class JobLevelCard extends StatelessWidget {
                       ),
                     )
                   : Text(
-                      'အဆင့် - $level',
+                      'အဆင့်-$level',
                       style: const TextStyle(
                         fontFamily: 'Walone-B',
-                        fontSize: 10,
+                        fontSize: 9,
                         color: Colors.black,
                       ),
                     ),

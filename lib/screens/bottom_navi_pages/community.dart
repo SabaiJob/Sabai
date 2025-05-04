@@ -67,7 +67,8 @@ class _CommunityPageState extends State<CommunityPage> {
       final response = await http.get(Uri.parse(
         'https://api.sabaijob.com/api/community/categories/'));
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      final List fetchedCategories = jsonDecode(response.body);
+      //final List fetchedCategories = jsonDecode(response.body);
+      final List fetchedCategories = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         categoires = fetchedCategories;
       });
@@ -99,7 +100,8 @@ class _CommunityPageState extends State<CommunityPage> {
       final response = await http.get(Uri.parse(
         'https://api.sabaijob.com/api/community/?page=${currentPage[categoryId]}&category=$categoryId'));
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      final data = jsonDecode(response.body);
+      //final data = jsonDecode(response.body);
+      final data = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         communityData[categoryId]!.addAll(data['results']);
         isLoading[categoryId] = false;

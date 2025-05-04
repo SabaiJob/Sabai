@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/services/language_provider.dart';
 
-class ReusableBulletPoints extends StatelessWidget {
+class TnCBulletPoints extends StatelessWidget {
   final String? content;
-  const ReusableBulletPoints({super.key, required this.content});
+  const TnCBulletPoints({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +30,14 @@ class ReusableBulletPoints extends StatelessWidget {
               content!,
               style: languageProvider.lan == 'English'
                   ? const TextStyle(
-                      fontSize: 15.63,
-                      fontFamily: 'Walone-R',
-                      //color: Color(0xFF4C5258),
+                      fontSize: 11,
+                      fontFamily: 'Walone-B',
+                      color: Colors.black
                     )
                   : const TextStyle(
-                      fontSize: 15.63,
-                      fontFamily: 'Walone-R',
-                      //color: Color(0xFF4C5258),
+                      fontSize: 11,
+                      fontFamily: 'Walone-B',
+                      color: Colors.black
                     ),
             ),
           ),

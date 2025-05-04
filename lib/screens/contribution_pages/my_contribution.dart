@@ -166,17 +166,18 @@ class _MyContributionState extends State<MyContribution> {
                               var job = filterJobs[index];
                               var jobInfo = job['info'] as Map<String, dynamic>;
                               return WorkCard(
-                                jobTitle: jobInfo['title'],
-                                isPartner: jobInfo['is_partner'],
-                                companyName: jobInfo['company_name'],
-                                location: jobInfo['location'],
-                                maxSalary: jobInfo['salary_max'],
-                                minSalary: jobInfo['salary_min'],
-                                currency: jobInfo['currency'],
-                                jobId: jobInfo['id'],
-                                closingAt: jobInfo['closing_at'],
-                                safetyLevel: jobInfo['safety_level'],
-                                viewCount: jobInfo['views_count'],
+                                jobTitle: jobInfo['title'] ?? '',
+                                isPartner: jobInfo['is_partner'] ?? '',
+                                companyName: jobInfo['company_name'] ?? '',
+                                location: jobInfo['location'] ?? '',
+                                maxSalary: jobInfo['salary_max'] ?? 0,
+                                minSalary: jobInfo['salary_min'] ?? 0,
+                                currency: jobInfo['currency'] ?? '',
+                                jobId: jobInfo['id'] ?? '',
+                                closingAt: jobInfo['closing_at'] ?? '',
+                                safetyLevel: jobInfo['safety_level'] ?? '',
+                                viewCount: jobInfo['views_count'] ?? '',
+                                isNegotiable: jobInfo['is_salary_negotiable'] ?? '',
                               );
                               //return SizedBox();
                             }),
@@ -229,17 +230,18 @@ class _MyContributionState extends State<MyContribution> {
                                       final jobDetail =
                                           appliedJobs[index]['info'];
                                       return WorkCard(
-                                        jobTitle: jobDetail['title'],
-                                        isPartner: jobDetail['is_partner'],
-                                        companyName: jobDetail['company_name'],
-                                        location: jobDetail['location'],
-                                        maxSalary: jobDetail["salary_max"],
-                                        minSalary: jobDetail["salary_min"],
-                                        currency: jobDetail['currency'],
-                                        jobId: jobDetail['id'],
-                                        closingAt: jobDetail['closing_at'],
-                                        safetyLevel: jobDetail['safety_level'],
-                                        viewCount: jobDetail['views_count'],
+                                        jobTitle: jobDetail['title'] ?? '',
+                                        isPartner: jobDetail['is_partner'] ?? '',
+                                        companyName: jobDetail['company_name'] ?? '',
+                                        location: jobDetail['location'] ?? '',
+                                        maxSalary: jobDetail["salary_max"] ?? 0,
+                                        minSalary: jobDetail["salary_min"] ?? 0,
+                                        currency: jobDetail['currency'] ?? '',
+                                        jobId: jobDetail['id'] ?? '',
+                                        closingAt: jobDetail['closing_at'] ?? '',
+                                        safetyLevel: jobDetail['safety_level'] ?? '',
+                                        viewCount: jobDetail['views_count'] ?? '',
+                                        isNegotiable: jobDetail['is_salary_negotiable'] ?? '',
                                       );
                                     } else {
                                       final adInfo = appliedJobs[index]['info'];

@@ -265,110 +265,110 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: languageProvider.lan == 'English'
-                      ? 'Search for job'
-                      : 'အလုပ်များရှာမယ်',
-                  hintStyle: languageProvider.lan == 'English'
-                      ? GoogleFonts.dmSans(
-                          textStyle: const TextStyle(
-                            color: Color(0xff989EA4),
-                            fontSize: 14,
-                          ),
-                        )
-                      : const TextStyle(
-                          fontFamily: 'Walone-R',
-                          color: Color(0xff989EA4),
-                          fontSize: 14,
-                        ),
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                      // searchQuery.isEmpty &&
-                      isSearching ? Icons.clear : Icons.search,
-                      color: const Color(0xffFF3997),
-                    ),
-                    onPressed: () {
-                      if (isSearching) {
-                        FocusScope.of(context).unfocus();
-                        // Clear the search query and reset search state
-                        _searchController.clear();
-                        setState(() {
-                          searchQuery = ""; // Clear search query
-                          isSearching = false; // Switch back to search icon
-                        });
-                      }
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Color(0xffF0F1F2),
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: Color(0xffFF3997), // Border color when not focused
-                      width: 1,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 17),
-                ),
-                onTap: () {
-                  setState(() {
-                    isSearching = true; // Activate search mode
-                  });
-                },
-                onChanged: (val) {
-                  setState(() {
-                    searchQuery = val; // Update the search query
-                  });
-                },
-              ),
-            ),
-            if (isSearching) ...[
-              Expanded(
-                child: ListView.builder(
-                    itemCount: filterJobs.length,
-                    itemBuilder: (context, index) {
-                      var job = filterJobs[index];
-                      var jobInfo = job['info'] as Map<String, dynamic>;
-                      return WorkCard(
-                        jobTitle: jobInfo['title'],
-                        isPartner: jobInfo['is_partner'],
-                        companyName: jobInfo['company_name'],
-                        location: jobInfo['location'],
-                        maxSalary: jobInfo['salary_max'],
-                        minSalary: jobInfo['salary_min'],
-                        currency: jobInfo['currency'],
-                        jobId: jobInfo['id'],
-                        closingAt: jobInfo['closing_at'],
-                        safetyLevel: jobInfo['safety_level'],
-                        viewCount: jobInfo['views_count'],
-                      );
-                      //return SizedBox();
-                    }),
-              ),
-            ]
+            // Container(
+            //   width: double.infinity,
+            //   height: 50,
+            //   decoration: BoxDecoration(
+            //       color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            //   child: TextField(
+            //     controller: _searchController,
+            //     decoration: InputDecoration(
+            //       hintText: languageProvider.lan == 'English'
+            //           ? 'Search for job'
+            //           : 'အလုပ်များရှာမယ်',
+            //       hintStyle: languageProvider.lan == 'English'
+            //           ? GoogleFonts.dmSans(
+            //               textStyle: const TextStyle(
+            //                 color: Color(0xff989EA4),
+            //                 fontSize: 14,
+            //               ),
+            //             )
+            //           : const TextStyle(
+            //               fontFamily: 'Walone-R',
+            //               color: Color(0xff989EA4),
+            //               fontSize: 14,
+            //             ),
+            //       prefixIcon: IconButton(
+            //         icon: Icon(
+            //           // searchQuery.isEmpty &&
+            //           isSearching ? Icons.clear : Icons.search,
+            //           color: const Color(0xffFF3997),
+            //         ),
+            //         onPressed: () {
+            //           if (isSearching) {
+            //             FocusScope.of(context).unfocus();
+            //             // Clear the search query and reset search state
+            //             _searchController.clear();
+            //             setState(() {
+            //               searchQuery = ""; // Clear search query
+            //               isSearching = false; // Switch back to search icon
+            //             });
+            //           }
+            //         },
+            //       ),
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //         borderSide: BorderSide.none,
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //         borderSide: const BorderSide(
+            //           color: Color(0xffF0F1F2),
+            //           width: 2,
+            //         ),
+            //       ),
+            //       focusedBorder: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(8),
+            //         borderSide: const BorderSide(
+            //           color: Color(0xffFF3997), // Border color when not focused
+            //           width: 1,
+            //         ),
+            //       ),
+            //       contentPadding: const EdgeInsets.symmetric(vertical: 17),
+            //     ),
+            //     onTap: () {
+            //       setState(() {
+            //         isSearching = true; // Activate search mode
+            //       });
+            //     },
+            //     onChanged: (val) {
+            //       setState(() {
+            //         searchQuery = val; // Update the search query
+            //       });
+            //     },
+            //   ),
+            // ),
+            // if (isSearching) ...[
+            //   Expanded(
+            //     child: ListView.builder(
+            //         itemCount: filterJobs.length,
+            //         itemBuilder: (context, index) {
+            //           var job = filterJobs[index];
+            //           var jobInfo = job['info'] as Map<String, dynamic>;
+            //           return WorkCard(
+            //             jobTitle: jobInfo['title'],
+            //             isPartner: jobInfo['is_partner'],
+            //             companyName: jobInfo['company_name'],
+            //             location: jobInfo['location'],
+            //             maxSalary: jobInfo['salary_max'],
+            //             minSalary: jobInfo['salary_min'],
+            //             currency: jobInfo['currency'],
+            //             jobId: jobInfo['id'],
+            //             closingAt: jobInfo['closing_at'],
+            //             safetyLevel: jobInfo['safety_level'],
+            //             viewCount: jobInfo['views_count'],
+            //           );
+            //           //return SizedBox();
+            //         }),
+            //   ),
+            // ]
             //Job Name
-            else ...[
+           
               Expanded(
                 child: ListView(
                   children: [
                     const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: ReusableLabelHolder(
                           labelName: 'Job Name',
                           textStyle: lablelHolderEng,
@@ -838,7 +838,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                 ),
               )
             ]
-          ],
+          
         ),
       ),
       persistentFooterButtons: [

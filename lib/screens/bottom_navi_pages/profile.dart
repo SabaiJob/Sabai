@@ -26,9 +26,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sabai_app/services/payment_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../services/job_provider.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -40,11 +39,19 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
+  int? totalRose;
+  List? visibleAvatar;
 
   void fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
     await paymentProvider.getProfileData(context);
+  }
+
+  void fetchRoseCount() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getRoseCount(context);
   }
 
   Future<void> deleteDraft(
@@ -63,6 +70,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     fetchUserData();
+    fetchRoseCount();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<JobProvider>(context, listen: false).fetchContributedJobs(
         false,
@@ -76,15 +84,17 @@ class _ProfileState extends State<Profile> {
       context,
       MaterialPageRoute(
         builder: (context) => EditProfile(
-          initialName: paymentProvider.userData!['username'],
-          initialEmail: paymentProvider.userData!['email'] ?? '',
+          initialName: paymentProvider.userData!['username'] ?? '',
+          initialEmail: paymentProvider.userData!['user_info']['email'] ?? '',
+          initialImageUrl: paymentProvider.userData!['photo'] ?? '',
         ),
       ),
     );
     if (updatedData != null) {
       setState(() {
         paymentProvider.userData!['username'] = updatedData["username"];
-        paymentProvider.userData!['email'] = updatedData["email"];
+        paymentProvider.userData!['user_info']['email'] = updatedData["email"];
+        paymentProvider.userData!['photo'] = updatedData["profile_picture"];
       });
     }
   }
@@ -187,6 +197,7 @@ class _ProfileState extends State<Profile> {
                                 if (loadingProgress == null) return child;
                                 return Center(
                                   child: CircularProgressIndicator(
+                                    color: primaryPinkColor,
                                     value: loadingProgress.expectedTotalBytes !=
                                             null
                                         ? loadingProgress
@@ -383,7 +394,7 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 10,
               ),
-              Text(paymentProvider.userData!['username'],
+              Text(paymentProvider.userData?['username'] ?? '',
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Bricolage-B',
@@ -395,8 +406,8 @@ class _ProfileState extends State<Profile> {
 
               Text(
                   languageProvider.lan == 'English'
-                      ? '${paymentProvider.userData!['phone']}'
-                      : '${paymentProvider.userData!['phone']}',
+                      ? '${paymentProvider.userData?['phone']}'
+                      : '${paymentProvider.userData?['phone']}',
                   style: languageProvider.lan == 'English'
                       ? const TextStyle(
                           //color: Color(0xFF6C757D),
@@ -459,12 +470,12 @@ class _ProfileState extends State<Profile> {
                                           // color: Color(0xFF565E64),
                                           fontFamily: 'Bricolage-R',
                                           fontSize: 12,
-                                        )
+                                          color: Colors.black)
                                       : const TextStyle(
                                           //color: Color(0xFF565E64),
                                           fontFamily: 'Walone-B',
                                           fontSize: 12,
-                                        ),
+                                          color: Colors.black),
                                 ),
                                 Text(
                                   languageProvider.lan == 'English'
@@ -474,12 +485,12 @@ class _ProfileState extends State<Profile> {
                                       ? const TextStyle(
                                           //color: Color(0xFF2B2F32),
                                           fontFamily: 'Bricolage-B',
-                                          fontSize: 11,
-                                        )
+                                          fontSize: 12,
+                                          color: Colors.black)
                                       : const TextStyle(
                                           //color: Color(0xFF2B2F32),
                                           fontFamily: 'Walone-B',
-                                          fontSize: 11,
+                                          fontSize: 12,
                                         ),
                                 ),
                               ],
@@ -490,155 +501,170 @@ class _ProfileState extends State<Profile> {
                     ),
                     //Temporary block
                     // //Striaght Line
-                    // Container(
-                    //   width: 1,
-                    //   height: 43,
-                    //   color: const Color(0xFFE2E3E5),
-                    // ),
+                    Container(
+                      width: 1,
+                      height: 43,
+                      color: const Color(0xFFE2E3E5),
+                    ),
                     // Rose Counts
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         //RoseCountPage()
-                    //         builder: (context) => RoseCountPage(),
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: SizedBox(
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         languageProvider.lan == 'English'
-                    //             ? RichText(
-                    //                 text: const TextSpan(children: [
-                    //                   TextSpan(
-                    //                       text: 'Got ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Bricolage-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: '46 ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF2B2F32),
-                    //                         fontFamily: 'Bricolage-B',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: 'roses',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Bricolage-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                 ]),
-                    //               )
-                    //             : RichText(
-                    //                 text: const TextSpan(children: [
-                    //                   TextSpan(
-                    //                       text: 'နှင်းဆီ ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Walone-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: '၄၆ပွင့် ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF2B2F32),
-                    //                         fontFamily: 'Walone-B',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                   TextSpan(
-                    //                       text: 'ရခဲ့ပြီ',
-                    //                       style: TextStyle(
-                    //                         color: Color(0xFF565E64),
-                    //                         fontFamily: 'Walone-R',
-                    //                         fontSize: 10,
-                    //                       )),
-                    //                 ]),
-                    //               ),
-                    //         const SizedBox(
-                    //           height: 5,
-                    //         ),
-                    //         const Stack(
-                    //           alignment: Alignment.center,
-                    //           clipBehavior: Clip.none,
-                    //           children: [
-                    //             Positioned(
-                    //                 child: Image(
-                    //               image: AssetImage('images/avatar1.png'),
-                    //               width: 24,
-                    //               height: 24,
-                    //             )),
-                    //             Positioned(
-                    //                 left: 12,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar2.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //             Positioned(
-                    //                 left: 24,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar3.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //             Positioned(
-                    //                 left: 36,
-                    //                 child: Image(
-                    //                   image: AssetImage('images/avatar4.png'),
-                    //                   width: 24,
-                    //                   height: 24,
-                    //                 )),
-                    //           ],
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // )
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            //RoseCountPage()
+                            builder: (context) => const RoseCountPage(),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            languageProvider.lan == 'English'
+                                ? RichText(
+                                    text: TextSpan(children: [
+                                      const TextSpan(
+                                          text: 'Got ',
+                                          style: TextStyle(
+                                            //color: Color(0xFF565E64),
+                                            color: Colors.black,
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 12,
+                                          )),
+                                      TextSpan(
+                                          text: paymentProvider
+                                                  .roseCount?['total_roses']
+                                                  .toString() ??
+                                              '',
+                                          style: const TextStyle(
+                                            color: Color(0xFF2B2F32),
+                                            fontFamily: 'Bricolage-B',
+                                            fontSize: 12,
+                                          )),
+                                      const TextSpan(
+                                          text: ' roses',
+                                          style: TextStyle(
+                                            //color: Color(0xFF565E64),
+                                            color: Colors.black,
+                                            fontFamily: 'Bricolage-R',
+                                            fontSize: 12,
+                                          )),
+                                    ]),
+                                  )
+                                : RichText(
+                                    text: TextSpan(children: [
+                                      const TextSpan(
+                                          text: 'နှင်းဆီ ',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Walone-R',
+                                            fontSize: 12,
+                                          )),
+                                      TextSpan(
+                                          text: paymentProvider
+                                                  .roseCount?['total_roses']
+                                                  .toString() ??
+                                              '',
+                                          style: const TextStyle(
+                                            color: Color(0xFF2B2F32),
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 12,
+                                          )),
+                                      const TextSpan(
+                                          text: ' ပွင့် ',
+                                          style: TextStyle(
+                                            color: Color(0xFF2B2F32),
+                                            fontFamily: 'Walone-B',
+                                            fontSize: 12,
+                                          )),
+                                      const TextSpan(
+                                          text: 'ရခဲ့ပြီ',
+                                          style: TextStyle(
+                                            color: Color(0xFF565E64),
+                                            fontFamily: 'Walone-R',
+                                            fontSize: 12,
+                                          )),
+                                    ]),
+                                  ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                    child: Image(
+                                  image: AssetImage('images/avatar1.png'),
+                                  width: 24,
+                                  height: 24,
+                                )),
+                                Positioned(
+                                    left: 12,
+                                    child: Image(
+                                      image: AssetImage('images/avatar2.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                                Positioned(
+                                    left: 24,
+                                    child: Image(
+                                      image: AssetImage('images/avatar3.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                                Positioned(
+                                    left: 36,
+                                    child: Image(
+                                      image: AssetImage('images/avatar4.png'),
+                                      width: 24,
+                                      height: 24,
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
 
               const SizedBox(height: 16),
+              // My CV
+              // Container(
+              //   padding: const EdgeInsets.symmetric(vertical: 8),
+              //   decoration: const BoxDecoration(
+              //     color: Color(0xFFF0F1F2),
+              //     borderRadius: BorderRadius.all(Radius.circular(16)),
+              //   ),
+              //   child: ListTileButton(
+              //     ltLeading: const Icon(
+              //       CupertinoIcons.doc,
+              //       size: 23,
+              //       color: Color(0xFFFF3997),
+              //     ),
+              //     ltTitle: const Text(
+              //       'My CV',
+              //       style: TextStyle(
+              //         fontFamily: 'Bricolage-B',
+              //         fontSize: 12,
+              //         //color: Color(0xFF2B2F32),
+              //       ),
+              //     ),
+              //     ltTrailing: const RightChevronButton(),
+              //     navTo: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => const MyCVScreen()));
+              //     },
+              //   ),
+              // ),
 
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF0F1F2),
-                  borderRadius: BorderRadius.all(Radius.circular(16)),
-                ),
-                child: ListTileButton(
-                  ltLeading: const Icon(
-                    CupertinoIcons.doc,
-                    size: 23,
-                    color: Color(0xFFFF3997),
-                  ),
-                  ltTitle: const Text(
-                    'My CV',
-                    style: TextStyle(
-                      fontFamily: 'Bricolage-B',
-                      fontSize: 12,
-                      //color: Color(0xFF2B2F32),
-                    ),
-                  ),
-                  ltTrailing: const RightChevronButton(),
-                  navTo: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MyCVScreen()));
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
 
               // Box 2
               Container(
@@ -650,38 +676,38 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     //My Applications
-                    ListTileButton(
-                      ltLeading: const FaIcon(
-                        FontAwesomeIcons.suitcase,
-                        size: 23,
-                        color: Color(0xFFFF3997),
-                      ),
-                      ltTitle: languageProvider.lan == 'English'
-                          ? const Text(
-                              'My Application',
-                              style: TextStyle(
-                                fontFamily: 'Bricolage-B',
-                                fontSize: 12,
-                                //color: Color(0xFF2B2F32),
-                              ),
-                            )
-                          : const Text(
-                              'သိမ်းထားသည့်အလုပ်များ',
-                              style: TextStyle(
-                                fontFamily: 'Walone-B',
-                                fontSize: 12,
-                              ),
-                            ),
-                      ltTrailing: const RightChevronButton(),
-                      navTo: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const MyApplicationScreen()));
-                      },
-                    ),
-                    const DividerLine(),
+                    // ListTileButton(
+                    //   ltLeading: const FaIcon(
+                    //     FontAwesomeIcons.suitcase,
+                    //     size: 23,
+                    //     color: Color(0xFFFF3997),
+                    //   ),
+                    //   ltTitle: languageProvider.lan == 'English'
+                    //       ? const Text(
+                    //           'My Application',
+                    //           style: TextStyle(
+                    //             fontFamily: 'Bricolage-B',
+                    //             fontSize: 12,
+                    //             //color: Color(0xFF2B2F32),
+                    //           ),
+                    //         )
+                    //       : const Text(
+                    //           'သိမ်းထားသည့်အလုပ်များ',
+                    //           style: TextStyle(
+                    //             fontFamily: 'Walone-B',
+                    //             fontSize: 12,
+                    //           ),
+                    //         ),
+                    //   ltTrailing: const RightChevronButton(),
+                    //   navTo: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const MyApplicationScreen()));
+                    //   },
+                    // ),
+                    // const DividerLine(),
                     // Saved Jobs
                     ListTileButton(
                       ltLeading: const Icon(
@@ -1306,7 +1332,7 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
-               const SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               TextButton(

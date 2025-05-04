@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sabai_app/screens/auth_pages/token_service.dart';
@@ -37,6 +39,41 @@ class ApiService {
     return response;
   }
 
+  static Future<Response> putWithFile(String endPoint, {
+    Map<String, dynamic>? data,
+    File? photo,
+  }) async {
+    final dio = Dio();
+    final headers = await getHeaders();
+
+    try {
+      FormData formData;
+      
+      if (photo != null) {
+        formData = FormData.fromMap({
+          ...data ?? {},
+          'photo': await MultipartFile.fromFile(photo.path, filename: 'profile.jpg'),
+        });
+      } else {
+        formData = FormData.fromMap(data ?? {});
+      }
+
+      final response = await dio.put(
+        'https://api.sabaijob.com/api$endPoint',
+        data: formData,
+        options: Options(
+          headers: headers,
+          contentType: 'multipart/form-data',
+        ),
+      );
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
   static Future<http.Response> put(String endPoint, dynamic body) async {
     final headers = await getHeaders();
     final response = await http.put(
@@ -49,9 +86,11 @@ class ApiService {
     return response;
   }
 
+  
+
   static Future<void> logout(BuildContext context) async {
     await TokenService.deleteToken(); // Ensure token is removed
-
+    
     // Debugging: Check if token is really deleted
     final token = await TokenService.getToken();
     if (token == null) {
