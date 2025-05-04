@@ -179,6 +179,7 @@ class _SaveJobsState extends State<SaveJobs> {
                       closingAt: jobInfo['closing_at'] ?? '',
                       safetyLevel: jobInfo['safety_level'],
                       viewCount: jobInfo['views_count'],
+                      isNegotiable: jobInfo['is_salary_negotiable'],
                     );
                   },
                 ),
@@ -222,6 +223,7 @@ class _SaveJobsState extends State<SaveJobs> {
                               closingAt: jobInfo['closing_at'] ?? '',
                               safetyLevel: jobInfo['safety_level'],
                               viewCount: jobInfo['views_count'],
+                              isNegotiable: jobInfo['is_salary_negotiable'],
                             );
                           },
                         )

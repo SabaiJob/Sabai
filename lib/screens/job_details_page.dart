@@ -10,6 +10,8 @@ import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/services/general_service.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailsPage extends StatefulWidget {
   const JobDetailsPage(
@@ -22,9 +24,14 @@ class JobDetailsPage extends StatefulWidget {
 }
 
 class _JobDetailsPageState extends State<JobDetailsPage> {
-  late Map<String, dynamic> jobDetail;
-  late List<dynamic> interestedUser;
+  Map<String, dynamic> jobDetail = {};
+  List<dynamic> interestedUser = [];
+  String? externalLink;
   bool isLoading = true;
+  int? jobId;
+  int? receiverId;
+  Map<String, dynamic>? contribution;
+  
   Future<void> fetchJobDetail() async {
     try {
       final response = await ApiService.get('/jobs/${widget.jobId}/');
@@ -35,7 +42,27 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           jobDetail = data['job'];
           interestedUser = data['job']['interested_by']['users'];
           isLoading = false;
-          // print(jobDetail);
+          externalLink = jobDetail['link'];
+          jobId = jobDetail['id'];
+          if (jobDetail['contribution'] != null) {
+            contribution = jobDetail['contribution'];
+            receiverId = jobDetail['contribution']['user']['id'];
+          } else {
+            contribution = null;
+            receiverId = null;
+          }
+          // if (jobDetail['is_partner'] == false) {
+          //   externalLink = jobDetail['link'];
+          // } else {
+          //   externalLink = '';
+          // }
+          print(jobDetail);
+          print('job_id: $jobId');
+          print('receiver_id: $receiverId');
+          print('contribution: $contribution');
+          print('external link: $externalLink');
+          print('jobDetail["contribution"]: ${jobDetail['contribution']}');
+          //jobDetail['contribution'] != null && paymentProvider.userData!['id'] == jobDetail['contribution']['user']['id']
           // print(jobDetail['category']);
         });
       } else {
@@ -43,6 +70,22 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> openLink() async {
+    try {
+      final uri = Uri.parse(Uri.encodeFull(externalLink!));
+      print("Uri: $uri");
+      bool launched =
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        print('Could not launch $externalLink');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('The link has expired.')));
+      }
+    } catch (e) {
+      print('Error launching $externalLink: $e');
     }
   }
 
@@ -77,9 +120,75 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
     return "Unknown Category";
   }
 
+  Future<void> sendRose(LanguageProvider languageProvider) async {
+    try {
+      final response = await ApiService.post(
+          '/rewards/give-rose/', {'receiver_id': receiverId, 'job_id': jobId});
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            elevation: 3,
+            backgroundColor: Colors.white,
+            content: Row(
+              children: [
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: primaryPinkColor,
+                  size: 20,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  languageProvider.lan == 'English'
+                      ? 'Thanks sent with a rose!'
+                      : 'ကျေးဇူးတင်ပြီးပါပြီ!',
+                  style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971),
+                  ),
+                ),
+              ],
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          elevation: 3,
+          backgroundColor: Colors.white,
+          content: Text('Failed to send rose. Error ${response.statusCode}',
+              style: const TextStyle(
+                fontFamily: 'Bricolage-M',
+                fontSize: 12.5,
+                color: Color(0xFF616971),
+              )),
+          behavior: SnackBarBehavior.floating,
+        ));
+      }
+    } catch (e) {
+      print('Catch Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        elevation: 3,
+        backgroundColor: Colors.white,
+        content: Text('You can not send rose at the moment!',
+            style: const TextStyle(
+              fontFamily: 'Bricolage-M',
+              fontSize: 12.5,
+              color: Color(0xFF616971),
+            )),
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    //fetchUserData();
     fetchJobDetail();
     fetchCategory();
   }
@@ -87,6 +196,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF0F1F2),
       appBar: AppBar(
@@ -135,7 +245,10 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                     ),
                     Container(
                       width: double.infinity,
-                      height: 400,
+                      constraints: const BoxConstraints(
+                        minHeight: 400, // Minimum height
+                      ),
+                      //height: 400,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -208,6 +321,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxHeight:
+                                        60, // Maximum height for company section
+                                  ),
+                                ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,6 +349,8 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         fontFamily: 'Walone-B',
                                         fontSize: 15.63,
                                       ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
@@ -260,21 +381,30 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    languageProvider.lan == 'English'
-                                        ? Text(
+                                    jobDetail['is_salary_negotiable']
+                                        ? languageProvider.lan == 'English'
+                                            ? const Text(
+                                                'Negotiable',
+                                                style: TextStyle(
+                                                  // color: Color(0xFF4C5258),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 15.63,
+                                                ),
+                                              )
+                                            : const Text(
+                                                'ညှိနှိုင်း',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 15.63,
+                                                  // color: Color(0xff4C5258),
+                                                ),
+                                              )
+                                        : Text(
                                             '${jobDetail['salary_min']} ~ ${jobDetail['salary_max']} ${jobDetail['currency']}',
                                             style: const TextStyle(
                                               // color: Color(0xFF4C5258),
                                               fontFamily: 'Walone-B',
                                               fontSize: 15.63,
-                                            ),
-                                          )
-                                        : const Text(
-                                            '၁၈၀၀၀ ~ ၂၈၀၀၀ ဘတ်',
-                                            style: TextStyle(
-                                              fontFamily: 'Walone-B',
-                                              fontSize: 15.63,
-                                              // color: Color(0xff4C5258),
                                             ),
                                           ),
                                   ],
@@ -562,46 +692,53 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         fontSize: 10,
                                       ),
                                     ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: const Color(0xFFE2E3E5),
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(4)),
-                                ),
-                                width: 100,
-                                height: 25,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Image(
-                                      image: AssetImage('images/rose.png'),
-                                      width: 12,
-                                      height: 15.26,
+                              if (jobDetail['contribution'] != null && paymentProvider.userData!['id'] != jobDetail['contribution']['user']['id']) ...[
+                                GestureDetector(
+                                  onTap: () {
+                                    sendRose(languageProvider);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: const Color(0xFFE2E3E5),
+                                        width: 2.0,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(4)),
                                     ),
-                                    languageProvider.lan == 'English'
-                                        ? const Text(
-                                            'Say Thanks',
-                                            style: TextStyle(
-                                              fontFamily: 'Walone-B',
-                                              fontSize: 10,
-                                              color: Color(0xFFFF4DA1),
-                                            ),
-                                          )
-                                        : const Text(
-                                            'ကျေးဇူးတင်ပါသည် ',
-                                            style: TextStyle(
-                                              fontFamily: 'Walone-B',
-                                              fontSize: 10,
-                                              color: Color(0xFFFF4DA1),
-                                            ),
-                                          )
-                                  ],
-                                ),
-                              )
+                                    width: 100,
+                                    height: 25,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        const Image(
+                                          image: AssetImage('images/rose.png'),
+                                          width: 12,
+                                          height: 15.26,
+                                        ),
+                                        languageProvider.lan == 'English'
+                                            ? const Text(
+                                                'Say Thanks',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 10,
+                                                  color: Color(0xFFFF4DA1),
+                                                ),
+                                              )
+                                            : const Text(
+                                                'ကျေးဇူးတင်ပါသည် ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 10,
+                                                  color: Color(0xFFFF4DA1),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
                             ],
                           ),
                           jobDetail['contribution'] == null
@@ -782,63 +919,159 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
         SizedBox(
           width: double.infinity,
           height: 42,
-          child: TextButton(
-            onPressed: widget.isClosed
-                ? null
-                : () async {
-                   bool isAccepted = await GeneralService.getForApplyButton();
-                    if(isAccepted){
-                       showDialog(
-                      context: context,
-                      builder: (context) => CvUploadModel(
-                            jobId: widget.jobId,
-                          ),
-                      barrierDismissible: false);
-                    }else{
-                       showDialog(
-                        context: context,
-                        builder: (context) => TAndCDialog(jobId: widget.jobId));
-                    }
-                   
-                  },
-            style: TextButton.styleFrom(
-              backgroundColor: widget.isClosed
-                  ? const Color(0x50FF3997)
-                  : const Color(0xffFF3997),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Set the border radius
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                languageProvider.lan == 'English'
-                    ? const Text(
-                        'Apply Now',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Bricolage-B',
-                          fontSize: 15.63,
-                        ),
-                      )
-                    : const Text(
-                        'လျှောက်ထားရန်',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Walone-B',
-                          fontSize: 14,
-                        ),
+          child: jobDetail['is_partner'] == true
+              ? TextButton(
+                  onPressed: widget.isClosed
+                      ? null
+                      // org method with cv upload
+                      // : () async {
+                      //     bool isAccepted =
+                      //         await GeneralService.getForApplyButton();
+                      //     if (isAccepted) {
+                      //       showDialog(
+                      //           context: context,
+                      //           builder: (context) => CvUploadModel(
+                      //                 jobId: widget.jobId,
+                      //               ),
+                      //           barrierDismissible: false);
+                      //     } else {
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) =>
+                      //         TAndCDialog(jobId: widget.jobId));
+                      // }
+                      //   },
+                      : () async {
+                          bool isAccepted =
+                              await GeneralService.getForApplyButton();
+                          // first time job applyer
+                          if (!isAccepted) {
+                            // show T&C
+                            showDialog(
+                                context: context,
+                                builder: (context) => TAndCDialog(
+                                      jobId: widget.jobId,
+                                      onPressed: () async {
+                                        await GeneralService.saveForApplyButton(
+                                            true);
+                                        Navigator.pop(context);
+                                        openLink();
+                                      },
+                                    ));
+                          } else {
+                            // open external browser
+                            openLink();
+                          }
+                        },
+                  style: TextButton.styleFrom(
+                    backgroundColor: widget.isClosed
+                        ? const Color(0x50FF3997)
+                        : const Color(0xffFF3997),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8), // Set the border radius
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      languageProvider.lan == 'English'
+                          ? const Text(
+                              'Apply Now',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Bricolage-B',
+                                fontSize: 15.63,
+                              ),
+                            )
+                          : const Text(
+                              'လျှောက်ထားရန်',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                              ),
+                            ),
+                      const SizedBox(
+                        width: 15,
                       ),
-                const SizedBox(
-                  width: 15,
+                      const Icon(
+                        CupertinoIcons.arrow_right,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                )
+              : TextButton(
+                  onPressed: widget.isClosed
+                      ? null
+                      //original method
+                      // : () {
+                      //     print(
+                      //         'Go to external browser to see the original job post.');
+                      //     openLink();
+                      //   },
+                      : () async {
+                          bool isAccepted =
+                              await GeneralService.getForApplyButton();
+                          // first time job applyer
+                          if (!isAccepted) {
+                            // show T&C
+                            showDialog(
+                                context: context,
+                                builder: (context) => TAndCDialog(
+                                      jobId: widget.jobId,
+                                      onPressed: () async {
+                                        await GeneralService.saveForApplyButton(
+                                            true);
+                                        Navigator.pop(context);
+                                        openLink();
+                                      },
+                                    ));
+                          } else {
+                            // open external browser
+                            openLink();
+                          }
+                        },
+                  style: TextButton.styleFrom(
+                    backgroundColor: widget.isClosed
+                        ? const Color(0x50FF3997)
+                        : const Color(0xffFF3997),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(8), // Set the border radius
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      languageProvider.lan == 'English'
+                          ? const Text(
+                              'See Original Post',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Bricolage-B',
+                                fontSize: 15.63,
+                              ),
+                            )
+                          : const Text(
+                              'မူလ အလုပ်ခေါ်စာ ကိုကြည့်ရန်',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Walone-B',
+                                fontSize: 14,
+                              ),
+                            ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Icon(
+                        CupertinoIcons.arrow_right,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
                 ),
-                const Icon(
-                  CupertinoIcons.arrow_right,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
         ),
         // SizedBox(
         //   width: 40,

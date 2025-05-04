@@ -169,6 +169,7 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                                 closingAt: jobInfo['closing_at'],
                                 safetyLevel: jobInfo['safety_level'],
                                 viewCount: jobInfo['views_count'],
+                                isNegotiable: jobInfo['is_salary_negotiable'],
                               );
                               //return SizedBox();
                             }),
@@ -229,6 +230,7 @@ class _MyApplicationScreenState extends State<MyApplicationScreen> {
                                         closingAt: jobDetail['closing_at'],
                                         safetyLevel: jobDetail['safety_level'],
                                         viewCount: jobDetail['views_count'],
+                                        isNegotiable: jobDetail['is_salary_negotiable'],
                                       );
                                     } else {
                                       final adInfo = appliedJobs[index]['info'];

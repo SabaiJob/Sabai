@@ -113,6 +113,7 @@ class _BestMatchesState extends State<BestMatches> {
                           closingAt: jobInfo['closing_at'],
                           safetyLevel: jobInfo['safety_level'],
                           viewCount: jobInfo['views_count'],
+                          isNegotiable: jobInfo['is_salary_negotiable'],
                         );
                       } else {
                         final adInfo = job['info'] as Map<String, dynamic>;

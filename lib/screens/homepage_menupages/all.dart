@@ -87,6 +87,8 @@ class _AllState extends State<All> {
     await jobProvider.getFilterJobs(_currentPage == 1, page: _currentPage);
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     var jobProvider = Provider.of<JobProvider>(context);
@@ -142,6 +144,7 @@ class _AllState extends State<All> {
                         closingAt: jobInfo['closing_at'] ?? '',
                         safetyLevel: jobInfo['safety_level'],
                         viewCount: jobInfo['views_count'],
+                        isNegotiable: jobInfo['is_salary_negotiable'],
                       );
                     } else {
                       final adInfo = job['info'] as Map<String, dynamic>;
@@ -214,6 +217,7 @@ class _AllState extends State<All> {
                             closingAt: jobInfo['closing_at'] ?? '',
                             safetyLevel: jobInfo['safety_level'],
                             viewCount: jobInfo['views_count'],
+                            isNegotiable: jobInfo['is_salary_negotiable']
                           );
                         } else {
                           final adInfo = job['info'] as Map<String, dynamic>;
@@ -276,6 +280,7 @@ class _AllState extends State<All> {
                                 closingAt: job['closing_at'] ?? '',
                                 safetyLevel: job['safety_level'] ?? '',
                                 viewCount: job['views_count'] ?? 0,
+                                isNegotiable: job['is_salary_negotiable'],
                               );
                             } else {
                               final adInfo =
@@ -331,7 +336,7 @@ class _AllState extends State<All> {
                             if (job['type'] == 'job') {
                               final jobInfo =
                                   job['info'] as Map<String, dynamic>;
-                             // print(jobInfo);
+                              // print(jobInfo);
                               return WorkCard(
                                 jobTitle: jobInfo['title'] ?? 'none',
                                 companyName: jobInfo['company_name'] ?? 'none',
@@ -344,6 +349,7 @@ class _AllState extends State<All> {
                                 closingAt: jobInfo['closing_at'] ?? '',
                                 safetyLevel: jobInfo['safety_level'],
                                 viewCount: jobInfo['views_count'],
+                                isNegotiable: jobInfo['is_salary_negotiable'],
                               );
                             } else {
                               final adInfo =

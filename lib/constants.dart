@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 const int totalSteps = 4;
 
+const maxVisibleAvatars = 3;
+
 const appBarTitleStyleEng = TextStyle(
   fontFamily: 'Bricolage-M',
   fontSize: 19.53,

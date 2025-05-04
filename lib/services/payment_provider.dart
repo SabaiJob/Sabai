@@ -47,6 +47,7 @@ class PaymentProvider extends ChangeNotifier {
         notifyListeners();
         _userPhNo = _userData!['phone'];
         print(_userPhNo);
+        print(_userData!['user_info']['email']);
       } else {
         print(response.body);
         if (response.statusCode == 401) {
@@ -59,6 +60,22 @@ class PaymentProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
+      print(e);
+    }
+  }
+  Map<String, dynamic>? _roseCount;
+  Map<String, dynamic>? get roseCount => _roseCount;
+
+  Future<void> getRoseCount(BuildContext context)async{
+    try{
+      final response = await ApiService.get('/rewards/rose-history/');
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      _roseCount = data;
+      notifyListeners();
+      print('total_roses: ${_roseCount!['total_roses']}');
+      print('rose_history: ${_roseCount!['rose_history']}');
+
+    }catch(e){
       print(e);
     }
   }
