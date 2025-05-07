@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabai_app/screens/spin_wheel.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 import '../constants.dart';
 import 'package:sabai_app/services/language_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,21 @@ class RoseCountPage extends StatefulWidget {
 
 class _RoseCountPageState extends State<RoseCountPage> {
   @override
+  void initState() {
+    super.initState();
+    fetchRoseCount();
+  }
+
+  void fetchRoseCount() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getRoseCount(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFFED7EA), // Background for the app
       appBar: AppBar(
@@ -76,15 +90,15 @@ class _RoseCountPageState extends State<RoseCountPage> {
                 children: [
                   languageProvider.lan == 'English'
                       ? RichText(
-                          text: const TextSpan(children: [
-                            TextSpan(
+                          text: TextSpan(children: [
+                            const TextSpan(
                                 text: 'You ',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
                                   fontFamily: 'Bricolage-R',
                                   fontSize: 19.5,
                                 )),
-                            TextSpan(
+                            const TextSpan(
                                 text: 'got ',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
@@ -92,14 +106,15 @@ class _RoseCountPageState extends State<RoseCountPage> {
                                   fontSize: 19.5,
                                 )),
                             TextSpan(
-                                text: '46 ',
-                                style: TextStyle(
+                                text: paymentProvider.roseCount?['total_roses']
+                                    .toString(),
+                                style: const TextStyle(
                                   color: Color(0xFF000000),
                                   fontFamily: 'Bricolage-M',
                                   fontSize: 19.5,
                                 )),
-                            TextSpan(
-                                text: 'roses!',
+                            const TextSpan(
+                                text: ' roses!',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
                                   fontFamily: 'Bricolage-R',
@@ -108,8 +123,8 @@ class _RoseCountPageState extends State<RoseCountPage> {
                           ]),
                         )
                       : RichText(
-                          text: const TextSpan(children: [
-                            TextSpan(
+                          text: TextSpan(children: [
+                            const TextSpan(
                                 text: 'နှင်းဆီ ',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
@@ -117,14 +132,15 @@ class _RoseCountPageState extends State<RoseCountPage> {
                                   fontSize: 19.5,
                                 )),
                             TextSpan(
-                                text: '၄၆ ',
-                                style: TextStyle(
+                                text: paymentProvider.roseCount?['total_roses']
+                                    .toString(),
+                                style: const TextStyle(
                                   color: Color(0xFF000000),
                                   fontFamily: 'Walone-B',
                                   fontSize: 19.5,
                                 )),
-                            TextSpan(
-                                text: 'ပွင့်ရခဲ့ပြီ!',
+                            const TextSpan(
+                                text: ' ပွင့်ရခဲ့ပြီ!',
                                 style: TextStyle(
                                   color: Color(0xFF4C5258),
                                   fontFamily: 'Walone-B',
@@ -166,158 +182,220 @@ class _RoseCountPageState extends State<RoseCountPage> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Expanded(
-                    child: Container(
+                  if (paymentProvider.roseCount!['rose_history'].isEmpty) ...[
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        child: const Center(
+                          child: Text('No recent givers',
+                              style: TextStyle(
+                                  fontFamily: 'Bricolage-R',
+                                  fontSize: 15.63,
+                                  color: Color(0xFF6C757D))),
+                        ),
+                      ),
+                    )
+                  ] else ...[
+                    Expanded(
+                        child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(16)),
                       ),
-                      child: const SizedBox(
-                        height:
-                            268, // Set the desired height for the scrollable area
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp1.png'),
+                      child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              minVerticalPadding: 5,
+                              minTileHeight: 10,
+                              leading: ClipOval(
+                                child: Image.network(
+                                  paymentProvider.roseCount!['rose_history']
+                                      [index]['photo'],
                                   width: 24,
                                   height: 24,
-                                ),
-                                title: Text(
-                                  'LiLi',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp2.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Emily Wilson',
-                                  style: TextStyle(
+                              title: Text(
+                                paymentProvider.roseCount!['rose_history']
+                                    [index]['username'],
+                                style: const TextStyle(
                                     fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
                                     fontSize: 15.63,
-                                  ),
-                                ),
+                                    color: Color(0xFF6C757D)),
                               ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp3.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Kris Johnson',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp4.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Gavin Burns',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp5.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Julia Singh',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp6.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Tess Fowler',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              ),
-                              Divider(color: Color(0xFFF0F1F2)),
-                              ListTile(
-                                minVerticalPadding: 5,
-                                minTileHeight: 10,
-                                leading: Image(
-                                  image: AssetImage('icons/temp6.png'),
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                title: Text(
-                                  'Someone',
-                                  style: TextStyle(
-                                    fontFamily: 'Bricolage-R',
-                                    color: Color(0xFF6C757D),
-                                    fontSize: 15.63,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const Divider(color: Color(0xFFF0F1F2));
+                          },
+                          itemCount: paymentProvider
+                              .roseCount!['rose_history'].length),
+                    )),
+
+                    //   Expanded(
+                    //   child: Container(
+                    // padding: const EdgeInsets.symmetric(
+                    //     horizontal: 10, vertical: 5),
+                    // decoration: const BoxDecoration(
+                    //   color: Colors.white,
+                    //   borderRadius: BorderRadius.all(Radius.circular(16)),
+                    // ),
+                    //     child: const SizedBox(
+                    //       height:
+                    //           268, // Set the desired height for the scrollable area
+                    //       child: SingleChildScrollView(
+                    //         child: Column(
+                    //           children: [
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp1.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'LiLi',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp2.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Emily Wilson',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp3.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Kris Johnson',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp4.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Gavin Burns',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp5.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Julia Singh',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp6.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Tess Fowler',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //             Divider(color: Color(0xFFF0F1F2)),
+                    //             ListTile(
+                    //               minVerticalPadding: 5,
+                    //               minTileHeight: 10,
+                    //               leading: Image(
+                    //                 image: AssetImage('icons/temp6.png'),
+                    //                 width: 24,
+                    //                 height: 24,
+                    //               ),
+                    //               title: Text(
+                    //                 'Someone',
+                    //                 style: TextStyle(
+                    //                   fontFamily: 'Bricolage-R',
+                    //                   color: Color(0xFF6C757D),
+                    //                   fontSize: 15.63,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
+                  ],
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     height: 42,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const SpinWheel()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SpinWheel()));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffFF3997),

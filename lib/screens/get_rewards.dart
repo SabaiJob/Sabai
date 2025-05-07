@@ -6,8 +6,8 @@ import 'package:sabai_app/screens/earn_roses_page.dart';
 import 'package:sabai_app/screens/navigation_homepage.dart';
 import 'package:sabai_app/screens/redeem_rewards_page.dart';
 import 'package:sabai_app/screens/rose_count_page.dart';
-import 'package:sabai_app/screens/spin_wheel.dart';
 import 'package:sabai_app/services/language_provider.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key});
@@ -18,8 +18,31 @@ class RewardsPage extends StatefulWidget {
 
 class _RewardsPageState extends State<RewardsPage> {
   @override
+  void initState() {
+    super.initState();
+    fetchRoseCount();
+    fetchUserReward();
+  }
+
+  void fetchRoseCount() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getRoseCount(context);
+    if (paymentProvider.userRewards != null) {
+      paymentProvider.separateRewardsByStatus();
+    }
+  }
+
+  void fetchUserReward() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getUserRewards(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
@@ -53,7 +76,7 @@ class _RewardsPageState extends State<RewardsPage> {
                   style: appBarTitleStyleEng,
                 )
               : const Text(
-                  'My Rewards',
+                  'ကျွန်တော့်ဆုများ',
                   style: appBarTitleStyleMn,
                 ),
           centerTitle: true,
@@ -75,66 +98,6 @@ class _RewardsPageState extends State<RewardsPage> {
                 ),
                 const Positioned(
                     top: 20, left: 0, right: 0, child: AnimatedBox()),
-                // Positioned(
-                //   top: 150,
-                //   left: 20,
-                //   right: 20,
-                //   child: Container(
-                //     padding: const EdgeInsets.symmetric(horizontal: 15),
-                //     decoration: const BoxDecoration(
-                //       borderRadius: BorderRadius.all(Radius.circular(16)),
-                //       color: Colors.white,
-                //     ),
-                //     width: 343,
-                //     height: 85,
-                //     child: Column(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             const Text(
-                //               'You got 46 roses!',
-                //               style: TextStyle(
-                //                   fontFamily: 'Bricolage-SMB',
-                //                   fontSize: 15.63,
-                //                   color: Colors.black),
-                //             ),
-                //             const SizedBox(
-                //               width: 10,
-                //             ),
-                //             GestureDetector(
-                //               onTap: () => Navigator.push(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                       builder: (context) =>
-                //                           const RoseCountPage())),
-                //               child: const Icon(
-                //                 Icons.arrow_forward_sharp,
-                //                 color: primaryPinkColor,
-                //               ),
-                //             )
-                //           ],
-                //         ),
-                //         const Divider(),
-                //         const SizedBox(),
-                //         GestureDetector(
-                //           onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> const EarnRosesPage())),
-                //           child: const Text(
-                //             'How to earn roses ?',
-                //             style: TextStyle(
-                //                 fontFamily: 'Walone - B',
-                //                 fontSize: 11,
-                //                 color: Color(0xFF2B2F32),
-                //                 decoration: TextDecoration.underline,
-                //                 decorationColor: Color(0xFF2B2F32),
-                //                 decorationStyle: TextDecorationStyle.solid),
-                //           ),
-                //         )
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             Container(
@@ -151,13 +114,68 @@ class _RewardsPageState extends State<RewardsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'You got 46 roses!',
-                        style: TextStyle(
-                            fontFamily: 'Bricolage-SMB',
-                            fontSize: 15.63,
-                            color: Colors.black),
-                      ),
+                      languageProvider.lan == 'English'
+                          ? RichText(
+                              text: TextSpan(children: [
+                                const TextSpan(
+                                    text: 'You ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Bricolage-SMB',
+                                      fontSize: 15.6,
+                                    )),
+                                const TextSpan(
+                                    text: 'got ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Bricolage-SMB',
+                                      fontSize: 15.6,
+                                    )),
+                                TextSpan(
+                                    text: paymentProvider
+                                        .roseCount?['total_roses']
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Color(0xFF000000),
+                                      fontFamily: 'Bricolage-M',
+                                      fontSize: 19.5,
+                                    )),
+                                const TextSpan(
+                                    text: ' roses!',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Bricolage-SMB',
+                                      fontSize: 15.6,
+                                    )),
+                              ]),
+                            )
+                          : RichText(
+                              text: TextSpan(children: [
+                                const TextSpan(
+                                    text: 'နှင်းဆီ ',
+                                    style: TextStyle(
+                                      color: Color(0xFF4C5258),
+                                      fontFamily: 'Walone-B',
+                                      fontSize: 19.5,
+                                    )),
+                                TextSpan(
+                                    text: paymentProvider
+                                        .roseCount?['total_roses']
+                                        .toString(),
+                                    style: const TextStyle(
+                                      color: Color(0xFF000000),
+                                      fontFamily: 'Walone-B',
+                                      fontSize: 19.5,
+                                    )),
+                                const TextSpan(
+                                    text: ' ပွင့်ရခဲ့ပြီ!',
+                                    style: TextStyle(
+                                      color: Color(0xFF4C5258),
+                                      fontFamily: 'Walone-B',
+                                      fontSize: 19.5,
+                                    )),
+                              ]),
+                            ),
                       const SizedBox(
                         width: 10,
                       ),
@@ -179,16 +197,25 @@ class _RewardsPageState extends State<RewardsPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const EarnRosesPage())),
-                    child: const Text(
-                      'How to earn roses ?',
-                      style: TextStyle(
-                          fontFamily: 'Walone - B',
-                          fontSize: 11,
-                          color: Color(0xFF2B2F32),
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color(0xFF2B2F32),
-                          decorationStyle: TextDecorationStyle.solid),
-                    ),
+                    child: languageProvider.lan == 'English'
+                        ? const Text(
+                            'How to earn roses ?',
+                            style: TextStyle(
+                                fontFamily: 'Walone - B',
+                                fontSize: 11,
+                                color: Color(0xFF2B2F32),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF2B2F32),
+                                decorationStyle: TextDecorationStyle.solid),
+                          )
+                        : const Text('နှင်းဆီပွင့်ဘယ်လိုရယူကြမလဲ?',
+                            style: TextStyle(
+                                fontFamily: 'Walone - R',
+                                fontSize: 12.5,
+                                color: Color(0xFF4C5258),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF2B2F32),
+                                decorationStyle: TextDecorationStyle.solid)),
                   )
                 ],
               ),
@@ -223,10 +250,22 @@ class _RewardsPageState extends State<RewardsPage> {
                       fontSize: 12.5,
                       color: Color(0xffFF3997),
                       fontFamily: 'Bricolage-R'),
-                  tabs: const [
-                    Tab(text: 'Available'),
-                    Tab(text: 'Expired'),
-                    Tab(text: 'Redeemed'),
+                  tabs: [
+                    Tab(
+                      text: languageProvider.lan == 'English'
+                          ? 'Available'
+                          : 'ရနိုင်သော',
+                    ),
+                    Tab(
+                      text: languageProvider.lan == 'English'
+                          ? 'Expired'
+                          : 'သက်တမ်းကုန်သွာသော',
+                    ),
+                    Tab(
+                      text: languageProvider.lan == 'English'
+                          ? 'Redeemed'
+                          : 'ရရှိပြီးသော',
+                    )
                   ],
                 ),
               ),
@@ -234,18 +273,24 @@ class _RewardsPageState extends State<RewardsPage> {
             const SizedBox(
               height: 20,
             ),
-            const Expanded(
-              // width: double.infinity,
-              // height: 400,
+            SizedBox(
+              height: 332,
               child: TabBarView(children: [
                 Center(
-                  child: AvailableRewards(),
+                  child: AvailableRewards(
+                    availableRewards:
+                        paymentProvider.separatedRewards['available'] ?? [],
+                  ),
                 ),
                 Center(
-                  child: ExpiredRewards(),
+                  child: ExpiredRewards(
+                      expiredRewards:
+                          paymentProvider.separatedRewards['expired'] ?? []),
                 ),
                 Center(
-                  child: RedeemedRewards(),
+                  child: RedeemedRewards(
+                      redeemedRewards:
+                          paymentProvider.separatedRewards['redeemed'] ?? []),
                 ),
               ]),
             ),
@@ -257,10 +302,12 @@ class _RewardsPageState extends State<RewardsPage> {
 }
 
 class AvailableRewards extends StatelessWidget {
-  const AvailableRewards({super.key});
+  final List<dynamic> availableRewards;
+  const AvailableRewards({super.key, required this.availableRewards});
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         itemBuilder: (context, index) {
@@ -270,45 +317,79 @@ class AvailableRewards extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: ListTile(
-              // placeholder for image
-              leading: Container(
-                width: 40,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(4),
+              leading: Material(
+                color: Colors.transparent,
+                elevation: 1,
+                child: Container(
+                  width: 40,
+                  height: 45,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    gradient: RadialGradient(
+                      colors: [
+                        Color(0xFFFFDDE6),
+                        Color(0xFFFFB8CA),
+                      ],
+                    ),
+                  ),
+                  child: Image.network(
+                    availableRewards[index]['reward']['image'],
+                  ),
                 ),
               ),
-              title: const Text(
-                'Sabai Tote Bag',
-                style: TextStyle(
+              title: Text(
+                availableRewards[index]['reward']['name'],
+                style: const TextStyle(
                   fontFamily: 'Walone-B',
                   fontSize: 11,
                   color: Colors.black,
                 ),
               ),
-              subtitle: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Redeem before ',
-                      style: TextStyle(
-                        fontFamily: 'Walone-R',
-                        fontSize: 11,
-                        color: Color(0xFF6C757D),
+              subtitle: languageProvider.lan == 'English'
+                  ? RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Redeem before ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-R',
+                              fontSize: 11,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'သက်တမ်းကုန်မည့်ရက်စွဲ ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 10,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: '14 Jan 2025',
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 11,
-                        color: Color(0xFF2B2F32),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               trailing: GestureDetector(
                 onTap: () => Navigator.push(
                     context,
@@ -325,15 +406,17 @@ class AvailableRewards extends StatelessWidget {
         separatorBuilder: (context, index) => const SizedBox(
               height: 16,
             ),
-        itemCount: 3);
+        itemCount: availableRewards.length);
   }
 }
 
 class ExpiredRewards extends StatelessWidget {
-  const ExpiredRewards({super.key});
+  final List<dynamic> expiredRewards;
+  const ExpiredRewards({super.key, required this.expiredRewards});
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         itemBuilder: (context, index) {
@@ -344,58 +427,90 @@ class ExpiredRewards extends StatelessWidget {
             ),
             child: ListTile(
               // placeholder for image
-              leading: Container(
-                width: 40,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(4),
+              leading: Material(
+                color: Colors.transparent,
+                elevation: 1,
+                child: Container(
+                  width: 40,
+                  height: 45,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: Color(0xFFE2E3E5),
+                  ),
+                  child: Image.network(
+                    expiredRewards[index]['reward']['image'],
+                  ),
                 ),
               ),
-              title: const Text(
-                'Sabai Job Tote Bag',
-                style: TextStyle(
+              title: Text(
+                expiredRewards[index]['reward']['name'],
+                style: const TextStyle(
                   fontFamily: 'Walone-B',
                   fontSize: 11,
                   color: Color(0xFF6C757D),
                 ),
               ),
-              subtitle: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Expired On ',
-                      style: TextStyle(
-                        fontFamily: 'Walone-R',
-                        fontSize: 11,
-                        color: Color(0xFF6C757D),
+              subtitle: languageProvider.lan == 'English'
+                  ? RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Expired On ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-R',
+                              fontSize: 11,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'သက်တမ်းကုန်သွားသောရက်စွဲ ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 10,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: '14 Jan 2025',
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 11,
-                        color: Color(0xFF6C757D),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
           );
         },
         separatorBuilder: (context, index) => const SizedBox(
               height: 16,
             ),
-        itemCount: 3);
+        itemCount: expiredRewards.length);
   }
 }
 
 class RedeemedRewards extends StatelessWidget {
-  const RedeemedRewards({super.key});
+  final List<dynamic> redeemedRewards;
+  const RedeemedRewards({super.key, required this.redeemedRewards});
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         itemBuilder: (context, index) {
@@ -406,44 +521,79 @@ class RedeemedRewards extends StatelessWidget {
             ),
             child: ListTile(
               // placeholder for image
-              leading: Container(
-                width: 40,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(4),
+              leading: Material(
+                color: Colors.transparent,
+                elevation: 1,
+                child: Container(
+                  width: 40,
+                  height: 45,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    gradient: RadialGradient(
+                      colors: [
+                        Color(0xFFFFDDE6),
+                        Color(0xFFFFB8CA),
+                      ],
+                    ),
+                  ),
+                  child: Image.network(
+                    redeemedRewards[index]['reward']['image'],
+                  ),
                 ),
               ),
-              title: const Text(
-                'Sabai Tote Bag',
-                style: TextStyle(
+              title: Text(
+                redeemedRewards[index]['reward']['name'],
+                style: const TextStyle(
                   fontFamily: 'Walone-B',
                   fontSize: 11,
                   color: Colors.black,
                 ),
               ),
-              subtitle: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Redeem before ',
-                      style: TextStyle(
-                        fontFamily: 'Walone-R',
-                        fontSize: 11,
-                        color: Color(0xFF6C757D),
+              subtitle: languageProvider.lan == 'English'
+                  ? RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Redeem on ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-R',
+                              fontSize: 11,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'ရရှိခဲ့သောရက်စွဲ ',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 10,
+                              color: Color(0xFF6C757D),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '14 Jan 2025',
+                            style: TextStyle(
+                              fontFamily: 'Walone-B',
+                              fontSize: 11,
+                              color: Color(0xFF2B2F32),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: '14 Jan 2025',
-                      style: TextStyle(
-                        fontFamily: 'Walone-B',
-                        fontSize: 11,
-                        color: Color(0xFF2B2F32),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               trailing: const Icon(
                 CupertinoIcons.check_mark_circled,
                 color: Color(0xFF28A745),
@@ -455,7 +605,7 @@ class RedeemedRewards extends StatelessWidget {
         separatorBuilder: (context, index) => const SizedBox(
               height: 16,
             ),
-        itemCount: 3);
+        itemCount: redeemedRewards.length);
   }
 }
 

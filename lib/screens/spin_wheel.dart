@@ -1,10 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
+import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:sabai_app/screens/get_rewards.dart';
+import 'package:sabai_app/services/payment_provider.dart';
 
 class SpinWheel extends StatefulWidget {
   const SpinWheel({super.key});
@@ -15,6 +17,7 @@ class SpinWheel extends StatefulWidget {
 
 class _SpinWheelState extends State<SpinWheel> {
   final StreamController<int> controller = StreamController<int>();
+
   final List<String> rewards = [
     'Samsung',
     'Bag',
@@ -23,13 +26,16 @@ class _SpinWheelState extends State<SpinWheel> {
     'iPad',
     'MacBook',
   ];
+
   bool spinning = false;
+
+  String? wonAward;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showInitialBottomSheet();
+      _loadDataAndShowBottomSheet();
     });
   }
 
@@ -39,95 +45,150 @@ class _SpinWheelState extends State<SpinWheel> {
     super.dispose();
   }
 
-  void spinWheel() {
+  Future<void> _loadDataAndShowBottomSheet() async {
+    try {
+      await fetchRewards();
+      await fetchRoseCount();
+
+      final paymentProvider =
+          Provider.of<PaymentProvider>(context, listen: false);
+      if (paymentProvider.availableRewards != null &&
+          paymentProvider.roseCount != null) {
+        showInitialBottomSheet();
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+    }
+  }
+
+  Future<void> fetchRewards() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getAvailableRewards(context);
+  }
+
+  Future<void> fetchRoseCount() async {
+    final paymentProvider =
+        Provider.of<PaymentProvider>(context, listen: false);
+    await paymentProvider.getRoseCount(context);
+  }
+
+  void spinWheel() async {
     // Check if the bottom sheet is still open before popping
     if (ModalRoute.of(context)?.isCurrent != true) {
       Navigator.pop(context); // Close the bottom sheet if open
     }
-    final randomIndex = Fortune.randomInt(0, rewards.length);
-    controller.add(randomIndex);
     setState(() {
       spinning = true;
     });
-    Future.delayed(const Duration(seconds: 5), () {
-      final result = rewards[randomIndex];
-      showModalBottomSheet(
-        isDismissible: false,
-        enableDrag: false,
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-        ),
-        builder: (context) => Container(
-          padding: const EdgeInsets.all(24),
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 50,
-                height: 5,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Image.asset(
-                'images/gift-dynamic-color.png',
-                width: 98,
-                height: 98,
-              ),
-              const Text(
-                "🎉 Woohoo! You've won !",
-                style: TextStyle(
-                  fontSize: 19.53,
-                  fontFamily: 'Bricolage-M',
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                result,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: primaryPinkColor,
-                  fontFamily: 'Walone-B',
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RewardsPage()),
-                ),
-                label: const Text(
-                  "Redeem the Reward",
-                  style: TextStyle(
-                    fontFamily: 'Bricolage-B',
-                    color: Colors.white,
-                    fontSize: 15.63,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryPinkColor,
-                  minimumSize: const Size.fromHeight(50),
-                  textStyle: const TextStyle(fontSize: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ],
+    try {
+      final paymentProvider =
+          Provider.of<PaymentProvider>(context, listen: false);
+      final response = await ApiService.post('/rewards/spin-wheel/', {});
+      // For visual effect - spin wheel randomly (doesn't affect actual result)
+      if(response.statusCode < 200 || response.statusCode >= 300){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(jsonDecode(response.body)['error'], style: const TextStyle(fontFamily: 'Bricolage-M', fontSize: 12.5, color: Color(0xFF616971)),),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.white,
+        ));
+        setState(() {
+          spinning = false;
+        });
+        return;
+      }
+      final randomIndex =
+          Fortune.randomInt(0, paymentProvider.availableRewards!.length);
+      controller.add(randomIndex);
+      await Future.delayed(const Duration(seconds: 5));
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final data = jsonDecode(response.body);
+        wonAward = data['reward']['name'];
+        print(wonAward);
+        await paymentProvider.getRoseCount(context);
+        showModalBottomSheet(
+          isDismissible: false,
+          enableDrag: false,
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
           ),
-        ),
-      );
-    });
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(24),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 50,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                Image.asset(
+                  'images/gift-dynamic-color.png',
+                  width: 98,
+                  height: 98,
+                ),
+                const Text(
+                  "🎉 Woohoo! You've won !",
+                  style: TextStyle(
+                    fontSize: 19.53,
+                    fontFamily: 'Bricolage-M',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  wonAward!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: primaryPinkColor,
+                    fontFamily: 'Walone-B',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RewardsPage()),
+                  ),
+                  label: const Text(
+                    "Redeem the Reward",
+                    style: TextStyle(
+                      fontFamily: 'Bricolage-B',
+                      color: Colors.white,
+                      fontSize: 15.63,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryPinkColor,
+                    minimumSize: const Size.fromHeight(50),
+                    textStyle: const TextStyle(fontSize: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      } 
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      setState(() {
+        spinning = false;
+      });
+    }
   }
 
   void showInitialBottomSheet() async {
     await showModalBottomSheet<int>(
-      // isDismissible: false,
-      // enableDrag: false,
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(
@@ -142,6 +203,17 @@ class _SpinWheelState extends State<SpinWheel> {
 
   @override
   Widget build(BuildContext context) {
+    var paymentProvider = Provider.of<PaymentProvider>(context);
+    if (paymentProvider.availableRewards == null ||
+        paymentProvider.roseCount == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -153,7 +225,7 @@ class _SpinWheelState extends State<SpinWheel> {
         ),
         actions: [
           Container(
-            width: 50,
+            width: 60,
             height: 30,
             margin: const EdgeInsets.only(right: 15),
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -168,9 +240,9 @@ class _SpinWheelState extends State<SpinWheel> {
                   'images/rose.png',
                   scale: 2.5,
                 ),
-                const Text(
-                  '46',
-                  style: TextStyle(
+                Text(
+                  paymentProvider.roseCount!['total_roses'].toString(),
+                  style: const TextStyle(
                     fontSize: 15.6,
                     fontFamily: 'Bricolage-R',
                     color: primaryPinkColor,
@@ -212,23 +284,18 @@ class _SpinWheelState extends State<SpinWheel> {
                     child: FortuneWheel(
                       animateFirst: false,
                       selected: controller.stream,
-                      indicators: const [
-                        FortuneIndicator(
-                          alignment: Alignment.topCenter,
-                          child: TriangleIndicator(
-                            color: Color(0xffFFD700),
-                          ),
-                        ),
-                      ],
+                      indicators: const [],
                       items: [
-                        for (int i = 0; i < rewards.length; i++)
+                        for (int i = 0;
+                            i < paymentProvider.availableRewards!.length;
+                            i++)
                           FortuneItem(
-                            child: Text(rewards[i]),
+                            child: Text(
+                                paymentProvider.availableRewards?[i]['name']),
                             style: FortuneItemStyle(
                               color: i.isEven
                                   ? Colors.white
                                   : Colors.blue, // Alternating colors
-                              // borderColor: Colors.grey[300]!, // Border color
                               borderWidth: 0.0, // Border width
                               textStyle: TextStyle(
                                 fontSize: 16,
@@ -265,6 +332,7 @@ class _SpinWheelState extends State<SpinWheel> {
           ),
         ),
       ),
+      // button under the spin wheel
       floatingActionButton: spinning
           ? null
           : Padding(
@@ -300,6 +368,7 @@ class InitialBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var paymentProvider = Provider.of<PaymentProvider>(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -346,7 +415,7 @@ class InitialBottomSheet extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.29,
             child: GridView.builder(
-              itemCount: rewards.length,
+              itemCount: paymentProvider.availableRewards?.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,
@@ -368,7 +437,9 @@ class InitialBottomSheet extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
+                        Image.network(
+                          paymentProvider.availableRewards?[index]['image'] ??
+                              '',
                           width: 84,
                           height: 88,
                         ),
@@ -380,7 +451,8 @@ class InitialBottomSheet extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
                             overflow: TextOverflow.ellipsis,
-                            rewards[index],
+                            paymentProvider.availableRewards?[index]['name'] ??
+                                '',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontFamily: 'Bricolage-M', fontSize: 10),

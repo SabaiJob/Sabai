@@ -30,8 +30,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
   bool isLoading = true;
   int? jobId;
   int? receiverId;
+  bool? gaveRose;
   Map<String, dynamic>? contribution;
-  
+
   Future<void> fetchJobDetail() async {
     try {
       final response = await ApiService.get('/jobs/${widget.jobId}/');
@@ -44,6 +45,7 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           isLoading = false;
           externalLink = jobDetail['link'];
           jobId = jobDetail['id'];
+          gaveRose = jobDetail['has_given_rose'];
           if (jobDetail['contribution'] != null) {
             contribution = jobDetail['contribution'];
             receiverId = jobDetail['contribution']['user']['id'];
@@ -56,13 +58,12 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           // } else {
           //   externalLink = '';
           // }
-          print(jobDetail);
+          print('jobDetail: $jobDetail');
           print('job_id: $jobId');
           print('receiver_id: $receiverId');
           print('contribution: $contribution');
           print('external link: $externalLink');
-          print('jobDetail["contribution"]: ${jobDetail['contribution']}');
-          //jobDetail['contribution'] != null && paymentProvider.userData!['id'] == jobDetail['contribution']['user']['id']
+          print('has_given_rose: $gaveRose');
           // print(jobDetail['category']);
         });
       } else {
@@ -125,6 +126,9 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
       final response = await ApiService.post(
           '/rewards/give-rose/', {'receiver_id': receiverId, 'job_id': jobId});
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        setState(() {
+          gaveRose = true;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             elevation: 3,
@@ -692,52 +696,107 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
                                         fontSize: 10,
                                       ),
                                     ),
-                              if (jobDetail['contribution'] != null && paymentProvider.userData!['id'] != jobDetail['contribution']['user']['id']) ...[
-                                GestureDetector(
-                                  onTap: () {
-                                    sendRose(languageProvider);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: const Color(0xFFE2E3E5),
-                                        width: 2.0,
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(4)),
-                                    ),
-                                    width: 100,
-                                    height: 25,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        const Image(
-                                          image: AssetImage('images/rose.png'),
-                                          width: 12,
-                                          height: 15.26,
+                              if (jobDetail['contribution'] != null &&
+                                  paymentProvider.userData!['user_id'] !=
+                                      jobDetail['contribution']['user']
+                                          ['id']) ...[
+                                gaveRose == true
+                                    ? GestureDetector(
+                                        onTap: null,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color(0xFFE2E3E5),
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(4)),
+                                          ),
+                                          width: 120,
+                                          height: 25,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              const Image(
+                                                image: AssetImage(
+                                                    'images/rose.png'),
+                                                width: 12,
+                                                height: 15.26,
+                                              ),
+                                              languageProvider.lan == 'English'
+                                                  ? const Text(
+                                                      'You\'ve said Thanks',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Walone-B',
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFFFF4DA1),
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      'ကျေးဇူးတင်ပြီးပါပြီ',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Walone-B',
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFFFF4DA1),
+                                                      ),
+                                                    )
+                                            ],
+                                          ),
                                         ),
-                                        languageProvider.lan == 'English'
-                                            ? const Text(
-                                                'Say Thanks',
-                                                style: TextStyle(
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 10,
-                                                  color: Color(0xFFFF4DA1),
-                                                ),
-                                              )
-                                            : const Text(
-                                                'ကျေးဇူးတင်ပါသည် ',
-                                                style: TextStyle(
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 10,
-                                                  color: Color(0xFFFF4DA1),
-                                                ),
-                                              )
-                                      ],
-                                    ),
-                                  ),
-                                )
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          sendRose(languageProvider);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color(0xFFE2E3E5),
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(4)),
+                                          ),
+                                          width: 100,
+                                          height: 25,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              const Image(
+                                                image: AssetImage(
+                                                    'images/rose.png'),
+                                                width: 12,
+                                                height: 15.26,
+                                              ),
+                                              languageProvider.lan == 'English'
+                                                  ? const Text(
+                                                      'Say Thanks',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Walone-B',
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFFFF4DA1),
+                                                      ),
+                                                    )
+                                                  : const Text(
+                                                      'ကျေးဇူးတင်ပါသည် ',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Walone-B',
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFFFF4DA1),
+                                                      ),
+                                                    )
+                                            ],
+                                          ),
+                                        ),
+                                      )
                               ],
                             ],
                           ),

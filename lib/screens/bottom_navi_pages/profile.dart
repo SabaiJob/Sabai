@@ -40,8 +40,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
-  int? totalRose;
-  List? visibleAvatar;
 
   void fetchUserData() async {
     final paymentProvider =
@@ -242,135 +240,10 @@ class _ProfileState extends State<Profile> {
                     child: GestureDetector(
                       onTap: () {
                         if (Platform.isIOS) {
-                          // showCupertinoModalPopup(
-                          //   context: context,
-                          //   builder: (context) => CupertinoActionSheet(
-                          //     actions: [
-                          //       CupertinoActionSheetAction(
-                          //         onPressed: () async {
-                          //           FileImage? image = await imagePickerHelper
-                          //               .pickImage(ImageSource.gallery);
-                          //           if (image != null) {
-                          //             setState(() {
-                          //               _selectedImage = image;
-                          //             });
-                          //           }
-                          //         },
-                          //         child: Text('Upload New Picture',
-                          //             style: TextStyle(
-                          //               fontSize: 15,
-                          //               color: Colors.grey[600],
-                          //             )),
-                          //       ),
-                          //       CupertinoActionSheetAction(
-                          //         onPressed: () {
-                          //           setState(() {
-                          //             _selectedImage = null;
-                          //           });
-                          //         },
-                          //         child: Text(
-                          //           'Remove Profile Picture',
-                          //           style: TextStyle(
-                          //             fontSize: 15,
-                          //             color: Colors.grey[600],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // );
                           navToEditProfile(paymentProvider);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => EditProfile(
-                          //       initialName:
-                          //           paymentProvider.userData!['username'],
-                          //       initialEmail:
-                          //           paymentProvider.userData!['email'],
-                          //     ),
-                          //   ),
-                          // );
                         }
                         if (Platform.isAndroid) {
-                          // showModalBottomSheet(
-                          //   backgroundColor: Colors.white,
-                          //   scrollControlDisabledMaxHeightRatio: 0.25,
-                          //   context: context,
-                          //   builder: (context) => Padding(
-                          //     padding:
-                          //         const EdgeInsets.symmetric(horizontal: 15),
-                          //     child: Column(
-                          //       crossAxisAlignment: CrossAxisAlignment.stretch,
-                          //       mainAxisAlignment: MainAxisAlignment.center,
-                          //       children: [
-                          //         ElevatedButton.icon(
-                          //           onPressed: () async {
-                          //             FileImage? image = await imagePickerHelper
-                          //                 .pickImage(ImageSource.gallery);
-                          //             if (image != null) {
-                          //               setState(() {
-                          //                 _selectedImage = image;
-                          //               });
-                          //             }
-                          //           },
-                          //           icon: Icon(Icons.image,
-                          //               size: 20, color: Colors.grey[600]),
-                          //           label: Text(
-                          //             'Update Profile Picture',
-                          //             style: TextStyle(
-                          //                 fontSize: 14,
-                          //                 color: Colors.grey[600]),
-                          //           ),
-                          //           style: ElevatedButton.styleFrom(
-                          //             padding: const EdgeInsets.symmetric(
-                          //                 vertical: 12, horizontal: 16),
-                          //             shape: const RoundedRectangleBorder(
-                          //                 borderRadius: BorderRadius.all(
-                          //                     Radius.circular(8))),
-                          //             backgroundColor: const Color.fromARGB(
-                          //                 255, 247, 226, 233),
-                          //           ),
-                          //         ),
-                          //         const SizedBox(height: 10),
-                          //         OutlinedButton.icon(
-                          //           onPressed: () {
-                          //             setState(() {
-                          //               _selectedImage = null;
-                          //             });
-                          //           },
-                          //           icon: Icon(Icons.delete,
-                          //               size: 20, color: Colors.grey[600]),
-                          //           label: Text(
-                          //             'Remove Profile Picture',
-                          //             style: TextStyle(
-                          //                 fontSize: 14,
-                          //                 color: Colors.grey[600]),
-                          //           ),
-                          //           style: OutlinedButton.styleFrom(
-                          //             shape: const RoundedRectangleBorder(
-                          //                 borderRadius: BorderRadius.all(
-                          //                     Radius.circular(8))),
-                          //             padding: const EdgeInsets.symmetric(
-                          //                 vertical: 12, horizontal: 16),
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // );
                           navToEditProfile(paymentProvider);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => EditProfile(
-                          //       initialName:
-                          //           paymentProvider.userData!['username'],
-                          //       initialEmail:
-                          //           paymentProvider.userData!['email'],
-                          //     ),
-                          //   ),
-                          // );
                         }
                       },
                       child: Container(
@@ -518,117 +391,244 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       },
-                      child: SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            languageProvider.lan == 'English'
-                                ? RichText(
-                                   text: TextSpan(children: [
-                                      const TextSpan(
-                                          text: 'Got ',
-                                          style: TextStyle(
-                                            //color: Color(0xFF565E64),
-                                            color: Colors.black,
-                                            fontFamily: 'Bricolage-R',
-                                            fontSize: 12,
-                                          )),
-                                      TextSpan(
-                                          text: paymentProvider
-                                                  .roseCount?['total_roses']
-                                                  .toString() ??
-                                              '',
-                                          style: const TextStyle(
-                                            color: Color(0xFF2B2F32),
-                                            fontFamily: 'Bricolage-B',
-                                            fontSize: 12,
-                                          )),
-                                      const TextSpan(
-                                          text: ' roses',
-                                          style: TextStyle(
-                                            //color: Color(0xFF565E64),
-                                            color: Colors.black,
-                                            fontFamily: 'Bricolage-R',
-                                            fontSize: 12,
-                                          )),
-                                    ]),
-                                  )
-                                : RichText(
-                                    text: TextSpan(children: [
-                                      const TextSpan(
-
-                                          text: 'နှင်းဆီ ',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Walone-R',
-                                            fontSize: 12,
-                                          )),
-                                      TextSpan(
-                                          text: paymentProvider
-                                                  .roseCount?['total_roses']
-                                                  .toString() ??
-                                              '',
-                                          style: const TextStyle(
-                                            color: Color(0xFF2B2F32),
-                                            fontFamily: 'Walone-B',
-                                            fontSize: 12,
-                                          )),
-                                      const TextSpan(
-                                          text: ' ပွင့် ',
-                                          style: TextStyle(
-                                            color: Color(0xFF2B2F32),
-                                            fontFamily: 'Walone-B',
-                                            fontSize: 12,
-                                          )),
-                                      const TextSpan(
-                                          text: 'ရခဲ့ပြီ',
-                                          style: TextStyle(
-                                            color: Color(0xFF565E64),
-                                            fontFamily: 'Walone-R',
-                                            fontSize: 12,
-                                          )),
-                                    ]),
-                                  ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            const Stack(
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Positioned(
-                                    child: Image(
-                                  image: AssetImage('images/avatar1.png'),
-                                  width: 24,
-                                  height: 24,
-                                )),
-                                Positioned(
-                                    left: 12,
-                                    child: Image(
-                                      image: AssetImage('images/avatar2.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
-                                    left: 24,
-                                    child: Image(
-                                      image: AssetImage('images/avatar3.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                                Positioned(
-                                    left: 36,
-                                    child: Image(
-                                      image: AssetImage('images/avatar4.png'),
-                                      width: 24,
-                                      height: 24,
-                                    )),
-                              ],
+                      child: paymentProvider.roseCount?['total_roses'] == 0
+                          ? SizedBox(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  languageProvider.lan == 'English'
+                                      ? RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'Got ',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Bricolage-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' roses',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        )
+                                      : RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'နှင်းဆီ ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' ပွင့် ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: 'ရခဲ့ပြီ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        ),
+                                ],
+                              ),
                             )
-                          ],
-                        ),
-                      ),
+                          : paymentProvider.roseCount?['rose_history'] == [] || paymentProvider.roseCount?['rose_history'] == null ?
+                          SizedBox(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  languageProvider.lan == 'English'
+                                      ? RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'Got ',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Bricolage-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' roses',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        )
+                                      : RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'နှင်းဆီ ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' ပွင့် ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: 'ရခဲ့ပြီ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        ),
+                                ],
+                              ),
+                            ) :
+                          SizedBox(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  languageProvider.lan == 'English'
+                                      ? RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'Got ',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Bricolage-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' roses',
+                                                style: TextStyle(
+                                                  //color: Color(0xFF565E64),
+                                                  color: Colors.black,
+                                                  fontFamily: 'Bricolage-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        )
+                                      : RichText(
+                                          text: TextSpan(children: [
+                                            const TextSpan(
+                                                text: 'နှင်းဆီ ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                            TextSpan(
+                                                text: paymentProvider
+                                                        .roseCount?[
+                                                            'total_roses']
+                                                        .toString() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: ' ပွင့် ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF2B2F32),
+                                                  fontFamily: 'Walone-B',
+                                                  fontSize: 12,
+                                                )),
+                                            const TextSpan(
+                                                text: 'ရခဲ့ပြီ',
+                                                style: TextStyle(
+                                                  color: Color(0xFF565E64),
+                                                  fontFamily: 'Walone-R',
+                                                  fontSize: 12,
+                                                )),
+                                          ]),
+                                        ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  SizedBox(
+                                      width: 80,
+                                      height: 25,
+                                      child: buildRoseAvatars(paymentProvider
+                                          .roseCount?['rose_history']))
+                                ],
+                              ),
+                            ),
                     )
                   ],
                 ),
@@ -755,7 +755,7 @@ class _ProfileState extends State<Profile> {
                             : 'ဆုများ',
                         style: languageProvider.lan == 'English'
                             ? const TextStyle(
-                                 fontFamily: 'Bricolage-B',
+                                fontFamily: 'Bricolage-B',
                                 fontSize: 12,
                               )
                             : const TextStyle(
@@ -768,7 +768,7 @@ class _ProfileState extends State<Profile> {
                       navTo: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RewardsPage() )),
+                              builder: (context) => const RewardsPage())),
                     ),
                   ],
                 ),
@@ -843,7 +843,7 @@ class _ProfileState extends State<Profile> {
                               height: 5,
                               decoration: BoxDecoration(
                                 color:
-                                    paymentProvider.userData!['is_premium'] ==
+                                    paymentProvider.userData?['is_premium'] ==
                                             true
                                         ? const Color(0xfff7d801)
                                         : const Color(0xFF28A745),
@@ -854,7 +854,7 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               width: 2,
                             ),
-                            paymentProvider.userData!['is_premium'] == true
+                            paymentProvider.userData?['is_premium'] == true
                                 ? Text(
                                     textAlign: TextAlign.center,
                                     languageProvider.lan == 'English'
@@ -889,7 +889,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       navTo: () {
-                        paymentProvider.userData!['is_premium'] == true
+                        paymentProvider.userData?['is_premium'] == true
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -1545,6 +1545,43 @@ class _ProfileState extends State<Profile> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildRoseAvatars(List<dynamic>? roseHistory) {
+    if (roseHistory == null || roseHistory.isEmpty) {
+      return const SizedBox(); // Return empty widget if no history
+    }
+    int totalAvatars = roseHistory.length;
+    int displayCount = totalAvatars > 3 ? 3 : totalAvatars;
+    List<Widget> avatars = [];
+    for (int i = 0; i < displayCount; i++) {
+      avatars.add(Positioned(
+        left: i * 12.0, // overlapping spacing
+        child: CircleAvatar(
+          radius: 12,
+          backgroundImage: NetworkImage(roseHistory[i]['photo']),
+        ),
+      ));
+    }
+    // If there are more than 3, add a "+x" circle
+    if (totalAvatars > 3) {
+      avatars.add(Positioned(
+        left: displayCount * 12.0,
+        child: CircleAvatar(
+          radius: 12,
+          backgroundColor: Colors.white,
+          child: Text(
+            '+${totalAvatars - 3}',
+            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ));
+    }
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: avatars,
     );
   }
 }

@@ -137,8 +137,8 @@ class _EditProfileState extends State<EditProfile> {
       });
 
       showCustomSnackBar(
-        message: "Name and email cannot be empty!",
-        isError: true,
+        message: "Profile updated successfully!",
+        isError: false,
       );
     } catch (e) {
       showCustomSnackBar(
