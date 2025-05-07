@@ -28,7 +28,7 @@ class _CommunityDetailState extends State<CommunityDetail> {
 
     if (response.statusCode == 200) {
       setState(() {
-        communityData = jsonDecode(response.body);
+        communityData = json.decode(utf8.decode(response.bodyBytes));
         isLoading = false;
       });
     } else {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
 import 'package:sabai_app/components/divider_line.dart';
 import 'package:sabai_app/components/listtile_button.dart';
@@ -41,13 +40,13 @@ class _ProfileState extends State<Profile> {
   final List<String> languages = ['English', 'Myanmar'];
   FileImage? _selectedImage;
 
-  void fetchUserData() async {
+  Future<void> fetchUserData() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
     await paymentProvider.getProfileData(context);
   }
 
-  void fetchRoseCount() async {
+  Future<void> fetchRoseCount() async {
     final paymentProvider =
         Provider.of<PaymentProvider>(context, listen: false);
     await paymentProvider.getRoseCount(context);
@@ -68,8 +67,8 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
-    fetchRoseCount();
+    Future.microtask(() => fetchUserData());
+    Future.microtask(() => fetchRoseCount());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<JobProvider>(context, listen: false).fetchContributedJobs(
         false,
@@ -108,7 +107,7 @@ class _ProfileState extends State<Profile> {
     List<bool> isSelected =
         languages.map((lang) => lang == languageProvider.lan).toList();
 
-    if (paymentProvider.userData == null) {
+    if (paymentProvider.userData == null || paymentProvider.roseCount == null) {
       return const Scaffold(
         backgroundColor: backgroundColor,
         body: Center(
@@ -468,167 +467,174 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                             )
-                          : paymentProvider.roseCount?['rose_history'] == [] || paymentProvider.roseCount?['rose_history'] == null ?
-                          SizedBox(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  languageProvider.lan == 'English'
-                                      ? RichText(
-                                          text: TextSpan(children: [
-                                            const TextSpan(
-                                                text: 'Got ',
-                                                style: TextStyle(
-                                                  //color: Color(0xFF565E64),
-                                                  color: Colors.black,
-                                                  fontFamily: 'Bricolage-R',
-                                                  fontSize: 12,
-                                                )),
-                                            TextSpan(
-                                                text: paymentProvider
-                                                        .roseCount?[
-                                                            'total_roses']
-                                                        .toString() ??
-                                                    '',
-                                                style: const TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Bricolage-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: ' roses',
-                                                style: TextStyle(
-                                                  //color: Color(0xFF565E64),
-                                                  color: Colors.black,
-                                                  fontFamily: 'Bricolage-R',
-                                                  fontSize: 12,
-                                                )),
-                                          ]),
-                                        )
-                                      : RichText(
-                                          text: TextSpan(children: [
-                                            const TextSpan(
-                                                text: 'နှင်းဆီ ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF565E64),
-                                                  fontFamily: 'Walone-R',
-                                                  fontSize: 12,
-                                                )),
-                                            TextSpan(
-                                                text: paymentProvider
-                                                        .roseCount?[
-                                                            'total_roses']
-                                                        .toString() ??
-                                                    '',
-                                                style: const TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: ' ပွင့် ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: 'ရခဲ့ပြီ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF565E64),
-                                                  fontFamily: 'Walone-R',
-                                                  fontSize: 12,
-                                                )),
-                                          ]),
-                                        ),
-                                ],
-                              ),
-                            ) :
-                          SizedBox(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  languageProvider.lan == 'English'
-                                      ? RichText(
-                                          text: TextSpan(children: [
-                                            const TextSpan(
-                                                text: 'Got ',
-                                                style: TextStyle(
-                                                  //color: Color(0xFF565E64),
-                                                  color: Colors.black,
-                                                  fontFamily: 'Bricolage-R',
-                                                  fontSize: 12,
-                                                )),
-                                            TextSpan(
-                                                text: paymentProvider
-                                                        .roseCount?[
-                                                            'total_roses']
-                                                        .toString() ??
-                                                    '',
-                                                style: const TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Bricolage-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: ' roses',
-                                                style: TextStyle(
-                                                  //color: Color(0xFF565E64),
-                                                  color: Colors.black,
-                                                  fontFamily: 'Bricolage-R',
-                                                  fontSize: 12,
-                                                )),
-                                          ]),
-                                        )
-                                      : RichText(
-                                          text: TextSpan(children: [
-                                            const TextSpan(
-                                                text: 'နှင်းဆီ ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF565E64),
-                                                  fontFamily: 'Walone-R',
-                                                  fontSize: 12,
-                                                )),
-                                            TextSpan(
-                                                text: paymentProvider
-                                                        .roseCount?[
-                                                            'total_roses']
-                                                        .toString() ??
-                                                    '',
-                                                style: const TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: ' ပွင့် ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF2B2F32),
-                                                  fontFamily: 'Walone-B',
-                                                  fontSize: 12,
-                                                )),
-                                            const TextSpan(
-                                                text: 'ရခဲ့ပြီ',
-                                                style: TextStyle(
-                                                  color: Color(0xFF565E64),
-                                                  fontFamily: 'Walone-R',
-                                                  fontSize: 12,
-                                                )),
-                                          ]),
-                                        ),
-                                  const SizedBox(
-                                    height: 5,
+                          : paymentProvider
+                                      .roseCount?['rose_history'].isEmpty ||
+                                  paymentProvider.roseCount?['rose_history'] ==
+                                      null
+                              ? SizedBox(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      languageProvider.lan == 'English'
+                                          ? RichText(
+                                              text: TextSpan(children: [
+                                                const TextSpan(
+                                                    text: 'Got ',
+                                                    style: TextStyle(
+                                                      //color: Color(0xFF565E64),
+                                                      color: Colors.black,
+                                                      fontFamily: 'Bricolage-R',
+                                                      fontSize: 12,
+                                                    )),
+                                                TextSpan(
+                                                    text: paymentProvider
+                                                            .roseCount?[
+                                                                'total_roses']
+                                                            .toString() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Bricolage-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: ' roses',
+                                                    style: TextStyle(
+                                                      //color: Color(0xFF565E64),
+                                                      color: Colors.black,
+                                                      fontFamily: 'Bricolage-R',
+                                                      fontSize: 12,
+                                                    )),
+                                              ]),
+                                            )
+                                          : RichText(
+                                              text: TextSpan(children: [
+                                                const TextSpan(
+                                                    text: 'နှင်းဆီ ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF565E64),
+                                                      fontFamily: 'Walone-R',
+                                                      fontSize: 12,
+                                                    )),
+                                                TextSpan(
+                                                    text: paymentProvider
+                                                            .roseCount?[
+                                                                'total_roses']
+                                                            .toString() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Walone-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: ' ပွင့် ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Walone-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: 'ရခဲ့ပြီ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF565E64),
+                                                      fontFamily: 'Walone-R',
+                                                      fontSize: 12,
+                                                    )),
+                                              ]),
+                                            ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                      width: 80,
-                                      height: 25,
-                                      child: buildRoseAvatars(paymentProvider
-                                          .roseCount?['rose_history']))
-                                ],
-                              ),
-                            ),
+                                )
+                              : SizedBox(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      languageProvider.lan == 'English'
+                                          ? RichText(
+                                              text: TextSpan(children: [
+                                                const TextSpan(
+                                                    text: 'Got ',
+                                                    style: TextStyle(
+                                                      //color: Color(0xFF565E64),
+                                                      color: Colors.black,
+                                                      fontFamily: 'Bricolage-R',
+                                                      fontSize: 12,
+                                                    )),
+                                                TextSpan(
+                                                    text: paymentProvider
+                                                            .roseCount?[
+                                                                'total_roses']
+                                                            .toString() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Bricolage-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: ' roses',
+                                                    style: TextStyle(
+                                                      //color: Color(0xFF565E64),
+                                                      color: Colors.black,
+                                                      fontFamily: 'Bricolage-R',
+                                                      fontSize: 12,
+                                                    )),
+                                              ]),
+                                            )
+                                          : RichText(
+                                              text: TextSpan(children: [
+                                                const TextSpan(
+                                                    text: 'နှင်းဆီ ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF565E64),
+                                                      fontFamily: 'Walone-R',
+                                                      fontSize: 12,
+                                                    )),
+                                                TextSpan(
+                                                    text: paymentProvider
+                                                            .roseCount?[
+                                                                'total_roses']
+                                                            .toString() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Walone-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: ' ပွင့် ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF2B2F32),
+                                                      fontFamily: 'Walone-B',
+                                                      fontSize: 12,
+                                                    )),
+                                                const TextSpan(
+                                                    text: 'ရခဲ့ပြီ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF565E64),
+                                                      fontFamily: 'Walone-R',
+                                                      fontSize: 12,
+                                                    )),
+                                              ]),
+                                            ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      SizedBox(
+                                          width: 80,
+                                          height: 25,
+                                          child: buildRoseAvatars(
+                                              paymentProvider.roseCount?[
+                                                      'rose_history'] ??
+                                                  []))
+                                    ],
+                                  ),
+                                ),
                     )
                   ],
                 ),
