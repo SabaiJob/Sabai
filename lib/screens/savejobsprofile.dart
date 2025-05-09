@@ -73,6 +73,9 @@ class _SaveJobsProfileState extends State<SaveJobsProfile> {
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         automaticallyImplyLeading: true,
+        iconTheme: const IconThemeData(
+            color: Color(0xFFFF3997),
+          )
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),

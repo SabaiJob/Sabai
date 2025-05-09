@@ -283,152 +283,157 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: Colors.grey.shade300,
-            height: 1.0,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey.shade300,
+              height: 1.0,
+            ),
           ),
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Color(0xFFFF3997),
+          ),
+          title: const Text(
+            'Edit Profile',
+            style: appBarTitleStyleEng,
+          ),
+          elevation: 2,
         ),
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color(0xFFFF3997),
-        ),
-        title: const Text(
-          'Edit Profile',
-          style: appBarTitleStyleEng,
-        ),
-        elevation: 2,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Colors.grey[400],
-                        child: ClipOval(
-                          child: isUploadingImage
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : _imageFile != null
-                                  ? Image.file(_imageFile!,
-                                      fit: BoxFit.cover,
-                                      width: 120,
-                                      height: 120)
-                                  : widget.initialImageUrl.isNotEmpty
-                                      ? Image.network(widget.initialImageUrl,
-                                          fit: BoxFit.cover,
-                                          width: 120,
-                                          height: 120)
-                                      : const Icon(Icons.person,
-                                          size: 60, color: Colors.grey),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.grey[400],
+                          child: ClipOval(
+                            child: isUploadingImage
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : _imageFile != null
+                                    ? Image.file(_imageFile!,
+                                        fit: BoxFit.cover,
+                                        width: 120,
+                                        height: 120)
+                                    : widget.initialImageUrl.isNotEmpty
+                                        ? Image.network(widget.initialImageUrl,
+                                            fit: BoxFit.cover,
+                                            width: 120,
+                                            height: 120)
+                                        : const Icon(Icons.person,
+                                            size: 60, color: Colors.grey),
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap:
-                              isUploadingImage ? null : showImageSourceDialog,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFF3997),
-                              shape: BoxShape.circle,
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap:
+                                isUploadingImage ? null : showImageSourceDialog,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFF3997),
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: const Icon(Icons.camera_alt,
+                                  color: Colors.white, size: 20),
                             ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(Icons.camera_alt,
-                                color: Colors.white, size: 20),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      prefixIcon: const Icon(Icons.person),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      filled: true,
+                      fillColor: Colors.grey[100],
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[100],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: const Icon(Icons.email),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[100],
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(value)) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                        .hasMatch(value)) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: isLoading ? null : saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF3997),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: isLoading ? null : saveProfile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF3997),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
+                    child: isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Save Changes',
+                            style: textButtonTextStyleEng,
                           ),
-                        )
-                      : const Text(
-                          'Save Changes',
-                          style: textButtonTextStyleEng,
-                        ),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

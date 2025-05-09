@@ -38,14 +38,17 @@ class _DropDownState extends State<DropDown> {
                         width: 16,
                         height: 16,
                       ),
-                      const SizedBox(width: 3),
-                      Text(
-                        item["name"]!,
-                        style: GoogleFonts.bricolageGrotesque(
-                          textStyle: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                      ),
+                      const SizedBox(width: 5),
+                      Text(item["name"]!,
+                          style: languageProvider.lan == 'English'
+                              ? const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.5,
+                                  fontFamily: 'Bricolage-M')
+                              : const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.5,
+                                  fontFamily: 'Walone-B')),
                     ],
                   ),
                 ))

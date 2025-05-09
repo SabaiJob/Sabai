@@ -28,6 +28,9 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _visiblePassword = true;
 
   //user login
   Future<void> userLogin() async {
@@ -36,7 +39,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
     final Map<String, dynamic> requestBody = {
       //'full_name': _fullNameController.text,
       //'phone': _phoneNumberController.text,
-      'email' : _emailController.text,
+      'email': _emailController.text,
     };
 
     try {
@@ -78,7 +81,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
 
     final Map<String, dynamic> requestBody = {
       //"phone": _phoneNumberController.text,
-      "email" : _emailController.text,
+      "email": _emailController.text,
     };
 
     try {
@@ -119,8 +122,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
     if (isFormValid) {
       print('Your full name: ${_fullNameController.text}');
       print('Your Phone Number: ${_phoneNumberController.text}');
-      phoneNumberProvider
-          .setEmail(_emailController.text.toString().trim());
+      phoneNumberProvider.setEmail(_emailController.text.toString().trim());
       // _pageController.nextPage(
       //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
       // setState(() {
@@ -150,7 +152,7 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
 
       final Map<String, dynamic> requestBody = {
         //"phone": _phoneNumberController.text,
-        'email' : _emailController.text,
+        'email': _emailController.text,
         "otp": enteredPinCode,
       };
 
@@ -248,11 +250,18 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 LogInFormPage(
-                    formKey: _formKey,
-                    fullNameController: _fullNameController,
-                    phoneNumberController: _phoneNumberController,
-                    emailController: _emailController,
-                    ),
+                  formKey: _formKey,
+                  fullNameController: _fullNameController,
+                  phoneNumberController: _phoneNumberController,
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                  visiblePassword: _visiblePassword,
+                  seePassword: () {
+                    setState(() {
+                      _visiblePassword = !_visiblePassword;
+                    });
+                  },
+                ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
                     //requestOtp: requestOTP(),

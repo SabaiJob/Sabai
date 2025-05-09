@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sabai_app/components/reusable_content_holder.dart';
 import 'package:sabai_app/components/reusable_label.dart';
+import 'package:sabai_app/components/reusable_password_field.dart';
 import 'package:sabai_app/components/reusable_textformfield.dart';
 import 'package:sabai_app/components/reusable_title_holder.dart';
 import 'package:sabai_app/constants.dart';
@@ -21,13 +22,21 @@ class InitialRegistrationPage extends StatelessWidget {
   //email
   final TextEditingController emailController;
 
+  final TextEditingController passwordController;
+
+  final Function() seePassword;
+
+  final bool? visiblePassword;
+
   const InitialRegistrationPage({
     super.key,
     required this.formKey,
     required this.fullNameController,
     required this.phoneNumberController,
     required this.emailController,
-    //required this.emailController
+    required this.passwordController,
+    required this.seePassword,
+    this.visiblePassword,
   });
 
   @override
@@ -126,8 +135,9 @@ class InitialRegistrationPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: ReusableLabelHolder(
-                    labelName:
-                        languageProvider.lan == 'English' ? 'Email' : 'Email',
+                    labelName: languageProvider.lan == 'English'
+                        ? 'Email'
+                        : 'အီးမေးလ် လိပ်စာ',
                     textStyle: languageProvider.lan == 'English'
                         ? labelStyleEng
                         : labelStyleMm,
@@ -136,7 +146,7 @@ class InitialRegistrationPage extends StatelessWidget {
                 ),
                 //for email text field
                 ReusableTextformfield(
-                  keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.emailAddress,
                     textEditingController: emailController,
                     validating: (value) {
                       if (value == null || value.isEmpty) {
@@ -162,7 +172,50 @@ class InitialRegistrationPage extends StatelessWidget {
                       }
                       return null;
                     },
-                    hint: 'Enter your email')
+                    hint: languageProvider.lan == 'English'
+                        ? 'Enter your email'
+                        : 'သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
+                //for password
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: ReusableLabelHolder(
+                    labelName: languageProvider.lan == 'English'
+                        ? 'Password'
+                        : 'လျှို့ဝှက်ကုတ်',
+                    textStyle: languageProvider.lan == 'English'
+                        ? labelStyleEng
+                        : labelStyleMm,
+                    isStarred: true,
+                  ),
+                ),
+                //for password text field
+                ReusablePasswordField(
+                    widget: IconButton(
+                        onPressed: seePassword,
+                        icon: visiblePassword!
+                            ? const Icon(
+                                Icons.visibility_off,
+                                size: 15,
+                                color: Color(0xFF7B838A),
+                              )
+                            : const Icon(
+                                Icons.visibility,
+                                size: 15,
+                                color: Color(0xFF7B838A),
+                              )),
+                    textEditingController: passwordController,
+                    canSeePassword: visiblePassword,
+                    validating: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageProvider.lan == 'English'
+                            ? "Password is required"
+                            : "လျှို့ဝှက်ကုတ်ထည့်ရန်လိုအပ်သည်";
+                      }
+                      return null;
+                    },
+                    hint: languageProvider.lan == 'English'
+                        ? 'Enter your password'
+                        : 'သင့်လျှို့ဝှက်ကုတ် ထည့်ပါ')
               ],
             ),
           ),

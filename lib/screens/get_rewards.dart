@@ -43,6 +43,17 @@ class _RewardsPageState extends State<RewardsPage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var paymentProvider = Provider.of<PaymentProvider>(context);
+    if (paymentProvider.roseCount == null ||
+        paymentProvider.userRewards == null) {
+      return const Scaffold(
+        backgroundColor: Color(0xFFF7F7F7),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: primaryPinkColor,
+          ),
+        ),
+      );
+    }
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
@@ -57,7 +68,7 @@ class _RewardsPageState extends State<RewardsPage> {
                       builder: (context) => const NavigationHomepage()));
             },
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios_new_sharp,
               color: primaryPinkColor,
             ),
           ),
@@ -308,6 +319,17 @@ class AvailableRewards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
+    if (availableRewards.isEmpty) {
+      return const Center(
+        child: Text(
+          'No rewards yet',
+          style: TextStyle(
+              fontFamily: 'Bricolage-B',
+              fontSize: 11,
+              color: Color(0xFF2B2F32)),
+        ),
+      );
+    }
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         itemBuilder: (context, index) {
@@ -416,6 +438,17 @@ class ExpiredRewards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (expiredRewards.isEmpty) {
+      return const Center(
+        child: Text(
+          'No rewards yet',
+          style: TextStyle(
+              fontFamily: 'Bricolage-B',
+              fontSize: 11,
+              color: Color(0xFF2B2F32)),
+        ),
+      );
+    }
     var languageProvider = Provider.of<LanguageProvider>(context);
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -510,6 +543,17 @@ class RedeemedRewards extends StatelessWidget {
   const RedeemedRewards({super.key, required this.redeemedRewards});
   @override
   Widget build(BuildContext context) {
+    if (redeemedRewards.isEmpty) {
+      return const Center(
+        child: Text(
+          'No rewards yet',
+          style: TextStyle(
+              fontFamily: 'Bricolage-B',
+              fontSize: 11,
+              color: Color(0xFF2B2F32)),
+        ),
+      );
+    }
     var languageProvider = Provider.of<LanguageProvider>(context);
     return ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 15),

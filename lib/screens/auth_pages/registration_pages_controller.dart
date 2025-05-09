@@ -39,6 +39,9 @@ class _RegistrationPagesControllerState
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pinCodeController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _visiblePassword = true;
 
   int _currentPage = 0;
 
@@ -174,6 +177,7 @@ class _RegistrationPagesControllerState
   }
 
   // Profile Set Up (additional info)
+  // currently no use
   void _handleProfileSetUp() async {
     if (_currentPage == 2) {
       _isLanguageLevelError = _selectedLanguageLevel == null;
@@ -369,40 +373,41 @@ class _RegistrationPagesControllerState
     bool isAnyJobCategorySelected =
         _jobCategories.any((category) => category['selected'] == true);
     if (!isAnyJobCategorySelected) {
-      // print('Error: Please select at least one job category.');
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text(
-      //       'Please select at least one job category.',
-      //       style: TextStyle(color: Colors.white),
-      //     ),
-      //     backgroundColor: Colors.red,
-      //     duration: Duration(seconds: 2),
-      //   ),
-      // );
-      // return;
-      setState(() {
-        var selectedJobCategories = _jobCategories
-            .where((category) => category['selected'] == true)
-            .map((category) => category['id'])
-            .toList();
-        print('did you choose something? Y/N ${isAnyJobCategorySelected}');
-        print('Selected Categories: ${selectedJobCategories}');
-
-        completeRegistration(selectedJobCategories, languageProvider);
-      });
-    } else {
-      setState(() {
-        var selectedJobCategories = _jobCategories
-            .where((category) => category['selected'] == true)
-            .map((category) => category['id'])
-            .toList();
-        print('did you choose something? Y/N ${isAnyJobCategorySelected}');
-        print('Selected Categories: ${selectedJobCategories}');
-
-        completeRegistration(selectedJobCategories, languageProvider);
-      });
+      print('Error: Please select at least one job category.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please select at least one job category.',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
     }
+    setState(() {
+      var selectedJobCategories = _jobCategories
+          .where((category) => category['selected'] == true)
+          .map((category) => category['id'])
+          .toList();
+      print('did you choose something? Y/N ${isAnyJobCategorySelected}');
+      print('Selected Categories: ${selectedJobCategories}');
+
+      completeRegistration(selectedJobCategories, languageProvider);
+    });
+
+    setState(() {
+      var selectedJobCategories = _jobCategories
+          .where((category) => category['selected'] == true)
+          .map((category) => category['id'])
+          .toList();
+      print('did you choose something? Y/N ${isAnyJobCategorySelected}');
+      print('Selected Categories: ${selectedJobCategories}');
+
+      completeRegistration(selectedJobCategories, languageProvider);
+    });
   }
 
   // get job categories
@@ -505,10 +510,17 @@ class _RegistrationPagesControllerState
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 InitialRegistrationPage(
+                  seePassword: () {
+                    setState(() {
+                      _visiblePassword = !_visiblePassword;
+                    });
+                  },
+                  visiblePassword: _visiblePassword,
                   formKey: _formKey,
                   fullNameController: _fullNameController,
                   phoneNumberController: _phoneNumberController,
                   emailController: _emailController,
+                  passwordController: _passwordController,
                 ),
                 OtpCodeVerificationPage(
                     pinCodeController: _pinCodeController,
@@ -516,44 +528,44 @@ class _RegistrationPagesControllerState
                     whenOnComplete: (value) {
                       _handleOTPVerificationPage(value, jobProvider);
                     }),
-                CompleteUserInfoPage(
-                  isLanguageLevelError: _isLanguageLevelError,
-                  selectedLanguageLevel: _selectedLanguageLevel,
-                  whenLanguageLevelOnChanged: (value) {
-                    setState(() {
-                      _selectedLanguageLevel = value;
-                      _isLanguageLevelError = false;
-                    });
-                  },
-                  languageLevelErrorMessage: _languageLevelErrorMessage,
-                  selectedGender: _selectedGender,
-                  genderErrorMessage: _genderErrorMessage,
-                  isGenderError: _isGenderError,
-                  onGenderChanged: (value) {
-                    setState(() {
-                      _selectedGender = value;
-                      _isGenderError = false;
-                    });
-                  },
-                  selectedAge: selectedAge ?? '',
-                  whenAgeOnChange: (value) {
-                    setState(() {
-                      selectedAge = value!;
-                    });
-                  },
-                  selectedStatus: selectedStatus ?? '',
-                  whenStatusOnChange: (value) {
-                    setState(() {
-                      selectedStatus = value!;
-                      updateStatus();
-                    });
-                  },
-                  emailController: _emailController,
-                  isAgeError: _isAgeError,
-                  ageErrorMessage: _ageErrorMessage,
-                  isStatusError: _isStatusError,
-                  statusErrorMessage: _statusErrorMessage,
-                ),
+                // CompleteUserInfoPage(
+                //   isLanguageLevelError: _isLanguageLevelError,
+                //   selectedLanguageLevel: _selectedLanguageLevel,
+                //   whenLanguageLevelOnChanged: (value) {
+                //     setState(() {
+                //       _selectedLanguageLevel = value;
+                //       _isLanguageLevelError = false;
+                //     });
+                //   },
+                //   languageLevelErrorMessage: _languageLevelErrorMessage,
+                //   selectedGender: _selectedGender,
+                //   genderErrorMessage: _genderErrorMessage,
+                //   isGenderError: _isGenderError,
+                //   onGenderChanged: (value) {
+                //     setState(() {
+                //       _selectedGender = value;
+                //       _isGenderError = false;
+                //     });
+                //   },
+                //   selectedAge: selectedAge ?? '',
+                //   whenAgeOnChange: (value) {
+                //     setState(() {
+                //       selectedAge = value!;
+                //     });
+                //   },
+                //   selectedStatus: selectedStatus ?? '',
+                //   whenStatusOnChange: (value) {
+                //     setState(() {
+                //       selectedStatus = value!;
+                //       updateStatus();
+                //     });
+                //   },
+                //   emailController: _emailController,
+                //   isAgeError: _isAgeError,
+                //   ageErrorMessage: _ageErrorMessage,
+                //   isStatusError: _isStatusError,
+                //   statusErrorMessage: _statusErrorMessage,
+                // ),
                 SelectJobCategoryPage(
                     jobCategoryLength: _jobCategories.length,
                     jobCategoryList: _jobCategories,
@@ -579,10 +591,15 @@ class _RegistrationPagesControllerState
                   TextButton(
                     onPressed: () {
                       // original method
+                      // if (_currentPage == _pageController.initialPage) {
+                      //   _handleUserRegistration(phoneNumberProvider);
+                      // } else if (_currentPage == 2) {
+                      //   _handleProfileSetUp();
+                      // } else {
+                      //   _handleCreateProfile(languageProvider);
+                      // }
                       if (_currentPage == _pageController.initialPage) {
                         _handleUserRegistration(phoneNumberProvider);
-                      } else if (_currentPage == 2) {
-                        _handleProfileSetUp();
                       } else {
                         _handleCreateProfile(languageProvider);
                       }

@@ -433,7 +433,7 @@ class _ProfileState extends State<Profile> {
                                             const TextSpan(
                                                 text: 'နှင်းဆီ ',
                                                 style: TextStyle(
-                                                  color: Color(0xFF565E64),
+                                                  color: Colors.black,
                                                   fontFamily: 'Walone-R',
                                                   fontSize: 12,
                                                 )),
@@ -451,14 +451,14 @@ class _ProfileState extends State<Profile> {
                                             const TextSpan(
                                                 text: ' ပွင့် ',
                                                 style: TextStyle(
-                                                  color: Color(0xFF2B2F32),
+                                                  color: Colors.black,
                                                   fontFamily: 'Walone-B',
                                                   fontSize: 12,
                                                 )),
                                             const TextSpan(
                                                 text: 'ရခဲ့ပြီ',
                                                 style: TextStyle(
-                                                  color: Color(0xFF565E64),
+                                                  color: Colors.black,
                                                   fontFamily: 'Walone-R',
                                                   fontSize: 12,
                                                 )),
@@ -514,7 +514,7 @@ class _ProfileState extends State<Profile> {
                                                 const TextSpan(
                                                     text: 'နှင်းဆီ ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF565E64),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-R',
                                                       fontSize: 12,
                                                     )),
@@ -532,14 +532,14 @@ class _ProfileState extends State<Profile> {
                                                 const TextSpan(
                                                     text: ' ပွင့် ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF2B2F32),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-B',
                                                       fontSize: 12,
                                                     )),
                                                 const TextSpan(
                                                     text: 'ရခဲ့ပြီ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF565E64),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-R',
                                                       fontSize: 12,
                                                     )),
@@ -591,7 +591,7 @@ class _ProfileState extends State<Profile> {
                                                 const TextSpan(
                                                     text: 'နှင်းဆီ ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF565E64),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-R',
                                                       fontSize: 12,
                                                     )),
@@ -609,14 +609,14 @@ class _ProfileState extends State<Profile> {
                                                 const TextSpan(
                                                     text: ' ပွင့် ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF2B2F32),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-B',
                                                       fontSize: 12,
                                                     )),
                                                 const TextSpan(
                                                     text: 'ရခဲ့ပြီ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF565E64),
+                                                      color: Colors.black,
                                                       fontFamily: 'Walone-R',
                                                       fontSize: 12,
                                                     )),
