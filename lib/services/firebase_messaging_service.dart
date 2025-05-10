@@ -38,21 +38,23 @@ class FirebaseMessagingService {
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('✅ Message received in foreground: ${message.notification?.title}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          behavior: SnackBarBehavior.floating,
-          elevation: 3,
-          backgroundColor: Colors.white,
-          content: Text(
-            'You have a new notification!',
-            style: TextStyle(
-              fontFamily: 'Bricolage-M',
-              fontSize: 12.5,
-              color: primaryPinkColor,
+      if(context.mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            elevation: 3,
+            backgroundColor: Colors.white,
+            content: Text(
+              'You have a new notification!',
+              style: TextStyle(
+                fontFamily: 'Bricolage-M',
+                fontSize: 12.5,
+                color: primaryPinkColor,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     });
 
     // Handle app opened from background notification

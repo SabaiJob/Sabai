@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sabaijob.app"
+    namespace = "com.sabaijob.sabai_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.sabaijob.app"
+        applicationId = "com.sabaijob.sabai_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -40,7 +40,7 @@ android {
     signingConfigs {
         release {
             //storeFile file(keystoreProperties['storeFile'])
-            storeFile file(rootProject.file("my-release-key.jks"))
+            storeFile file(rootProject.file("release.jks"))
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
