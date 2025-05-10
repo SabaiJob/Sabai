@@ -15,111 +15,105 @@ class _EarnRosesPageState extends State<EarnRosesPage> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
-        backgroundColor: const Color(0xFFF7F7F7),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFFED7EA),
-          bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1.0),
-              child: Container(
-                color: Colors.grey.shade300,
-                height: 1.0,
-              )),
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          title: languageProvider.lan == 'English'
-              ? const Text(
-                  "How to earn roses?",
-                  style: appBarTitleStyleEng,
-                )
-              : const Text(
-                  'How to earn roses?',
-                  style: appBarTitleStyleMn,
-                ),
-          centerTitle: true,
-          iconTheme: const IconThemeData(
-            color: Color(0xFFFF3997),
+      backgroundColor: const Color(0xFFF7F7F7),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFED7EA),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.shade300,
+            height: 1.0,
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: languageProvider.lan == 'English'
+            ? const Text(
+                "How to earn roses?",
+                style: appBarTitleStyleEng,
+              )
+            : const Text(
+                'How to earn roses?',
+                style: appBarTitleStyleMn,
+              ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFF3997),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header with animation
+            Container(
+              height: 150,
+              width: double.infinity,
+              color: const Color(0xFFFED7EA),
+              child: const Center(
+                child: AnimatedBox(),
+              ),
+            ),
+            
+            // FAQ Content
+            Container(
+              margin: const EdgeInsets.only(top: 15, left: 20, right: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                color: Colors.white,
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFED7EA),
-                    ),
+                  buildFAQ(
+                    "How can I earn roses?", 
+                    "You can earn roses by contributing job opportunities to the Sabai Job community. Share job posts by either:\n• Pasting the job link.\n• Uploading a photo of the job details.",
+                    "နှင်းဆီပွင့်ဘယ်လိုရယူကြမလဲ?",
+                    "Sabai Job အသိုင်းအဝိုင်းအတွက် အလုပ်အကိုင်အခွင့်အလမ်းများ ပံ့ပိုးပေးခြင်းဖြင့် သင်သည် နှင်းဆီပန်းများကို ရရှိနိုင်မည်ဖြစ်သည်။ အလုပ်ပို့စ်များကို \nအလုပ်လင့်ခ်ကို ကူးထည့်ခြင်းသော်လည်းကောင်း \nအလုပ်အသေးစိတ်ဓာတ်ပုံကို အပ်လုဒ်လုပ်ခြင်းသော်လည်ကောင်းမျှဝေပါ",
+                    context
                   ),
-                  const Positioned(
-                      top: 20, left: 0, right: 0, child: AnimatedBox()),
-                  Positioned(
-                    top: 150,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        color: Colors.white,
-                      ),
-                      width: 343,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          buildFAQ(
-                            "How can I earn roses?" ,
-                            "You can earn roses by contributing job opportunities to the Sabai Job community. Share job posts by either:\n• Pasting the job link.\n• Uploading a photo of the job details.",
-                            "နှင်းဆီပွင့်ဘယ်လိုရယူကြမလဲ?",
-                            "Sabai Job အသိုင်းအဝိုင်းအတွက် အလုပ်အကိုင်အခွင့်အလမ်းများ ပံ့ပိုးပေးခြင်းဖြင့် သင်သည် နှင်းဆီပန်းများကို ရရှိနိုင်မည်ဖြစ်သည်။ အလုပ်ပို့စ်များကို \nအလုပ်လင့်ခ်ကို ကူးထည့်ခြင်းသော်လည်းကောင်း \nအလုပ်အသေးစိတ်ဓာတ်ပုံကို အပ်လုဒ်လုပ်ခြင်းသော်လည်ကောင်းမျှဝေပါ",
-                            context
-                          ),
-                          buildFAQ(
-                            "What happens after I share a job post?",
-                            "Once your job post is live, other users who find it helpful can endorse you by giving you roses.",
-                            "အလုပ်ပို့စ်တစ်ခုကို မျှဝေပြီးနောက် ဘာဖြစ်သွားမလဲ။",
-                            "သင့်အလုပ်ရာထူးကို တိုက်ရိုက်လွှင့်ပြီးသည်နှင့် ၎င်းကို အထောက်အကူဖြစ်စေသော အခြားအသုံးပြုသူများသည် သင့်အား နှင်းဆီပန်းများပေးခြင်းဖြင့် သင့်အား ထောက်ခံနိုင်ပါသည်။",
-                            context
-                          ),
-                          buildFAQ(
-                            "Can I earn roses for every job post I share?",
-                            "Yes! As long as your post helps others, you'll earn roses through endorsements.",
-                            "ကျွန်တော်မျှဝေတဲ့ အလုပ်ပို့စ်တိုင်းအတွက် နှင်းဆီပန်းကို ရနိုင်ပါသလား။",
-                            "ဟုတ်တယ်! သင့်ပို့စ်သည် အခြားသူများကို ကူညီပေးသရွေ့ ထောက်ခံမှုများဖြင့် နှင်းဆီပန်းများကို သင်ရရှိမည်ဖြစ်သည်။",
-                            context
-                          ),
-                          buildFAQ(
-                            "Is there a limit to how many roses I can earn?",
-                            "There's no limit! The more helpful your contributions, the more roses you can collect.",
-                            "နှင်းဆီဘယ်နှစ်ပွင့်ရနိုင်တယ်ဆိုတာကန့်သတ်ချက်ရှိပါသလား။",
-                            "အကန့်အသတ်မရှိ! သင်၏အလှူငွေများကို ပိုမိုအထောက်အကူဖြစ်စေလေ၊ နှင်းဆီပန်းများစုဆောင်းနိုင်လေလေဖြစ်သည်။",
-                            context
-                          ),
-                          buildFAQ(
-                            "How do I know if someone endorsed my post?",
-                            "You'll be notified when someone gives you a rose for your helpful post.",
-                            "တစ်စုံတစ်ယောက်သည် ကျွန်ုပ်၏ပို့စ်ကို ထောက်ခံခြင်း ရှိ၊ မရှိ မည်သို့သိနိုင်မည်နည်း။",
-                            "အကန့်အသတ်မရှိ! သင်၏အလှူငွေများကို ပိုမိုအထောက်အကူဖြစ်စေလေ၊ နှင်းဆီပန်းများစုဆောင်းနိုင်လေလေဖြစ်သည်။",
-                            context
-                          ),
-                          buildFAQ(
-                            "What can I do with the roses I earn?",
-                            "You can use roses to unlock exclusive rewards, like phone, tote bag, key chain, T Shirts, etc.",
-                            "What can I do with the roses I earn?",
-                            "You can use roses to unlock exclusive rewards, like phone, tote bag, key chain, T Shirts, etc.",
-                            context
-                          ),
-                        ],
-                      ),
-                    ),
+                  buildFAQ(
+                    "What happens after I share a job post?",
+                    "Once your job post is live, other users who find it helpful can endorse you by giving you roses.",
+                    "အလုပ်ပို့စ်တစ်ခုကို မျှဝေပြီးနောက် ဘာဖြစ်သွားမလဲ။",
+                    "သင့်အလုပ်ရာထူးကို တိုက်ရိုက်လွှင့်ပြီးသည်နှင့် ၎င်းကို အထောက်အကူဖြစ်စေသော အခြားအသုံးပြုသူများသည် သင့်အား နှင်းဆီပန်းများပေးခြင်းဖြင့် သင့်အား ထောက်ခံနိုင်ပါသည်။",
+                    context
+                  ),
+                  buildFAQ(
+                    "Can I earn roses for every job post I share?",
+                    "Yes! As long as your post helps others, you'll earn roses through endorsements.",
+                    "ကျွန်တော်မျှဝေတဲ့ အလုပ်ပို့စ်တိုင်းအတွက် နှင်းဆီပန်းကို ရနိုင်ပါသလား။",
+                    "ဟုတ်တယ်! သင့်ပို့စ်သည် အခြားသူများကို ကူညီပေးသရွေ့ ထောက်ခံမှုများဖြင့် နှင်းဆီပန်းများကို သင်ရရှိမည်ဖြစ်သည်။",
+                    context
+                  ),
+                  buildFAQ(
+                    "Is there a limit to how many roses I can earn?",
+                    "There's no limit! The more helpful your contributions, the more roses you can collect.",
+                    "နှင်းဆီဘယ်နှစ်ပွင့်ရနိုင်တယ်ဆိုတာကန့်သတ်ချက်ရှိပါသလား။",
+                    "အကန့်အသတ်မရှိ! သင်၏အလှူငွေများကို ပိုမိုအထောက်အကူဖြစ်စေလေ၊ နှင်းဆီပန်းများစုဆောင်းနိုင်လေလေဖြစ်သည်။",
+                    context
+                  ),
+                  buildFAQ(
+                    "How do I know if someone endorsed my post?",
+                    "You'll be notified when someone gives you a rose for your helpful post.",
+                    "တစ်စုံတစ်ယောက်သည် ကျွန်ုပ်၏ပို့စ်ကို ထောက်ခံခြင်း ရှိ၊ မရှိ မည်သို့သိနိုင်မည်နည်း။",
+                    "သင့်အတွက် အထောက်အကူဖြစ်စေမည့် ပို့စ်အတွက် တစ်စုံတစ်ယောက်က သင့်အား နှင်းဆီတစ်ပွင့်ပေးသောအခါ သင့်ကို အကြောင်းကြားပါမည်။",
+                    context
+                  ),
+                  buildFAQ(
+                    "What can I do with the roses I earn?",
+                    "You can use roses to unlock exclusive rewards, like phone, tote bag, key chain, T Shirts, etc.",
+                    "ကျွန်ုပ်ရရှိထားသည့် နှင်းဆီပန်းများနှင့်မည်သည်များလုပ်နိုင်မည်နည်း",
+                    "ဖုန်း၊ အိတ်၊ သော့ချိတ်၊ တီရှပ်များ အစရှိသည့် သီးသန့်ဆုလာဘ်များကို ရရှိရန် နှင်းဆီပန်းများကို အသုံးပြုနိုင်သည်။",
+                    context
                   ),
                 ],
               ),
-            ],
-          ),
-        ));
+            ),
+            const SizedBox(height: 20), 
+          ],
+        ),
+      ),
+    );
   }
 }
 
