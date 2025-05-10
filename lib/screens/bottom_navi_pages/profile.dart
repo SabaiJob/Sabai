@@ -1588,7 +1588,7 @@ class _ProfileState extends State<Profile> {
           backgroundColor: Colors.white,
           child: Text(
             '+${totalAvatars - 3}',
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF6C757D)),
           ),
         ),
       ));

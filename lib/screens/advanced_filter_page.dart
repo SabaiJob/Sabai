@@ -157,8 +157,8 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
       //
       final existingFilters = filterProvider.filterValues;
       //
-      final jobProvider = Provider.of<JobProvider>(context, listen: false);
-      jobProvider.getAllJobs();
+      //final jobProvider = Provider.of<JobProvider>(context, listen: false);
+      //jobProvider.getAllJobs();
 
       if (existingFilters != null) {
         setState(() {
@@ -207,26 +207,26 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
     SabaiAppData sabaiAppData = SabaiAppData();
     var jobProvider = Provider.of<JobProvider>(context);
     //for new searchbar
-    var languageProvider = Provider.of<LanguageProvider>(context);
-    final jobs =
-        jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
-    final filterJobs = jobs.where((job) {
-      final jobInfo = job['info'] as Map<String, dynamic>;
-      final jobTitle = jobInfo['title'] as String;
-      bool matchesQuery =
-          jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
-      return matchesQuery;
-    }).toList();
+    // var languageProvider = Provider.of<LanguageProvider>(context);
+    // final jobs =
+    //     jobProvider.allTypeJobs.where((job) => job['type'] == 'job').toList();
+    // final filterJobs = jobs.where((job) {
+    //   final jobInfo = job['info'] as Map<String, dynamic>;
+    //   final jobTitle = jobInfo['title'] as String;
+    //   bool matchesQuery =
+    //       jobTitle.toLowerCase().contains(searchQuery.toLowerCase());
+    //   return matchesQuery;
+    // }).toList();
 
     // final allJobs = jobProvider.allTypeJobs
     //     .where((job) => job['type'] == 'job')
     //     .map((job) => job['info']['title'])
     //     .toList();
-    var jobNameItems = jobProvider.allTypeJobs
-        .where((job) => job['type'] == 'job')
-        .map((job) => DropdownItem(
-            label: '${job['info']['title']}', value: '${job['info']['title']}'))
-        .toList();
+    // var jobNameItems = jobProvider.allTypeJobs
+    //     .where((job) => job['type'] == 'job')
+    //     .map((job) => DropdownItem(
+    //         label: '${job['info']['title']}', value: '${job['info']['title']}'))
+    //     .toList();
     var jobLocation = sabaiAppData.provinceItemsInEng
         .map((province) => DropdownItem(label: province, value: province))
         .toList();
@@ -367,81 +367,81 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
               Expanded(
                 child: ListView(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: ReusableLabelHolder(
-                          labelName: 'Job Name',
-                          textStyle: lablelHolderEng,
-                          isStarred: false),
-                    ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 5),
+                    //   child: ReusableLabelHolder(
+                    //       labelName: 'Job Name',
+                    //       textStyle: lablelHolderEng,
+                    //       isStarred: false),
+                    // ),
                     // Job Name Dropdown with search bar
-                    SizedBox(
-                      width: 343,
-                      child: MultiDropdown(
-                        singleSelect: true,
-                        onSelectionChange: (selectedItems) {
-                          setState(() {
-                            selectedJobNames = selectedItems;
-                          });
-                        },
-                        enabled: true,
-                        items: jobNameItems,
-                        fieldDecoration: const FieldDecoration(
-                          backgroundColor: Colors.white,
-                          hintText: 'Select Job Name',
-                          hintStyle: textfieldHintTextStyleEng,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                              color: Color(0xFFF0F1F2),
-                            ),
-                          ),
-                        ),
-                        searchEnabled: true,
-                        searchDecoration: const SearchFieldDecoration(
-                          searchIcon: Icon(
-                            Icons.search,
-                            color: primaryPinkColor,
-                          ),
-                          hintText: 'Search Job By Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            borderSide: BorderSide(
-                              color: Color(0xFFF0F1F2),
-                            ),
-                          ),
-                        ),
-                        chipDecoration: const ChipDecoration(
-                          wrap: true,
-                          spacing: 8,
-                          runSpacing: 10,
-                          deleteIcon: Icon(
-                            Icons.close,
-                            size: 11,
-                            color: primaryPinkColor,
-                          ),
-                          labelStyle: TextStyle(
-                            fontFamily: 'Bricolage-R',
-                            fontSize: 12,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        dropdownDecoration: const DropdownDecoration(
-                          marginTop: 5,
-                          maxHeight: 212,
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        dropdownItemDecoration: const DropdownItemDecoration(
-                            selectedIcon: Icon(
-                          Icons.check_box,
-                          size: 20,
-                          color: primaryPinkColor,
-                        )),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 343,
+                    //   child: MultiDropdown(
+                    //     singleSelect: true,
+                    //     onSelectionChange: (selectedItems) {
+                    //       setState(() {
+                    //         selectedJobNames = selectedItems;
+                    //       });
+                    //     },
+                    //     enabled: true,
+                    //     items: jobNameItems,
+                    //     fieldDecoration: const FieldDecoration(
+                    //       backgroundColor: Colors.white,
+                    //       hintText: 'Select Job Name',
+                    //       hintStyle: textfieldHintTextStyleEng,
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.all(Radius.circular(8)),
+                    //         borderSide: BorderSide(
+                    //           color: Color(0xFFF0F1F2),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     searchEnabled: true,
+                    //     searchDecoration: const SearchFieldDecoration(
+                    //       searchIcon: Icon(
+                    //         Icons.search,
+                    //         color: primaryPinkColor,
+                    //       ),
+                    //       hintText: 'Search Job By Name',
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.all(Radius.circular(8)),
+                    //         borderSide: BorderSide(
+                    //           color: Color(0xFFF0F1F2),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     chipDecoration: const ChipDecoration(
+                    //       wrap: true,
+                    //       spacing: 8,
+                    //       runSpacing: 10,
+                    //       deleteIcon: Icon(
+                    //         Icons.close,
+                    //         size: 11,
+                    //         color: primaryPinkColor,
+                    //       ),
+                    //       labelStyle: TextStyle(
+                    //         fontFamily: 'Bricolage-R',
+                    //         fontSize: 12,
+                    //       ),
+                    //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                    //     ),
+                    //     dropdownDecoration: const DropdownDecoration(
+                    //       marginTop: 5,
+                    //       maxHeight: 212,
+                    //       borderRadius: BorderRadius.all(Radius.circular(8)),
+                    //     ),
+                    //     dropdownItemDecoration: const DropdownItemDecoration(
+                    //         selectedIcon: Icon(
+                    //       Icons.check_box,
+                    //       size: 20,
+                    //       color: primaryPinkColor,
+                    //     )),
+                    //   ),
+                    // ),
                     // Job Category
                     const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: ReusableLabelHolder(
                           labelName: 'Job Category',
                           textStyle: lablelHolderEng,
@@ -696,7 +696,7 @@ class _AdvancedFilterPageState extends State<AdvancedFilterPage> {
                           maximumSalary = 8000;
                         });
                       },
-                      rButtonName: 'Under 8,000 THb',
+                      rButtonName: 'Under 8,000 THB',
                       rButtonSelectedValue: salaryOptin,
                     ),
                     ReusableRadioButton(
