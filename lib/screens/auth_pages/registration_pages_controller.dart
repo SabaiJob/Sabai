@@ -147,6 +147,7 @@ class _RegistrationPagesControllerState
           jobProvider.setGuest(false);
           final responseData = jsonDecode(response.body);
           final token = responseData['token'] ?? '';
+          print(token);
           await TokenService.saveToken(token);
           await getJobCategory();
           await sendFCMToken();

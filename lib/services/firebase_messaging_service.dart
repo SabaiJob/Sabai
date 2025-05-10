@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,19 +38,21 @@ class FirebaseMessagingService {
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('✅ Message received in foreground: ${message.notification?.title}');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.white,
-            content: Text('You have a new notification!',
-                style: TextStyle(
-                    fontFamily: 'Bricolage-M',
-                    fontSize: 12.5,
-                    color: Color(0xFF616971))),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          elevation: 3,
+          backgroundColor: Colors.white,
+          content: Text(
+            'You have a new notification!',
+            style: TextStyle(
+              fontFamily: 'Bricolage-M',
+              fontSize: 12.5,
+              color: primaryPinkColor,
+            ),
           ),
-        );
-      }
+        ),
+      );
     });
 
     // Handle app opened from background notification
