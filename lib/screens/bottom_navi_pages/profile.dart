@@ -83,21 +83,20 @@ class _ProfileState extends State<Profile> {
       MaterialPageRoute(
         builder: (context) => EditProfile(
           initialName: paymentProvider.userData!['username'] ?? '',
-          //initialEmail: paymentProvider.userData!['user_info']['email'] ?? '',
           initialImageUrl: paymentProvider.userData!['photo'] ?? '',
         ),
       ),
     );
-    if (updatedData != null) {
+    if (updatedData != null && context.mounted) {
       setState(() {
         paymentProvider.userData!['username'] = updatedData["username"];
         //paymentProvider.userData!['user_info']['email'] = updatedData["email"];
-        //paymentProvider.userData!['photo'] = updatedData["profile_picture"];
-        if (updatedData["profile_picture"] is String) {
-          paymentProvider.userData!['photo'] = updatedData["profile_picture"];
-        } else if (updatedData["profile_picture"] is File) {
-          _selectedImage = FileImage(updatedData["profile_picture"] as File);
-        }
+        paymentProvider.userData!['photo'] = updatedData["profile_picture"];
+        // if (updatedData["profile_picture"] is String) {
+        //   paymentProvider.userData!['photo'] = updatedData["profile_picture"];
+        // } else if (updatedData["profile_picture"] is File) {
+        //   _selectedImage = FileImage(updatedData["profile_picture"] as File);
+        // }
       });
     }
   }
@@ -221,9 +220,14 @@ class _ProfileState extends State<Profile> {
                                         ..hideCurrentSnackBar() // Hide any existing snackbar
                                         ..showSnackBar(
                                           const SnackBar(
-                                            content:
-                                                Text('Failed to load image'),
-                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                                'Failed to load image',
+                                                style: TextStyle(
+                                                    fontFamily: 'Bricolage-M',
+                                                    fontSize: 12.5,
+                                                    color: Color(0xFF616971))),
+                                            backgroundColor: Colors.white,
+                                            behavior: SnackBarBehavior.fixed,
                                           ),
                                         );
                                     }

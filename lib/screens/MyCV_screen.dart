@@ -74,9 +74,14 @@ class _MyCVScreenState extends State<MyCVScreen> {
         if (fileSizeInMB > 10) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content:
-                  Text("File size exceeds 10MB. Please select a smaller file."),
-              backgroundColor: Colors.red,
+              content: Text(
+                  "File size exceeds 10MB. Please select a smaller file.",
+                  style: TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12.5,
+                      color: Color(0xFF616971))),
+              backgroundColor: Colors.white,
+              behavior: SnackBarBehavior.floating,
             ),
           );
           return;
@@ -110,8 +115,13 @@ class _MyCVScreenState extends State<MyCVScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error picking file: ${e.toString()}"),
-          backgroundColor: Colors.red,
+          content: Text("Error picking file: ${e.toString()}",
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
+          backgroundColor: Colors.white,
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }
@@ -119,8 +129,7 @@ class _MyCVScreenState extends State<MyCVScreen> {
 
   Future<void> uploadFile(Uint8List fileBytes, String fileName) async {
     final Dio dio = Dio();
-    String uploadUrl =
-        "https://api.sabaijob.com/api/auth/userinfo/";
+    String uploadUrl = "https://api.sabaijob.com/api/auth/userinfo/";
 
     final token = await TokenService.getToken();
 
@@ -169,8 +178,13 @@ class _MyCVScreenState extends State<MyCVScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("CV uploaded successfully"),
-            backgroundColor: Colors.green,
+            content: Text("CV uploaded successfully",
+                style: TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
+            backgroundColor: Colors.white,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       } else {
@@ -184,8 +198,13 @@ class _MyCVScreenState extends State<MyCVScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              "Upload Failed: ${e.toString().length > 100 ? e.toString().substring(0, 100) + '...' : e.toString()}"),
-          backgroundColor: Colors.red,
+              "Upload Failed: ${e.toString().length > 100 ? e.toString().substring(0, 100) + '...' : e.toString()}",
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
+          backgroundColor: Colors.white,
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }

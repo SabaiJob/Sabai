@@ -5,7 +5,6 @@ import 'package:sabai_app/components/reusable_double_circle_loading_component.da
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/data/sabai_app_data.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
-import 'package:sabai_app/screens/auth_pages/auth_controller.dart';
 import 'package:sabai_app/screens/auth_pages/otp_code_verification_page.dart';
 import 'package:sabai_app/screens/auth_pages/complete_user_registration_page.dart';
 import 'package:sabai_app/screens/auth_pages/initial_registration_page.dart';
@@ -138,7 +137,6 @@ class _RegistrationPagesControllerState
     bool isFormValid = _formKey.currentState!.validate();
     if (isFormValid) {
       try {
-        print('Still Inside try');
         final response = await ApiService.unauthenticatedPost(
             '/auth/phone-password/register/', {
           "phone": _phoneNumberController.text,
@@ -146,11 +144,9 @@ class _RegistrationPagesControllerState
           "full_name": _fullNameController.text,
         });
         if (response.statusCode >= 200 && response.statusCode < 300) {
-          print('Still inside if');
           jobProvider.setGuest(false);
           final responseData = jsonDecode(response.body);
           final token = responseData['token'] ?? '';
-          print('Token: $token');
           await TokenService.saveToken(token);
           await getJobCategory();
           await sendFCMToken();
@@ -173,10 +169,6 @@ class _RegistrationPagesControllerState
             backgroundColor: Colors.white,
           ));
         } else {
-          print('Inside else');
-          print('Request Headers: ${response.request?.headers}');
-          print(response.statusCode);
-          print(jsonDecode(response.body));
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(jsonDecode(response.body)['error'],
                 style: const TextStyle(
@@ -201,11 +193,12 @@ class _RegistrationPagesControllerState
       print('Error: Please select at least one job category.');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Please select at least one job category.',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.red,
+          content: Text('Please select at least one job category.',
+              style: TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
+          backgroundColor: Colors.white,
           duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),

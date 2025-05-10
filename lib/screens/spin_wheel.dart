@@ -86,9 +86,15 @@ class _SpinWheelState extends State<SpinWheel> {
           Provider.of<PaymentProvider>(context, listen: false);
       final response = await ApiService.post('/rewards/spin-wheel/', {});
       // For visual effect - spin wheel randomly (doesn't affect actual result)
-      if(response.statusCode < 200 || response.statusCode >= 300){
+      if (response.statusCode < 200 || response.statusCode >= 300) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(jsonDecode(response.body)['error'], style: const TextStyle(fontFamily: 'Bricolage-M', fontSize: 12.5, color: Color(0xFF616971)),),
+          content: Text(
+            jsonDecode(response.body)['error'],
+            style: const TextStyle(
+                fontFamily: 'Bricolage-M',
+                fontSize: 12.5,
+                color: Color(0xFF616971)),
+          ),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.white,
         ));
@@ -177,7 +183,7 @@ class _SpinWheelState extends State<SpinWheel> {
             ),
           ),
         );
-      } 
+      }
     } catch (e) {
       print('Error: $e');
     } finally {

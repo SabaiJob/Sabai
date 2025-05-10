@@ -238,9 +238,16 @@ class _QrState extends State<Qr> {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(saved
-                                          ? 'Image saved successfully!'
-                                          : 'Failed to save image'),
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.white,
+                                      content: Text(
+                                          saved
+                                              ? 'Image saved successfully!'
+                                              : 'Failed to save image',
+                                          style: const TextStyle(
+                                              fontFamily: 'Bricolage-M',
+                                              fontSize: 12.5,
+                                              color: Color(0xFF616971))),
                                     ),
                                   );
                                 }
@@ -248,7 +255,13 @@ class _QrState extends State<Qr> {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Error: $e'),
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.white,
+                                      content: Text('Error: $e',
+                                          style: const TextStyle(
+                                              fontFamily: 'Bricolage-M',
+                                              fontSize: 12.5,
+                                              color: Color(0xFF616971))),
                                     ),
                                   );
                                 }

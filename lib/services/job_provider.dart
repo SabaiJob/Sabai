@@ -69,7 +69,8 @@ class JobProvider extends ChangeNotifier {
           '/jobs/search/?location_type=$locationType&page=$page');
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print('hi this is from all jobs');
-        final Map<String, dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data =
+            json.decode(utf8.decode(response.bodyBytes));
         if (data.containsKey('results') && data['results'] is List) {
           final newJobs = data['results'];
           if (page == 1) {
@@ -214,14 +215,26 @@ class JobProvider extends ChangeNotifier {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error ${response.body}'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.white,
+            content: Text('Error ${response.body}',
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error fetching data: $e'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.white,
+          content: Text('Error fetching data: $e',
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
         ),
       );
     }
@@ -344,14 +357,26 @@ class JobProvider extends ChangeNotifier {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error fetching data ${response.body}'),
+            backgroundColor: Colors.white,
+            behavior: SnackBarBehavior.floating,
+            content: Text('Error fetching data ${response.body}',
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error $e'),
+          backgroundColor: Colors.white,
+          behavior: SnackBarBehavior.floating,
+          content: Text('Error $e',
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
         ),
       );
     } finally {}
@@ -389,14 +414,25 @@ class JobProvider extends ChangeNotifier {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error fetching data ${response.body}'),
+            backgroundColor: Colors.white,
+            behavior: SnackBarBehavior.floating,
+            content: Text('Error fetching data ${response.body}',
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error $e'),
+          behavior: SnackBarBehavior.floating,
+          content: Text('Error $e',
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
         ),
       );
     } finally {}

@@ -245,11 +245,22 @@ class NotiTile extends StatelessWidget {
       child: ListTile(
         minTileHeight: 82,
         titleAlignment: ListTileTitleAlignment.titleHeight,
-        leading: type.toLowerCase() == 'successful payment'
+        leading: type.toLowerCase() == 'payment_success' ||
+                type.toLowerCase() == 'contribution_success'
             ? Image.asset('images/like.png')
-            : type.toLowerCase() == 'closing soon'
+            : type.toLowerCase() == 'reminder'
                 ? Image.asset('images/noti_closing.png')
-                : Image.asset('images/noti_rose.png'),
+                : type.toLowerCase() == 'quote'
+                    ? Image.asset('images/noti_moti.png')
+                    : type.toLowerCase() == 'reward'
+                        ? Image.asset('images/noti_rose.png')
+                        : type.toLowerCase() == 'job'
+                            ? Image.asset('images/noti_open.png')
+                            : type.toLowerCase() == 'contribution'
+                                ? Image.asset('images/noti_clock')
+                                :
+                                //type.toLowerCase() == 'payment_fail' || type.toLowerCase() == 'contribution_fail'?
+                                Image.asset('images/sad.png'),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -529,8 +529,16 @@ class _PostingState extends State<Posting> {
                                               ..showSnackBar(
                                                 const SnackBar(
                                                   content: Text(
-                                                      'Failed to load image'),
-                                                  backgroundColor: Colors.red,
+                                                      'Failed to load image',
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'Bricolage-M',
+                                                          fontSize: 12.5,
+                                                          color: Color(
+                                                              0xFF616971))),
+                                                  backgroundColor: Colors.white,
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
                                                 ),
                                               );
                                           }
@@ -626,8 +634,15 @@ class _PostingState extends State<Posting> {
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content:
-                                        Text('Could not launch ${widget.url}')),
+                                  content: Text(
+                                      'Could not launch ${widget.url}',
+                                      style: const TextStyle(
+                                          fontFamily: 'Bricolage-M',
+                                          fontSize: 12.5,
+                                          color: Color(0xFF616971))),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.white,
+                                ),
                               );
                             }
                           }
@@ -727,7 +742,15 @@ class RowWrapper extends StatelessWidget {
                   whenOnPressedAddPhoto(images);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No images selected')),
+                    const SnackBar(
+                      content: Text('No images selected',
+                          style: TextStyle(
+                              fontFamily: 'Bricolage-M',
+                              fontSize: 12.5,
+                              color: Color(0xFF616971))),
+                      behavior: SnackBarBehavior.fixed,
+                      backgroundColor: Colors.white,
+                    ),
                   );
                 }
               },

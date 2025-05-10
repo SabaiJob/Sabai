@@ -2,21 +2,21 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/auth_pages/api_service.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 
 import 'package:sabai_app/screens/auth_pages/token_service.dart';
+import 'package:sabai_app/services/language_provider.dart';
 
 class EditProfile extends StatefulWidget {
   final String initialName;
-  //final String initialEmail;
   final String initialImageUrl;
   const EditProfile({
     super.key,
     required this.initialName,
-    //required this.initialEmail,
     required this.initialImageUrl,
   });
 
@@ -38,50 +38,25 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.initialName);
-    //emailController = TextEditingController(text: widget.initialEmail);
     nameController.addListener(trackChanges);
-    //emailController.addListener(trackChanges);
   }
 
   @override
   void dispose() {
     nameController.dispose();
-    //emailController.dispose();
     super.dispose();
   }
 
   void trackChanges() {
     setState(() {
-      isEdited = nameController.text != widget.initialName ||
-          //emailController.text != widget.initialEmail ||
-          _imageFile != null;
+      isEdited =
+          nameController.text != widget.initialName || _imageFile != null;
     });
-  }
-
-  Future<Map<String, dynamic>?> fetchUpdatedProfile() async {
-    try {
-      final response = await ApiService.get('/auth/token/verify/');
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final data = jsonDecode(response.body);
-        return {
-          'username': data['username'],
-          //'email': data['user_info']['email'],
-          'profile_picture': data['photo'],
-        };
-      }
-      return null;
-    } catch (e) {
-      showCustomSnackBar(
-        message: "Failed to fetch updated profile: ${e.toString()}",
-        isError: true,
-      );
-      return null;
-    }
   }
 
   Future<void> saveProfile() async {
     final bool fieldsEdited = nameController.text != widget.initialName;
-    // || emailController.text != widget.initialEmail;
+    String? uploadedImageUrl;
 
     if (!fieldsEdited && _imageFile == null) {
       Navigator.pop(context);
@@ -93,8 +68,8 @@ class _EditProfileState extends State<EditProfile> {
     try {
       // Upload image first if changed
       if (_imageFile != null) {
-        final imageUploadSuccess = await _uploadProfilePhoto(_imageFile!);
-        if (!imageUploadSuccess) {
+        uploadedImageUrl = await _uploadProfilePhoto(_imageFile!);
+        if (uploadedImageUrl == null) {
           setState(() => isLoading = false);
           return;
         }
@@ -104,11 +79,9 @@ class _EditProfileState extends State<EditProfile> {
       if (fieldsEdited) {
         final response = await ApiService.put('/auth/profile-update/', {
           "username": nameController.text,
-          //"email": emailController.text,
         });
 
         if (response.statusCode < 200 || response.statusCode >= 300) {
-          print(response.body);
           showCustomSnackBar(
             message: "Failed to update profile. Please try again.",
             isError: true,
@@ -124,8 +97,8 @@ class _EditProfileState extends State<EditProfile> {
         // Return the updated data from the response
         Navigator.pop(context, {
           "username": userData["username"],
-          //"email": userData["email"],
-          "profile_picture": userData["photo"],
+          "profile_picture":
+              userData["photo"] ?? uploadedImageUrl ?? widget.initialImageUrl,
         });
 
         showCustomSnackBar(
@@ -136,10 +109,7 @@ class _EditProfileState extends State<EditProfile> {
         // If only image was updated, just pop with the existing data
         Navigator.pop(context, {
           "username": nameController.text,
-          //"email": emailController.text,
-          "profile_picture": _imageFile != null
-              ? null // You might want to handle this case differently
-              : widget.initialImageUrl,
+          "profile_picture": uploadedImageUrl ?? widget.initialImageUrl,
         });
 
         showCustomSnackBar(
@@ -157,7 +127,7 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<bool> _uploadProfilePhoto(File imageFile) async {
+  Future<String?> _uploadProfilePhoto(File imageFile) async {
     try {
       setState(() => isUploadingImage = true);
 
@@ -182,13 +152,17 @@ class _EditProfileState extends State<EditProfile> {
         ),
       );
 
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        return responseData["user"]["photo"]; // assuming `photo` is the key
+      }
+      return null;
     } catch (e) {
       showCustomSnackBar(
         message: "Failed to upload photo: ${e.toString()}",
         isError: true,
       );
-      return false;
+      return null;
     } finally {
       setState(() => isUploadingImage = false);
     }
@@ -199,12 +173,13 @@ class _EditProfileState extends State<EditProfile> {
       SnackBar(
         content: Text(
           message,
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontFamily: 'Bricolage-M',
+              fontSize: 12.5,
+              color: Color(0xFF616971)),
         ),
-        backgroundColor: isError ? Colors.redAccent : Colors.green,
+        backgroundColor: isError ? Colors.white : Colors.white,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -258,17 +233,21 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  void showImageSourceDialog() {
+  void showImageSourceDialog(LanguageProvider languageProvider) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Select Image Source"),
+        title: languageProvider.lan == 'English'
+            ? Text("Select Image Source")
+            : Text("Image Source ကို ရွေးပါ။"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text("Camera"),
+              title: languageProvider.lan == 'English'
+                  ? const Text("Camera")
+                  : const Text("ကင်မရာ"),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.camera);
@@ -276,7 +255,9 @@ class _EditProfileState extends State<EditProfile> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text("Gallery"),
+              title: languageProvider.lan == 'English'
+                  ? const Text("Gallery")
+                  : const Text("ပြခန်း"),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.gallery);
@@ -290,6 +271,7 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<LanguageProvider>(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -311,9 +293,13 @@ class _EditProfileState extends State<EditProfile> {
           iconTheme: const IconThemeData(
             color: Color(0xFFFF3997),
           ),
-          title: const Text(
-            'Edit Profile',
-            style: appBarTitleStyleEng,
+          title: Text(
+            languageProvider.lan == 'English'
+                ? 'Edit Profile'
+                : 'Profile ပြောင်းလဲခြင်း',
+            style: languageProvider.lan == 'English'
+                ? appBarTitleStyleEng
+                : appBarTitleStyleMn,
           ),
           elevation: 2,
         ),
@@ -355,8 +341,11 @@ class _EditProfileState extends State<EditProfile> {
                           bottom: 0,
                           right: 0,
                           child: GestureDetector(
-                            onTap:
-                                isUploadingImage ? null : showImageSourceDialog,
+                            onTap: isUploadingImage
+                                ? null
+                                : () {
+                                    showImageSourceDialog(languageProvider);
+                                  },
                             child: Container(
                               decoration: const BoxDecoration(
                                 color: Color(0xFFFF3997),
@@ -375,7 +364,8 @@ class _EditProfileState extends State<EditProfile> {
                   TextFormField(
                     controller: nameController,
                     decoration: InputDecoration(
-                      labelText: 'Name',
+                      labelText:
+                          languageProvider.lan == 'English' ? 'Name' : 'နာမည်',
                       prefixIcon: const Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -385,7 +375,9 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your name';
+                        return languageProvider.lan == 'English'
+                            ? 'Please enter your name'
+                            : 'သင့်အမည်ကို ထည့်သွင်းပါ။';
                       }
                       return null;
                     },
@@ -433,8 +425,10 @@ class _EditProfileState extends State<EditProfile> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
-                            'Save Changes',
+                        : Text(
+                            languageProvider.lan == 'English'
+                                ? 'Save Changes'
+                                : 'အပြောင်းအလဲများကို သိမ်းဆည်းပါ။',
                             style: textButtonTextStyleEng,
                           ),
                   ),

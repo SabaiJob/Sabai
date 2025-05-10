@@ -82,8 +82,14 @@ class _JobDetailsPageState extends State<JobDetailsPage> {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched) {
         print('Could not launch $externalLink');
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('The link has expired.')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.white,
+            content: Text('The link has expired.',
+                style: TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971)))));
       }
     } catch (e) {
       print('Error launching $externalLink: $e');

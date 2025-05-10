@@ -41,7 +41,12 @@ class FirebaseMessagingService {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             behavior: SnackBarBehavior.floating,
-            content: Text('You Have a new notification!'),
+            backgroundColor: Colors.white,
+            content: Text('You have a new notification!',
+                style: TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
           ),
         );
       }

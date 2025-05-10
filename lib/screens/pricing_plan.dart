@@ -84,7 +84,13 @@ class _PricingPlanState extends State<PricingPlan> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("error : ${response.body}"),
+            behavior: SnackBarBehavior.fixed,
+            backgroundColor: Colors.white,
+            content: Text("error : ${response.body}",
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
           ),
         );
         print('error ${response.body}');
@@ -92,7 +98,13 @@ class _PricingPlanState extends State<PricingPlan> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error fetching the data $e}'),
+          behavior: SnackBarBehavior.fixed,
+          backgroundColor: Colors.white,
+          content: Text('Error fetching the data $e}',
+              style: const TextStyle(
+                  fontFamily: 'Bricolage-M',
+                  fontSize: 12.5,
+                  color: Color(0xFF616971))),
         ),
       );
       print(e);
