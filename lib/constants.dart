@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const int totalSteps = 3;
+const int totalSteps = 2;
 
 const maxVisibleAvatars = 3;
 

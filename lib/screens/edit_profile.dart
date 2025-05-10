@@ -11,12 +11,12 @@ import 'package:sabai_app/screens/auth_pages/token_service.dart';
 
 class EditProfile extends StatefulWidget {
   final String initialName;
-  final String initialEmail;
+  //final String initialEmail;
   final String initialImageUrl;
   const EditProfile({
     super.key,
     required this.initialName,
-    required this.initialEmail,
+    //required this.initialEmail,
     required this.initialImageUrl,
   });
 
@@ -27,7 +27,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
-  late TextEditingController emailController;
+  //late TextEditingController emailController;
   bool isLoading = false;
   bool isUploadingImage = false;
   bool isEdited = false;
@@ -38,22 +38,22 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.initialName);
-    emailController = TextEditingController(text: widget.initialEmail);
+    //emailController = TextEditingController(text: widget.initialEmail);
     nameController.addListener(trackChanges);
-    emailController.addListener(trackChanges);
+    //emailController.addListener(trackChanges);
   }
 
   @override
   void dispose() {
     nameController.dispose();
-    emailController.dispose();
+    //emailController.dispose();
     super.dispose();
   }
 
   void trackChanges() {
     setState(() {
       isEdited = nameController.text != widget.initialName ||
-          emailController.text != widget.initialEmail ||
+          //emailController.text != widget.initialEmail ||
           _imageFile != null;
     });
   }
@@ -65,7 +65,7 @@ class _EditProfileState extends State<EditProfile> {
         final data = jsonDecode(response.body);
         return {
           'username': data['username'],
-          'email': data['user_info']['email'],
+          //'email': data['user_info']['email'],
           'profile_picture': data['photo'],
         };
       }
@@ -80,8 +80,8 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> saveProfile() async {
-    final bool fieldsEdited = nameController.text != widget.initialName ||
-        emailController.text != widget.initialEmail;
+    final bool fieldsEdited = nameController.text != widget.initialName;
+    // || emailController.text != widget.initialEmail;
 
     if (!fieldsEdited && _imageFile == null) {
       Navigator.pop(context);
@@ -104,7 +104,7 @@ class _EditProfileState extends State<EditProfile> {
       if (fieldsEdited) {
         final response = await ApiService.put('/auth/profile-update/', {
           "username": nameController.text,
-          "email": emailController.text,
+          //"email": emailController.text,
         });
 
         if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -116,30 +116,37 @@ class _EditProfileState extends State<EditProfile> {
           setState(() => isLoading = false);
           return;
         }
-      }
 
-      // Fetch the updated profile data
-      final updatedProfile = await fetchUpdatedProfile();
-      if (updatedProfile == null) {
+        // Parse the response
+        final responseData = jsonDecode(response.body);
+        final userData = responseData['user'];
+
+        // Return the updated data from the response
+        Navigator.pop(context, {
+          "username": userData["username"],
+          //"email": userData["email"],
+          "profile_picture": userData["photo"],
+        });
+
         showCustomSnackBar(
-          message: "Profile updated but failed to fetch updated data",
-          isError: true,
+          message: responseData["message"] ?? "Profile updated successfully!",
+          isError: false,
         );
-        setState(() => isLoading = false);
-        return;
+      } else {
+        // If only image was updated, just pop with the existing data
+        Navigator.pop(context, {
+          "username": nameController.text,
+          //"email": emailController.text,
+          "profile_picture": _imageFile != null
+              ? null // You might want to handle this case differently
+              : widget.initialImageUrl,
+        });
+
+        showCustomSnackBar(
+          message: "Profile photo updated successfully!",
+          isError: false,
+        );
       }
-
-      // Return all updated data
-      Navigator.pop(context, {
-        "username": updatedProfile["username"],
-        "email": updatedProfile["email"],
-        "profile_picture": updatedProfile["profile_picture"],
-      });
-
-      showCustomSnackBar(
-        message: "Profile updated successfully!",
-        isError: false,
-      );
     } catch (e) {
       showCustomSnackBar(
         message: "An error occurred: $e",
@@ -383,30 +390,30 @@ class _EditProfileState extends State<EditProfile> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                          .hasMatch(value)) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
+                  //const SizedBox(height: 20),
+                  // TextFormField(
+                  //   controller: emailController,
+                  //   decoration: InputDecoration(
+                  //     labelText: 'Email',
+                  //     prefixIcon: const Icon(Icons.email),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Colors.grey[100],
+                  //   ),
+                  //   keyboardType: TextInputType.emailAddress,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'Please enter your email';
+                  //     }
+                  //     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                  //         .hasMatch(value)) {
+                  //       return 'Please enter a valid email address';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: isLoading ? null : saveProfile,

@@ -37,7 +37,7 @@ class _RegistrationPagesControllerState
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  //final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pinCodeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -74,6 +74,10 @@ class _RegistrationPagesControllerState
   //has_id_certificate
   bool? has_id_certificate;
 
+  int _progressStep = 0;
+
+  List<Map<String, dynamic>> _jobCategories = [];
+
   void updateStatus() {
     // Ensure they are not null before updating (optional handling)
     has_passport ??= false;
@@ -101,270 +105,91 @@ class _RegistrationPagesControllerState
     }
   }
 
-  List<Map<String, dynamic>> _jobCategories = [];
-
-  final AuthController _authController = AuthController();
-  void initialRegister() async {
+  // get job categories
+  Future<void> getJobCategory() async {
     try {
-      await _authController.initialSignIn(
-          context: context,
-          fullName: _fullNameController.text,
-          phoneNum: _phoneNumberController.text,
-          email: _emailController.text,
-          endPoint: '/auth/register/',
-          nextScreen: () {
-            requestOTP();
-            setState(() {
-              _currentPage++;
-              _progressStep++;
-            });
-          });
+      final response = await ApiService.get('/jobs/categories/');
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final List<dynamic> data = json.decode(response.body);
+        final List<Map<String, dynamic>> jobCategories = data.map((job) {
+          String name = job['name'];
+          String imageLink = job['image'];
+          int id = job['id'];
+          return {
+            'name': name ?? 'Unknown',
+            'image': imageLink ?? '',
+            'selected': false,
+            'id': id,
+          };
+        }).toList();
+        setState(() {
+          _jobCategories = jobCategories;
+        });
+      } else {
+        print('error: ${response.body} , ststusCode: ${response.statusCode} ');
+      }
     } catch (e) {
       print(e);
     }
   }
 
-  //request OTP
-  Future<void> requestOTP() async {
-    // const String url =
-    //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
-    const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
-    final Map<String, dynamic> requestBody = {
-      //"phone": _phoneNumberController.text,
-      "email": _emailController.text,
-    };
-
-    try {
-      final otpReqResponse = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(requestBody),
-      );
-
-      if (otpReqResponse.statusCode == 200) {
-        // Move to the next page
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      } else {
-        // Handle errors
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('OTP request failed: ${otpReqResponse.body}'),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
-      }
-    }
-  }
-
-  int _progressStep = 0;
-
-  // handle initialRegister method
-  void _handleUserRegistration(PhoneNumberProvider phoneNumberProvider) {
-    if (_currentPage == _pageController.initialPage) {
-      phoneNumberProvider.setEmail(_emailController.text.toString().trim());
-      initialRegister();
-    }
-  }
-
-  // Profile Set Up (additional info)
-  // currently no use
-  void _handleProfileSetUp() async {
-    if (_currentPage == 2) {
-      _isLanguageLevelError = _selectedLanguageLevel == null;
-      _isGenderError = _selectedGender == null;
-      _isAgeError = selectedAge == null;
-      _isStatusError = selectedStatus == null;
-      setState(() {
-        _languageLevelErrorMessage =
-            _isLanguageLevelError ? ' Language Level is required ' : '';
-        _genderErrorMessage = _isGenderError ? ' Gender is required ' : '';
-        _ageErrorMessage = _isAgeError ? ' Age is required ' : '';
-        _statusErrorMessage = _isStatusError ? ' Status is required ' : '';
-      });
-      bool noErrors = !_isLanguageLevelError &
-          !_isGenderError &
-          !_isAgeError &
-          !_isStatusError;
-      if (noErrors) {
-        updateStatus();
-        print('Your Gender: $_selectedGender');
-        print('Your Age: $selectedAge');
-        print('Your Thai Language Proficiency : $_selectedLanguageLevel');
-        print(
-            'Your status: Passport: $has_passport, WP: $has_work_permit, CI: $has_id_certificate');
-        print('Your email (if any): ${_emailController.text}');
-        print(
-            'Congratulations! You have completed all the required fields for the registration');
-        //post user's info api
-        try {
-          final token = await TokenService.getToken();
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          final fcmToken = prefs.getString('fcm_token');
-          // Create form data with proper boundary
-          var formData = FormData.fromMap({
-            "age": selectedAge.toString(),
-            "gender": _selectedGender,
-            "email": _emailController.text,
-            "thai_proficiency": _selectedLanguageLevel,
-            "has_passport": has_passport! ? 1 : 0,
-            "has_work_permit": has_work_permit! ? 1 : 0,
-            "has_id_certificate": has_id_certificate! ? 1 : 0,
-            "fcm_token": fcmToken
-          });
-
-          Dio dio = Dio();
-          final response = await dio.post(
-            // "https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/userinfo/",
-            'https://api.sabaijob.com/api/auth/userinfo/',
-            options: Options(
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": "Bearer $token",
-              },
-            ),
-            data: formData,
-          );
-
-          if (response.statusCode! >= 200 && response.statusCode! < 300) {
-            print('fcmToken $fcmToken');
-            //fetch the job categories
-            getJobCategory();
-            // Move to the next page
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-            setState(() {
-              _progressStep++;
-              _currentPage++;
-            });
-          } else {
-            print(response.statusCode);
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Adding info fail: ${response.statusMessage}'),
-                ),
-              );
-            }
-            print(response.statusMessage);
-          }
-        } catch (e) {
-          if (e is DioException) {
-            print('Error status code: ${e.response?.statusCode}');
-            print('Error response data: ${e.response?.data}');
-          }
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('error: $e'),
-              ),
-            );
-          }
-        }
-      } else {
-        print('You need to complete all fields');
-      }
-    }
-  }
-
-  // OTP Code Verification
-  void _handleOTPVerificationPage(
-      String enteredPinCode, JobProvider jobProvider) async {
-    if (_currentPage == 1) {
-      // const String url =
-      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/register/';
-      const String url =
-          'https://api.sabaijob.com/api/auth/otp/confirm/register/';
-      final Map<String, dynamic> requestBody = {
-        "phone": _phoneNumberController.text,
-        "otp": enteredPinCode,
-        "full_name": _fullNameController.text,
-        "email": _emailController.text,
-      };
-
+  // Initial Register with Phone and Password
+  void initialRegister(JobProvider jobProvider) async {
+    bool isFormValid = _formKey.currentState!.validate();
+    if (isFormValid) {
       try {
-        final response = await http.post(
-          Uri.parse(url),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(requestBody),
-        );
-
+        print('Still Inside try');
+        final response = await ApiService.unauthenticatedPost(
+            '/auth/phone-password/register/', {
+          "phone": _phoneNumberController.text,
+          "password": _passwordController.text,
+          "full_name": _fullNameController.text,
+        });
         if (response.statusCode >= 200 && response.statusCode < 300) {
+          print('Still inside if');
           jobProvider.setGuest(false);
-          final responseData = json.decode(response.body);
-          final token = responseData['token'];
-          print(token);
+          final responseData = jsonDecode(response.body);
+          final token = responseData['token'] ?? '';
+          print('Token: $token');
           await TokenService.saveToken(token);
+          await getJobCategory();
+          await sendFCMToken();
           _pageController.nextPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-          getJobCategory();
           setState(() {
             _currentPage++;
             _progressStep++;
           });
+        } else if (response.statusCode == 409) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(jsonDecode(response.body)['error'],
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.white,
+          ));
         } else {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('OTP confirmation failed: ${response.body}'),
-              ),
-            );
-          }
-          print(response.body);
+          print('Inside else');
+          print('Request Headers: ${response.request?.headers}');
+          print(response.statusCode);
+          print(jsonDecode(response.body));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(jsonDecode(response.body)['error'],
+                style: const TextStyle(
+                    fontFamily: 'Bricolage-M',
+                    fontSize: 12.5,
+                    color: Color(0xFF616971))),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.white,
+          ));
         }
       } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error: $e'),
-            ),
-          );
-        }
-        print(e);
+        print('Error $e');
       }
-    }
-  }
-
-  Future<void> completeRegistration(
-      List selectedJobCategories, LanguageProvider languageProvider) async {
-    try {
-      final response = await ApiService.post('/auth/user/job-preferences/',
-          {'preferences': selectedJobCategories});
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        _progressStep++;
-        showDoubleCircleLoadingBox(context, languageProvider.lan);
-        Future.delayed(
-          const Duration(seconds: 3),
-          () {
-            if (!mounted) return;
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SuccessPage(),
-              ),
-            );
-          },
-        );
-      } else {
-        print('Error : ${response.body}');
-      }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -397,44 +222,73 @@ class _RegistrationPagesControllerState
 
       completeRegistration(selectedJobCategories, languageProvider);
     });
-
-    setState(() {
-      var selectedJobCategories = _jobCategories
-          .where((category) => category['selected'] == true)
-          .map((category) => category['id'])
-          .toList();
-      print('did you choose something? Y/N ${isAnyJobCategorySelected}');
-      print('Selected Categories: ${selectedJobCategories}');
-
-      completeRegistration(selectedJobCategories, languageProvider);
-    });
   }
 
-  // get job categories
-  Future<void> getJobCategory() async {
+  Future<void> completeRegistration(
+      List selectedJobCategories, LanguageProvider languageProvider) async {
     try {
-      final response = await ApiService.get('/jobs/categories/');
+      final response = await ApiService.post('/auth/user/job-preferences/',
+          {'preferences': selectedJobCategories});
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final List<dynamic> data = json.decode(response.body);
-        final List<Map<String, dynamic>> jobCategories = data.map((job) {
-          String name = job['name'];
-          String imageLink = job['image'];
-          int id = job['id'];
-          return {
-            'name': name ?? 'Unknown',
-            'image': imageLink ?? '',
-            'selected': false,
-            'id': id,
-          };
-        }).toList();
-        setState(() {
-          _jobCategories = jobCategories;
-        });
+        _progressStep++;
+        showDoubleCircleLoadingBox(context, languageProvider.lan);
+        Future.delayed(
+          const Duration(seconds: 3),
+          () {
+            if (!mounted) return;
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SuccessPage(),
+              ),
+            );
+          },
+        );
       } else {
-        print('error: ${response.body} , ststusCode: ${response.statusCode} ');
+        print('Error : ${response.body}');
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> sendFCMToken() async {
+    try {
+      final token = await TokenService.getToken();
+      // Ensure token is not null or empty
+      if (token == null || token.isEmpty) {
+        print('Error: No valid token available.');
+        return;
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final fcmToken = prefs.getString('fcm_token');
+      // Ensure fcm_token is valid
+      if (fcmToken == null || fcmToken.isEmpty) {
+        print('Error: FCM token is missing or invalid.');
+        return;
+      }
+      var formData = FormData.fromMap({"fcm_token": fcmToken});
+      Dio dio = Dio();
+      final response = await dio.post(
+        'https://api.sabaijob.com/api/auth/userinfo/',
+        options: Options(
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: formData,
+      );
+      if (response.statusCode! >= 200 && response.statusCode! < 300) {
+        print('FCM token sent successfully: $fcmToken');
+      } else {
+        print('Failed to send FCM token: ${response.statusCode}');
+        print('Response: ${response.data}');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
@@ -442,7 +296,7 @@ class _RegistrationPagesControllerState
   void dispose() {
     _fullNameController.dispose();
     _phoneNumberController.dispose();
-    _emailController.dispose();
+    _passwordController.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -451,7 +305,6 @@ class _RegistrationPagesControllerState
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var jobProvider = Provider.of<JobProvider>(context);
-    var phoneNumberProvider = Provider.of<PhoneNumberProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -484,25 +337,11 @@ class _RegistrationPagesControllerState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // fixed progress indicator
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 24),
-            //   child: StepProgressIndicator(
-            //     roundedEdges: const Radius.circular(10),
-            //     padding: 0.0,
-            //     totalSteps: totalSteps,
-            //     currentStep: _progressStep,
-            //     selectedColor: const Color(0xFFFF3997),
-            //     unselectedColor: const Color.fromARGB(100, 76, 82, 88),
-            //     size: 8.0,
-            //   ),
-            // ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 24),
               child: CustomProgressBar(
                   totalSteps: totalSteps, currentStep: _progressStep),
             ),
-
             // Page View
             Expanded(
                 child: PageView(
@@ -519,53 +358,9 @@ class _RegistrationPagesControllerState
                   formKey: _formKey,
                   fullNameController: _fullNameController,
                   phoneNumberController: _phoneNumberController,
-                  emailController: _emailController,
+                  // emailController: _emailController,
                   passwordController: _passwordController,
                 ),
-                OtpCodeVerificationPage(
-                    pinCodeController: _pinCodeController,
-                    //requestOtp: requestOTP(),
-                    whenOnComplete: (value) {
-                      _handleOTPVerificationPage(value, jobProvider);
-                    }),
-                // CompleteUserInfoPage(
-                //   isLanguageLevelError: _isLanguageLevelError,
-                //   selectedLanguageLevel: _selectedLanguageLevel,
-                //   whenLanguageLevelOnChanged: (value) {
-                //     setState(() {
-                //       _selectedLanguageLevel = value;
-                //       _isLanguageLevelError = false;
-                //     });
-                //   },
-                //   languageLevelErrorMessage: _languageLevelErrorMessage,
-                //   selectedGender: _selectedGender,
-                //   genderErrorMessage: _genderErrorMessage,
-                //   isGenderError: _isGenderError,
-                //   onGenderChanged: (value) {
-                //     setState(() {
-                //       _selectedGender = value;
-                //       _isGenderError = false;
-                //     });
-                //   },
-                //   selectedAge: selectedAge ?? '',
-                //   whenAgeOnChange: (value) {
-                //     setState(() {
-                //       selectedAge = value!;
-                //     });
-                //   },
-                //   selectedStatus: selectedStatus ?? '',
-                //   whenStatusOnChange: (value) {
-                //     setState(() {
-                //       selectedStatus = value!;
-                //       updateStatus();
-                //     });
-                //   },
-                //   emailController: _emailController,
-                //   isAgeError: _isAgeError,
-                //   ageErrorMessage: _ageErrorMessage,
-                //   isStatusError: _isStatusError,
-                //   statusErrorMessage: _statusErrorMessage,
-                // ),
                 SelectJobCategoryPage(
                     jobCategoryLength: _jobCategories.length,
                     jobCategoryList: _jobCategories,
@@ -581,61 +376,48 @@ class _RegistrationPagesControllerState
       ),
       //fixed continue button across the pages
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: ((_currentPage == _pageController.initialPage ||
-              _currentPage == 2 ||
-              _currentPage == 3))
-          ? [
-              Row(
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {
+                // original method
+                if (_currentPage == _pageController.initialPage) {
+                  initialRegister(jobProvider);
+                } else {
+                  _handleCreateProfile(languageProvider);
+                }
+              },
+              style: TextButton.styleFrom(
+                fixedSize: const Size(343, 42),
+                backgroundColor: const Color(0xffFF3997),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      // original method
-                      // if (_currentPage == _pageController.initialPage) {
-                      //   _handleUserRegistration(phoneNumberProvider);
-                      // } else if (_currentPage == 2) {
-                      //   _handleProfileSetUp();
-                      // } else {
-                      //   _handleCreateProfile(languageProvider);
-                      // }
-                      if (_currentPage == _pageController.initialPage) {
-                        _handleUserRegistration(phoneNumberProvider);
-                      } else {
-                        _handleCreateProfile(languageProvider);
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      fixedSize: const Size(343, 42),
-                      backgroundColor: const Color(0xffFF3997),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        languageProvider.lan == 'English'
-                            ? Text(
-                                _currentPage == 3
-                                    ? 'Create Profile '
-                                    : 'Continue',
-                                style: textButtonTextStyleEng,
-                              )
-                            : const Text(
-                                'ဆက်လက်ရန်',
-                                style: textButtonTextStyleMm,
-                              ),
-                        const SizedBox(
-                          width: 10,
+                  languageProvider.lan == 'English'
+                      ? Text(
+                          _currentPage == 3 ? 'Create Profile ' : 'Continue',
+                          style: textButtonTextStyleEng,
+                        )
+                      : const Text(
+                          'ဆက်လက်ရန်',
+                          style: textButtonTextStyleMm,
                         ),
-                        rightArrowIcon,
-                      ],
-                    ),
+                  const SizedBox(
+                    width: 10,
                   ),
+                  rightArrowIcon,
                 ],
-              )
-            ]
-          : null,
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

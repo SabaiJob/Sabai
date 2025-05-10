@@ -83,7 +83,7 @@ class _ProfileState extends State<Profile> {
       MaterialPageRoute(
         builder: (context) => EditProfile(
           initialName: paymentProvider.userData!['username'] ?? '',
-          initialEmail: paymentProvider.userData!['user_info']['email'] ?? '',
+          //initialEmail: paymentProvider.userData!['user_info']['email'] ?? '',
           initialImageUrl: paymentProvider.userData!['photo'] ?? '',
         ),
       ),
@@ -91,8 +91,13 @@ class _ProfileState extends State<Profile> {
     if (updatedData != null) {
       setState(() {
         paymentProvider.userData!['username'] = updatedData["username"];
-        paymentProvider.userData!['user_info']['email'] = updatedData["email"];
-        paymentProvider.userData!['photo'] = updatedData["profile_picture"];
+        //paymentProvider.userData!['user_info']['email'] = updatedData["email"];
+        //paymentProvider.userData!['photo'] = updatedData["profile_picture"];
+        if (updatedData["profile_picture"] is String) {
+          paymentProvider.userData!['photo'] = updatedData["profile_picture"];
+        } else if (updatedData["profile_picture"] is File) {
+          _selectedImage = FileImage(updatedData["profile_picture"] as File);
+        }
       });
     }
   }

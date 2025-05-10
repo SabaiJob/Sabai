@@ -9,7 +9,8 @@ class AuthController {
       {required BuildContext context,
       required String fullName,
       required String phoneNum,
-      required String email,
+      // required String email,
+      required String password,
       required String endPoint,
       required VoidCallback nextScreen}) async {
     try {
@@ -19,7 +20,8 @@ class AuthController {
               body: jsonEncode({
                 "full_name": fullName,
                 "phone": phoneNum,
-                "email": email,
+                "password": password
+                //    "email": email,
               }));
       if (response.statusCode >= 200 && response.statusCode < 300) {
         nextScreen();

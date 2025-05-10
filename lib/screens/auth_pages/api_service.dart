@@ -16,6 +16,12 @@ class ApiService {
     };
   }
 
+  static Future<Map<String, String>> getUnauthenticatedHeaders() async {
+    return {
+      'Content-Type': 'application/json',
+    };
+  }
+
   static Future<http.Response> get(String endPoint) async {
     final headers = await getHeaders();
     final response = await http.get(
@@ -39,7 +45,21 @@ class ApiService {
     return response;
   }
 
-  static Future<Response> putWithFile(String endPoint, {
+  static Future<http.Response> unauthenticatedPost(
+      String endPoint, dynamic body) async {
+    final headers = await getUnauthenticatedHeaders();
+    final response = await http.post(
+      // Uri.parse(
+      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api$endPoint'),
+      Uri.parse('https://api.sabaijob.com/api$endPoint'),
+      headers: headers,
+      body: json.encode(body),
+    );
+    return response;
+  }
+
+  static Future<Response> putWithFile(
+    String endPoint, {
     Map<String, dynamic>? data,
     File? photo,
   }) async {
@@ -48,11 +68,12 @@ class ApiService {
 
     try {
       FormData formData;
-      
+
       if (photo != null) {
         formData = FormData.fromMap({
           ...data ?? {},
-          'photo': await MultipartFile.fromFile(photo.path, filename: 'profile.jpg'),
+          'photo':
+              await MultipartFile.fromFile(photo.path, filename: 'profile.jpg'),
         });
       } else {
         formData = FormData.fromMap(data ?? {});
@@ -73,7 +94,6 @@ class ApiService {
     }
   }
 
-
   static Future<http.Response> put(String endPoint, dynamic body) async {
     final headers = await getHeaders();
     final response = await http.put(
@@ -86,11 +106,9 @@ class ApiService {
     return response;
   }
 
-  
-
   static Future<void> logout(BuildContext context) async {
     await TokenService.deleteToken(); // Ensure token is removed
-    
+
     // Debugging: Check if token is really deleted
     final token = await TokenService.getToken();
     if (token == null) {

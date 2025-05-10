@@ -27,156 +27,38 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
   final TextEditingController _pinCodeController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   bool _visiblePassword = true;
 
   //user login
-  Future<void> userLogin() async {
-    const String url = 'https://api.sabaijob.com/api/auth/login/';
-
-    final Map<String, dynamic> requestBody = {
-      //'full_name': _fullNameController.text,
-      //'phone': _phoneNumberController.text,
-      'email': _emailController.text,
-    };
-
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        body: json.encode(requestBody),
-        headers: {'Content-Type': 'application/json'},
-      );
-      if (response.statusCode == 200) {
-        requestOTP();
-        setState(() {
-          _currentPage++;
-        });
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login failed: ${response.body}'),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-          ),
-        );
-      }
-    }
-  }
-
-  //request OTP
-  Future<void> requestOTP() async {
-    // const String url =
-    //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/request/';
-    const String url = 'https://api.sabaijob.com/api/auth/otp/request/';
-
-    final Map<String, dynamic> requestBody = {
-      //"phone": _phoneNumberController.text,
-      "email": _emailController.text,
-    };
-
-    try {
-      final otpReqResponse = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(requestBody),
-      );
-
-      if (otpReqResponse.statusCode == 200) {
-        // Move to the next page
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      } else {
-        // Handle errors
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('OTP request failed: ${otpReqResponse.body}'),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
-      }
-    }
-  }
-
-  // User Log In
-  void _handleUserLogin(PhoneNumberProvider phoneNumberProvider) {
+  Future<void> userLogin(JobProvider jobProvider) async {
     bool isFormValid = _formKey.currentState!.validate();
     if (isFormValid) {
-      print('Your full name: ${_fullNameController.text}');
-      print('Your Phone Number: ${_phoneNumberController.text}');
-      phoneNumberProvider.setEmail(_emailController.text.toString().trim());
-      // _pageController.nextPage(
-      //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-      // setState(() {
-      //   _currentPage++;
-      // });
-      userLogin();
-    }
-  }
-
-  // OTP Code Verification
-  void _handleOTPVerificationPage(
-      String enteredPinCode, JobProvider jobProvider) async {
-    if (_currentPage == 1) {
-      String enteredPinCode = _pinCodeController.text.trim();
-      // if (enteredPinCode == sabaiAppData.fixedPinNumber) {
-      //   jobProvider.setGuest(false);
-      //   Navigator.pushReplacement(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) => const NavigationHomepage(
-      //                 showButtonSheet: false,
-      //               )));
-      // }
-      // const String url =
-      //     'https://sabai-job-backend-k9wda.ondigitalocean.app/api/auth/otp/confirm/login/';
-      const String url = 'https://api.sabaijob.com/api/auth/otp/confirm/login/';
+      const String url =
+          'https://api.sabaijob.com/api/auth/phone-password/login/';
 
       final Map<String, dynamic> requestBody = {
-        //"phone": _phoneNumberController.text,
-        'email': _emailController.text,
-        "otp": enteredPinCode,
+        'phone': _phoneNumberController.text,
+        'password': _passwordController.text,
       };
 
       try {
         final response = await http.post(
           Uri.parse(url),
-          headers: {'Content-Type': 'application/json'},
           body: json.encode(requestBody),
+          headers: {'Content-Type': 'application/json'},
         );
-
-        if (response.statusCode == 200 && response.statusCode < 300) {
+        if (response.statusCode >= 200 && response.statusCode < 300) {
           jobProvider.setGuest(false);
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => const NavigationHomepage(
-          //       showButtonSheet: false,
-          //     ),
-          //   ),
-          // );
           final responseData = json.decode(response.body);
           final token = responseData['token'];
           print(token);
           await TokenService.saveToken(token);
+          setState(() {
+            _currentPage++;
+          });
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const NavigationHomepage(
@@ -186,25 +68,24 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
             (Route<dynamic> route) => false,
           );
         } else {
-          _pinCodeController.clear();
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: Color(0xFFf44336),
+              SnackBar(
+                backgroundColor: Colors.white,
                 behavior: SnackBarBehavior.floating,
-                content: Text('OTP confirmation failed'),
+                content: Text(
+                  'Login failed: ${jsonDecode(response.body)['error']}',
+                  style: const TextStyle(
+                      fontFamily: 'Bricolage-M',
+                      fontSize: 12.5,
+                      color: Color(0xFF616971)),
+                ),
               ),
             );
           }
-          print(response.body);
-          print(response.statusCode);
         }
       } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: $e')),
-          );
-        }
+        print('Error: $e');
       }
     }
   }
@@ -253,7 +134,6 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                   formKey: _formKey,
                   fullNameController: _fullNameController,
                   phoneNumberController: _phoneNumberController,
-                  emailController: _emailController,
                   passwordController: _passwordController,
                   visiblePassword: _visiblePassword,
                   seePassword: () {
@@ -262,58 +142,50 @@ class _LogInControllerPageState extends State<LogInControllerPage> {
                     });
                   },
                 ),
-                OtpCodeVerificationPage(
-                    pinCodeController: _pinCodeController,
-                    //requestOtp: requestOTP(),
-                    whenOnComplete: (value) {
-                      _handleOTPVerificationPage(value, jobProvider);
-                    })
               ],
             ))
           ],
         ),
       ),
       persistentFooterAlignment: AlignmentDirectional.center,
-      persistentFooterButtons: (_currentPage == _pageController.initialPage)
-          ? [
-              Row(
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () async {
+                await userLogin(jobProvider);
+              },
+              style: TextButton.styleFrom(
+                fixedSize: const Size(343, 42),
+                backgroundColor: const Color(0xffFF3997),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Set the border radius
+                ),
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      _handleUserLogin(phoneNumberProvider);
-                    },
-                    style: TextButton.styleFrom(
-                      fixedSize: const Size(343, 42),
-                      backgroundColor: const Color(0xffFF3997),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Set the border radius
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        languageProvider.lan == 'English'
-                            ? const Text(
-                                'Log In',
-                                style: textButtonTextStyleEng,
-                              )
-                            : const Text(
-                                'ဆက်လက်ရန်',
-                                style: textButtonTextStyleMm,
-                              ),
-                        const SizedBox(
-                          width: 10,
+                  languageProvider.lan == 'English'
+                      ? const Text(
+                          'Log In',
+                          style: textButtonTextStyleEng,
+                        )
+                      : const Text(
+                          'ဆက်လက်ရန်',
+                          style: textButtonTextStyleMm,
                         ),
-                        rightArrowIcon,
-                      ],
-                    ),
+                  const SizedBox(
+                    width: 10,
                   ),
+                  rightArrowIcon,
                 ],
               ),
-            ]
-          : null,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

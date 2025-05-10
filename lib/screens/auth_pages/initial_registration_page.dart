@@ -20,7 +20,7 @@ class InitialRegistrationPage extends StatelessWidget {
   final TextEditingController phoneNumberController;
 
   //email
-  final TextEditingController emailController;
+  //final TextEditingController emailController;
 
   final TextEditingController passwordController;
 
@@ -33,7 +33,7 @@ class InitialRegistrationPage extends StatelessWidget {
     required this.formKey,
     required this.fullNameController,
     required this.phoneNumberController,
-    required this.emailController,
+    //required this.emailController,
     required this.passwordController,
     required this.seePassword,
     this.visiblePassword,
@@ -132,49 +132,49 @@ class InitialRegistrationPage extends StatelessWidget {
                   hint: '0662134567',
                 ),
                 //for email
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: ReusableLabelHolder(
-                    labelName: languageProvider.lan == 'English'
-                        ? 'Email'
-                        : 'အီးမေးလ် လိပ်စာ',
-                    textStyle: languageProvider.lan == 'English'
-                        ? labelStyleEng
-                        : labelStyleMm,
-                    isStarred: true,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 12),
+                //   child: ReusableLabelHolder(
+                //     labelName: languageProvider.lan == 'English'
+                //         ? 'Email'
+                //         : 'အီးမေးလ် လိပ်စာ',
+                //     textStyle: languageProvider.lan == 'English'
+                //         ? labelStyleEng
+                //         : labelStyleMm,
+                //     isStarred: true,
+                //   ),
+                // ),
                 //for email text field
-                ReusableTextformfield(
-                    keyboardType: TextInputType.emailAddress,
-                    textEditingController: emailController,
-                    validating: (value) {
-                      if (value == null || value.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Email is required"),
-                          ),
-                        );
-                        return languageProvider.lan == 'English'
-                            ? "Email is required"
-                            : "Email is required";
-                      }
-                      // Basic email regex
-                      final emailRegex = RegExp(
-                          r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-                      if (!emailRegex.hasMatch(value)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please enter a valid email address'),
-                          ),
-                        );
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                    hint: languageProvider.lan == 'English'
-                        ? 'Enter your email'
-                        : 'သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
+                // ReusableTextformfield(
+                //     keyboardType: TextInputType.emailAddress,
+                //     textEditingController: emailController,
+                //     validating: (value) {
+                //       if (value == null || value.isEmpty) {
+                //         ScaffoldMessenger.of(context).showSnackBar(
+                //           const SnackBar(
+                //             content: Text("Email is required"),
+                //           ),
+                //         );
+                //         return languageProvider.lan == 'English'
+                //             ? "Email is required"
+                //             : "Email is required";
+                //       }
+                // Basic email regex
+                //   final emailRegex = RegExp(
+                //       r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+                //   if (!emailRegex.hasMatch(value)) {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //         content: Text('Please enter a valid email address'),
+                //       ),
+                //     );
+                //     return 'Please enter a valid email address';
+                //   }
+                //   return null;
+                // },
+                // hint: languageProvider.lan == 'English'
+                //     ? 'Enter your email'
+                //     : 'သင့်အီးမေးလ် လိပ်စာ ထည့်ပါ'),
                 //for password
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),

@@ -44,12 +44,13 @@ class PaymentProvider extends ChangeNotifier {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         _userData = data;
+        print('user_id: ${_userData?['user_id']}');
+        print('name: ${_userData?['username']}');
         notifyListeners();
-        _userPhNo = _userData!['phone'];
-        print(_userPhNo);
-        print(_userData!['user_info']['email']);
-        print(_userData!['user_id']);
-        print('id: ${_userData!['id']}');
+        // _userPhNo = _userData!['phone'];
+        // print(_userPhNo);
+        // print(_userData!['user_id']);
+        // print('id: ${_userData!['id']}');
       } else {
         print(response.body);
         if (response.statusCode == 401) {
