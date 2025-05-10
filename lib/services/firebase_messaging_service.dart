@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:sabai_app/constants.dart';
 import 'package:sabai_app/screens/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,10 +39,34 @@ class FirebaseMessagingService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('✅ Message received in foreground: ${message.notification?.title}');
       if (context.mounted) {
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //     behavior: SnackBarBehavior.floating,
+        //     content: Text('You Have a new notification!'),
+        //   ),
+        // );
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             behavior: SnackBarBehavior.floating,
-            content: Text('You Have a new notification!'),
+            backgroundColor: primaryPinkColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 8,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            content: const Row(
+              children: [
+                Icon(Icons.notifications_active, color: Colors.white),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'You have a new notification!',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            duration: Duration(seconds: 3),
           ),
         );
       }
